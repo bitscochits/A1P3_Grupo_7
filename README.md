@@ -41,20 +41,36 @@ edificios/<ed>/exportar_unity.py   →  data/unity/<ed>.json        lo que dibuj
 
 ## 2. Cómo correrlo
 
+Todo se corre **desde la carpeta del repo** y **con el Python del
+proyecto** (`.venv`), que es el que tiene OpenSees. `python` a secas es
+el del computador y falla con `No module named 'openseespy'`.
+
 ```powershell
-.\setup.ps1                                  # una vez: crea .venv e instala
-python comun\verificar_todo.py               # ¿está todo bien?  (34 comprobaciones)
+cd A1P1.0_Grupo_7                            # desde la carpeta que lo contiene
+.\setup.ps1                                  # SOLO la primera vez: crea .venv e instala
+.\.venv\Scripts\Activate.ps1                 # cada terminal nueva; el prompt queda con (.venv)
+python comun\verificar_todo.py               # ¿está todo bien?  (34 comprobaciones, ~4 min)
 python comun\lanzar_unity.py app conjunto --pantalla-completa   # verlo
 ```
 
+Si `Activate.ps1` responde que la ejecución de scripts está
+deshabilitada, antes: `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`.
+Sin activar, en lugar de `python` va `.\.venv\Scripts\python.exe`.
+
 Cada script se puede correr solo y explica qué hace en su cabecera.
-Los parámetros que dicta el profesor van por línea de comandos:
+Los parámetros que dicta el profesor (`--q`, `--cs`, `--fq`, `--patron`,
+`--k`, `--fracciones`, `--comb`) van por línea de comandos al
+**laboratorio** y a la **demanda**, que resuelven los casos con ellos:
 
 ```powershell
-python comun\combinar.py lt2 --q 2.5 --cs 0.15 --comb 1.2 1.6 1.0 0.3
+python semana03\lab_semana03.py lt2 --q 2.5 --cs 0.15 --comb 1.2 1.6 1.0 0.3
 python semana03\lab_semana03.py --patron manual --fracciones 5 10 20 30 35
 python semana03\demanda_capacidad.py lt2 9 --grafico     # cualquier columna o muro
 ```
+
+`comun\combinar.py` **no** usa `--q` ni `--cs`: combina los casos ya
+guardados en `data/resultados/` y solo toma `--comb` o `--combinacion`.
+Sirve para probar la superposición, no para cambiar las cargas.
 
 ## 3. Mapa del repo — qué hace cada archivo
 
