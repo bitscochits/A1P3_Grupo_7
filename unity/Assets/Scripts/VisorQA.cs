@@ -102,6 +102,10 @@ public class VisorQA : MonoBehaviour
     private VisorSemana03 s3;
     private ModoDeformada modo = ModoDeformada.Sin;
 
+    // Semana 4: esfuerzos del caso activo, diagramas, curva P-M y
+    // trazabilidad. Si la escena no lo trae, se agrega en Start.
+    private VisorSemana04 s4;
+
     private string Marca(ModoDeformada m) { return modo == m ? "> " : ""; }
 
     // ============================================================
@@ -121,6 +125,10 @@ public class VisorQA : MonoBehaviour
         // El panel manda sobre la deformada, asi que arranca coherente
         // con lo que este script cree: sin deformar.
         if (s3 != null) s3.aplicarDeformada = false;
+
+        s4 = FindAnyObjectByType<VisorSemana04>();
+        if (s4 == null) s4 = gameObject.AddComponent<VisorSemana04>();
+        s4.CambioCasoActivo += AlCambiarCasoActivo;
     }
 
     void OnValidate()
@@ -166,8 +174,25 @@ public class VisorQA : MonoBehaviour
         DatoElemento de = hit.collider.GetComponentInParent<DatoElemento>();
         if (de == null) return;
 
-        seleccionado = BuscarElemento(de.idElemento);
+        SeleccionarElemento(de.idElemento);
+    }
+
+    /// Selecciona una barra por su elementTag, igual que un click. Lo usan
+    /// tambien los botones de demo de Semana 4.
+    public void SeleccionarElemento(int id)
+    {
+        seleccionado = BuscarElemento(id);
         panel = DescribirSeleccion();
+        refrescar = true;
+        if (s4 != null) s4.Seleccionar(id);
+    }
+
+    /// El texto del panel depende del caso activo, y si se esta mirando
+    /// la deformada del caso activo hay que cambiarla tambien.
+    void AlCambiarCasoActivo()
+    {
+        if (modo == ModoDeformada.CasoActivo && s4 != null) s4.AplicarDeformadaDelCaso();
+        if (seleccionado != null) panel = DescribirSeleccion();
         refrescar = true;
     }
 
@@ -182,6 +207,8 @@ public class VisorQA : MonoBehaviour
         Vector2 p = new Vector2(Input.mousePosition.x,
                                 Screen.height - Input.mousePosition.y);
         if (RectPanel().Contains(p)) return true;
+        // La ventana de la curva P-M de Semana 4 tampoco se atraviesa.
+        if (s4 != null && s4.MouseSobreVentana(p)) return true;
 
         if (editor == null) editor = FindAnyObjectByType<EditorEstructura>();
         return editor != null && editor.MouseSobrePanel();
@@ -246,6 +273,14 @@ public class VisorQA : MonoBehaviour
         {
             sb.AppendLine("(este elemento no recibe carga de losa)");
         }
+
+        // Semana 4: material, restricciones, esfuerzos del caso activo,
+        // demanda-capacidad y la cadena de trazabilidad.
+        if (s4 != null && (s4.Anexo != null || !string.IsNullOrEmpty(s4.Aviso)))
+        {
+            sb.AppendLine();
+            sb.Append(s4.DescribirElemento(e.id));
+        }
         return sb.ToString();
     }
 
@@ -298,9 +333,12 @@ public class VisorQA : MonoBehaviour
         if (verAreasTributarias) DibujarTributarias(m);
         if (verIDs) DibujarIDs(m);
         if (seleccionado != null) Resaltar(seleccionado, m);
+        // Los diagramas de Semana 4 respetan el filtro de piso: solo se
+        // rehacen si algo de lo que los define cambio.
+        if (s4 != null) s4.Refrescar();
     }
 
-    bool NivelVisible(float z)
+    public bool NivelVisible(float z)
     {
         return soloNivel < 0 || Mathf.Abs(z - CotaDeNivel(soloNivel)) < 0.01f;
     }
@@ -577,6 +615,11 @@ public class VisorQA : MonoBehaviour
     {
         modo = m;
         bool sismo = (m == ModoDeformada.SismoEX || m == ModoDeformada.SismoEY);
+        bool casoS4 = (m == ModoDeformada.CasoActivo);
+
+        // Semana 4 suelta la suya antes de que otra fuente ponga otra: solo
+        // limpia lo que puso ella, asi que no apaga las de los demas.
+        if (s4 != null && !casoS4) s4.QuitarDeformada();
 
         // PRIMERO Semana 3, y despues la de gravedad. Al reves, su
         // redibujo -- que limpia la deformada cuando el modo ya no es
@@ -605,6 +648,12 @@ public class VisorQA : MonoBehaviour
         {
             visor.LimpiarDeformada();
             visor.Redibujar();
+        }
+        else if (casoS4 && s4 != null)
+        {
+            // Caso base o combinacion: los desplazamientos vienen en el
+            // anexo de Semana 4, ya combinados en Python.
+            s4.AplicarDeformadaDelCaso();
         }
         // El caso sismico ya lo aplico VisorSemana03 mas arriba.
 
@@ -778,6 +827,12 @@ public class VisorQA : MonoBehaviour
         {
             GUILayout.Label("(no hay VisorSemana03 en la escena: sin sismo)");
         }
+        if (s4 != null && s4.Anexo != null)
+        {
+            if (GUILayout.Button(Marca(ModoDeformada.CasoActivo)
+                                 + "Caso activo (S4): " + s4.casoActivo))
+                elegido = ModoDeformada.CasoActivo;
+        }
 
         if (elegido != modo) AplicarModo(elegido);
 
@@ -812,6 +867,9 @@ public class VisorQA : MonoBehaviour
         // ---------- Semana 3 ----------
         if (s3 != null) PanelSemana03();
 
+        // ---------- Semana 4 ----------
+        if (s4 != null) s4.DibujarControles();
+
         GUILayout.Space(6);
         if (string.IsNullOrEmpty(panel))
             GUILayout.Label("Click en una barra para inspeccionarla.");
@@ -831,7 +889,7 @@ public class VisorQA : MonoBehaviour
 /// De donde sale la deformada que se esta mirando. Solo una a la vez:
 /// la de gravedad viene precalculada en el JSON del modelo y las de
 /// sismo del anexo de Semana 3.
-public enum ModoDeformada { Sin, Gravedad, SismoEX, SismoEY }
+public enum ModoDeformada { Sin, Gravedad, SismoEX, SismoEY, CasoActivo }
 
 
 /// Mantiene el texto 3D mirando a la camara; si no, los IDs se leen

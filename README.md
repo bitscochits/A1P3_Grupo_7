@@ -128,12 +128,28 @@ python semana03\demanda_capacidad.py lt2 9 --grafico     # cualquier columna o m
 | `reports/semana03.md` | El informe del avance, con todos los números salidos de correr los scripts. |
 | `GUIA_SEMANA3.md` | Guía de estudio para la defensa. |
 
+### `semana04/` — Unity como postprocesador
+
+Todo lo de la entrega está en la carpeta; **para estudiar, empezar por
+`semana04/README.md`**.
+
+| archivo | qué hace |
+|---|---|
+| `exportar_unity.py <ed>` | Resuelve G, Q, EX, EY con los parámetros de la Semana 3, combina, reconstruye N, Vy, Vz, T, My, Mz a lo largo de cada barra y verifica que lleguen a `f_j` de OpenSees; agrega material, restricciones, familias P-M y demandas. Escribe `data/unity/semana04.json` y su copia en `StreamingAssets`. |
+| `verificar_semana04.py <ed>` | Reconstrucción, superposición, una combinación contra corrida explícita, E·A contra OpenSees, trazabilidad, signos con una sección de fibras, `u = 9999` y el momento del plano de los muros. |
+| `test_contrato_semana04.py` · `verificar_unity_semana04.py` | Nombres JSON ↔ C# en las dos direcciones, y Unity leyendo el JSON de verdad con `JsonUtility`. |
+| `trazabilidad.py <ed> <elem>` | La cadena de un elemento: línea de OpenSees → modelo → objeto de Unity → resultados → sección y capacidad, contra el JSON. |
+| `GUIA_DEFENSA.md` · `GUION_DEMO.md` · `COMANDOS.md` · `CONTRATO.md` | Guía de estudio, guion de la demo, chuleta y contrato Python ↔ Unity. |
+| `reports/semana04.md` | El informe de la entrega. |
+
 ### `unity/Assets/Scripts/`
 
 `ModeloEstructural.cs` (las clases de datos, fuente de verdad del
 contrato) · `VisorEstructura.cs` (dibuja) · `AnalizadorEstructural.cs`
 (habla con el servidor) · `EditorEstructura.cs` · `VisorQA.cs` (toggles)
-· `VisorSemana03.cs` · `CamaraOrbital.cs`.
+· `VisorSemana03.cs` · `VisorSemana04.cs` y sus partes `.Diagramas`,
+`.PM`, `.Panel` (postprocesador) · `CapturaSemana04.cs` (capturas sin
+intervención) · `CamaraOrbital.cs`.
 
 ### Raíz
 

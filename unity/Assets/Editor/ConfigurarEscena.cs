@@ -44,6 +44,9 @@ public static class ConfigurarEscena
 
         VisorEstructura visor = Obtener<VisorEstructura>(goVisor);
         VisorQA qa = Obtener<VisorQA>(goVisor);
+        // Semana 4: esfuerzos, diagramas, P-M y trazabilidad. VisorQA lo
+        // agrega solo si falta, pero asi queda guardado en la escena.
+        VisorSemana04 s4 = Obtener<VisorSemana04>(goVisor);
 
         // --- Analizador + Editor (modificar el modelo en vivo) ---
         // Necesitan el servidor Flask corriendo:
@@ -85,6 +88,7 @@ public static class ConfigurarEscena
         editor.camara = orbital;
 
         EditorUtility.SetDirty(qa);
+        EditorUtility.SetDirty(s4);
         EditorUtility.SetDirty(orbital);
         EditorUtility.SetDirty(analizador);
         EditorUtility.SetDirty(editor);

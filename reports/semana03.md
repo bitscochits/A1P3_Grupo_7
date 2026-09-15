@@ -646,19 +646,31 @@ capacidad a momento. Los cuatro puntos caen holgadamente dentro de la
 envolvente.
 
 **Muro 537** — `pm_ingenieria_537.png`. En un muro se toma solo el momento
-**en su plano** (`Mz`); el de fuera de plano se informa aparte.
+**en su plano**, que en los muros de este edificio es `My`; el de fuera de
+plano se informa aparte.
 
-| caso | P_d [kN] | M_d [kN·m] | Mn a ese P | utilización |
+> **Errata, encontrada en la Semana 4.** La versión entregada de esta
+> tabla tomaba `|Mz|` como momento del plano. Esa regla vale para los
+> muros del LT2, que traen como `vecxz` su normal; los de Ingeniería lo
+> traen a lo largo, la inercia grande queda en `Iy` y su `Mz` es el de
+> **fuera** de plano. La tabla entregada decía M_d = 641.6, 207.0, 29.3 y
+> 45.7 kN·m, y una utilización de 0.8 %. Hoy
+> `demanda_capacidad.demanda()` elige el eje por inercias y exige que se
+> lo digan; la tabla y el gráfico están rehechos. Las columnas y el
+> resultado de `--todas` bajo `G + Q` (columnas 80 y 66 fuera) **no
+> cambian**. Detalle en `reports/semana04.md`.
+
+| caso | P_d [kN] | M_d = \|My\| [kN·m] | Mn a ese P | utilización |
 | --- | --- | --- | --- | --- |
-| G | 3250.2 | 641.6 | 78 516.4 | 0.008 |
-| Q | 940.8 | 207.0 | 64 262.5 | 0.003 |
-| EX | 163.5 | 29.3 | 59 464.8 | 0.000 |
-| EY | 283.0 | 45.7 | 60 202.5 | 0.001 |
+| G | 3250.2 | 2243.1 | 78 516.4 | 0.029 |
+| Q | 940.8 | 701.8 | 64 262.5 | 0.011 |
+| EX | 163.5 | 4391.6 | 59 464.8 | 0.074 |
+| EY | 283.0 | 30 352.4 | 60 202.5 | 0.504 |
 
-El muro trabaja al **0.8 %**. No sorprende: 16.85 m de largo dan un brazo
-enorme, y bajo carga vertical un muro toma poco momento. Su papel es
-resistir corte y momento **sísmico**, y este modelo reparte el sismo entre
-56 muros.
+Bajo carga vertical el muro trabaja al **3 %**: 16.85 m de largo dan un
+brazo enorme, y bajo carga vertical un muro toma poco momento. Su papel es
+resistir el **sismo**, y ahí sí trabaja: con el sismo en la dirección de su
+largo, EY, llega al **50 %** de su capacidad.
 
 ### Las 138 columnas y muros a la vez
 
