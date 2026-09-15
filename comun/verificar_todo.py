@@ -68,6 +68,14 @@ SUITE = [
     # cambiar si el modelo se rearma.
     ('viga partida no es rotula',
      ['semana03/verificar_viga_partida.py', 'ingenieria', '373'], False),
+    # --- semana 4: el anexo del visor, sus esfuerzos contra OpenSees,
+    # su contrato con el C# y lo que Unity lee de verdad. El ultimo abre
+    # el editor en batch: es lento y sale con 2 si Unity ya esta abierto.
+    ('anexo Unity semana 4',  ['semana04/exportar_unity.py'], False),
+    ('esfuerzos y signos s4', ['semana04/verificar_semana04.py'], False),
+    ('contrato JSON-C# s4',   ['semana04/test_contrato_semana04.py'], False),
+    ('trazabilidad s4',       ['semana04/trazabilidad.py', 'ingenieria', '18'], False),
+    ('JsonUtility real s4',   ['semana04/verificar_unity_semana04.py'], True),
 ]
 
 
