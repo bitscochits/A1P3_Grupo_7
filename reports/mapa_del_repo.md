@@ -93,10 +93,21 @@ tener que fusionar dos programas. `comun/calcular.py` no sabe de qué edificio s
 | `exportar_unity.py` + `VisorSemana03.cs` | Flechas de carga, deformada sísmica y jaula de armadura en Unity. |
 | `reports/semana03.md` | El informe del avance. |
 
+## `semana04/` — Unity como postprocesador
+
+| archivo | qué hace |
+|---|---|
+| `exportar_unity.py <ed>` | Casos, combinaciones, esfuerzos a lo largo de cada barra (verificados contra `f_j`), material, restricciones, curvas P-M y demandas → `data/unity/semana04.json`. |
+| `verificar_semana04.py <ed>` | Reconstrucción, superposición, corrida explícita, E·A, trazabilidad, signos con fibras, `u = 9999`, plano de los muros. |
+| `test_contrato_semana04.py` · `verificar_unity_semana04.py` | Contrato JSON ↔ C# en las dos direcciones; Unity leyendo el JSON de verdad. |
+| `trazabilidad.py <ed> <elem>` | OpenSees → modelo → objeto de Unity → resultados → sección y capacidad. |
+| `GUIA_DEFENSA.md` · `GUION_DEMO.md` · `COMANDOS.md` · `CONTRATO.md` | Estudio, demo, chuleta y contrato. |
+| `reports/semana04.md` | El informe. |
+
 ## `unity/Assets/Scripts/` y raíz
 
 `ModeloEstructural.cs` (las clases de datos) · `VisorEstructura.cs` (dibuja) · `AnalizadorEstructural.cs`
-(habla con el servidor) · `EditorEstructura.cs` · `VisorQA.cs` (toggles) · `VisorSemana03.cs` · `CamaraOrbital.cs`
+(habla con el servidor) · `EditorEstructura.cs` · `VisorQA.cs` (toggles) · `VisorSemana03.cs` · `VisorSemana04*.cs` (postprocesador) · `CapturaSemana04.cs` · `CamaraOrbital.cs`
 `README.md` (mapa) · `CLAUDE.md` (reglas y trampas) · `AGENTS.md` (registro de IA) · `benchmark/` (Semana 1)
 
 ---

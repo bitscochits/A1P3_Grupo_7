@@ -56,8 +56,8 @@ antes de tocarlos. Nada específico de un edificio va en código: va en
 |---|---|---|
 | **Ejes** | OpenSees: Z vertical. Unity: Y vertical. `Unity(x, z, y)`. | `VisorEstructura.cs` |
 | **Unidades** | m, kN, kPa. `Ec = 4700·√f'c·1000`. | todo el repo |
-| **Inercias** | En el contrato `Iz` es la de **gravedad** (`b·h³/12`), `Iy` la lateral. El servidor las **cruza** solo en elementos no verticales (`vecxz=(0,0,1)` deja el local *y* vertical). | `servidor_opensees.py` |
-| **`vecxz`** | Se elige por **geometría**, nunca por la etiqueta `tipo`. Vertical → `(1,0,0)`; si no → `(0,0,1)`. Un muro trae el suyo (su normal). | `servidor_opensees.py` |
+| **Inercias** | En el contrato `Iz` es la de **gravedad** (`b·h³/12`), `Iy` la lateral. En los muros de Ingeniería (`b` = espesor, `h` = largo) la grande, `b·h³/12`, está en `Iy`. El servidor las **cruza** solo en elementos no verticales (`vecxz=(0,0,1)` deja el local *z* vertical: la gravedad flecta en `My`, que resiste `Iy`). | `servidor_opensees.py` |
+| **`vecxz`** | Se elige por **geometría**, nunca por la etiqueta `tipo`. Vertical → `(1,0,0)`; si no → `(0,0,1)`. Un muro trae el suyo: en el LT2 su normal (inercia grande en `Iz`), en Ingeniería su largo (inercia grande en `Iy`); el momento del plano se elige por inercias. | `servidor_opensees.py` |
 | **Fuerzas internas** | `eleResponse(tag,'localForce')`, **nunca** `eleForce` (que es global). Vector `[N,Vy,Vz,T,My,Mz]` por extremo. | `calcular.py`, `demanda_capacidad.py` |
 | **Reacciones** | `nodeReaction` en un nodo de diafragma incluye la fuerza de la restricción, que es interna. Se separa **por grado de libertad**: en horizontal solo cuentan nodos fuera de todo diafragma; en vertical, cualquier restringido salvo el maestro. Sumar todo **dobla el corte basal**. | `calcular.equilibrio()` |
 | **Diafragma rígido** | `constraints('Transformation')`. Los GDL fuera del plano del maestro se fijan. El piso se traslada **y gira**: `ux_i = ux_m − rz·(y_i−y_m)`. | `servidor_opensees.py` |
@@ -100,6 +100,8 @@ solo se ve mirando otra cosa.
 | Dos secciones con el mismo número de barras **no** son la misma sección (caché de curvas P-M). | `demanda_capacidad._todas()` |
 | Un cociente de torsión sobre un piso que casi no se mueve es ruido. | `sismo.py` |
 | Ajustar un umbral "hasta que entre" roba las anotaciones del vecino. Regla: mínima distancia, a uno solo. | `pegar_enfierradura_muros()` |
+| El momento **del plano** de un muro no es siempre `Mz`: el LT2 da como `vecxz` la normal (inercia grande en `Iz`) e Ingeniería el largo (grande en `Iy`, momento del plano `My`). Con `|Mz|` fijo, los 56 muros de Ingeniería se comparaban con su momento **fuera** de plano y trabajaban muy por debajo de lo real (el 537 salía al 0.8 % bajo G; es 3 % bajo G y 50 % bajo EY). Se elige por inercias, y `demanda()` no tiene default para muros. | `demanda_capacidad.momento_en_el_plano()`, `verificar_semana04.py` [8] |
+| `eleResponse(...,'localForce')` da los extremos; el diagrama del medio se **reconstruye** por equilibrio. Un signo o un eje de carga mal puesto da un diagrama igual de razonable: se exige llegar a `f_j` de OpenSees, y el lado traccionado se prueba con una sección de fibras. | `exportar_unity.py` (no escribe si no cierra), `verificar_semana04.py` [1] y [6] |
 
 ## 7. Reglas para el agente
 

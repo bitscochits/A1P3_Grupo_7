@@ -162,6 +162,65 @@ modelo y el conteo debe cerrar con los rótulos del plano"*. Uno malo:
   fisuración** — por eso 0.25 y no 1.0, y por eso cerca del 0.35 de viga
   y lejos del 0.70 de columna, que es lo correcto a `P = 0`.
 
+### Semana 4 — Unity como postprocesador
+- **Tarea:** llevar a Unity los esfuerzos de OpenSees ya verificados
+  (panel por elemento, diagramas, deformada por caso, P-M de columna y
+  muro con el caso activo) y demostrar la trazabilidad. Todo en
+  `semana04/`.
+- **Cómo se trabajó:** un workflow de agentes en paralelo (exportador,
+  verificador, contrato, trazabilidad, visor C#). Durante ~5 h los
+  agentes murieron varias veces por errores de la API ("the response
+  stopped arriving"); el del visor nunca llegó a escribir código. El
+  agente principal detuvo el workflow, escribió el C# en cuatro archivos
+  parciales (`VisorSemana04*.cs`) y relanzó una verificación más chica,
+  con la instrucción de escribir en trozos cortos. Lo que ya habían
+  dejado los otros agentes se revisó antes de usarlo.
+- **Corrección 10 — una regla fija que valía para un solo edificio.**
+  `demanda_capacidad.demanda()` tomaba `|Mz|` como el momento del plano
+  de todo muro; en la Semana 3 se había comprobado **solo** con el muro 9
+  del LT2. El agente que escribía `trazabilidad.py` comparó las inercias
+  que recibe OpenSees y encontró que en Ingeniería los 56 muros traen el
+  `vecxz` a lo largo, con la inercia grande en `Iy`: su `Mz` es el de
+  **fuera** de plano. Muro 537 bajo EY: `My = 30 352`, `Mz = 46 kN·m`, y
+  se usaba el segundo. El informe entregado de la Semana 3 decía que ese
+  muro trabajaba al 0.8 %; con el eje correcto es 2.9 % bajo G y 50 %
+  bajo EY, y en `1.2G+1.0Q+1.4EY` no pasan 13 muros (7
+  traccionados, entre ellos los cuatro de 2.35 m, y 6 comprimidos). Se corrigió eligiendo por inercias
+  (`momento_en_el_plano(Iy, Iz)`), sin valor por defecto para muros, y
+  con una prueba que no mira las inercias: bajo EX y EY el momento
+  declarado del plano es el mayor en los 96 muros de los dos cuerpos
+  (el más justo, 5.2 veces). Mutada la regla a `Mz`, la prueba falla.
+- **El lado del diagrama no se eligió: se probó dos veces.** Las fórmulas
+  de los esfuerzos internos se exigen contra `f_j` de OpenSees (60 372
+  comparaciones en Ingeniería, dentro del redondeo) y el lado traccionado
+  se comprobó aparte con una sección de fibras: con `My > 0` la fibra de
+  `+z` queda en tracción (+12 579.5 kPa).
+- **`JsonUtility` no avisa.** Además del test de contrato en las dos
+  direcciones, Unity lee el JSON de verdad y se compara campo a campo.
+  Esa comparación atrapó primero un error del propio verificador: los
+  nombres de bloque que esperaba no eran los del reporte de Unity.
+- **Capturas sin intervención:** el primer criterio para elegir "una
+  viga con parábola" eligió una viga de 2.5 m con momento monótono. Se
+  cambió por la joroba de la parábola, que es lo que se quería mostrar.
+- **Una revisión adversarial antes de entregar.** Cinco agentes
+  revisaron la guía, el guion, el informe, el código y la coherencia
+  entre documentos, y otros cinco intentaron refutar cada hallazgo: de 30
+  quedaron 27. Casi todos eran de precisión (una cota de redondeo escrita
+  sin `Σ|λ|`, un número de antes de NCh1537, un paso del guion que no
+  funcionaba en vivo). Tres llevaron a cambiar código: el panel rotulaba
+  `Iz = b·h³/12` también en los muros de Ingeniería, donde es al revés;
+  un brazo rígido seleccionado dibujaba diagrama; y la lectura real de
+  Unity no probaba el campo nuevo en un muro.
+- **Hallazgos que quedan para el grupo, sin corregir:** la curva del
+  muro 10 del LT2 (familia 3, M 0.60×2.92) trae un punto `P = 0` con
+  `Mn = 0`: el M-φ a ese axial no avanza y `capacidad.interaccion()` lo
+  agrega igual. Puede venir de la lectura del plano, que le deja toda la
+  armadura en un borde (¿`L:8+8` mal leído?). Por eso el bloque [7] de
+  `verificar_semana04.py` falla en `lt2` y `conjunto`; la suite corre
+  solo Ingeniería y no lo ve. Y en el
+  conjunto la capacidad usa un solo `f'c` (28 MPa) también para las
+  secciones del LT2, que son G35; `trazabilidad.py` lo avisa.
+
 ---
 
 ## Verificaciones críticas del proyecto
@@ -177,5 +236,9 @@ modelo y el conteo debe cerrar con los rótulos del plano"*. Uno malo:
 | Superposición = corrida explícita | ≤ 1.05× la cota de redondeo, 45/45 | `comun/combinar.py` |
 | Tracción pura, fibras = a mano | 0.00e+00 | `semana03/verificar_rc.py` |
 | Contrato JSON ↔ C# | sin campos huérfanos | `comun/test_contrato_unity.py` |
+| Esfuerzos reconstruidos = extremo *j* de OpenSees | 60 372 comparaciones dentro del redondeo | `semana04/verificar_semana04.py` [1] |
+| Lado traccionado del diagrama | fibra `+z` en tracción con `My > 0` | `semana04/verificar_semana04.py` [6] |
+| Momento del plano de los muros | el mayor bajo EX y EY: 56 de 56 en Ingeniería (en la suite); 96 de 96 con `verificar_semana04.py conjunto` | `semana04/verificar_semana04.py` [8] |
+| Unity lee el anexo de Semana 4 | `JsonUtility` real = lo escrito | `semana04/verificar_unity_semana04.py` |
 
 Todo junto: `python comun/verificar_todo.py`.
