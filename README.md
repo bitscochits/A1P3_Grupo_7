@@ -43,7 +43,7 @@ edificios/<ed>/exportar_unity.py   →  data/unity/<ed>.json        lo que dibuj
 
 ```powershell
 .\setup.ps1                                  # una vez: crea .venv e instala
-python comun\verificar_todo.py               # ¿está todo bien?  (27 comprobaciones)
+python comun\verificar_todo.py               # ¿está todo bien?  (34 comprobaciones)
 python comun\lanzar_unity.py app conjunto --pantalla-completa   # verlo
 ```
 

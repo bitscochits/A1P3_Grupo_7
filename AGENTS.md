@@ -211,15 +211,57 @@ modelo y el conteo debe cerrar con los rótulos del plano"*. Uno malo:
   `Iz = b·h³/12` también en los muros de Ingeniería, donde es al revés;
   un brazo rígido seleccionado dibujaba diagrama; y la lectura real de
   Unity no probaba el campo nuevo en un muro.
-- **Hallazgos que quedan para el grupo, sin corregir:** la curva del
-  muro 10 del LT2 (familia 3, M 0.60×2.92) trae un punto `P = 0` con
-  `Mn = 0`: el M-φ a ese axial no avanza y `capacidad.interaccion()` lo
-  agrega igual. Puede venir de la lectura del plano, que le deja toda la
-  armadura en un borde (¿`L:8+8` mal leído?). Por eso el bloque [7] de
-  `verificar_semana04.py` falla en `lt2` y `conjunto`; la suite corre
-  solo Ingeniería y no lo ve. Y en el
-  conjunto la capacidad usa un solo `f'c` (28 MPa) también para las
-  secciones del LT2, que son G35; `trazabilidad.py` lo avisa.
+- **Corrección 11 — `L:` no era fierro de muro.** El bloque [7] fallaba
+  en `lt2` y `conjunto` por la curva del muro 10 (M 0.60×2.92), con
+  `Mn = 0` en `P = 0`. La causa no estaba en la capacidad sino en la
+  lectura: en la Semana 3 el agente interpretó `L:8+8%%C10` como el
+  longitudinal de un "machón" y lo pegó al muro más cercano. Leyendo el
+  DXF se comprobó que la lámina 000 define `L:` = LATERALES y que esas
+  llamadas están bajo los rótulos `V.F. 20/120`, `20/160` y `20/180` del
+  eje A': eran la piel de las vigas de fundación. Se quitó la rama
+  "machón" del extractor; `geometria/lt2.json` y `modelo/lt2.json`
+  cambian solo en eso (los muros 10 y 11 quedan sin fierro, 29 de 40).
+  Relajar el chequeo o borrar el punto `(0, 0)` lo habría hecho pasar
+  inventando un `Mn`.
+- **Corrección 12 — el `f'c` del conjunto, del lado de la capacidad.**
+  Lo mismo que el módulo elástico de la Semana 3: `conjunto/armar.py`
+  sellaba `E` y `G` por cuerpo pero no `f'c`, y `capacidad.py` leía el
+  del material del conjunto (28 MPa) también para el LT2 (G35). La nariz
+  de sus curvas salía 17 a 23 % más baja. Ahora la sección trae
+  `fpc_MPa`; `trazabilidad.py conjunto 200001` da 35 MPa y `Mn(0)` 987.8.
+- **Cómo se trabajó la 11 y la 12:** cuatro agentes en paralelo (plano,
+  `f'c`, asimetría de la curva, el bloque [7]) y dos revisores que
+  intentaron refutarlos; después del arreglo, cuatro más sobre el diff y
+  sobre lo que quedaba abierto. Uno de los revisores corrigió al agente
+  del plano en dos números (las cotas de los textos y el fierro de la
+  punta), sin cambiar la conclusión.
+- **Hallazgos que quedan para el grupo, sin corregir:**
+  - **Fierro de muro del LT2, contado de menos.** En los bloques de barra de
+    las elevaciones el número que dibuja el plano (`5 Ø32 L=900`) es el
+    atributo `NUM`; el extractor lee `CANT`, que es invisible y vale `1`.
+    Pasa en 660 de 780 bloques: los 29 muros armados llevan 181 barras de
+    borde donde el plano da 411. Del lado seguro (el `Mn` a `P = 0` del
+    muro 12 sube 97 %), pero los números de capacidad de esos muros no son
+    los del plano.
+  - **Barras que no son del muro, pegadas como borde (LT2).** De esas 181
+    asignaciones, 36 son barras horizontales (dinteles bajo losa, vigas de
+    fundación) y 30 vienen de la elevación perpendicular; 22 bloques entran
+    en dos muros. Del lado **inseguro**: quitándolas, el `Mn` baja hasta
+    33 % (muro 16).
+  - **Puntas de muro de Ingeniería.** Las `L:3+3 Ø10` que se ponen en las
+    dos puntas de los 56 muros son las laterales de las vigas `V. 60/80`:
+    la lámina 2017_67-000 dice `L:` = LATERALES, igual que la del LT2. En el
+    muro 537 pesan 7 % del `Mn` a `P = 0`; en los muros cortos, 42 %. El
+    plano dibuja en las puntas otras barras contadas (`2 Ø22`, `2 Ø18`).
+  - **La curva P-M es de un solo signo.** `capacidad.interaccion()` flecta
+    hacia un lado y la demanda usa `|M|`. En una sección con el acero
+    descentrado la capacidad cambia con el signo (20 a 36 % en varios muros
+    del LT2), y para uno de los dos queda del lado inseguro. Parte de esa
+    asimetría es de los dos puntos de arriba y de que la malla no queda
+    centrada en `_seccion_de_muro`.
+  - **Los M 0.60x2.92 del LT2 (eje A') van sin fierro.** El plano les da
+    cuatro mallas y núcleos de borde de Ø32, en texto suelto y en cortes que
+    el extractor no lee; no entran a la revisión P-M.
 
 ---
 

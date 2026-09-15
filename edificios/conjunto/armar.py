@@ -159,6 +159,12 @@ def _remapear(modelo: dict, nombre: str, calce: dict, base: int) -> dict:
     # El servidor admite E y G POR SECCION -- ya se usaban para los
     # tubos metalicos del voladizo -- asi que cada cuerpo se lleva el
     # suyo y el 'material' del conjunto pasa a ser solo referencia.
+    #
+    # Y el f'c, por la misma razon del lado de la CAPACIDAD: la curva
+    # P-M lo usa en el hormigon de las fibras y en el confinamiento.
+    # Sin sellarlo, las secciones del LT2 (G35) sacaban su curva con
+    # los 28 MPa del otro cuerpo: la nariz 17 a 23 % mas baja y la
+    # utilizacion hasta 26 % mas alta, con la rigidez ya bien.
     mat = modelo.get('material') or {}
     fpc = float(mat.get('fpc_MPa', 0.0) or 0.0)
     nu = float(mat.get('poisson', 0.2) or 0.2)
@@ -176,6 +182,7 @@ def _remapear(modelo: dict, nombre: str, calce: dict, base: int) -> dict:
             s['E'] = round(E_cuerpo, 4)
             s['G'] = round(G_cuerpo, 4)
             s['E_del_cuerpo'] = nombre
+            s['fpc_MPa'] = fpc
             sellados += 1
         out['secciones'].append(s)
     out['_secciones_con_E_propio'] = sellados

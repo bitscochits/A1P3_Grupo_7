@@ -211,50 +211,8 @@ def pegar_enfierradura_muros(elementos, coords, geo, tol_perp=1.2,
     cfg = geo.get('enfierradura') or {}
     mallas = cfg.get('muros') or []
     barras = cfg.get('barras_sueltas') or []
-    macho = cfg.get('machones') or []
-    if not mallas and not macho:
-        return 0, 0
-
-    # ----------------------------------------------------------
-    # A QUE MURO PERTENECE CADA LLAMADA DE MACHON
-    # ----------------------------------------------------------
-    # Las llamadas 'L:n+n' se escriben con linea de referencia desde
-    # AFUERA del muro, apuntando a su zona de borde: quedan medio metro
-    # o mas alla del extremo. Exigir que caigan dentro de la huella las
-    # descarta todas.
-    #
-    # Agrandar el margen a ojo hasta que entren es justo lo que no hay
-    # que hacer: con un margen suelto, la llamada de un muro se la
-    # queda el vecino. La regla es de MINIMA DISTANCIA -- cada llamada
-    # va al muro mas cercano y a uno solo -- que no necesita elegir
-    # ningun umbral salvo un tope de seguridad.
-    def dist_al_muro(px, py, e):
-        x, y, _z = coords[e['n1']]
-        L = float(e.get('largo', 0.0))
-        d = e.get('dir_largo') or [1.0, 0.0]
-        s2 = (px - x) * d[0] + (py - y) * d[1]
-        perp = abs(-(px - x) * d[1] + (py - y) * d[0])
-        fuera = max(0.0, abs(s2) - L / 2.0)
-        return math.hypot(fuera, perp), s2
-
-    muros = [e for e in elementos if e.get('tipo') == 'muro']
-    mio = {}
-    for X in macho:
-        if X.get('x') is None or X.get('cota') is None:
-            continue
-        cands = []
-        for e in muros:
-            _x, _y, z = coords[e['n1']]
-            if abs(float(X['cota']) - z) > tol_cota:
-                continue
-            d, s2 = dist_al_muro(X['x'], X['y'], e)
-            cands.append((d, s2, int(e['id'])))
-        if not cands:
-            continue
-        cands.sort(key=lambda c: c[0])
-        d, s2, eid = cands[0]
-        if d <= tol_perp:
-            mio.setdefault(eid, []).append((s2, X))
+    if not mallas:
+        return 0, 0, {}
 
     secciones = {}
     con_malla = con_barras = 0
@@ -288,53 +246,9 @@ def pegar_enfierradura_muros(elementos, coords, geo, tol_perp=1.2,
                 cand.append((r[1], M))
 
         if not cand:
-            # Sin bloque de malla: puede ser un muro armado COMO MACHON
-            # -- estribos y trabas como una columna, mas el longitudinal
-            # escrito en un 'L:n+n'. Es el caso del M 0.60x2.92 del
-            # poniente, cuya elevacion (eje A') no tiene ni un bloque de
-            # malla en sus 150 bloques con atributos.
-            suyas = mio.get(int(e['id']), [])
-            if not suyas:
-                continue
-            estribo = next((X['llamada'] for _s2, X in suyas
-                            if X['llamada']
-                            and X['llamada']['tipo'] in ('E', 'ED', 'ET')),
-                           None)
-            trabas = [X['llamada'] for _s2, X in suyas
-                      if X['llamada'] and X['llamada']['tipo'] == 'T']
-            trabas_l = [X['llamada'] for _s2, X in suyas
-                        if X['llamada'] and X['llamada']['tipo'] == 'TL']
-            longis = [{'s': round(s2, 4),
-                       'cantidad': X['longitudinal']['cantidad'],
-                       'diametro_mm': X['longitudinal']['diametro_mm'],
-                       'largo': X['longitudinal']['texto']}
-                      for s2, X in suyas if X['longitudinal']]
-            if not longis:
-                continue
-            longis.sort(key=lambda b: b['s'])
-            e['enfierradura'] = {
-                'tipo': 'muro',
-                'armado': 'machon',
-                'espesor_m': t,
-                'largo_m': L,
-                'malla_vertical': None,
-                'malla_horizontal': None,
-                'capas': 2,
-                'estribo': estribo,
-                'trabas': trabas,
-                'trabas_longitudinales': trabas_l,
-                'barras_de_borde': longis,
-                'fuente': {
-                    'lamina': suyas[0][1].get('lamina'),
-                    'elevacion': suyas[0][1].get('elevacion'),
-                    'eje': suyas[0][1].get('eje'),
-                    'texto': 'armado como machon: %s + %s'
-                             % ((estribo or {}).get('texto', '-'),
-                                ', '.join(x['largo'] for x in longis[:3])),
-                },
-            }
-            con_malla += 1
-            con_barras += 1
+            # Sin bloque de malla no hay fierro que pegarle. Las
+            # llamadas 'L:n+n' que quedan cerca NO son del muro: son
+            # las LATERALES de una viga (ver planos/enfierradura.py).
             continue
 
         cand.sort(key=lambda p: p[0])

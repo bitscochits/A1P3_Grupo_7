@@ -43,7 +43,7 @@ tener que fusionar dos programas. `comun/calcular.py` no sabe de qué edificio s
 | `capacidad.py` | Fiber Section desde el modelo: M-φ, curva P-M, confinamiento de Mander desde el estribo real. Columna o muro. |
 | `verificar_tributarias.py` | La losa que se aplica es la que se dibuja: `q` implícito constante por piso. |
 | `test_contrato_unity.py` | Cada clave del JSON tiene su campo en el C#. `JsonUtility` no avisa si falta. |
-| `verificar_todo.py` | Corre las 27 comprobaciones y resume. |
+| `verificar_todo.py` | Corre las 34 comprobaciones y resume. |
 | `lanzar_unity.py` | Regenera, copia a `StreamingAssets/` con el nombre que declara la escena, y abre el visor. |
 
 ## `edificios/lt2/` — cuerpo nuevo, planos 2024_22
@@ -55,7 +55,7 @@ tener que fusionar dos programas. `comun/calcular.py` no sabe de qué edificio s
 | `planos/lectura.py` | Abre una lámina, explota los bloques y XREFs, deja todo en metros. |
 | `planos/ejes.py` · `niveles.py` · `muros.py` · `pilares.py` · `vigas.py` · `losas.py` | Cada uno saca una cosa de la lámina. |
 | `planos/alineacion.py` | Registra plantas entre sí por los ejes que comparten. |
-| `planos/enfierradura.py` | El fierro desde las elevaciones: estribos de 40 pilares, malla y barras de borde de 31 muros. |
+| `planos/enfierradura.py` | El fierro desde las elevaciones: estribos de 40 pilares, malla y barras de borde de 29 muros. |
 | `planos/perfil.py` · `inventario.py` | Lee el perfil; inventaría capas y láminas. |
 | `malla.py` | Corta las vigas en sus intersecciones reales; engancha muros con brazos rígidos. |
 | `panos.py` | Paños = caras del grafo de vigas; reparto a 45° (Sutherland–Hodgman). |
@@ -140,12 +140,12 @@ deactivate                          # salir
 ## 3.2 ¿Está todo bien? — el comando de siempre
 
 ```powershell
-python comun\verificar_todo.py            # las 27 comprobaciones (~25 s)
+python comun\verificar_todo.py            # las 34 comprobaciones (~4 min; --rapido, ~40 s)
 python comun\verificar_todo.py --rapido   # sin las lentas
 python comun\verificar_todo.py --solo sismo combinar
 ```
 
-**Si dice `27 de 27 EN OK`, el repo está como se entrega.** Correlo antes de cada `push`.
+**Si dice `34 de 34 EN OK`, el repo está como se entrega.** Correlo antes de cada `push`.
 
 ## 3.3 Regenerar el modelo desde cero
 

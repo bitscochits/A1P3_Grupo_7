@@ -62,7 +62,7 @@ antes de tocarlos. Nada específico de un edificio va en código: va en
 | **Reacciones** | `nodeReaction` en un nodo de diafragma incluye la fuerza de la restricción, que es interna. Se separa **por grado de libertad**: en horizontal solo cuentan nodos fuera de todo diafragma; en vertical, cualquier restringido salvo el maestro. Sumar todo **dobla el corte basal**. | `calcular.equilibrio()` |
 | **Diafragma rígido** | `constraints('Transformation')`. Los GDL fuera del plano del maestro se fijan. El piso se traslada **y gira**: `ux_i = ux_m − rz·(y_i−y_m)`. | `servidor_opensees.py` |
 | **Muro** | Una barra en su eje baricéntrico (columna ancha) + brazos rígidos como barras ×100 hasta las caras. **No** `rigidLink` (pelea con el diafragma). | `malla.py`, `modelo_lt2.py` |
-| **E por sección** | `E`/`G` opcionales en cada sección pisan al material del modelo. Es lo que permite juntar un cuerpo G35 con uno G28. | `conjunto/armar.py` |
+| **Hormigón por sección** | `E`, `G` y `fpc_MPa` opcionales en cada sección pisan al material del modelo: el solver usa `E`/`G`, la capacidad `fpc_MPa`. Es lo que permite juntar un cuerpo G35 con uno G28. | `conjunto/armar.py`, `capacidad._fpc_kPa()` |
 | **Rutas** | Solo `comun/rutas.py` sabe dónde está cada cosa; encuentra la raíz subiendo hasta la marca del repo. **Nunca** contar `dirname`. | `rutas.py` |
 | **Resultados** | El servidor **redondea**: desplazamientos a 8 decimales, fuerzas a 4. Nada se puede comparar por debajo de eso. | `combinar.py` |
 
@@ -94,8 +94,8 @@ solo se ve mirando otra cosa.
 | `JsonUtility` ignora sin avisar un campo C# que no calza con el JSON: deformada plana, sin error. | `comun/test_contrato_unity.py` |
 | La **escena** pisa el `nombreArchivo` del C#, y hay dos visores: el lanzador debe leer el de `VisorEstructura`. | `lanzar_unity.nombre_que_lee_el_visor()` |
 | En la elevación, la llamada de fierro **más cercana** al pilar es la de la viga. La búsqueda es direccional (hacia abajo, dentro del ancho). | `enfierradura.extraer()` |
-| El plano arma muros de dos formas: **malla** (bloque con atributos) o **machón** (`E`+`L:n+n`). Una elevación sin pilares también tiene muros. | `enfierradura.py`, `exportar_unity.pegar_enfierradura_muros()` |
-| Al unir dos edificios el contrato tiene **un** material: el LT2 corría con 28 MPa (10.6% más blando) y el equilibrio cerraba igual. | `verificar_conjunto.py` |
+| `L:n+n` **no** es fierro de muro: la lámina 000 dice `L:` = LATERALES, la piel de una viga (`V. 40/80` → `L:3+3`, `V.F. 20/180` → `L:8+8`). Leído como longitudinal de "machón", le pegó las laterales de la V.F. del eje A' al M 0.60x2.92 y su curva P-M dio Mn = 0 a P = 0. Una elevación sin pilares también tiene muros. | `semana04/verificar_semana04.py lt2` bloque [7] |
+| Al unir dos edificios el contrato tiene **un** material: el LT2 corría con 28 MPa (10.6% más blando) y el equilibrio cerraba igual. Lo mismo del lado de la capacidad: sin `fpc_MPa` en la sección, sus curvas P-M salían con 28 (nariz 17–23 % más baja). | `verificar_conjunto.py`, `trazabilidad.py conjunto` |
 | Un paño de losa que nunca entró al modelo **no** rompe el equilibrio. | `verificar_tributarias.py` (q implícito por piso) |
 | Dos secciones con el mismo número de barras **no** son la misma sección (caché de curvas P-M). | `demanda_capacidad._todas()` |
 | Un cociente de torsión sobre un piso que casi no se mueve es ruido. | `sismo.py` |
