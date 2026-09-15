@@ -55,8 +55,9 @@ r"""
  la misma en cualquier direccion.
 
  En un MURO no. Un M 0.25x7.95 tiene mil veces mas inercia en un eje
- que en el otro, asi que se toma solo el momento EN SU PLANO -- que
- es Mz -- y el de fuera de plano se informa aparte. Ver demanda().
+ que en el otro, asi que se toma solo el momento EN SU PLANO -- el
+ del eje de inercia mayor, My o Mz segun el muro -- y el de fuera de
+ plano se informa aparte. Ver demanda() y momento_en_el_plano().
 ================================================================
 """
 from __future__ import annotations
@@ -122,7 +123,22 @@ def combinar(por_caso, lambdas):
     return out
 
 
-def demanda(f, tipo='columna'):
+def momento_en_el_plano(Iy, Iz):
+    """'My' o 'Mz': el momento que flecta un muro en su plano, el del eje
+    de inercia mayor. Un muro es una barra vertical y el servidor le pasa
+    Iy e Iz tal cual, sin cruzarlas: la flexion alrededor del eje local y
+    la resiste Iy, la de z la resiste Iz."""
+    return 'My' if float(Iy) > float(Iz) else 'Mz'
+
+
+def momento_en_el_plano_de(modelo, e):
+    """momento_en_el_plano() con las inercias de la seccion del elemento.
+    Sin valores por defecto: una seccion sin Iy o Iz es un error."""
+    s = next(s for s in modelo['secciones'] if s['nombre'] == e['seccion'])
+    return momento_en_el_plano(s['Iy'], s['Iz'])
+
+
+def demanda(f, tipo='columna', plano=None):
     r"""
     (P, M) de un vector de fuerza local. P positivo en COMPRESION.
 
@@ -141,22 +157,39 @@ def demanda(f, tipo='columna'):
     otro. Componer los dos momentos en uno resultante y compararlo
     contra la curva del plano fuerte diria que el muro aguanta fuera
     de su plano lo mismo que dentro, que es falso. Se toma solo el
-    momento EN EL PLANO, que es Mz, y el fuera de plano se informa
-    aparte.
+    momento EN EL PLANO, y el fuera de plano se informa aparte.
 
-    Que Mz es el del plano se comprobo: el muro 9 corre en Y, y bajo
-    sismo EY su Mz sube a 9249 kN m mientras My se queda en 23.
+    ----------------------------------------------------------------
+    CUAL ES EL DEL PLANO LO DICEN LAS INERCIAS
+    ----------------------------------------------------------------
+    plano = 'My' o 'Mz', obligatorio en un muro: sale de
+    momento_en_el_plano_de(modelo, e), el eje de inercia mayor. Antes
+    habia una regla fija, 'Mz', que valia solo para el LT2.
+
+    Los dos cuerpos eligieron distinto el vecxz de sus muros. En el LT2
+    es la normal y la inercia grande queda en Iz: el muro 9 bajo EY da
+    Mz = 9661 kN m y My = 24. En el edificio de Ingenieria es la
+    direccion del largo y la grande queda en Iy: el muro 537 bajo EY da
+    My = 30 352 kN m y Mz = 46. Con la regla fija, en Ingenieria se
+    comparaba el momento FUERA de plano contra la curva del plano.
     """
     if not f or len(f) < 12:
         return None
+    if tipo == 'muro' and plano not in ('My', 'Mz'):
+        # Sin default a proposito: un default silencioso es justo lo que
+        # escondio el error en los muros de Ingenieria.
+        raise ValueError("demanda() de un muro necesita plano='My' o 'Mz': "
+                         "usa momento_en_el_plano_de(modelo, e)")
     extremos = [
         {'P_kN': f[0], 'My': f[4], 'Mz': f[5], 'extremo': 'i (inferior)'},
         {'P_kN': -f[6], 'My': f[10], 'Mz': f[11], 'extremo': 'j (superior)'},
     ]
     for d in extremos:
         if tipo == 'muro':
-            d['M_kNm'] = abs(d['Mz'])
-            d['M_fuera_de_plano_kNm'] = abs(d['My'])
+            fuera = 'Mz' if plano == 'My' else 'My'
+            d['M_kNm'] = abs(d[plano])
+            d['M_fuera_de_plano_kNm'] = abs(d[fuera])
+            d['plano'] = plano
         else:
             d['M_kNm'] = math.hypot(d['My'], d['Mz'])
             d['M_fuera_de_plano_kNm'] = None
@@ -183,6 +216,24 @@ def capacidad_en(P, curva):
     return 0.0
 
 
+def firma_de_seccion(e, sec):
+    """
+    La clave de FAMILIA de un elemento con enfierradura: dos elementos
+    con la misma firma comparten curva de interaccion. Vive a nivel de
+    modulo para que _todas() y semana04/exportar_unity.py agrupen igual.
+    """
+    # La clave tiene que incluir la SECCION. Sin ella, dos muros
+    # distintos con el mismo numero de barras -- un M 0.30x1.45 y
+    # un M 0.25x7.95 con cinco barras de borde cada uno -- caian en
+    # la misma entrada y el segundo se comparaba contra la curva
+    # del primero. Mismo numero de barras no es la misma seccion.
+    fe = e.get('enfierradura') or {}
+    return (e.get('seccion'), round(sec.b, 4), round(sec.h, 4),
+            len(sec.barras), round(sec.As, 8),
+            (sec.estribo or {}).get('texto'),
+            (fe.get('malla_vertical') or {}).get('texto'))
+
+
 def revisar(edificio, elemento_id, lambdas=None, curva=None, modelo=None,
             resultados=None, p=None):
     """Demanda, capacidad y utilizacion de una columna."""
@@ -192,14 +243,16 @@ def revisar(edificio, elemento_id, lambdas=None, curva=None, modelo=None,
     sec = capacidad.desde_elemento(modelo, elemento_id)
     curva = curva if curva is not None else capacidad.interaccion(sec)
 
-    tipo = next((e.get('tipo') for e in modelo['elementos']
-                 if int(e['id']) == int(elemento_id)), 'columna')
+    elemento = next((e for e in modelo['elementos']
+                     if int(e['id']) == int(elemento_id)), {})
+    tipo = elemento.get('tipo', 'columna')
+    plano = momento_en_el_plano_de(modelo, elemento) if tipo == 'muro' else None
     por_caso = fuerzas_por_caso(resultados, elemento_id)
     puntos = {}
     for c, f in por_caso.items():
-        puntos[c] = demanda(f, tipo)
+        puntos[c] = demanda(f, tipo, plano)
     if lambdas:
-        puntos['COMB'] = demanda(combinar(por_caso, lambdas), tipo)
+        puntos['COMB'] = demanda(combinar(por_caso, lambdas), tipo, plano)
 
     for nombre, d in puntos.items():
         if not d:
@@ -286,25 +339,13 @@ def _todas(edificio, lambdas, p):
     # cuarenta veces la misma curva es tirar el tiempo.
     curvas = {}
 
-    def firma(e, sec):
-        # La clave tiene que incluir la SECCION. Sin ella, dos muros
-        # distintos con el mismo numero de barras -- un M 0.30x1.45 y
-        # un M 0.25x7.95 con cinco barras de borde cada uno -- caian en
-        # la misma entrada y el segundo se comparaba contra la curva
-        # del primero. Mismo numero de barras no es la misma seccion.
-        fe = e.get('enfierradura') or {}
-        return (e.get('seccion'), round(sec.b, 4), round(sec.h, 4),
-                len(sec.barras), round(sec.As, 8),
-                (sec.estribo or {}).get('texto'),
-                (fe.get('malla_vertical') or {}).get('texto'))
-
     print('  %5s %10s %10s %10s %7s  %s'
           % ('elem', 'P [kN]', 'M [kN m]', 'Mn [kN m]', 'u', ''))
     peor = None
     for eid in ids:
         e = next(x for x in modelo['elementos'] if int(x['id']) == eid)
         sec = capacidad.desde_elemento(modelo, eid)
-        clave = firma(e, sec)
+        clave = firma_de_seccion(e, sec)
         if clave not in curvas:
             curvas[clave] = capacidad.interaccion(sec)
         res = revisar(edificio, eid, lambdas, curva=curvas[clave],
