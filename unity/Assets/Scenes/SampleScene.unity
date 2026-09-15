@@ -149,9 +149,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisorSemana03
   nombreArchivo: semana03.json
-  mostrarSismo: 1
+  mostrarCargas: 1
   mostrarArmadura: 1
+  enfierrarTodas: 1
+  aplicarDeformada: 1
+  casoDeformada: EX
+  casoCarga: EX
+  cargasAlCostado: 1
+  cargasConLaDeformada: 1
+  separacionCargas: 0.15
   largoFlechaMaxima: 8
+  umbralPorcentaje: 8
   grosorFlecha: 0.35
   colorSismo: {r: 1, g: 0.35, b: 0.1, a: 1}
   jaulaEnSitio: 1
@@ -255,6 +263,7 @@ GameObject:
   - component: {fileID: 258344398}
   - component: {fileID: 258344397}
   - component: {fileID: 258344399}
+  - component: {fileID: 258344400}
   m_Layer: 0
   m_Name: Visor
   m_TagString: Untagged
@@ -344,6 +353,34 @@ MonoBehaviour:
   colorEjeZ: {r: 0.35, g: 0.55, b: 1, a: 1}
   colorTributaria: {r: 1, g: 0.55, b: 0.1, a: 0.85}
   colorSeleccion: {r: 1, g: 0, b: 0.85, a: 1}
+--- !u!114 &258344400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 258344396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f152614ffcc8c6442918aa8cec9b82de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VisorSemana04
+  colorCurva: {r: 0.1, g: 0.35, b: 0.85, a: 1}
+  colorCurvaMax: {r: 0.65, g: 0.75, b: 0.95, a: 1}
+  colorDemanda: {r: 0.55, g: 0.55, b: 0.55, a: 1}
+  colorDemandaActiva: {r: 0.9, g: 0.1, b: 0.1, a: 1}
+  nombreArchivo: semana04.json
+  casoActivo: 
+  mostrarDiagramas: 1
+  magnitud: My
+  soloSeleccionado: 1
+  largoDiagramaMaximo: 2
+  multiplicadorEscala: 1
+  colorPositivo: {r: 0.25, g: 0.55, b: 1, a: 1}
+  colorNegativo: {r: 1, g: 0.4, b: 0.25, a: 1}
+  colorContorno: {r: 0.08, g: 0.08, b: 0.1, a: 1}
+  colorEtiqueta: {r: 0.05, g: 0.05, b: 0.05, a: 1}
+  mostrarPM: 1
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
