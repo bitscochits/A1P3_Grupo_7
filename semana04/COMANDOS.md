@@ -15,6 +15,9 @@ Desde la carpeta del repo. Si no activaste el entorno, `python` es
     python semana03\exportar_unity.py ingenieria
     python comun\lanzar_unity.py editor ingenieria          y Play
 
+El **edificio va siempre**: sin argumento el lanzador abre el LT2, y con los
+anexos de otro edificio el visor apaga los diagramas (el lanzador lo avisa).
+
 **Trazabilidad desde Python** — la misma barra que tocaste en Unity
 
     python semana04\trazabilidad.py ingenieria 18
@@ -50,7 +53,8 @@ Desde la carpeta del repo. Si no activaste el entorno, `python` es
 | --- | --- |
 | `G` `Q` `EX` `EY` y las combinaciones | cambia el **caso activo**: panel, diagramas, punto P-M y deformada |
 | **Diagramas de esfuerzos** | prende los diagramas |
-| `My` `Mz` `Vz` `Vy` `N` `T` | la magnitud |
+| `My` `Mz` `Vz` `Vy` `N` `T` | la magnitud del esfuerzo |
+| `wy` `wz` | la **carga repartida** de cada barra (kN/m), dibujada hacia donde empuja: es la que recibe `beamUniform` y la que cierra el diagrama. En estos edificios solo hay `wz`, y solo en vigas: la gravedad va en `z` local y el sismo entra por los nodos |
 | **la seleccionada** / **todas las visibles** | una barra, o todas las del piso filtrado |
 | escala | solo gráfica |
 | **Curva P-M de la seleccionada** | la ventana de demanda-capacidad |

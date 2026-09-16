@@ -110,6 +110,17 @@ la barra 222 y **"la seleccionada"**, en S3. Salen las etiquetas `My i = 278.4 k
 `x`): los extremos arriba —tracción arriba, sobre el apoyo— y el tramo
 abajo.
 
+**La carga, sobre cada barra:** magnitud **`wz`**. Dibuja la carga repartida
+de cada **viga** en el caso activo, hacia donde empuja, en kN/m. Las
+columnas y los muros no llevan: su peso propio entra por los nodos, no como
+carga repartida. En este edificio la gravedad va en `z` local, así que
+`wy` vale cero en todas las barras, y en `EX` y `EY` también `wz`: el sismo
+entra por cargas nodales. Cuando eso pasa, el panel lo dice —"sin diagrama:
+`wz` vale 0 en todo lo dibujado"— en vez de quedarse mudo. Es la misma `w` que OpenSees recibe en `beamUniform` y la
+que cierra el diagrama por equilibrio, así que se puede mostrar la causa
+—`wz` en las vigas de un piso— y el efecto —`My` en las mismas vigas— una
+detrás de la otra.
+
 **Diagrama de corte o axial:** magnitud **`Vz`** (corte de gravedad) o
 **`N`** (axial). El color dice el signo: azul positivo, rojo negativo; en
 `N`, positivo es tracción.
@@ -235,8 +246,10 @@ interfaz y le hace leer el archivo de verdad. Las dos están en la suite.
 
 | síntoma | causa | qué hacer |
 | --- | --- | --- |
-| panel dice "el anexo es de otro modelo" | se exportó otro edificio | `python semana04\exportar_unity.py ingenieria` y Play de nuevo |
+| el panel de Semana 4 dice "El anexo es de otro modelo" y no hay diagramas | se abrió otro edificio: **el lanzador sin argumento abre el LT2** | cerrar, `python comun\lanzar_unity.py editor ingenieria` y Play; el lanzador avisa cuando los anexos son de otro edificio |
 | la sección Semana 4 muestra un AVISO de que falta `semana04.json` y no tiene botones | no se exportó el anexo | lo mismo |
+| **no existe la sección `--- Semana 4 ---`** en el panel, y tampoco el botón "Caso activo (S4)" | ese repositorio no tiene la Semana 4: está en `main` o en una rama sin el merge | `git fetch origin` y `git checkout ingenieria-semana03`; reabrir Unity, esperar el import y Play. Definitivo: mergear el PR |
+| el panel se corta antes de llegar a la sección Semana 4 | la ventana es chica: los controles de Semana 4 van al final del panel | rueda del mouse con el cursor **encima** del panel; o maximizar la Game view (Shift+Espacio) |
 | no se ve el diagrama | toggle apagado, o "la seleccionada" sin barra elegida | prender y hacer clic en una barra |
 | el diagrama de un muro no se ve | el de `My` va en su plano, dentro del muro | mirar las etiquetas y la ventana P-M |
 | la ventana P-M no abre | la barra no tiene fierro (viga, brazo) | elegir columna o muro |

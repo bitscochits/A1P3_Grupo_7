@@ -29,6 +29,7 @@ n1 158: apoyo [0 0 1 1 1 0]; n1 158: diafragma rigido, maestro 714; n2 263: diaf
 (ejes locales; * = los que mandan en columna)
 max |My| = 4.67 kN*m en x = 0.00 m  (2 estaciones)
 max |Mz| = 40.54 kN*m en x = 3.96 m  (2 estaciones)
+carga repartida: ninguna en este caso
 --- demanda / capacidad ---
 familia 0: columna | 0.50 x 0.50 m | 16 barras | As = 32.17 cm2 | estribo Ef10a10 (lamina 2017_67-000, esquema 2E) | malla -
 P 3904.8 kN   M 40.6 kN*m   extremo j (superior)
@@ -75,6 +76,7 @@ n1 529: diafragma rigido, maestro 718; n2 550: diafragma rigido, maestro 718
 (ejes locales; * = los que mandan en viga_x)
 max |My| = 504.97 kN*m en x = 10.00 m  (9 estaciones)
 max |Mz| = 0.00 kN*m en x = 0.00 m  (9 estaciones)
+carga repartida (beamUniform)  wx 0.000  wy 0.000  wz -49.025 kN/m
 --- demanda / capacidad ---
 (sin enfierradura: no tiene curva P-M)
 --- trazabilidad ---
@@ -90,6 +92,9 @@ Modelo      nodos y seccion del anexo calzan con el modelo del visor: OK
 
 === 04_N_todas ===
 caso S3  magnitud N  solo seleccionada False  seleccionado 222
+
+=== 04b_wz_todas_piso_2 ===
+caso S3  magnitud wz  solo seleccionada False  seleccionado 222
 
 === 05_Vz_todas_piso_2 ===
 caso S3  magnitud Vz  solo seleccionada False  seleccionado 222
@@ -125,6 +130,7 @@ n1 702: empotrado [1 1 1 1 1 1]; n2 703: diafragma rigido, maestro 714
 (ejes locales; * = los que mandan en muro)
 max |My| = 40969.08 kN*m en x = 0.00 m  (2 estaciones)
 max |Mz| = 1040.85 kN*m en x = 3.96 m  (2 estaciones)
+carga repartida: ninguna en este caso
 --- demanda / capacidad ---
 familia 22: muro_21 | 0.30 x 16.85 m | 182 barras | As = 142.94 cm2 | estribo - | malla 10a20
 P 5237.2 kN   M 40969.1 kN*m (|My|, en su plano)   extremo i (inferior)
@@ -168,6 +174,7 @@ n1 501: diafragma rigido, maestro 717; n2 606: diafragma rigido, maestro 718
 (ejes locales; * = los que mandan en columna)
 max |My| = 414.40 kN*m en x = 3.96 m  (2 estaciones)
 max |Mz| = 57.00 kN*m en x = 3.96 m  (2 estaciones)
+carga repartida: ninguna en este caso
 --- demanda / capacidad ---
 familia 0: columna | 0.50 x 0.50 m | 16 barras | As = 32.17 cm2 | estribo Ef10a10 (lamina 2017_67-000, esquema 2E) | malla -
 P 726.6 kN   M 418.3 kN*m   extremo j (superior)
@@ -211,6 +218,7 @@ n1 647: diafragma rigido, maestro 715; n2 648: diafragma rigido, maestro 716
 (ejes locales; * = los que mandan en muro)
 max |My| = 7210.50 kN*m en x = 0.00 m  (2 estaciones)
 max |Mz| = 3.57 kN*m en x = 3.96 m  (2 estaciones)
+carga repartida: ninguna en este caso
 --- demanda / capacidad ---
 familia 4: muro_3 | 0.20 x 3.75 m | 50 barras | As = 39.27 cm2 | estribo - | malla 10a20
 P -3510.1 kN   M 7210.5 kN*m (|My|, en su plano)   extremo i (inferior)
@@ -254,6 +262,7 @@ n1 691: diafragma rigido, maestro 714; n2 692: diafragma rigido, maestro 715
 (ejes locales; * = los que mandan en muro)
 max |My| = 3814.27 kN*m en x = 3.96 m  (2 estaciones)
 max |Mz| = 7.26 kN*m en x = 3.96 m  (2 estaciones)
+carga repartida: ninguna en este caso
 --- demanda / capacidad ---
 familia 20: muro_19 | 0.30 x 2.35 m | 36 barras | As = 28.27 cm2 | estribo - | malla 10a20
 P -1108.5 kN   M 3814.3 kN*m (|My|, en su plano)   extremo j (superior)

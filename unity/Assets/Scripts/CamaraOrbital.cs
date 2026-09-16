@@ -60,6 +60,20 @@ public class CamaraOrbital : MonoBehaviour
     /// debe tratarse como seleccion). Lo consulta EditorEstructura.
     public bool HuboArrastre { get; private set; }
 
+    // El arrastre empezo sobre la interfaz (la barra de scroll del panel,
+    // la ventana P-M, el panel del editor): la camara se queda quieta
+    // hasta que se suelte, aunque el cursor salga del panel.
+    private bool arrastreSobreUI;
+    private VisorQA qa;
+
+    /// Si el cursor esta sobre algun panel. Lo sabe VisorQA, que es quien
+    /// los dibuja; aca solo se pregunta.
+    bool SobreUI()
+    {
+        if (qa == null) qa = FindAnyObjectByType<VisorQA>();
+        return qa != null && qa.MouseSobreUI();
+    }
+
     void Start()
     {
         // Un frame de espera no hace falta: el Visor carga en su Start,
@@ -72,6 +86,19 @@ public class CamaraOrbital : MonoBehaviour
     void LateUpdate()
     {
         if (bloqueada)
+        {
+            Aplicar();
+            return;
+        }
+
+        // Un arrastre que NACE sobre la interfaz no es para la camara.
+        bool algunBoton = Input.GetMouseButton(0) || Input.GetMouseButton(1)
+                          || Input.GetMouseButton(2);
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)
+            || Input.GetMouseButtonDown(2))
+            arrastreSobreUI = SobreUI();
+        if (!algunBoton) arrastreSobreUI = false;
+        if (arrastreSobreUI)
         {
             Aplicar();
             return;
@@ -110,7 +137,8 @@ public class CamaraOrbital : MonoBehaviour
         }
 
         // --- Zoom ---
-        float rueda = Input.GetAxis("Mouse ScrollWheel");
+        // Con el cursor sobre el panel, la rueda es para su scroll.
+        float rueda = SobreUI() ? 0f : Input.GetAxis("Mouse ScrollWheel");
         if (Mathf.Abs(rueda) > 0.0001f)
         {
             // Proporcional a la distancia: cerca avanza fino, lejos avanza rapido.

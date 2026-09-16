@@ -121,6 +121,13 @@ public class CapturaSemana04 : MonoBehaviour
         cam.EncuadrarTodo();
         yield return Foto("04_N_todas", s4, -1);
 
+        // 4b. La carga repartida del mismo piso: la causa del diagrama.
+        s4.magnitud = "wz";
+        qa.soloNivel = 2;
+        s4.Redibujar();
+        EncuadrarNivel(qa, cam);
+        yield return Foto("04b_wz_todas_piso_2", s4, -1);
+
         // 5. Corte Vz de un piso.
         s4.magnitud = "Vz";
         qa.soloNivel = 2;

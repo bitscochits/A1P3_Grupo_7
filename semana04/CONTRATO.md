@@ -84,6 +84,7 @@ existía en `ModeloEstructural.cs`.
 | --- | --- | --- |
 | `id` | int | el elementTag |
 | `f` | float[12] | `eleResponse(tag, 'localForce')`: `[N Vy Vz T My Mz]` en *i* y en *j*, fuerzas **sobre** la barra en ejes locales. En una combinación, `Σ λ·f` |
+| `w` | float[3] | `(wx, wy, wz)` en ejes locales, kN/m: la carga repartida que recibe `beamUniform`, combinada con los mismos `λ`. Es la que cierra el diagrama, y el visor la dibuja como magnitud `wy`/`wz` |
 | `x` | float[] | estaciones desde el nodo *i*, de 0 a L. **9** si la barra tiene carga repartida en ese caso, **2** si no |
 | `N`, `Vy`, `Vz`, `T`, `My`, `Mz` | float[] | esfuerzos **internos** en cada estación (§3) |
 
@@ -202,7 +203,8 @@ Los momentos se dibujan **del lado traccionado**:
 | `Mz < 0` | la de `+y` local | `−Mz · y_local` |
 
 `Vz`, `N` y `T` se dibujan en `z_local`, `Vy` en `y_local`, y **el color
-dice el signo** (azul positivo, rojo negativo; en N, tracción y compresión).
+dice el signo**. Las magnitudes `wy` y `wz` —la carga repartida, kN/m— se
+dibujan como los cortes, en su eje local y **hacia donde empuja la carga** (azul positivo, rojo negativo; en N, tracción y compresión).
 
 Los ejes locales los toma Unity de `Elemento.localY` y `localZ` del modelo
 base (`data/unity/<edificio>.json`), que salen de `contrato.ejes_locales`:

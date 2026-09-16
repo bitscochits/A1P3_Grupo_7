@@ -75,8 +75,10 @@ python semana03\exportar_unity.py ingenieria
 python comun\lanzar_unity.py editor ingenieria
 ```
 
-Los dos exportadores tienen que ser del **mismo** edificio que abre el
-lanzador. El de la Semana 4 se comprueba: si no calza, el panel avisa que
+El **nombre del edificio va en los tres comandos**: el lanzador sin
+argumento abre el LT2, que es lo que hacía antes de que hubiera más de un
+edificio. Los dos exportadores tienen que ser del **mismo** edificio que
+abre el lanzador (si no lo son, el lanzador lo avisa). El de la Semana 4 se comprueba: si no calza, el panel avisa que
 el anexo es de otro modelo y no dibuja diagramas (los ids existirían igual
 pero serían otras barras). El de la Semana 3 no se comprueba, así que se
 exportan siempre juntos.

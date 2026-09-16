@@ -210,7 +210,7 @@ def bloque_1(anexo, ctx, inf):
               'medio decimal %.1e)' % (eu.DECIMALES_FUERZA, r_est))
 
     peores = {}
-    malos, mal_x, n = [], [], 0
+    malos, mal_x, malas_w, n = [], [], [], 0
     n_carg = anexo['info']['n_estaciones_cargada']
     for caso in anexo['casos']:
         lam, activos = activos_de(caso)
@@ -222,6 +222,17 @@ def bloque_1(anexo, ctx, inf):
         for s in caso['esfuerzos']:
             eid = int(s['id'])
             L = largos[eid]
+            # La w que el anexo dibuja tiene que ser la que usan las
+            # formulas: la combinacion de las cargas de los casos base.
+            w_json = [float(v) for v in s.get('w', [])]
+            w_ref = [sum(l * w_base[c].get(eid, (0.0, 0.0, 0.0))[k]
+                         for c, l in activos.items()) for k in range(3)]
+            if len(w_json) != 3 or any(
+                    abs(a - b) > R_ANEXO_F + FP * abs(b)
+                    for a, b in zip(w_json, w_ref)):
+                malas_w.append('%s elem %d: w %s, esperada %s'
+                               % (caso['nombre'], eid, w_json,
+                                  [round(v, 4) for v in w_ref]))
             mag = [0.0] * 6
             for c, l in activos.items():
                 m_c = eu.magnitudes_de_cierre(f_base[c][eid],
@@ -263,6 +274,9 @@ def bloque_1(anexo, ctx, inf):
             print('  %-4s %-6s %10.2e %10.2e %8.3f   %s, elemento %d'
                   % (comp, extremo, err, cota, q, nombre, eid))
     print('  (en x = 0 la formula es -f_i sin ninguna operacion: el error es 0 exacto)')
+    inf.check(not malas_w, 'la carga repartida del anexo (w) es la combinacion '
+              'de las de los casos base, la misma que usan las formulas del '
+              'cierre', malas_w[:6])
     inf.check(not malos, '%d comparaciones (%d casos x %d elementos x 6 esfuerzos x '
               '2 extremos) dentro de su cota' % (n, len(anexo['casos']),
                                                  len(anexo['elementos'])), malos[:6])

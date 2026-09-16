@@ -202,6 +202,14 @@ public class VisorQA : MonoBehaviour
     /// Se consulta tambien el panel del EDITOR (que vive a la derecha):
     /// un click sobre el no debe atravesar y seleccionar la barra que
     /// haya detras.
+    /// Lo mismo, para quien no es VisorQA: la camara pregunta antes de
+    /// orbitar o hacer zoom. Arrastrar la barra de scroll de este panel
+    /// no puede mover el modelo.
+    public bool MouseSobreUI()
+    {
+        return MouseSobrePanel();
+    }
+
     bool MouseSobrePanel()
     {
         Vector2 p = new Vector2(Input.mousePosition.x,

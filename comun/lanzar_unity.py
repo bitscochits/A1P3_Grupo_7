@@ -27,6 +27,8 @@ r"""
  luego ejecutarla es un proceso normal.
 ================================================================
 """
+import io
+import json
 import os
 import shutil
 import subprocess
@@ -204,7 +206,62 @@ def sincronizar_json(verbose=True):
             print(f"  modelo copiado a {os.path.relpath(d, _RAIZ)}")
     if verbose:
         print(f"  (el visor abre '{NOMBRE_EN_UNITY}', segun la escena)")
+    sincronizar_anexos(verbose)
     return destinos
+
+
+# ============================================================
+# 2b. LOS ANEXOS DE LAS SEMANAS 3 Y 4
+# ============================================================
+# Cada anexo (semana03.json, semana04.json) es de UN edificio. Si no es
+# el que se esta abriendo, el visor de Semana 4 lo detecta y APAGA los
+# diagramas -- los ids existirian igual pero serian otras barras -- y el
+# de Semana 3 ni siquiera avisa. Como el lanzador es el unico lugar por
+# donde pasan el editor, la app y el build, el aviso va aca.
+#
+# Ademas la app compilada lee SU copia de StreamingAssets, no la del
+# proyecto: sin este copiado seguiria mostrando el anexo con que se
+# compilo.
+ANEXOS = ('semana03.json', 'semana04.json')
+
+
+def _edificio_del_anexo(ruta):
+    """El edificio que dice el anexo, o None si no se puede leer."""
+    try:
+        with io.open(ruta, encoding='utf-8') as fh:
+            return (json.load(fh).get('info') or {}).get('edificio')
+    except Exception:
+        return None
+
+
+def sincronizar_anexos(verbose=True):
+    """Copia los anexos a la app y avisa si son de otro edificio.
+
+    Devuelve la lista de (anexo, edificio) que NO calzan con EDIFICIO.
+    """
+    build_sa = os.path.join(CARPETA_BUILD, 'LaboratorioEstructural_Data',
+                            'StreamingAssets')
+    no_calzan = []
+    for nombre in ANEXOS:
+        origen = os.path.join(PROYECTO_UNITY, 'Assets', 'StreamingAssets', nombre)
+        if not os.path.exists(origen):
+            continue
+        if os.path.isdir(build_sa):
+            shutil.copyfile(origen, os.path.join(build_sa, nombre))
+            if verbose:
+                print("  %s copiado a la app" % nombre)
+        ed = _edificio_del_anexo(origen)
+        if ed is not None and ed != EDIFICIO:
+            no_calzan.append((nombre, ed))
+
+    for nombre, ed in no_calzan:
+        semana = nombre.split('.')[0]
+        print()
+        print("  OJO: %s es de '%s' y estas abriendo '%s'." % (nombre, ed, EDIFICIO))
+        print("       El visor de Semana 4 apaga los diagramas cuando el anexo no")
+        print("       calza con el modelo; el de Semana 3 no avisa. Regeneralo:")
+        print("         python %s/exportar_unity.py %s" % (semana, EDIFICIO))
+    return no_calzan
 
 
 # ============================================================
