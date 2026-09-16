@@ -44,7 +44,8 @@ r"""
  La seccion se lee del modelo, no se escribe aca:
 
      b, h            de la seccion del elemento    (data/modelo)
-     f'c             del material del modelo       (35 MPa en el LT2)
+     f'c             de la seccion si lo trae (el conjunto lo sella
+                     por cuerpo); si no, del material del modelo
      estribo, trabas de la elevacion del plano     (enfierradura.py)
      n de barras     deducido del estribo          (una traba amarra
                                                     una barra)
@@ -271,7 +272,7 @@ def desde_elemento(modelo, elemento_id):
                          'declarada' % (elemento_id, e.get('seccion')))
 
     b, h = float(s['b']), float(s['h'])
-    fpc = float(modelo['material']['fpc_MPa']) * 1000.0
+    fpc = _fpc_kPa(modelo, s)
     acero = fe.get('acero') or {}
     fy = float(acero.get('fy_MPa', 420.0)) * 1000.0
     Es = float(acero.get('Es_MPa', 200000.0)) * 1000.0
@@ -295,6 +296,16 @@ def desde_elemento(modelo, elemento_id):
         origen=fe.get('fuente') or {})
 
 
+def _fpc_kPa(modelo, seccion):
+    """
+    El f'c de la seccion, en kPa. Lo trae la seccion cuando el modelo
+    junta cuerpos de hormigones distintos -- el conjunto: LT2 G35 e
+    Ingenieria G28 --; si no, es el del material del modelo.
+    """
+    propio = (seccion or {}).get('fpc_MPa')
+    return float(propio or modelo['material']['fpc_MPa']) * 1000.0
+
+
 def _seccion_de_muro(modelo, e, fe, elemento_id, recubrimiento=0.03):
     r"""
     La seccion de un muro, para flexion EN SU PLANO.
@@ -314,7 +325,7 @@ def _seccion_de_muro(modelo, e, fe, elemento_id, recubrimiento=0.03):
     s = secciones.get(e.get('seccion'))
     t = float(fe.get('espesor_m') or (s and s['b']) or 0.0)
     L = float(fe.get('largo_m') or (s and s['h']) or 0.0)
-    fpc = float(modelo['material']['fpc_MPa']) * 1000.0
+    fpc = _fpc_kPa(modelo, s)
 
     mv = fe.get('malla_vertical') or {}
     capas = int(fe.get('capas', 2))

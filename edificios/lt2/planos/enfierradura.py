@@ -5,7 +5,7 @@ r"""
 ================================================================
  Lee las laminas de elevacion y devuelve, por pilar y por piso, su
  juego de estribos y trabas; y por muro, su malla y sus barras de
- borde -- o su armado como machon.
+ borde.
 
  DONDE ESTA. No en las plantas (200/201/202 son losa, 101/102
  encofrado): en la ELEVACION del eje, bajo el rotulo de la seccion.
@@ -19,18 +19,27 @@ r"""
  en UNA; la otra dice 'VER ELEV. EJE B'. Esa remision evita contar
  dos veces, y cierra: 80 rotulos, 40 con fierro, 40 que remiten.
 
- Los muros van de dos formas: MALLA, en un bloque con atributos
- (ESPESOR, MALLA_1..3, que el dibujo muestra como 'M.H.A. e=30 /
- D.M. / H. / V.'), o MACHON, como una columna ancha (E + trabas +
- 'L:5+5%%C10'). Una elevacion sin pilares tambien tiene muros.
+ Los muros traen su MALLA en un bloque con atributos (ESPESOR,
+ MALLA_1..3, que el dibujo muestra como 'M.H.A. e=30 / D.M. / H. /
+ V.') y sus barras de borde en bloques de barra. Una elevacion sin
+ pilares tambien tiene muros.
+
+ 'L:n+n' NO es fierro de muro. La nomenclatura de la lamina 000 dice
+ 'L:' = LATERALES: las barras de piel de una VIGA, una por cara. En
+ las elevaciones va siempre con su viga -- 'V. 40/80' lleva
+ 'ED%%C10a10 / L:3+3%%C10'; las V.F. 20/120, 20/160 y 20/180 de la
+ fundacion llevan 5+5, 7+7 y 8+8. Una version anterior lo leyo como
+ el longitudinal de un 'machon' y le pego las laterales de la V.F.
+ del eje A' al M 0.60x2.92, que en el plano es un muro de cuatro
+ mallas con nucleos de borde de fi32.
 
  TRAMPAS. (1) La llamada MAS CERCANA al rotulo del pilar es la de la
  viga del nudo; la busqueda es direccional (abajo, dentro del ancho),
  no un radio. (2) Cada XREF tiene su propio origen y una lamina puede
  traer dos: se lee XREF por XREF, y el corrimiento a planta sale de
  las burbujas de eje de ESA elevacion, por mediana (alguna esta
- corrida 45 cm). (3) Las llamadas 'L:' se anotan desde afuera del
- muro: se asignan al muro MAS CERCANO, nunca con un margen a ojo.
+ corrida 45 cm). (3) 'L:n+n' son las laterales de una viga, no
+ fierro de muro (ver arriba).
 
  LO QUE NO DA. El longitudinal del pilar no esta en el juego (se
  busco en las 22 laminas); se declara en el perfil, y el numero de
@@ -67,11 +76,6 @@ ROTULO_PILAR = re.compile(r'^P\.\s*(\d+)\s*[xX]\s*(\d+)\s*$')
 #   ET   3 estribos       T   traba          TL  traba longitudinal
 LLAMADA = re.compile(
     r'^\+?\s*(\d*)\s*(ED|ET|E|TL|T)\s*%%C\s*(\d+)\s*a\s*(\d+)\s*$', re.I)
-
-# Fierro longitudinal de punta de muro: 'L:5+5%%C10' son cinco barras
-# fi 10 en cada cara del machon.
-LONGITUDINAL = re.compile(
-    r'^L\s*:\s*(\d+)\s*\+\s*(\d+)\s*%%C\s*(\d+)\s*$', re.I)
 
 # Remision al otro eje: 'VER ELEV. EJE B'
 REMISION = re.compile(r'VER\s+ELEV\.?\s+EJE\s+(.+?)\s*$', re.I)
@@ -172,62 +176,6 @@ def parsear_malla(texto):
     return {'diametro_mm': int(m.group(1)),
             'separacion_cm': int(m.group(2)),
             'texto': texto.strip()}
-
-
-def parsear_longitudinal(texto):
-    """'L:5+5%%C10' -> 5 barras fi 10 por cara, 10 en total."""
-    m = LONGITUDINAL.match((texto or '').strip())
-    if not m:
-        return None
-    a, b, d = int(m.group(1)), int(m.group(2)), int(m.group(3))
-    return {'por_cara': [a, b], 'cantidad': a + b, 'diametro_mm': d,
-            'texto': texto.strip()}
-
-
-def machones(hoja, perfil, dx, a_cota, niveles):
-    r"""
-    Los muros que el plano detalla COMO UNA COLUMNA ANCHA en vez de
-    con malla repartida.
-
-    ----------------------------------------------------------------
-    HAY DOS FORMAS DE ARMAR UN MURO Y EL PLANO USA LAS DOS
-    ----------------------------------------------------------------
-    Un muro largo y delgado lleva MALLA: dos cortinas repartidas a lo
-    largo, mas barras en las puntas. Eso viene en un bloque con
-    atributos (ver mallas_de_muro).
-
-    Un muro corto y grueso -- el M 0.60x2.92 del poniente, 60 cm de
-    espesor por 2.92 de largo -- se arma como un machon: estribos y
-    trabas como una columna, y el longitudinal escrito aparte:
-
-        E%%C12a10  +3T%%C12a10  +3TL%%C12a10     el juego transversal
-        L:5+5%%C10                               cinco barras por cara
-
-    En la elevacion del eje A' no hay NINGUN bloque de malla -- se
-    comprobo: cero atributos ESPESOR en sus 150 bloques -- y por eso
-    esos diez elementos quedaban sin fierro aunque el plano si lo da.
-
-    Lo bueno es que el 'L:' dice cuantas barras hay. En una columna
-    ese numero habia que deducirlo del numero de trabas; aca esta
-    escrito.
-    """
-    salida = []
-    for t in hoja.textos_de(perfil, 'enfierradura'):
-        s = ' '.join(t.texto.split())
-        llamada = parsear_llamada(s)
-        largo = parsear_longitudinal(s)
-        if not (llamada or largo):
-            continue
-        cota = a_cota(t.y) if a_cota else None
-        piso, cota_piso = piso_de_cota(cota, niveles)
-        salida.append({
-            'x_planta': round(t.x + dx, 4),
-            'cota_leida': round(cota, 3) if cota is not None else None,
-            'piso': piso, 'cota': cota_piso,
-            'llamada': llamada, 'longitudinal': largo,
-            'texto': s,
-        })
-    return salida
 
 
 def mallas_de_muro(bloques):
@@ -641,11 +589,7 @@ def extraer_mallas(hoja, bloques, perfil, grid, niveles=None):
         else:
             b['piso'], b['cota'] = None, None
     aud['barras_sueltas'] = len(barras)
-
-    # Los muros armados como machon, que no traen bloque de malla.
-    macho = machones(hoja, perfil, dx, a_cota, niveles)
-    aud['llamadas_de_machon'] = len(macho)
-    return mallas, aud, barras, macho
+    return mallas, aud, barras
 
 
 def esquemas(pilares):

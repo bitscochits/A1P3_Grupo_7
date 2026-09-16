@@ -124,7 +124,7 @@ def comparar(nombre_clase, muestra, ignorar=()):
 #
 #   area_tributaria, enfierradura, w_gravedad   datos del elemento para
 #                                               capacidad y verificacion
-#   E, G, E_del_cuerpo, b_h_deducidos           el modulo por cuerpo del
+#   E, G, E_del_cuerpo, fpc_MPa, b_h_deducidos  el hormigon por cuerpo del
 #                                               conjunto; Unity no calcula
 #   incluye_peso_propio                          separa losa de peso propio
 #   forma                                        procedencia del poligono
@@ -134,7 +134,7 @@ NO_VAN_AL_CSHARP = {
     'ModeloEstructural': ('resumen',),
     'InfoModelo': ('cuerpos', 'extra'),
     'Elemento': ('enfierradura', 'area_tributaria', 'w_gravedad'),
-    'Seccion': ('E', 'G', 'E_del_cuerpo', 'b_h_deducidos'),
+    'Seccion': ('E', 'G', 'E_del_cuerpo', 'fpc_MPa', 'b_h_deducidos'),
     'AreaTributaria': ('forma',),
     'CasoDeCarga': ('incluye_peso_propio',),
 }

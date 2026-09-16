@@ -73,7 +73,7 @@ if (Test-Path $unity) {
 
 Write-Host ''
 Write-Host 'Listo. Para empezar:' -ForegroundColor Green
-Write-Host '  .\.venv\Scripts\python.exe comun\verificar_todo.py         la suite entera (27)'
+Write-Host '  .\.venv\Scripts\python.exe comun\verificar_todo.py         la suite entera (34)'
 Write-Host '  .\.venv\Scripts\python.exe comun\lanzar_unity.py app conjunto --pantalla-completa'
 Write-Host ''
 Write-Host '  Guia completa, para imprimir: reports\mapa_del_repo.md'

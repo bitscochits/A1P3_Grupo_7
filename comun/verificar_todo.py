@@ -74,6 +74,8 @@ SUITE = [
     # el editor en batch: es lento y sale con 2 si Unity ya esta abierto.
     ('anexo Unity semana 4',  ['semana04/exportar_unity.py'], False),
     ('esfuerzos y signos s4', ['semana04/verificar_semana04.py'], False),
+    ('esfuerzos s4 lt2',      ['semana04/verificar_semana04.py', 'lt2'], False),
+    ('esfuerzos s4 conjunto', ['semana04/verificar_semana04.py', 'conjunto'], False),
     ('contrato JSON-C# s4',   ['semana04/test_contrato_semana04.py'], False),
     ('trazabilidad s4',       ['semana04/trazabilidad.py', 'ingenieria', '18'], False),
     ('JsonUtility real s4',   ['semana04/verificar_unity_semana04.py'], True),

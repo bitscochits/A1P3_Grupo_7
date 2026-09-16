@@ -389,13 +389,36 @@ bajo G + Q (columnas 80 y 66 fuera de su curva) no cambian.
   elástico). Los "no pasa" señalan dónde mirar; no son un diseño.
 - **El diagrama de `My` de un muro** va en su propio plano y queda dentro
   del muro; en los muros se leen las etiquetas y la ventana P-M.
-- **Muro 10 del LT2:** su curva trae un punto en `P = 0` con `Mn = 0` (el
-  M-φ a ese axial no avanza y `capacidad.interaccion()` lo agrega igual);
-  puede venir de la lectura del plano, que le deja la armadura en un borde.
-  El bloque [7] lo acusa en `lt2` y `conjunto`; no afecta a Ingeniería, el
-  edificio que corre la suite.
-- **Conjunto:** la capacidad usa un `f'c` único (28 MPa) también para las
-  secciones del LT2, que son de 35 MPa. `trazabilidad.py` lo avisa.
+- **Resuelto antes de entregar:** el muro 10 del LT2 (curva con `Mn = 0`
+  en `P = 0`, por leer `L:8+8` —laterales de la viga de fundación— como
+  fierro de muro) y el `f'c` único del conjunto (ahora `fpc_MPa` por
+  sección). El bloque [7] calza en los tres edificios.
+- **Fierro de muro del LT2, contado de menos.** En los bloques de barra de
+  las elevaciones el número que dibuja el plano (`5 Ø32 L=900`) es el
+  atributo `NUM`; el extractor lee `CANT`, que es invisible y vale `1`.
+  Pasa en 660 de 780 bloques: los 29 muros armados llevan 181 barras de
+  borde donde el plano da 411. Del lado seguro (el `Mn` a `P = 0` del
+  muro 12 sube 97 %), pero los números de capacidad de esos muros no son
+  los del plano.
+- **Barras que no son del muro, pegadas como borde (LT2).** De esas 181
+  asignaciones, 36 son barras horizontales (dinteles bajo losa, vigas de
+  fundación) y 30 vienen de la elevación perpendicular; 22 bloques entran
+  en dos muros. Del lado **inseguro**: quitándolas, el `Mn` baja hasta
+  33 % (muro 16).
+- **Puntas de muro de Ingeniería.** Las `L:3+3 Ø10` que se ponen en las
+  dos puntas de los 56 muros son las laterales de las vigas `V. 60/80`:
+  la lámina 2017_67-000 dice `L:` = LATERALES, igual que la del LT2. En el
+  muro 537 pesan 7 % del `Mn` a `P = 0`; en los muros cortos, 42 %. El
+  plano dibuja en las puntas otras barras contadas (`2 Ø22`, `2 Ø18`).
+- **La curva P-M es de un solo signo.** `capacidad.interaccion()` flecta
+  hacia un lado y la demanda usa `|M|`. En una sección con el acero
+  descentrado la capacidad cambia con el signo (20 a 36 % en varios muros
+  del LT2), y para uno de los dos queda del lado inseguro. Parte de esa
+  asimetría es de los dos puntos de arriba y de que la malla no queda
+  centrada en `_seccion_de_muro`.
+- **Los M 0.60x2.92 del LT2 (eje A') van sin fierro.** El plano les da
+  cuatro mallas y núcleos de borde de Ø32, en texto suelto y en cortes que
+  el extractor no lee; no entran a la revisión P-M.
 
 ---
 

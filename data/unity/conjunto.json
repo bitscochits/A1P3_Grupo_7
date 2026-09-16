@@ -27,7 +27,8 @@
    "h": 0.5,
    "E": 24870062.324,
    "G": 10362525.9683,
-   "E_del_cuerpo": "ingenieria"
+   "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0
   },
   {
    "nombre": "ingenieria:viga_x",
@@ -41,7 +42,8 @@
    "h": 0.6,
    "E": 24870062.324,
    "G": 10362525.9683,
-   "E_del_cuerpo": "ingenieria"
+   "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0
   },
   {
    "nombre": "ingenieria:viga_y",
@@ -55,7 +57,8 @@
    "h": 0.8,
    "E": 24870062.324,
    "G": 10362525.9683,
-   "E_del_cuerpo": "ingenieria"
+   "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0
   },
   {
    "nombre": "ingenieria:muro_0",
@@ -68,6 +71,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 9.65,
    "h": 0.3,
    "b_h_deducidos": true
@@ -83,6 +87,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 3.7,
    "h": 0.2,
    "b_h_deducidos": true
@@ -98,6 +103,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 3.2,
    "h": 0.2,
    "b_h_deducidos": true
@@ -113,6 +119,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 3.75,
    "h": 0.2,
    "b_h_deducidos": true
@@ -128,6 +135,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 4.33,
    "h": 0.2,
    "b_h_deducidos": true
@@ -143,6 +151,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 3.87,
    "h": 0.2,
    "b_h_deducidos": true
@@ -158,6 +167,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 4.83,
    "h": 0.2,
    "b_h_deducidos": true
@@ -173,6 +183,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 15.0,
    "h": 0.3,
    "b_h_deducidos": true
@@ -188,6 +199,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 14.77,
    "h": 0.3,
    "b_h_deducidos": true
@@ -203,6 +215,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 11.5,
    "h": 0.15,
    "b_h_deducidos": true
@@ -218,6 +231,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 3.63,
    "h": 0.15,
    "b_h_deducidos": true
@@ -233,6 +247,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 7.45,
    "h": 0.15,
    "b_h_deducidos": true
@@ -248,6 +263,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 12.07,
    "h": 0.2,
    "b_h_deducidos": true
@@ -263,6 +279,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 7.95,
    "h": 0.2,
    "b_h_deducidos": true
@@ -278,6 +295,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 2.36,
    "h": 0.2,
    "b_h_deducidos": true
@@ -293,6 +311,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 5.8,
    "h": 0.2,
    "b_h_deducidos": true
@@ -308,6 +327,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 8.2,
    "h": 0.2,
    "b_h_deducidos": true
@@ -323,6 +343,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 1.68,
    "h": 0.25,
    "b_h_deducidos": true
@@ -338,6 +359,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 2.35,
    "h": 0.3,
    "b_h_deducidos": true
@@ -353,6 +375,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 2.35,
    "h": 0.3,
    "b_h_deducidos": true
@@ -368,6 +391,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 1.48,
    "h": 0.25,
    "b_h_deducidos": true
@@ -383,6 +407,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 16.85,
    "h": 0.3,
    "b_h_deducidos": true
@@ -398,6 +423,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 8.2,
    "h": 0.3,
    "b_h_deducidos": true
@@ -413,6 +439,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 3.05,
    "h": 0.15,
    "b_h_deducidos": true
@@ -428,6 +455,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 6.55,
    "h": 0.3,
    "b_h_deducidos": true
@@ -443,6 +471,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 8.2,
    "h": 0.3,
    "b_h_deducidos": true
@@ -458,6 +487,7 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0,
    "b": 8.2,
    "h": 0.3,
    "b_h_deducidos": true
@@ -511,7 +541,8 @@
    "espesor": 0.5,
    "E": 24870062.324,
    "G": 10362525.9683,
-   "E_del_cuerpo": "ingenieria"
+   "E_del_cuerpo": "ingenieria",
+   "fpc_MPa": 28.0
   },
   {
    "nombre": "lt2:BRAZO",
@@ -523,7 +554,8 @@
    "h": 4.0,
    "E": 27805574.9806,
    "G": 11585656.2419,
-   "E_del_cuerpo": "lt2"
+   "E_del_cuerpo": "lt2",
+   "fpc_MPa": 35.0
   },
   {
    "nombre": "lt2:M 0.25x2.82",
@@ -535,7 +567,8 @@
    "h": 2.8202,
    "E": 27805574.9806,
    "G": 11585656.2419,
-   "E_del_cuerpo": "lt2"
+   "E_del_cuerpo": "lt2",
+   "fpc_MPa": 35.0
   },
   {
    "nombre": "lt2:M 0.25x5.80",
@@ -547,7 +580,8 @@
    "h": 5.8,
    "E": 27805574.9806,
    "G": 11585656.2419,
-   "E_del_cuerpo": "lt2"
+   "E_del_cuerpo": "lt2",
+   "fpc_MPa": 35.0
   },
   {
    "nombre": "lt2:M 0.25x7.95",
@@ -559,7 +593,8 @@
    "h": 7.95,
    "E": 27805574.9806,
    "G": 11585656.2419,
-   "E_del_cuerpo": "lt2"
+   "E_del_cuerpo": "lt2",
+   "fpc_MPa": 35.0
   },
   {
    "nombre": "lt2:M 0.30x1.45",
@@ -571,7 +606,8 @@
    "h": 1.45,
    "E": 27805574.9806,
    "G": 11585656.2419,
-   "E_del_cuerpo": "lt2"
+   "E_del_cuerpo": "lt2",
+   "fpc_MPa": 35.0
   },
   {
    "nombre": "lt2:M 0.30x2.89",
@@ -583,7 +619,8 @@
    "h": 2.895,
    "E": 27805574.9806,
    "G": 11585656.2419,
-   "E_del_cuerpo": "lt2"
+   "E_del_cuerpo": "lt2",
+   "fpc_MPa": 35.0
   },
   {
    "nombre": "lt2:M 0.60x2.92",
@@ -595,7 +632,8 @@
    "h": 2.92,
    "E": 27805574.9806,
    "G": 11585656.2419,
-   "E_del_cuerpo": "lt2"
+   "E_del_cuerpo": "lt2",
+   "fpc_MPa": 35.0
   },
   {
    "nombre": "lt2:P 0.70x0.70",
@@ -607,7 +645,8 @@
    "h": 0.7,
    "E": 27805574.9806,
    "G": 11585656.2419,
-   "E_del_cuerpo": "lt2"
+   "E_del_cuerpo": "lt2",
+   "fpc_MPa": 35.0
   },
   {
    "nombre": "lt2:V 0.15x0.24",
@@ -619,7 +658,8 @@
    "h": 0.24,
    "E": 27805574.9806,
    "G": 11585656.2419,
-   "E_del_cuerpo": "lt2"
+   "E_del_cuerpo": "lt2",
+   "fpc_MPa": 35.0
   },
   {
    "nombre": "lt2:V 0.25x0.90",
@@ -631,7 +671,8 @@
    "h": 0.9,
    "E": 27805574.9806,
    "G": 11585656.2419,
-   "E_del_cuerpo": "lt2"
+   "E_del_cuerpo": "lt2",
+   "fpc_MPa": 35.0
   },
   {
    "nombre": "lt2:V 0.30x0.80",
@@ -643,7 +684,8 @@
    "h": 0.8,
    "E": 27805574.9806,
    "G": 11585656.2419,
-   "E_del_cuerpo": "lt2"
+   "E_del_cuerpo": "lt2",
+   "fpc_MPa": 35.0
   },
   {
    "nombre": "lt2:V 0.40x0.80",
@@ -655,7 +697,8 @@
    "h": 0.8,
    "E": 27805574.9806,
    "G": 11585656.2419,
-   "E_del_cuerpo": "lt2"
+   "E_del_cuerpo": "lt2",
+   "fpc_MPa": 35.0
   },
   {
    "nombre": "lt2:V 0.60x0.80",
@@ -667,7 +710,8 @@
    "h": 0.8,
    "E": 27805574.9806,
    "G": 11585656.2419,
-   "E_del_cuerpo": "lt2"
+   "E_del_cuerpo": "lt2",
+   "fpc_MPa": 35.0
   }
  ],
  "nodos": [
@@ -37067,68 +37111,6 @@
    ],
    "largo": 2.92,
    "espesor": 0.6,
-   "enfierradura": {
-    "tipo": "muro",
-    "armado": "machon",
-    "espesor_m": 0.6,
-    "largo_m": 2.92,
-    "malla_vertical": null,
-    "malla_horizontal": null,
-    "capas": 2,
-    "estribo": {
-     "tipo": "E",
-     "cantidad": 1,
-     "diametro_mm": 12,
-     "separacion_cm": 10,
-     "texto": "E%%C12a10"
-    },
-    "trabas": [
-     {
-      "tipo": "T",
-      "cantidad": 3,
-      "diametro_mm": 12,
-      "separacion_cm": 10,
-      "texto": "+3T%%C12a10"
-     },
-     {
-      "tipo": "T",
-      "cantidad": 1,
-      "diametro_mm": 12,
-      "separacion_cm": 10,
-      "texto": "+T%%C12a10"
-     }
-    ],
-    "trabas_longitudinales": [
-     {
-      "tipo": "TL",
-      "cantidad": 3,
-      "diametro_mm": 12,
-      "separacion_cm": 10,
-      "texto": "+3TL%%C12a10"
-     },
-     {
-      "tipo": "TL",
-      "cantidad": 1,
-      "diametro_mm": 12,
-      "separacion_cm": 10,
-      "texto": "+TL%%C12a10"
-     }
-    ],
-    "barras_de_borde": [
-     {
-      "s": 2.3624,
-      "cantidad": 16,
-      "diametro_mm": 10,
-      "largo": "L:8+8%%C10"
-     }
-    ],
-    "fuente": {
-     "lamina": "2024_22-303",
-     "elevacion": "EJE A'",
-     "eje": "A'",
-     "texto": "armado como machon: E%%C12a10 + L:8+8%%C10"
-    }
-   },
    "area_tributaria": 1.664062
   },
   {
@@ -37163,68 +37145,6 @@
    ],
    "largo": 2.92,
    "espesor": 0.6,
-   "enfierradura": {
-    "tipo": "muro",
-    "armado": "machon",
-    "espesor_m": 0.6,
-    "largo_m": 2.92,
-    "malla_vertical": null,
-    "malla_horizontal": null,
-    "capas": 2,
-    "estribo": {
-     "tipo": "E",
-     "cantidad": 1,
-     "diametro_mm": 12,
-     "separacion_cm": 10,
-     "texto": "E%%C12a10"
-    },
-    "trabas": [
-     {
-      "tipo": "T",
-      "cantidad": 3,
-      "diametro_mm": 12,
-      "separacion_cm": 10,
-      "texto": "+3T%%C12a10"
-     },
-     {
-      "tipo": "T",
-      "cantidad": 1,
-      "diametro_mm": 12,
-      "separacion_cm": 10,
-      "texto": "+T%%C12a10"
-     }
-    ],
-    "trabas_longitudinales": [
-     {
-      "tipo": "TL",
-      "cantidad": 3,
-      "diametro_mm": 12,
-      "separacion_cm": 10,
-      "texto": "+3TL%%C12a10"
-     },
-     {
-      "tipo": "TL",
-      "cantidad": 1,
-      "diametro_mm": 12,
-      "separacion_cm": 10,
-      "texto": "+TL%%C12a10"
-     }
-    ],
-    "barras_de_borde": [
-     {
-      "s": -2.0991,
-      "cantidad": 14,
-      "diametro_mm": 10,
-      "largo": "L:7+7%%C10"
-     }
-    ],
-    "fuente": {
-     "lamina": "2024_22-303",
-     "elevacion": "EJE A'",
-     "eje": "A'",
-     "texto": "armado como machon: E%%C12a10 + L:7+7%%C10"
-    }
-   },
    "area_tributaria": 1.664062
   },
   {

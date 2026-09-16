@@ -94,7 +94,7 @@
       "capas": [
         "*TEXTOS-FE"
       ],
-      "_que_es": "las llamadas de fierro escritas en la elevacion: 'E%%C12a10', '+3T%%C12a10', 'L:5+5%%C10'. El comodin cubre RLA-TEXTOS-FE, RLE-TEXTOS-FE y TEXTOS-FE, que el juego usa indistintamente."
+      "_que_es": "las llamadas de fierro escritas en la elevacion: 'E%%C12a10', '+3T%%C12a10'; tambien las laterales de viga 'L:5+5%%C10', que NO son fierro de muro. El comodin cubre RLA-TEXTOS-FE, RLE-TEXTOS-FE y TEXTOS-FE, que el juego usa indistintamente."
     }
   },
   "hojas": {

@@ -191,7 +191,7 @@ los demás en este orden:</p>
   <tr><td class="f">pilares.py</td><td>Los pilares: rectángulos cerrados, con su rótulo (<code>P.70x70</code>).</td></tr>
   <tr><td class="f">vigas.py · losas.py</td><td>Las vigas y el espesor de las losas, desde sus rótulos.</td></tr>
   <tr><td class="f">niveles.py</td><td>Las cotas de cada piso, desde las elevaciones. Verifica que el desfase del dibujo sea el mismo para todas.</td></tr>
-  <tr><td class="f">enfierradura.py</td><td>El <b>fierro</b>: estribos y trabas de los 40 pilares, malla y barras de borde de 31 muros. Lo lee de las elevaciones, donde está escrito bajo el rótulo de la sección.</td></tr>
+  <tr><td class="f">enfierradura.py</td><td>El <b>fierro</b>: estribos y trabas de los 40 pilares, malla y barras de borde de 29 muros. Lo lee de las elevaciones, donde está escrito bajo el rótulo de la sección.</td></tr>
 </table>
 
 <p><b>Deja:</b> <code>data/geometria/lt2.json</code> y un informe de auditoría en
@@ -232,7 +232,7 @@ barras, secciones, apoyos y cargas. Acá se toman las decisiones de modelado.</p
 
 <p><b>Lo que imprime:</b></p>
 <pre>  caso G resuelto. Carga total 34148.98 kN
-  enfierradura: 40 columnas, 31 de 40 muros
+  enfierradura: 40 columnas, 29 de 40 muros
   232 nodos, 378 elementos, 13 secciones, 5 diafragmas, 4 caso(s)
   243 elementos reciben losa, 2515.89 m2 en total
   -&gt; data\modelo\lt2.json</pre>
@@ -335,7 +335,7 @@ para bajarla.</div>
   <tr><td class="f">capacidad.py</td><td><b>Cuánto aguanta una sección.</b> Arma la sección de fibras desde el modelo y calcula la curva momento-curvatura y el diagrama de interacción P-M. Sirve para columnas y para muros.</td></tr>
   <tr><td class="f">verificar_tributarias.py</td><td>Comprueba que la losa que se aplica sea la misma que se dibuja, mirando que la presión implícita sea constante dentro de cada piso.</td></tr>
   <tr><td class="f">test_contrato_unity.py</td><td>Comprueba que cada dato del JSON tenga su campo en el código C#. Unity ignora en silencio lo que no reconoce, y un campo mal escrito da una deformada plana sin ningún error.</td></tr>
-  <tr><td class="f">verificar_todo.py</td><td>Corre las 27 comprobaciones del proyecto y resume. <b>Es el comando de antes de entregar.</b></td></tr>
+  <tr><td class="f">verificar_todo.py</td><td>Corre las 34 comprobaciones del proyecto y resume. <b>Es el comando de antes de entregar.</b></td></tr>
   <tr><td class="f">lanzar_unity.py</td><td>Regenera, copia y abre el visor.</td></tr>
 </table>
 
@@ -409,11 +409,11 @@ Si no activaste el entorno, poné <code>.\.venv\Scripts\python.exe</code> en su 
 
 <h3>4.3 ¿Está todo bien? — el comando de siempre</h3>
 
-<pre>python comun\verificar_todo.py            <span class="c"># las 27 comprobaciones, ~25 segundos</span>
+<pre>python comun\verificar_todo.py            <span class="c"># las 34 comprobaciones, ~4 minutos</span>
 python comun\verificar_todo.py --rapido   <span class="c"># sin las lentas</span>
 python comun\verificar_todo.py --solo sismo combinar</pre>
 
-<p>Si termina diciendo <b><code>27 de 27 EN OK</code></b>, el repositorio está como se
+<p>Si termina diciendo <b><code>34 de 34 EN OK</code></b>, el repositorio está como se
 entrega. <b>Correlo antes de subir cualquier cambio.</b> Si algo falla, muestra la salida
 del script que falló, sin esconder nada.</p>
 
