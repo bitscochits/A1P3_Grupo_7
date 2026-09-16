@@ -15,6 +15,9 @@ Desde la carpeta del repo. Si no activaste el entorno, `python` es
     python semana03\exportar_unity.py ingenieria
     python comun\lanzar_unity.py editor ingenieria          y Play
 
+El **edificio va siempre**: sin argumento el lanzador abre el LT2, y con los
+anexos de otro edificio el visor apaga los diagramas (el lanzador lo avisa).
+
 **Trazabilidad desde Python** — la misma barra que tocaste en Unity
 
     python semana04\trazabilidad.py ingenieria 18
