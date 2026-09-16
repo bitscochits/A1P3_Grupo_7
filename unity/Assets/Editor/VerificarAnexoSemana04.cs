@@ -134,6 +134,8 @@ public static class VerificarAnexoSemana04
                 if (n < 2 || Largo(s.N) != n || Largo(s.Vy) != n || Largo(s.Vz) != n
                     || Largo(s.T) != n || Largo(s.My) != n || Largo(s.Mz) != n)
                     Anotar(errores, $"{c.nombre} elem {s.id}: estaciones de distinto largo");
+                if (Largo(s.w) != 3)
+                    Anotar(errores, $"{c.nombre} elem {s.id}: w no trae 3 valores");
             }
             if (c.demandas != null)
                 foreach (DemandaS4 d in c.demandas)

@@ -110,6 +110,17 @@ la barra 222 y **"la seleccionada"**, en S3. Salen las etiquetas `My i = 278.4 k
 `x`): los extremos arriba —tracción arriba, sobre el apoyo— y el tramo
 abajo.
 
+**La carga, sobre cada barra:** magnitud **`wz`**. Dibuja la carga repartida
+de cada **viga** en el caso activo, hacia donde empuja, en kN/m. Las
+columnas y los muros no llevan: su peso propio entra por los nodos, no como
+carga repartida. En este edificio la gravedad va en `z` local, así que
+`wy` vale cero en todas las barras, y en `EX` y `EY` también `wz`: el sismo
+entra por cargas nodales. Cuando eso pasa, el panel lo dice —"sin diagrama:
+`wz` vale 0 en todo lo dibujado"— en vez de quedarse mudo. Es la misma `w` que OpenSees recibe en `beamUniform` y la
+que cierra el diagrama por equilibrio, así que se puede mostrar la causa
+—`wz` en las vigas de un piso— y el efecto —`My` en las mismas vigas— una
+detrás de la otra.
+
 **Diagrama de corte o axial:** magnitud **`Vz`** (corte de gravedad) o
 **`N`** (axial). El color dice el signo: azul positivo, rojo negativo; en
 `N`, positivo es tracción.

@@ -545,6 +545,10 @@ def bloque_caso(nombre, tipo, descripcion, factores, resultados, elementos,
 
         fila = {'id': eid,
                 'f': [round(v, DECIMALES_FUERZA) for v in f],
+                # La carga que recibe beamUniform, ya combinada: es la que
+                # cierra el diagrama, y el visor la dibuja como una magnitud
+                # mas para ver la causa al lado del efecto.
+                'w': [round(v, DECIMALES_FUERZA) for v in w],
                 'x': [round(x, DECIMALES_ESTACION) for x in xs]}
         for k in ('N', 'Vy', 'Vz', 'T', 'My', 'Mz'):
             fila[k] = [round(v, DECIMALES_FUERZA) for v in internos[k]]

@@ -139,6 +139,13 @@ public partial class VisorSemana04
             sb.AppendLine($"(ejes locales; * = los que mandan en {e.tipo})");
             Extremo(sb, s, "My");
             Extremo(sb, s, "Mz");
+            // La carga que recibe OpenSees en esta barra y en este caso.
+            if (s.w != null && s.w.Length == 3
+                && (s.w[0] != 0f || s.w[1] != 0f || s.w[2] != 0f))
+                sb.AppendLine($"carga repartida (beamUniform)  wx {F(s.w[0], "0.000")}  "
+                              + $"wy {F(s.w[1], "0.000")}  wz {F(s.w[2], "0.000")} kN/m");
+            else
+                sb.AppendLine("carga repartida: ninguna en este caso");
         }
 
         sb.AppendLine("--- demanda / capacidad ---");
@@ -272,8 +279,14 @@ public partial class VisorSemana04
             { multiplicadorEscala = esc; necesitaRedibujar = true; }
 
             GUILayout.Label(LeyendaDiagrama());
-            if (soloSeleccionado && Seleccionado < 0)
+            // Por que no se ve nada: el visor no se queda mudo.
+            if (!string.IsNullOrEmpty(MotivoSinDiagrama))
+                GUILayout.Label("sin diagrama: " + MotivoSinDiagrama);
+            else if (soloSeleccionado && Seleccionado < 0)
                 GUILayout.Label("(click en una barra para ver su diagrama)");
+            // Y esto se dibujo, pero cuesta verlo.
+            if (!string.IsNullOrEmpty(AvisoDeLectura))
+                GUILayout.Label("ojo: " + AvisoDeLectura);
         }
 
         bool pm = GUILayout.Toggle(mostrarPM, "Curva P-M de la seleccionada (ventana)");
@@ -302,6 +315,11 @@ public partial class VisorSemana04
             case "My": lado = "del lado traccionado: +My hacia +z local"; break;
             case "Mz": lado = "del lado traccionado: -Mz hacia +y local"; break;
             case "N": lado = "en z local; azul traccion, rojo compresion"; break;
+            case "wy":
+            case "wz":
+                lado = "en " + (magnitud == "wy" ? "y" : "z") + " local, hacia donde "
+                     + "empuja: es la carga repartida que recibe OpenSees, no un esfuerzo";
+                break;
             default: lado = "en " + (magnitud == "Vy" ? "y" : "z") + " local"; break;
         }
         string largo = F(largoDiagramaMaximo * multiplicadorEscala, "0.0");

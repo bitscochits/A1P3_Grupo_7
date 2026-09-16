@@ -93,6 +93,7 @@ public class EsfuerzosS4
 {
     public int id;
     public float[] f;
+    public float[] w;      // (wx, wy, wz) en ejes locales, kN/m
     public float[] x;
     public float[] N;
     public float[] Vy;
@@ -212,7 +213,7 @@ public partial class VisorSemana04 : MonoBehaviour
     [Header("Diagramas")]
     public bool mostrarDiagramas = true;
 
-    [Tooltip("My, Mz, Vz, Vy, N o T.")]
+    [Tooltip("My, Mz, Vz, Vy, N, T, o la carga repartida wy / wz (kN/m).")]
     public string magnitud = "My";
 
     [Tooltip("true: solo la barra seleccionada. false: todas las que el " +
@@ -246,7 +247,10 @@ public partial class VisorSemana04 : MonoBehaviour
     /// activo la tiene que cambiar, y el texto del panel tambien.
     public event System.Action CambioCasoActivo;
 
-    public static readonly string[] MAGNITUDES = { "My", "Mz", "Vz", "Vy", "N", "T" };
+    // wy y wz no son esfuerzos: son la carga repartida que recibe OpenSees.
+    // Van en la misma fila porque se dibujan con el mismo mecanismo.
+    public static readonly string[] MAGNITUDES =
+        { "My", "Mz", "Vz", "Vy", "N", "T", "wy", "wz" };
 
     // --- indices: se arman una vez al cargar ---
     private readonly Dictionary<int, ElementoS4> elementoPorId =

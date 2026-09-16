@@ -166,6 +166,11 @@ Mz(x) = −(Mz_i − x·Vy_i − wy·x²/2)
 puntos si la barra tiene carga repartida (el momento es una parábola), y en
 2 si no (es una recta). N positivo es tracción.
 
+Esa misma `w` viaja en el anexo y se puede **dibujar sobre la barra**, con
+las magnitudes `wy` y `wz`: la causa al lado del efecto. El bloque [1] exige
+que la `w` escrita sea la combinación de las de los casos base, o sea la
+misma que usan estas fórmulas para cerrar contra `f_j`.
+
 ### Por qué se sabe que está bien — la frase de la defensa
 
 > **Se reconstruye desde el extremo *i* y se exige llegar exactamente al

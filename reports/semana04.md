@@ -159,6 +159,14 @@ escala gráfica aparte: en este piso toman momentos unas siete veces mayores
 
 *Corte Vz de las barras del piso 2.*
 
+![Carga repartida del piso 2](../semana04/capturas/12_wz_piso_2.jpg)
+
+*El piso 2 con la magnitud `wz`: la carga repartida que OpenSees recibió en
+cada viga (`beamUniform`), dibujada hacia donde empuja. Es la causa del `My`
+y del `Vz` de ese mismo piso, y el bloque [1] exige que sea la misma `w` con
+la que cierra el equilibrio. Las columnas no llevan ninguna: su peso propio
+entra por los nodos.*
+
 ### Deformada
 
 La deformada del modo **"Caso activo (S4)"** usa los desplazamientos del
@@ -177,7 +185,8 @@ cada nodo de cada combinación son la suma rehecha).
 | --- | --- | --- |
 | Apoyos | toggle "Apoyos" | restricciones del modelo |
 | Áreas tributarias | toggle "Areas tributarias" | el polígono de losa de cada viga, calculado en Python (Semana 2) |
-| Cargas | Semana 3, "Flechas de carga" `G` `Q` `EX` `EY`, con una deformada de sismo puesta | los casos armados por `lab_semana03` |
+| Cargas (flechas) | Semana 3, "Flechas de carga" `G` `Q` `EX` `EY`, con una deformada de sismo puesta | los casos armados por `lab_semana03` |
+| Cargas (por barra) | Semana 4, magnitudes `wy` y `wz` | la `w` de `beamUniform` del caso activo, que viaja en `casos[].esfuerzos[].w` |
 | Ejes locales | toggle "Ejes locales" | `contrato.ejes_locales`, la regla del servidor |
 | Diafragmas | toggle "Diafragmas" | los diafragmas del modelo |
 | Enfierradura | Semana 3, "Enfierradura" | la sección de `comun/capacidad.py` |

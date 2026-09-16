@@ -31,6 +31,16 @@ using UnityEngine.Rendering;
 public partial class VisorSemana04
 {
     private string firmaDibujo = null;
+
+    /// Por que no se dibujo ningun diagrama, en una linea para el panel.
+    /// Vacio si se dibujo algo (o si el toggle esta apagado, que ya se ve).
+    /// Casi todas las formas de no ver nada terminan en una salida temprana
+    /// de Redibujar(): sin esto, el visor se queda mudo.
+    public string MotivoSinDiagrama { get; private set; } = "";
+
+    /// Un aviso para LEER el diagrama que si se dibujo. Hoy uno solo: en
+    /// un muro, la cinta del eje de su plano queda dentro de la placa.
+    public string AvisoDeLectura { get; private set; } = "";
     // El mayor |valor| dibujado, por grupo: lo que mide la leyenda.
     private float mayorBarrasDibujado, mayorMurosDibujado;
 
@@ -47,7 +57,13 @@ public partial class VisorSemana04
         string capas = visor == null ? "" :
             $"{visor.verColumnas}{visor.verVigas}{visor.verMuros}{visor.verBrazos}";
         string piso = qa != null ? qa.soloNivel.ToString(CultureInfo.InvariantCulture) : "-";
-        return $"{casoActivo}|{magnitud}|{mostrarDiagramas}|{soloSeleccionado}|"
+        // Cuantas barras tiene el modelo: si el editor agrega o borra una,
+        // la firma cambia y el diagrama se rehace. Sin esto quedaba en
+        // pantalla el de una barra que ya no existe.
+        string modelo = (visor == null || visor.Modelo == null
+                         || visor.Modelo.elementos == null)
+            ? "-" : visor.Modelo.elementos.Count.ToString(CultureInfo.InvariantCulture);
+        return $"{casoActivo}|{magnitud}|{mostrarDiagramas}|{soloSeleccionado}|{modelo}|"
              + $"{multiplicadorEscala.ToString(CultureInfo.InvariantCulture)}|"
              + $"{largoDiagramaMaximo.ToString(CultureInfo.InvariantCulture)}|"
              + $"{Seleccionado}|{piso}|{capas}|{AnexoCalzaConElModelo}";
@@ -58,14 +74,47 @@ public partial class VisorSemana04
         Limpiar();
         firmaDibujo = Firma();
         mayorBarrasDibujado = mayorMurosDibujado = 0f;
-        if (Anexo == null || visor == null || visor.Modelo == null) return;
+        MotivoSinDiagrama = AvisoDeLectura = "";
+        if (Anexo == null || visor == null || visor.Modelo == null)
+        {
+            MotivoSinDiagrama = "no hay anexo o no hay modelo cargado";
+            return;
+        }
         // Un anexo de otro edificio tiene los mismos ids en otras barras:
         // dibujarlo pondria esfuerzos de una barra sobre otra.
-        if (!mostrarDiagramas || !AnexoCalzaConElModelo) return;
-        if (CasoActivo() == null) return;
+        if (!mostrarDiagramas) return;          // el toggle se ve apagado
+        if (!AnexoCalzaConElModelo)
+        {
+            MotivoSinDiagrama = "el anexo es de otro edificio: mira el AVISO de arriba";
+            return;
+        }
+        if (CasoActivo() == null)
+        {
+            MotivoSinDiagrama = $"el caso activo '{casoActivo}' no esta en el anexo: "
+                              + "elige uno de los botones de caso";
+            return;
+        }
 
         List<Elemento> barras = BarrasADibujar();
-        if (barras.Count == 0) return;
+        if (barras.Count == 0)
+        {
+            // Se comprueba antes de afirmarlo: la barra puede no estar en el
+            // modelo, o estar y no ser un brazo (capa apagada, filtro de piso).
+            Elemento sel = null;
+            if (Seleccionado >= 0 && visor.Modelo.elementos != null)
+                foreach (Elemento x in visor.Modelo.elementos)
+                    if (x.id == Seleccionado) { sel = x; break; }
+            MotivoSinDiagrama = !soloSeleccionado
+                ? "ninguna barra visible: revisa el filtro de piso y las capas"
+                : Seleccionado < 0
+                    ? "no hay ninguna barra seleccionada"
+                    : sel == null
+                        ? $"la barra {Seleccionado} ya no esta en el modelo"
+                        : sel.EsBrazo
+                            ? "la barra seleccionada no lleva diagrama: es un brazo rigido"
+                            : $"la barra {Seleccionado} no tiene esfuerzos en este caso";
+            return;
+        }
 
         // Escala puramente grafica: el mayor |valor| dibujado se lleva a
         // largoDiagramaMaximo metros. Los muros llevan la suya: toman
@@ -82,6 +131,26 @@ public partial class VisorSemana04
                 if (EsMuro(e)) mayorMurosDibujado = Mathf.Max(mayorMurosDibujado, Mathf.Abs(q));
                 else mayorBarrasDibujado = Mathf.Max(mayorBarrasDibujado, Mathf.Abs(q));
             }
+        }
+
+        if (mayorBarrasDibujado <= 1e-9f && mayorMurosDibujado <= 1e-9f)
+        {
+            MotivoSinDiagrama = $"{magnitud} vale 0 en todo lo dibujado: prueba otra "
+                              + "magnitud (las que mandan llevan * en el panel)";
+            return;
+        }
+        if (soloSeleccionado && barras.Count == 1 && EsMuro(barras[0])
+            && visor.verMuros)
+        {
+            // Lo que esconde la cinta no es el nombre de la magnitud sino su
+            // DIRECCION: todo lo que se dibuja en el eje del plano del muro
+            // (My, Vz, N, T, wz en un muro de 'My'; Mz, Vy, wy en uno de
+            // 'Mz') sale a lo largo de la placa y queda dentro de ella. Si
+            // la capa Muros esta apagada no hay placa donde esconderse.
+            ElementoS4 s4 = ElementoPorId(barras[0].id);
+            if (s4 != null && EjeDeDibujo(magnitud) == s4.momento_en_el_plano)
+                AvisoDeLectura = "el diagrama va en el plano del muro y queda dentro "
+                               + "de la placa: apaga la capa Muros o sube la escala";
         }
 
         var positivo = new Malla();
@@ -102,6 +171,14 @@ public partial class VisorSemana04
     }
 
     static bool EsMuro(Elemento e) { return e.tipo == "muro"; }
+
+    /// En que eje local se dibuja cada magnitud, dicho como el momento que
+    /// usa ese mismo eje: "Mz" para lo que va en y local, "My" para lo que
+    /// va en z local. Es la regla de DireccionDeDibujo, en una sola parte.
+    static string EjeDeDibujo(string m)
+    {
+        return (m == "Mz" || m == "Vy" || m == "wy") ? "Mz" : "My";
+    }
 
     /// Metros de dibujo por unidad de esfuerzo, segun el grupo de la barra.
     float EscalaDe(Elemento e)
@@ -161,8 +238,21 @@ public partial class VisorSemana04
             case "Vz": return s.Vz;
             case "T": return s.T;
             case "Mz": return s.Mz;
+            case "wy": return Repartida(s, 1);
+            case "wz": return Repartida(s, 2);
             default: return s.My;
         }
+    }
+
+    /// La carga repartida es constante a lo largo de la barra: se repite en
+    /// cada estacion para que el dibujo de siempre la trate igual que a un
+    /// esfuerzo. w del JSON: 0 = wx, 1 = wy, 2 = wz, en ejes locales.
+    static float[] Repartida(EsfuerzosS4 s, int componente)
+    {
+        if (s == null || s.x == null || s.w == null || s.w.Length < 3) return null;
+        var v = new float[s.x.Length];
+        for (int k = 0; k < v.Length; k++) v[k] = s.w[componente];
+        return v;
     }
 
     /// Hacia donde se corre la curva, en coordenadas de Unity, y con que
@@ -172,7 +262,7 @@ public partial class VisorSemana04
     /// OpenSees y se pasan a Unity con el mismo swap que las posiciones.
     static bool DireccionDeDibujo(Elemento e, string m, out Vector3 dir, out float signo)
     {
-        bool enY = (m == "Mz" || m == "Vy");
+        bool enY = EjeDeDibujo(m) == "Mz";
         float[] v = enY ? e.localY : e.localZ;
         signo = (m == "Mz") ? -1f : 1f;
         dir = Vector3.zero;
@@ -308,6 +398,7 @@ public partial class VisorSemana04
 
     static string UnidadDe(string m)
     {
+        if (m == "wy" || m == "wz") return "kN/m";
         return (m == "N" || m == "Vy" || m == "Vz") ? "kN" : "kN*m";
     }
 
