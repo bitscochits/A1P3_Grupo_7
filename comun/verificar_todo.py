@@ -21,6 +21,7 @@ r"""
 """
 from __future__ import annotations
 
+import io
 import os
 import subprocess
 import sys
@@ -87,6 +88,28 @@ def correr(args):
     return r.returncode == 0, time.time() - t0, (r.stdout + r.stderr)
 
 
+def _avisar_anexos():
+    """Que edificio quedo en los anexos del visor.
+
+    La suite corre los exportadores SIN edificio, o sea a ingenieria: si
+    alguien estaba mirando otro edificio en Unity, se los acaba de pisar
+    y el visor apagaria los diagramas. Mejor decirlo que dejarlo en
+    silencio.
+    """
+    import json
+    raiz = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    sa = os.path.join(raiz, 'unity', 'Assets', 'StreamingAssets')
+    for nombre in ('semana03.json', 'semana04.json'):
+        try:
+            with io.open(os.path.join(sa, nombre), encoding='utf-8') as fh:
+                ed = (json.load(fh).get('info') or {}).get('edificio')
+        except Exception:
+            continue
+        if ed:
+            print("  (la suite dejo %s en '%s'; si mirabas otro edificio, "
+                  "vuelve a exportarlo)" % (nombre, ed))
+
+
 def main(argv):
     rapido = '--rapido' in argv
     solo = None
@@ -94,6 +117,7 @@ def main(argv):
         solo = [a.lower() for a in argv[argv.index('--solo') + 1:]
                 if not a.startswith('--')]
 
+    _avisar_anexos()
     print('=' * 70)
     print('  SUITE COMPLETA   (%s)' % rutas.RAIZ)
     print('=' * 70)
