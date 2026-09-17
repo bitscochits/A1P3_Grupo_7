@@ -49,7 +49,7 @@ el del computador y falla con `No module named 'openseespy'`.
 cd A1P1.0_Grupo_7                            # desde la carpeta que lo contiene
 .\setup.ps1                                  # SOLO la primera vez: crea .venv e instala
 .\.venv\Scripts\Activate.ps1                 # cada terminal nueva; el prompt queda con (.venv)
-python comun\verificar_todo.py               # ¿está todo bien?  (34 comprobaciones, ~4 min)
+python comun\verificar_todo.py               # ¿está todo bien?  (41 comprobaciones, entre 2 y 8 min el 17-09, Unity cerrado)
 python comun\lanzar_unity.py app conjunto --pantalla-completa   # verlo
 ```
 
@@ -72,6 +72,31 @@ python semana03\demanda_capacidad.py lt2 9 --grafico     # cualquier columna o m
 guardados en `data/resultados/` y solo toma `--comb` o `--combinacion`.
 Sirve para probar la superposición, no para cambiar las cargas.
 
+La suite abre Unity en batch en una entrada (`JsonUtility real s4`), así
+que hay que correrla con Unity y la app cerrados. Deja los anexos del visor
+en el **LT2**, el edificio de la demo, y al final lo dice.
+
+### Semana 5: la demo del LT2
+
+Detalle y orden completo en `semana05/COMANDOS.md`. Lo mínimo:
+
+```powershell
+python comun\lanzar_unity.py sincronizar lt2        # modelo, anexos, superposición, carga móvil y Excel a StreamingAssets
+python semana05\servidor_s5.py                      # otra terminal: /analizar, /combinar, /estados en el puerto 5000
+python comun\lanzar_unity.py app lt2                # la app de Windows
+python semana05\reanalisis_demo.py lt2 --borrar-elemento 69 --nodo 186 --elemento 337   # M1 sin Unity
+python semana05\comparar_anexos.py lt2 --cs 0.20    # M2 sin escribir nada
+python semana05\exportar_excel.py lt2               # el Excel de resultados
+```
+
+**Dónde está el Excel:** `data/excel/<ed>_resultados.xlsx`, versionado
+(`lt2`, `ingenieria` y `conjunto`). El lanzador copia el del edificio
+activo a `unity/Assets/StreamingAssets/resultados.xlsx`, que es el que abre
+el botón "Abrir Excel de resultados" de la app. Cada reanálisis del
+servidor escribe `results/excel/reanalisis_<ed>.xlsx`, que no va a git.
+En la hoja Reacciones **no se suma la columna entera**: se filtran las
+filas con "Cuenta en ..." = sí, o el corte basal sale al doble.
+
 ## 3. Mapa del repo — qué hace cada archivo
 
 > Versión de una hoja, para imprimir: `reports/mapa_del_repo.md`.
@@ -82,15 +107,16 @@ Sirve para probar la superposición, no para cambiar las cargas.
 |---|---|
 | `rutas.py` | El único que sabe dónde está cada carpeta. Encuentra la raíz subiendo hasta la marca del repo. |
 | `contrato.py` | Define el modelo neutro (`data/modelo/`): qué es estructura y qué es vista, `validar()` caza cargas huérfanas, `separar()` sella el área tributaria en cada elemento. |
-| `servidor_opensees.py` | El motor: construye el modelo en OpenSees y resuelve los casos. También es el servidor Flask para reanálisis desde Unity. |
+| `servidor_opensees.py` | El motor: construye el modelo en OpenSees y resuelve los casos. También es el servidor Flask para reanálisis desde Unity: `/analizar` devuelve el equilibrio de `calcular.equilibrio` y escribe el Excel del reanálisis. |
+| `excel.py` | Escritor genérico de libros `.xlsx` (openpyxl): LEEME, Resumen, Nodos, Desplazamientos, Elementos, Esfuerzos, Reacciones con "Cuenta en", Demanda-capacidad, Curvas P-M y Supuestos. |
 | `calcular.py` | Etapa 3: lee `data/modelo/`, resuelve G, Q, EX, EY y escribe `data/resultados/`. `equilibrio()` separa reacciones de restricciones **por grado de libertad**. |
 | `combinar.py` | Superposición `R = ΣλR` y su prueba contra una corrida explícita, sobre todos los GDL. La tolerancia es la **cota de redondeo** del servidor, medida. |
 | `sismo.py` | Un caso lateral: carga aplicada, corte basal, sentido de la deformada, torsión de piso (cociente NCh433) y centro de rigidez. |
 | `capacidad.py` | Fiber Section desde el modelo: M-φ, curva P-M nominal (ε_c = 0.003) y máxima, confinamiento de Mander desde el estribo real, sensibilidad, dibujo de la discretización. Columna o muro. |
 | `verificar_tributarias.py` | La losa que se aplica es la que se dibuja: área sellada = polígonos = carga, con el q implícito constante por piso. |
 | `test_contrato_unity.py <ed>` | Cada clave del JSON tiene su campo en el C#. `JsonUtility` no avisa si falta. |
-| `verificar_todo.py` | Corre toda la suite y resume. |
-| `lanzar_unity.py app <ed>` | Regenera, copia a `StreamingAssets/` con el nombre **que la escena declara** y abre el visor. |
+| `verificar_todo.py` | Corre toda la suite (41 entradas) y resume. `--rapido` salta las lentas. |
+| `lanzar_unity.py app <ed>` | Copia a `StreamingAssets/` con el nombre **que la escena declara** y abre el visor. Otros modos: `sincronizar` (solo copia), `build`, `web`, `android` (avisa si falta el módulo), `editor` y `servidor`. |
 
 ### `edificios/lt2/` — el LT2, desde sus planos `2024_22`
 
@@ -158,14 +184,36 @@ Todo lo de la entrega está en la carpeta; **para estudiar, empezar por
 | `GUIA_DEFENSA.md` · `GUION_DEMO.md` · `COMANDOS.md` · `CONTRATO.md` | Guía de estudio, guion de la demo, chuleta y contrato Python ↔ Unity. |
 | `reports/semana04.md` | El informe de la entrega. |
 
+### `semana05/` — viewer estructural, reanálisis y superposición
+
+Todo lo de la entrega está en la carpeta; **para la demo, empezar por
+`semana05/README.md`** y `semana05/GUION_DEMO.md`.
+
+| archivo | qué hace |
+|---|---|
+| `servidor_s5.py` | El servidor de la semana (puerto 5000): `/ping` y `/analizar` de `comun/servidor_opensees.py`, más `POST /combinar` (λ libres) y `GET /estados`. `--lan` para un teléfono. |
+| `superposicion.py` · `estados_s5.json` · `verificar_superposicion.py` | Combinación con cualquier λ usando las funciones del anexo, con la D/C rehecha entera; E1..E3 precalculados en `data/unity/superposicion_lt2.json`; y E1..E3 contra una corrida explícita de OpenSees. |
+| `exportar_excel.py` · `test_excel.py` | `data/excel/<ed>_resultados.xlsx` y su comparación celda a celda con la fuente. |
+| `carga_movil.py` | 30 posiciones de 100 kN sobre las vigas 203-208 del LT2, resueltas y verificadas en Python; Unity solo elige cuál mostrar. |
+| `reanalisis_demo.py` · `comparar_anexos.py` | M1 (borrar la columna 69) y M2 (`--cs 0.20`) sin Unity y sin escribir en `data/`. |
+| `compilar_unity.py` · `comparar_unity.py` | Compila los C# sin abrir Unity; cruza el registro de `CapturaSemana05` con Python (486 filas, 0 FALLA). |
+| `README.md` · `GUION_DEMO.md` · `COMANDOS.md` · `UX.md` · `MOVIL.md` · `MODIFICACIONES.md` · `CARGA_MOVIL.md` · `APP_AUTONOMA.md` · `CONTRATO.md` | Mapa de la entrega, guion, chuleta, las seis preguntas del visor, preparación móvil, M1/M2, carga móvil, evaluación de app autónoma y contrato entre piezas. |
+| `capturas/` · `evidencia/` | 23 fotos y `registro.txt` de la app; salidas de verificación. |
+| `reports/semana05.md` | El informe de la entrega. |
+
 ### `unity/Assets/Scripts/`
 
 `ModeloEstructural.cs` (las clases de datos, fuente de verdad del
 contrato) · `VisorEstructura.cs` (dibuja) · `AnalizadorEstructural.cs`
-(habla con el servidor) · `EditorEstructura.cs` · `VisorQA.cs` (toggles)
-· `VisorSemana03.cs` · `VisorSemana04.cs` y sus partes `.Diagramas`,
-`.PM`, `.Panel` (postprocesador) · `CapturaSemana04.cs` (capturas sin
-intervención) · `CamaraOrbital.cs`.
+(habla con el servidor) · `EditorEstructura.cs` (pestaña Modificar) ·
+`VisorQA.cs` (el panel con pestañas y el inspector) · `PanelUI.cs`
+(estilos escalados por DPI) · `EventosVisor.cs` (eventos entre visores y
+`AjustesVista`) · `LectorStreaming.cs` (StreamingAssets con
+`UnityWebRequest`) · `AmbienteVisor.cs` y `.Losas` (vista realista, suelo
+y losas de dibujo) · `VisorSemana03.cs` · `VisorSemana04.cs` y sus partes
+`.Diagramas`, `.PM`, `.Panel`, `.Mapa`, `.Superposicion`, `.Hooks` ·
+`VisorCargaMovil.cs` · `CapturaSemana04.cs` y `CapturaSemana05.cs`
+(capturas sin intervención) · `CamaraOrbital.cs` (mouse y táctil).
 
 ### Raíz
 

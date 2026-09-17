@@ -263,6 +263,123 @@ modelo y el conteo debe cerrar con los rótulos del plano"*. Uno malo:
     cuatro mallas y núcleos de borde de Ø32, en texto suelto y en cortes que
     el extractor no lee; no entran a la revisión P-M.
 
+### Semana 5 — viewer estructural, modificación y superposición interactiva
+- **Tarea:** con el LT2 como edificio de la demo:
+  - la tabla de las once funciones del viewer;
+  - dos modificaciones de punta a punta: M1 borra la columna 69 desde Unity
+    y reanaliza por `/analizar`; M2 cambia el dato `--cs 0.20` y se vuelve a
+    exportar el anexo;
+  - la superposición interactiva E1..E3 y LIBRE, con Python combinando;
+  - la carga móvil (sidequest);
+  - el panel ordenado y la vista realista con suelo;
+  - el Excel de resultados, abrible desde Unity;
+  - el código listo para móvil y la evaluación de una app autónoma.
+
+  Todo en `semana05/` y en `reports/semana05.md`.
+- **Cómo se trabajó:** un workflow de agentes en fases.
+  1. Auditoría en paralelo sobre `f357eb6`: ocho informes y una síntesis con
+     matriz de rúbrica y paquetes.
+  2. Decisiones del grupo escritas antes de programar: Windows primero,
+     móvil al final y sin instalar Android; ningún cálculo en C#; un solo
+     servidor en el puerto 5000.
+  3. Un agente base escribió `semana05/CONTRATO.md` y la API común de C#.
+  4. Trece paquetes en paralelo, cada uno con **archivos exclusivos**: si
+     necesitaba otro archivo, lo pedía por escrito en vez de tocarlo.
+  5. Un revisor adversarial por paquete: 13 de 13 "ok con arreglos". En la
+     implementación trabajaron 28 agentes, con 1 543 llamadas a
+     herramientas.
+  6. Integración con Unity real: import, regresión de la Semana 4 byte a
+     byte, build, 23 fotos y `comparar_unity.py`.
+  7. Un agente revisó las fotos buscando lo que no se entiende, otro corrigió
+     y al final se corrió la suite completa: 41 de 41.
+  8. Revisión adversarial final, de solo lectura, y un corrector que aplicó
+     lo de severidad alta y media: la suite fuera de UTF-8, la M2 en el exe,
+     la cabecera y "¿Qué lo carga?". Después, nueva build, captura S5
+     (456 filas, 0 FALLA) y regresión S4 (mismo md5).
+- **Corrección 13 — la escena pisaba el color de la selección.** El C# nuevo
+  resaltaba en cian, pero `SampleScene.unity` guardaba `colorSeleccion`
+  magenta, y el valor serializado de la escena manda sobre el del código. Es
+  la misma trampa que el `nombreArchivo` de la Semana 2. El reporte del
+  agente daba el cian por hecho; lo encontró su revisor leyendo el YAML de
+  la escena. Arreglo: un campo serializado nuevo (`colorResaltado`), así el
+  valor viejo se ignora.
+- **Corrección 14 — la huella del Excel dependía del fin de línea.** La hoja
+  LEEME guardaba el sha256 de los bytes en disco. Con `core.autocrlf`, git
+  entrega los JSON con CRLF en Windows y con LF en otra máquina. Con el
+  mismo modelo, `test_excel.py` daba el libro por desactualizado, y al
+  regenerarlo quedaba un diff binario. Se normaliza a LF antes del hash: la
+  huella del LT2, `95b64364576f89d5`, es la del contenido guardado en git.
+- **Corrección 15 — un pedido demasiado grande salía como error del
+  servidor.** `RequestEntityTooLarge` no hereda de `BadRequest`, así que
+  `/analizar` respondía 500 donde el contrato pide 400. Lo comprobó el
+  revisor con `test_client`. Arreglo con un test de regresión que achica el
+  tope y exige 400 con cuerpo JSON.
+- **Corrección 16 — un número idéntico no prueba una foto.** En la
+  integración, el `registro.txt` de la Semana 4 salió idéntico byte a byte
+  (283 líneas), pero la foto 01 había perdido la trazabilidad y la curva
+  P-M. El inspector se arma en el `Update` siguiente a la selección, y en
+  ese frame el scroll se recortaba a 0. Solo se vio comparando las imágenes.
+  `CapturaSemana04.cs` vuelve a fijar el scroll un frame después.
+- **Corrección 17 — la tolerancia de la M1 no contaba el redondeo del
+  servidor.** Unity y la demo en Python resuelven cada uno su modelo en
+  float32, y cada respuesta pasa por el redondeo del servidor (8 decimales
+  en m, 4 en kN). Pueden quedar a un escalón entero, y en una suma de
+  reacciones a un escalón por nodo restringido: 21 × 1e-4 = 2.1e-3 kN. En
+  vez de subir la tolerancia hasta que pasara, se buscó la causa y se agregó
+  como `srv` en `semana05/comparar_unity.py`. Ejemplo: el máximo de G antes
+  de borrar da 6.71146018 mm en Unity y 6.71145 en Python. La diferencia,
+  1.02e-05, queda fuera sin `srv` (5.5e-06) y dentro con ella (1.55e-05).
+  Resultado: 456 filas y 0 FALLA.
+- **Corrección 18 — la primera vista realista no se leía como edificio.** Lo
+  encontró la revisión de las 23 fotos.
+  - Columnas de 0.70 m y vigas de 0.60×0.80 salían como tubos de 5 cm con
+    esferas de 30 cm, porque la escena guardaba `verPerfiles: 0`.
+  - No había losas.
+  - En la deformada, cada muro se partía en escalera: la placa quedaba
+    siempre vertical y ni el pie ni la cabeza seguían a sus nodos.
+  - La cabecera decía "NO PASA 0/69" en verde.
+  - La foto 14 no mostraba la curva P-M y el estribo salía `E%%C12a10`.
+
+  Se corrigió solo el dibujo:
+  - secciones b×h en la vista realista;
+  - losas desde los polígonos tributarios;
+  - muros como prisma cizallado;
+  - "PASAN 69/69";
+  - `Ø` al mostrar.
+
+  Después, `comparar_unity.py` y la regresión S4 dieron lo mismo.
+- **Corrección 19 — un documento afirmaba más de lo medido.**
+  `MODIFICACIONES.md` decía que la corrida en float32 daba "los mismos
+  números a la precisión impresa". En el equilibrio no: Q aplicada da
+  −11361.002 y no −11361.003, y los peores errores cambian en el último
+  dígito. Lo corrigió el revisor de P3 con el diff de las dos salidas.
+- **Corrección 20 — la suite daba 41 de 41 solo en la terminal del agente.**
+  `test_excel.py` imprime "sin factor φ". `verificar_todo.py` lanza cada
+  entrada con la salida a un pipe, y en Windows un pipe usa cp1252 si no
+  está `PYTHONIOENCODING`. En una terminal normal, la entrada "excel s5"
+  caía con `UnicodeEncodeError` y quedaba en FALLA. El entorno del agente
+  define esa variable, así que nadie lo vio hasta la revisión final, que
+  corrió sin ella. Arreglo: `verificar_todo.correr` pasa
+  `PYTHONIOENCODING=utf-8` al hijo, como ya hacía `comparar_unity.py`, y
+  `test_excel.py` reconfigura su salida a UTF-8. Comprobado sin la
+  variable: `test_excel.py lt2` salía con 1 y ahora sale con 0 (47 OK).
+- **Otros arreglos de los revisores, menores:**
+  - Enter en "Ir a ID" no funcionaba en Windows: el campo consume el evento.
+  - Los logs de `AmbienteVisor` escribían `-4,01` en un Windows en español.
+  - `lanzar_unity.py app lt2 --seco` escribía de verdad.
+  - `sincronizar LT2` en mayúsculas copiaba el modelo pero ningún anexo.
+  - La evaluación de la app autónoma olvidaba que el motor ahora necesita
+    openpyxl: 24 MB y no 22.
+- **Lo que queda para el grupo, sin corregir:**
+  - La M2 se vio en el exe, pero con captura automática y solo con el muro 9
+    en 1.2G+1.0Q+1.4EY (u 1.078 NO PASA). El muro 9 en EY no tiene foto.
+  - La captura selecciona y mueve sliders por código; falta probar a mano
+    el clic, el arrastre y los sliders.
+  - Los polígonos de las losas de dibujo suman 536.94 m² en −4.01, contra
+    504.66 m² del campo `area`, y no está explicado.
+  - No hay build móvil, no se identificó un teléfono concreto y el táctil
+    no se probó en un equipo.
+
 ---
 
 ## Verificaciones críticas del proyecto
@@ -282,5 +399,12 @@ modelo y el conteo debe cerrar con los rótulos del plano"*. Uno malo:
 | Lado traccionado del diagrama | fibra `+z` en tracción con `My > 0` | `semana04/verificar_semana04.py` [6] |
 | Momento del plano de los muros | el mayor bajo EX y EY: 56 de 56 en Ingeniería (en la suite); 96 de 96 con `verificar_semana04.py conjunto` | `semana04/verificar_semana04.py` [8] |
 | Unity lee el anexo de Semana 4 | `JsonUtility` real = lo escrito | `semana04/verificar_unity_semana04.py` |
+| Superposición E1..E3 = OpenSees explícito | 0 fuera de cota en 22 691 comparaciones por estado (todo el modelo y la D/C); `/combinar` y el precalculado = Python bit a bit en 24 372 valores | `semana05/verificar_superposicion.py lt2` |
+| Contrato JSON ↔ C# de la Semana 5 | 181 OK, en las dos direcciones y en cada objeto | `semana05/test_contrato_semana05.py` |
+| M1: borrar la columna 69 y reanalizar | UZ nodo 186 (G) −3.64515 → −21.59875 mm; G aplicada −34 148.979 kN antes y después | `semana05/reanalisis_demo.py lt2 --borrar-elemento 69 --nodo 186 --elemento 337` |
+| M2: Cs 0.10 → 0.20 | G y Q idénticos; EX nuevo = 2·EX base (error/cota ≤ 0.72); muro 9 en EY u 0.635 → 1.479 | `semana05/comparar_anexos.py lt2 --cs 0.20` |
+| Carga móvil: ΣRz = P | peor 2.0e-04 ≤ 8.0e-04 kN en las 30 posiciones; Betti 3.5e-19 m | `semana05/carga_movil.py lt2` |
+| Excel = Python | 47 OK en el LT2; la suma filtrada de Reacciones = `calcular.equilibrio` | `semana05/test_excel.py` |
+| Unity muestra lo que calculó Python (Semana 5) | 486 filas, 0 FALLA (fuera de la suite: necesita el exe y el servidor) | `semana05/comparar_unity.py semana05/capturas/registro.txt` |
 
 Todo junto: `python comun/verificar_todo.py`.

@@ -1,6 +1,10 @@
 # Guía: usar el modelo en Unity (paso a paso, desde cero)
 
-Hay **dos flujos**. El A no necesita Python corriendo; el B sí.
+Hay **tres flujos**. El A no necesita Python corriendo; el B y el C sí.
+
+> Semana 5: las dos modificaciones de la entrega (M1, borrar una columna
+> desde Unity; M2, cambiar el coeficiente sísmico) están paso a paso y con
+> sus números en `semana05/MODIFICACIONES.md`.
 
 | | qué hace | necesita el servidor |
 |---|---|---|
@@ -22,21 +26,33 @@ En la raíz del repo, con el entorno activo (`.\setup.ps1` la primera vez):
 python comun\lanzar_unity.py app lt2
 ```
 
-Eso arma el modelo, lo resuelve, escribe `data/unity/lt2.json`, lo copia a
-`StreamingAssets/` con el nombre que la escena espera y abre el visor.
+Eso **no arma ni resuelve nada**: copia a `StreamingAssets/` lo que ya está
+en `data/` para ese edificio (modelo, anexos de las semanas 3 y 4,
+superposición, carga móvil, Excel), con el nombre que la escena espera, y
+abre la app de Windows (la compila la primera vez). Es el modo
+`sincronizar` más abrir la app (`comun/lanzar_unity.py`, `abrir_visor`).
 Cambiá `lt2` por `ingenieria` o `conjunto` para otro edificio, y agregá
 `--pantalla-completa` si querés verlo grande.
 
-Si preferís los pasos sueltos:
+Si el modelo cambió, primero hay que regenerar `data/` con los pasos
+sueltos:
 
 ```bash
-python edificios\lt2rmar.py             # geometría -> modelo
+python edificios\lt2\armar.py            # geometría -> modelo
 python comun\calcular.py lt2              # modelo -> resultados
 python edificios\lt2\exportar_unity.py    # -> data/unity/lt2.json
 ```
 
-Antes de mirar nada en Unity conviene `python comunerificar_todo.py`:
+Antes de mirar nada en Unity conviene `python comun\verificar_todo.py`:
 si ahí algo falla, no tiene sentido llevarlo al visor.
+
+> Ojo: la suite corre `semana03/exportar_unity.py lt2` y
+> `semana04/exportar_unity.py lt2` (entradas "anexo Unity semana 3/4" de
+> `comun/verificar_todo.py`), y esos exportadores copian el anexo a
+> `StreamingAssets/`. Si estabas mirando otro edificio, la suite te deja
+> los anexos del LT2 (lo dice al final). El modelo, `superposicion.json`,
+> `carga_movil.json` y `resultados.xlsx` no los toca: esos se copian con
+> `python comun\lanzar_unity.py sincronizar lt2`.
 
 ---
 
@@ -62,12 +78,16 @@ Al abrir, la escena `SampleScene` ya trae los objetos `Visor` y
 
 Cada vez que cambies el modelo en Python:
 
+1. Regenera `data/` (pasos sueltos del PASO 0).
+2. Copia a `StreamingAssets/`, sin abrir Unity:
+
 ```bash
-python comun\lanzar_unity.py app lt2      # regenera, copia y abre
+python comun\lanzar_unity.py sincronizar lt2   # solo copia; --seco dice qué copiaría
 ```
 
 > Es el error más común: cambias el modelo, no copias el JSON, y Unity
-> sigue mostrando el anterior.
+> sigue mostrando el anterior. El lanzador **solo copia**: si no
+> regeneraste `data/`, copia lo viejo.
 
 ---
 
@@ -88,9 +108,16 @@ EditorEstructura.cs       seleccionar y editar
 > y sin el campo `auxiliar`— y nadie se enteró hasta que
 > `test_contrato_unity.py` lo detectó. Ahora hay una sola.
 
+Desde las semanas 3 a 5 hay más (`VisorQA`, `VisorSemana03`,
+`VisorSemana04*`, `PanelUI`, `EventosVisor`...); la escena ya los trae
+puestos.
+
 ---
 
 ## PASO 4 — Crear el objeto Visor
+
+La escena del repo **ya lo trae** (PASO 1). Esto es para armarla desde una
+escena vacía:
 
 1. En **Hierarchy**, click derecho → **Create Empty**.
 2. Renómbralo `Visor`.
@@ -105,14 +132,13 @@ colores, `mostrarDeformada`, `factorEscala` y las **capas visibles**
 
 ## PASO 5 — Play
 
-Presiona **▶**. Deberías ver:
+Presiona **▶**. Deberías ver el edificio (con el LT2: columnas, vigas y
+muros sobre sus apoyos).
 
-- 4 esferas **verdes** abajo (apoyos)
-- 4 esferas **azules** arriba (nodos de techo)
-- barras **azules** (columnas) y **naranjas** (vigas)
-
-En la Console debe decir:
-`Modelo cargado: 8 nodos, 8 elementos, 4 casos.`
+En la Console debe decir, para el LT2:
+`Modelo cargado: 232 nodos, 378 elementos, 4 casos.`
+(los números de control de `CLAUDE.md`; el texto lo escribe
+`VisorEstructura.cs`).
 
 **Si no ves nada**, mira la Console:
 
@@ -156,8 +182,13 @@ Para los otros casos necesitas el Flujo B.
 En una terminal aparte, **déjala abierta**:
 
 ```bash
-python comun\servidor_opensees.py
+python semana05\servidor_s5.py
 ```
+
+Es **el** servidor de la Semana 5: el `/analizar` de
+`comun/servidor_opensees.py` más `/combinar` y `/estados`, en el mismo
+puerto. `python comun\lanzar_unity.py servidor` levanta ese mismo, y
+`python comun\servidor_opensees.py` sigue sirviendo solo para `/analizar`.
 
 Debe quedar escuchando en `http://localhost:5000`, y decir
 *"Solo accesible desde este equipo"*. Para conectar desde el celular
@@ -168,6 +199,9 @@ navegador: `http://localhost:5000/ping` debe responder
 ---
 
 ## PASO 9 — Crear el objeto Analizador
+
+Igual que el Visor, la escena del repo **ya lo trae**, cableado. Desde una
+escena vacía:
 
 1. En **Hierarchy**, click derecho → **Create Empty**.
 2. Renómbralo `Analizador`.
@@ -202,23 +236,40 @@ puesto — el campo solo acepta objetos que lo tengan.
 
 ## PASO 10 — Play
 
-Al darle Play, el Analizador manda el modelo completo y recibe los 4
-casos. En la Console:
+En la escena del repo el Analizador **no** analiza al darle Play
+(`analizarAlIniciar: 0` en `SampleScene.unity`): el análisis sale con
+**Enter** o con el botón *"Recalcular en el servidor (Enter)"* de la
+pestaña **Modificar**. Manda el modelo completo y recibe los 4 casos. En
+la Console:
 
 ```
 Respuesta OK: 4 caso(s) [G, Q, EX, EY]
-[G] Suma de reacciones: Fx=0.0000  Fy=0.0000  Fz=179.0000 kN
-[G] Max desplazamiento = 0.06348 mm
+[G] Max desplazamiento = ... mm (mayor componente)
+[G] Equilibrio de G (calcular.equilibrio), kN
+     aplicada   reaccion      error
+Fx ...
 ```
 
-**Ese `Fz=179.0000` es tu verificación de equilibrio.** Debe igualar la
-carga aplicada. Si no calza, algo está mal en las cargas.
+El equilibrio **lo calcula Python** (`calcular.equilibrio`, viaja en la
+respuesta como `equilibrio` de cada caso) y Unity solo lo muestra, en la
+Console y en la pestaña Modificar. Con el LT2 sin editar, G da aplicada
+Fz = −34 148.98 kN y reacción +34 148.98 kN (`python test_servidor.py`,
+bloque 9).
+
+> Hasta la Semana 4 este log **sumaba todas las reacciones**. Con
+> diafragmas eso está mal: en un nodo de diafragma `nodeReaction` trae la
+> fuerza interna de la restricción. En el LT2, EX, la suma de todas da
+> Fx = −7266.13 kN con 3633.06 kN aplicados; separada por grado de
+> libertad da −3633.06 (`python test_servidor.py`, bloque 9). Nunca
+> sumes la lista de reacciones entera.
 
 ---
 
 ## PASO 11 — Cambiar de caso
 
-Cambia el campo `casoActivo` a `EX`, `EY` o `Q`.
+En la pestaña **Modificar**, bajo *"Caso mostrado"*, un botón por caso
+(G, Q, EX, EY). Cambiar `casoActivo` en el Inspector **no** redibuja
+(no hay `OnValidate`): solo sirve para elegir el caso antes de analizar.
 
 Desde código, sin volver a consultar al servidor:
 
@@ -227,8 +278,13 @@ analizador.MostrarCaso("EX");
 ```
 
 Los 4 casos ya están en memoria. **No se vuelve a pedir nada** — es
-instantáneo. Esto es lo que necesitas para el *Load Combination
-Explorer*.
+instantáneo.
+
+> Q, EX y EY del servidor son los del modelo del visor
+> (`data/unity/lt2.json`: la Q del plano y el sismo del perfil), **no**
+> los del anexo de la Semana 4 (`semana03/parametros.json`). Solo G
+> coincide. Las combinaciones y la superposición con λ vienen del anexo
+> y de `/combinar`, no de acá.
 
 ---
 
@@ -236,17 +292,20 @@ Explorer*.
 
 ## PASO 12 — Cámara y editor
 
-Son dos scripts más: `CamaraOrbital.cs` y `EditorEstructura.cs`.
-Cópialos a `Assets/Scripts/` junto a los otros tres.
+Son dos scripts más: `CamaraOrbital.cs` y `EditorEstructura.cs`. Ya
+están en `Assets/Scripts/` (PASO 3) y la escena del repo los trae
+puestos: `CamaraOrbital` en la **Main Camera** y `EditorEstructura` en el
+mismo objeto **`Analizador`** (lo arma `Assets/Editor/ConfigurarEscena.cs`).
+Desde una escena vacía:
 
-1. Selecciona la **Main Camera** de la escena → Add Component → `CamaraOrbital`.
-2. GameObject vacío → `Editor` → Add Component → `EditorEstructura`.
-3. Con **`Editor` seleccionado**, arrastra `Visor` y `Analizador` desde
-   Hierarchy a sus campos. (También puedes dejarlos vacíos: se buscan
-   solos.)
+1. Selecciona la **Main Camera** → Add Component → `CamaraOrbital`.
+2. Selecciona `Analizador` → Add Component → `EditorEstructura`.
+3. Arrastra `Visor` y `Analizador` desde Hierarchy a sus campos.
+   (También puedes dejarlos vacíos: se buscan solos.)
 
 El panel es `OnGUI`, así que **no hay que armar ningún Canvas** ni
-arrastrar prefabs. Aparece solo al darle Play.
+arrastrar prefabs. Con `VisorQA` en la escena, el editor es la pestaña
+**Modificar** del panel; sin `VisorQA`, un panel propio a la derecha.
 
 ---
 
@@ -296,16 +355,37 @@ seleccionar el nodo **primero** y arrastrarlo **después**.
 
 ## PASO 14 — El ciclo de trabajo
 
-1. Mueve un nodo, cambia una sección o borra una barra.
-2. **Enter** → se manda al servidor.
-3. La deformada nueva aparece sola.
+1. Mueve un nodo, cambia una sección o borra una barra (**Supr** o
+   *"Borrar barra"*).
+2. **Enter** (o *"Recalcular en el servidor"*) → `POST /analizar`.
+3. La deformada nueva aparece sola: al llegar la respuesta,
+   `AnalizadorEstructural` enciende `mostrarDeformada` antes de aplicar
+   los desplazamientos. La pestaña Modificar muestra el máximo, la tabla
+   de equilibrio y *"Abrir Excel de este reanalisis"*
+   (`results/excel/reanalisis_<ed>.xlsx`).
 
 Al editar, la deformada anterior se borra: ya no corresponde a esa
-geometría. El panel muestra `(modificado)` hasta que recalculas.
+geometría. Supr, Enter y Esc no actúan si el foco está en un campo de
+texto (antes, borrar un carácter en X borraba el nodo).
 
-**Guardar JSON** escribe el modelo editado en `persistentDataPath`
-(la ruta completa sale en la Console). Ese archivo se puede copiar de
-vuelta a `StreamingAssets/` para que quede como modelo de partida.
+Lo que **no** se recalcula en vivo es el anexo de la Semana 4
+(diagramas, combinaciones, P-M): al editar, `VisorSemana04` lo marca
+**desactualizado**, apaga los diagramas y lo dice en el aviso. Para eso
+hay que re-exportar (`python semana04\exportar_unity.py lt2`) y reiniciar
+Play.
+
+**Guardar JSON** escribe `modelo_editado.json` en `persistentDataPath`
+(la ruta completa sale en la Console). Sirve para **reenviarlo** al
+motor y compararlo:
+
+```bash
+python semana05\reanalisis_demo.py lt2 --desde "<ruta>\modelo_editado.json" --nodo 186
+```
+
+**No** lo copies a `StreamingAssets/` como modelo de partida: `JsonUtility`
+solo escribe los campos que declara `ModeloEstructural.cs`, y la
+enfierradura no está entre ellos. El modelo de partida sale siempre de
+Python (PASO 0).
 
 ---
 
@@ -318,10 +398,17 @@ la carga descartada nunca entró.
 
 Por eso al borrar, el editor limpia también:
 
-- las cargas distribuidas de la barra,
-- las cargas nodales del nodo,
-- las barras que llegaban a ese nodo,
-- las referencias en diafragmas y brazos rígidos.
+- al borrar una **barra**: sus cargas distribuidas;
+- al borrar un **nodo**: sus cargas nodales, las barras que llegaban a
+  él (con sus cargas) y las referencias en diafragmas y brazos rígidos.
+
+Lo que **no** limpia, a propósito: las cargas nodales de los extremos de
+una barra borrada. En el LT2 el peso propio de columnas y muros viaja
+como carga **nodal** de G (mitad en cada extremo,
+`edificios/lt2/exportar_unity.py`), así que borrar la columna 69 deja
+48.51 kN aplicados, 24.255 kN en cada extremo
+(`python semana05\reanalisis_demo.py lt2 --borrar-elemento 69 --nodo 186`).
+El editor lo avisa al borrar.
 
 Y el servidor además lo valida y lo rechaza con un mensaje explícito, por
 si el JSON llega mal armado desde otro lado.
@@ -336,10 +423,11 @@ si el JSON llega mal armado desde otro lado.
 | **"the script class cannot be found"** | hay un error de compilación en ALGÚN script. El error real está en `unity/Logs/Editor.log`, busca `error CS`. |
 | **Todo se ve MAGENTA/rosado** | no se encontró el shader. Pasa en URP (plantilla 3D de Unity 6, se reconoce por el `Global Volume` en la escena). `VisorEstructura` ya elige el shader según el pipeline; si lo ves rosado, tu copia del script está desactualizada. |
 | **El edificio se ve acostado** | el swap de ejes. OpenSees usa Z vertical, Unity usa Y. Está centralizado en `Ejes.AUnity()` — un solo lugar que revisar. |
-| **La deformada sale plana** | un campo del C# no calza con el JSON. `JsonUtility` **no avisa**: deja el campo en 0. Corre `python comun	est_contrato_unity.py lt2`. |
-| **"No pude conectar con el servidor"** | falta el PASO 8, o cerraste la terminal. |
+| **La deformada sale plana** | un campo del C# no calza con el JSON. `JsonUtility` **no avisa**: deja el campo en 0. Corre `python comun\test_contrato_unity.py lt2`. |
+| **"No pude conectar con el servidor"** | falta el PASO 8, o cerraste la terminal. `http://localhost:5000/ping` lo confirma. |
 | **"El servidor rechazó el modelo (HTTP 400)"** | el mensaje trae el motivo real (sección inexistente, nodo que no existe, `vecxz` paralelo...). Léelo, es explícito. |
-| **Unity muestra datos viejos** | no copiaste el JSON de nuevo a StreamingAssets tras regenerarlo. |
+| **Unity muestra datos viejos** | no copiaste el JSON de nuevo a StreamingAssets tras regenerarlo: `python comun\lanzar_unity.py sincronizar lt2`. O corriste `verificar_todo.py` mirando otro edificio: deja los anexos del LT2 (ver PASO 0). |
+| **El panel dice que el anexo está desactualizado** | editaste el modelo: los diagramas y el P-M de la Semana 4 son del modelo original. No es un error; ver PASO 14. |
 | **La clase no aparece en Add Component** | hay un error de compilación en ALGÚN script (bloquea todos), o el nombre del archivo no coincide con el de la clase. |
 | **El click no selecciona nada** | los objetos necesitan Collider. `CreatePrimitive` los trae; si cambiaste el dibujo, revísalo. |
 | **Arrastrar el nodo orbita la cámara** | hay que seleccionarlo primero con un click corto, y arrastrarlo después. |
@@ -362,10 +450,11 @@ edificio se ve acostado, ahí es.
 # Resumen del flujo
 
 ```
-python comun\lanzar_unity.py app lt2     # 1. arma, resuelve, copia y abre
-python comun\servidor_opensees.py       # 2. dejar corriendo (solo flujo B)
+python comun\lanzar_unity.py app lt2     # 1. copia data/ -> StreamingAssets y abre la app
+python semana05\servidor_s5.py          # 2. dejar corriendo (flujos B y C)
 ```
 
-Cada vez que toques el modelo en Python: **repetí el paso 1**. El
-lanzador lee de la escena qué archivo abre el visor, así que no hay que
-acordarse de ningún nombre.
+Cada vez que toques el modelo en Python: **regenerá `data/`** (PASO 0,
+pasos sueltos) y **repetí el paso 1**; el lanzador solo copia. Lee de la
+escena qué archivo abre el visor, así que no hay que acordarse de ningún
+nombre.
