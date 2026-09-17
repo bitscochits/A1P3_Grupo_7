@@ -1,0 +1,95 @@
+============================================================================
+  CARGA MOVIL   CONJUNTO   P = 100 kN hacia abajo
+============================================================================
+  recorrido: cota 3.91, a lo largo de x, y = 55.0833; 6 vigas, 27.725 m
+    viga 200203  lt2:V 0.60x0.80  nodos 200101 -> 200121  L = 3.750 m
+    viga 200204  lt2:V 0.60x0.80  nodos 200121 -> 200102  L = 3.750 m
+    viga 200205  lt2:V 0.60x0.80  nodos 200102 -> 200116  L = 5.000 m
+    viga 200206  lt2:V 0.60x0.80  nodos 200116 -> 200103  L = 5.000 m
+    viga 200207  lt2:V 0.60x0.80  nodos 200103 -> 200119  L = 5.000 m
+    viga 200208  lt2:V 0.60x0.80  nodos 200119 -> 200122  L = 5.225 m
+    nodo 200101: columna, viga_x, viga_y
+    nodo 200121: viga_x, viga_y
+    nodo 200102: columna, viga_x, viga_y
+    nodo 200116: viga_x, viga_y
+    nodo 200103: columna, viga_x, viga_y
+    nodo 200119: viga_x, viga_y
+    nodo 200122: brazo, viga_x
+  posiciones: 30 (5 por viga, xL = (k + 1/2)/5)
+
+  [OK  ] el modelo resuelto es el que dibuja Unity (data\unity\conjunto.json): 558 nodos y 937 elementos iguales
+  [AVISO] StreamingAssets/modelo_unity_edificio.json no tiene los nodos de conjunto: sincroniza con  python comun/lanzar_unity.py sincronizar conjunto
+  apoyos que cuentan (regla de calcular.equilibrio): 45 en Fx, 45 en Fy, 84 en Fz; de 94 nodos con reaccion
+
+    i  viga    xL     s m |   V_i kN   V_j kN    % i |  palanca     emp. |   SumRz kN   err kN cierre | uz min mm  uz P mm  M P kNm
+    0 200203  0.10   0.375 |   96.048    3.952   96.0 |   90.000   97.200 |   100.0002  2.0e-04  0.435 |   -0.0734  -0.0817   -14.94 
+    1 200203  0.30   1.125 |   86.986   13.014   87.0 |   70.000   78.400 |   100.0000  0.0e+00  0.348 |   -0.1566  -0.1463   -42.40 
+    2 200203  0.50   1.875 |   74.796   25.204   74.8 |   50.000   50.000 |   100.0000  0.0e+00  0.609 |   -0.2591  -0.2507   -67.76 
+    3 200203  0.70   2.625 |   61.191   38.809   61.2 |   30.000   21.600 |   100.0001  1.0e-04  0.783 |   -0.3525  -0.3508   -84.20 
+    4 200203  0.90   3.375 |   47.883   52.117   47.9 |   10.000    2.800 |   100.0001  1.0e-04  0.000 |   -0.4121  -0.4118   -90.05 
+    5 200204  0.10   4.125 |   47.491   52.509   47.5 |   90.000   97.200 |   100.0001  1.0e-04  0.261 |   -0.4135  -0.4144   -96.48 
+    6 200204  0.30   4.875 |   34.653   65.347   34.6 |   70.000   78.400 |   100.0001  1.0e-04  0.435 |   -0.3531  -0.3513   -86.55 
+    7 200204  0.50   5.625 |   22.297   77.703   22.3 |   50.000   50.000 |   100.0000  0.0e+00  0.696 |   -0.2567  -0.2466   -66.79 
+    8 200204  0.70   6.375 |   11.669   88.331   11.7 |   30.000   21.600 |   100.0001  1.0e-04  0.522 |   -0.1517  -0.1418   -40.50 
+    9 200204  0.90   7.125 |    4.016   95.984    4.0 |   10.000    2.800 |   100.0000  0.0e+00  0.348 |   -0.0726  -0.0803   -14.74 
+   10 200205  0.10   8.000 |   96.878    3.122   96.9 |   90.000   97.200 |   100.0001  1.0e-04  0.286 |   -0.0880  -0.0897   -15.23 
+   11 200205  0.30   9.000 |   88.981   11.019   89.0 |   70.000   78.400 |   100.0002  2.0e-04  0.571 |   -0.2648  -0.2256   -48.77 
+   12 200205  0.50  10.000 |   77.602   22.398   77.6 |   50.000   50.000 |   100.0000  0.0e+00  0.286 |   -0.4899  -0.4598   -83.52 
+   13 200205  0.70  11.000 |   64.294   35.706   64.3 |   30.000   21.600 |    99.9998  2.0e-04  0.571 |   -0.7014  -0.6941  -108.67 
+   14 200205  0.90  12.000 |   50.614   49.386   50.6 |   10.000    2.800 |   100.0001  1.0e-04  0.000 |   -0.8372  -0.8375  -119.62 
+   15 200206  0.10  13.000 |   49.686   50.314   49.7 |   90.000   97.200 |   100.0000  0.0e+00  0.000 |   -0.8380  -0.8390  -119.76 
+   16 200206  0.30  14.000 |   35.988   64.012   36.0 |   70.000   78.400 |    99.9999  1.0e-04  0.571 |   -0.7035  -0.6981  -109.15 
+   17 200206  0.50  15.000 |   22.634   77.366   22.6 |   50.000   50.000 |    99.9998  2.0e-04  0.286 |   -0.4929  -0.4644   -84.20 
+   18 200206  0.70  16.000 |   11.173   88.827   11.2 |   30.000   21.600 |   100.0000  0.0e+00  0.571 |   -0.2676  -0.2289   -49.39 
+   19 200206  0.90  17.000 |    3.155   96.845    3.1 |   10.000    2.800 |   100.0002  2.0e-04  0.000 |   -0.0892  -0.0915   -15.38 
+   20 200207  0.10  18.000 |   97.048    2.952   97.0 |   90.000   97.200 |    99.9998  2.0e-04  0.571 |   -0.0965  -0.0920   -14.86 
+   21 200207  0.30  19.000 |   89.519   10.481   89.5 |   70.000   78.400 |   100.0001  1.0e-04  0.286 |   -0.2926  -0.2344   -48.27 
+   22 200207  0.50  20.000 |   78.704   21.296   78.7 |   50.000   50.000 |    99.9999  1.0e-04  0.000 |   -0.5420  -0.4861   -83.41 
+   23 200207  0.70  21.000 |   66.049   33.950   66.0 |   30.000   21.600 |    99.9999  1.0e-04  0.286 |   -0.7790  -0.7496  -110.03 
+   24 200207  0.90  22.000 |   52.998   47.002   53.0 |   10.000    2.800 |    99.9999  1.0e-04  0.571 |   -0.9379  -0.9296  -123.65 
+   25 200208  0.10  23.023 |   52.684   47.316   52.7 |   90.000   97.200 |    99.9999  1.0e-04  0.740 |   -0.9541  -0.9635  -127.27 
+   26 200208  0.30  24.067 |   38.594   61.406   38.6 |   70.000   78.400 |    99.9999  1.0e-04  0.014 |   -0.8156  -0.8255  -119.81 
+   27 200208  0.50  25.113 |   24.548   75.452   24.6 |   50.000   50.000 |   100.0000  0.0e+00  0.062 |   -0.5828  -0.5555   -95.49 
+   28 200208  0.70  26.157 |   12.181   87.819   12.2 |   30.000   21.600 |    99.9999  1.0e-04  0.471 |   -0.3210  -0.2566   -57.91 
+   29 200208  0.90  27.203 |    3.129   96.871    3.1 |   10.000    2.800 |    99.9999  1.0e-04  0.747 |   -0.0955  -0.0638   -17.50 
+
+  VERIFICACION POR POSICION (valores redondeados como el servidor)
+  [OK  ] [a] conservacion: SumRz = P en las 30 posiciones
+         peor |error| 2.0e-04 kN en la posicion 0, cota 4.2e-03 kN (84 apoyos x 5e-5 + coma flotante); en memoria, sin redondeo, peor 5.6e-10 kN
+  [OK  ] [b] horizontales: SumRx = SumRy = 0
+         peor |SumRx| 1.0e-04, |SumRy| 2.0e-04 kN; cota 2.3e-03 kN (45 apoyos)
+  [OK  ] [c] viga cargada: Vz_i + Vz_j + Pz = 0 y cierre en x = L con el salto H(x-a)
+         peor |Vz_i+Vz_j+Pz| 0.0e+00 kN (cota 1.0e-04); peor cierre 0.783 de la cota en My (error 2.3e-04, cota 2.9e-04)
+  [OK  ] [d] el reparto se explica: V_j - palanca = (My_i + My_j)/L
+         peor error / cota 0.783
+
+  VERIFICACIONES GLOBALES (en memoria)
+  [OK  ] [f] continuidad en el nodo 200121: viga 200203 xL=1 = viga 200204 xL=0 = carga nodal
+         uz(200121) = -0.4215 / -0.4215 / -0.4215 mm; max |du| 0.0e+00 y 0.0e+00 m; max |dR| 0.0e+00 kN
+  [OK  ] [g] Betti: uz en 200205 xL=0.50 con P en 200207 xL=0.30 = al reves
+         2.028955181041e-05 / 2.028955181041e-05 m, dif 3.0e-19 m (1.5e-14 relativo)
+  [OK  ] [h] superposicion: 200205 xL=0.50 + 200207 xL=0.30 en una corrida = suma de las dos
+         max |du| 1.9e-17 m, max |dR| 2.3e-13 kN, max |df| 1.1e-08 kN (todos los nodos, apoyos y barras)
+  [--] funciones de forma lineales en la viga 200205 a mitad: M bajo la carga -5.66 kN*m contra -83.52 exacto
+       uz(200102) -0.0553 contra -0.0623 mm; uz(200116) -0.4472 contra -0.4899 mm
+  [--] interpolar entre xL=0.30 y 0.50 de la viga 200205, carga en xL=0.40:
+       M bajo la carga (el numero) -66.14 interpolado contra -66.81 resuelto kN*m (1.0 %)
+       diagrama My en esa seccion -43.99 promediado contra -66.81 resuelto kN*m (34.2 %)
+       deformada uz en ese punto -0.3258 promediada contra -0.3361 resuelta mm (3.1 %)
+  [OK  ] [e] beamPoint = viga 200205 partida en 10 con carga nodal en el nodo 200235 (xL = 0.30)
+         max |du| 9.3e-17 m en (200116, 2) de 558 nodos; max |dR| 2.0e-10 kN; M bajo la carga -48.7674 / -48.7674 kN*m (dif 1.9e-12); V_i 88.9809 / 88.9809; flecha bajo la carga -0.225601 / -0.225601 mm (dif 3.9e-17 m); elastica en los 9 nodos interiores de la partida: max |du| 9.5e-17 m (xL = 0.9)
+  [OK  ] [e] beamPoint = viga 200205 partida en 10 con carga nodal en el nodo 200237 (xL = 0.50)
+         max |du| 1.5e-16 m en (200116, 2) de 558 nodos; max |dR| 2.0e-10 kN; M bajo la carga -83.5202 / -83.5202 kN*m (dif 8.7e-12); V_i 77.6016 / 77.6016; flecha bajo la carga -0.459834 / -0.459834 mm (dif 1.1e-16 m); elastica en los 9 nodos interiores de la partida: max |du| 1.6e-16 m (xL = 0.9)
+  [OK  ] [i] empotramiento perfecto: formula = OpenSees (biempotrada L=5, xL=0.3)
+         V_i 78.4000 / 78.4000, V_j 21.6000 / 21.6000, My_i -73.5000 / -73.5000, My_j 31.5000 / 31.5000; peor 0.0e+00
+
+  [OK  ] [j] el JSON calza con las clases C# en las dos direcciones (11 clases, 20022 objetos)
+
+  resueltas 36 corridas de OpenSees: construir 0.004 s, resolver y extraer 0.0430 s por corrida
+  escala grafica fija: x1600 (0.9635 mm -> 1.5 m)
+
+  1546.5 KB, 30 posiciones, 1.9 s en total
+  -> data\unity\carga_movil_conjunto.json
+  -> unity\Assets\StreamingAssets\carga_movil.json
+  -> semana05\evidencia\carga_movil_conjunto.json
+  -> semana05\evidencia\carga_movil_conjunto.txt

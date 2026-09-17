@@ -606,8 +606,7 @@ def construir_anexo(edificio, argv=()):
 
     casos, cargas, combinaciones, cierre = [], {}, [], {}
     for nombre, tipo, texto, factores in lista_de_combinaciones(p):
-        descripcion = texto if texto is not None else \
-            arm['casos'][nombre].get('descripcion', '')
+        descripcion = arm['casos'][nombre].get('descripcion', '') if texto is None else texto
         bloque, w, peor = bloque_caso(nombre, tipo, descripcion, factores, resultados,
                                       elementos, cargas_base, familia_de, curvas, largos)
         casos.append(bloque)
@@ -623,6 +622,7 @@ def construir_anexo(edificio, argv=()):
     muros = [eid for eid in secciones if por_id[eid].get('tipo') == 'muro']
     columna_demo = max(sorted(columnas), key=lambda i: axial_G.get(i, 0.0), default=-1)
     muro_demo = max(sorted(muros), key=lambda i: secciones[i].h, default=-1)
+    esc = escala_deformada(modelo, casos)   # la exageracion grafica: al final del archivo
 
     anexo = {
         'info': {
@@ -639,16 +639,16 @@ def construir_anexo(edificio, argv=()):
             'muro_demo': muro_demo,
             'n_estaciones_cargada': N_ESTACIONES_CARGADA,
             'cota_redondeo_kN': COTA_REDONDEO,
+            'escala_deformada': esc['escala'], '_escala_deformada_por_que': esc['por_que'],
         },
         'casos': casos,
         'elementos': elementos,
         'familias': familias,
     }
     contexto = {
-        'modelo': modelo, 'p': p, 'arm': arm, 'datos': datos,
-        'resultados': resultados, 'combinaciones': combinaciones,
-        'cargas': cargas, 'secciones': secciones, 'curvas': curvas,
-        'cierre': cierre,
+        'modelo': modelo, 'p': p, 'arm': arm, 'datos': datos, 'escala': esc,
+        'resultados': resultados, 'combinaciones': combinaciones, 'cargas': cargas,
+        'secciones': secciones, 'curvas': curvas, 'cierre': cierre,
     }
     return anexo, contexto
 
@@ -722,7 +722,90 @@ def main(argv=None):
     print('  -> %s' % os.path.relpath(SALIDA, rutas.RAIZ))
     if copiado:
         print('  -> %s' % os.path.relpath(STREAMING, rutas.RAIZ))
+
+    esc = ctx['escala']
+    print('  escala grafica recomendada x%g: %.2f mm -> %.2f m (%g %% de la diagonal '
+          '%.2f m, caso %s)'
+          % (esc['escala'], esc['mayor_mm'], esc['escala'] * esc['mayor_mm'] / 1000.0,
+             100.0 * FRACCION_DIAGONAL, esc['diagonal_m'], esc['caso']))
     return 0
+
+
+# ============================================================
+# LA ESCALA GRAFICA DE LA DEFORMADA
+# ============================================================
+# Esto va al final del archivo, y no junto a bloque_caso, para no
+# correr las lineas que citan los informes (CLAUDE.md seccion 6).
+
+# El mayor desplazamiento del modelo se dibuja como esta fraccion de la
+# diagonal de su caja envolvente. No es un largo en metros: un largo
+# fijo se ve enorme en un cuerpo chico y no se ve en uno grande.
+FRACCION_DIAGONAL = 0.05
+
+
+def escala_deformada(modelo, casos):
+    r"""
+    Cuanto hay que exagerar la deformada para que se VEA. Se calcula
+    aca y viaja en info.escala_deformada: Python calcula, Unity
+    muestra. El visor la usa como valor por defecto y el usuario la
+    puede cambiar; es solo grafica y no toca ningun resultado.
+
+    UNA sola por modelo -- la del caso mas deformado de todos -- para
+    que la deformada no cambie de tamano al cambiar de caso en el
+    visor. Y relativa al TAMANO del modelo: el mayor desplazamiento se
+    dibuja como FRACCION_DIAGONAL de la diagonal de la caja envolvente
+    de los nodos, asi que dos modelos de tamanos distintos salen igual
+    de exagerados. Un factor fijo no puede: el x300 de la escena deja
+    al LT2 legible y al conjunto -- caja el doble de larga y el doble
+    de desplazamiento -- como una carpa colapsada.
+
+    Devuelve los numeros que el anexo declara en
+    _escala_deformada_por_que y que comprueba
+    semana04/test_contrato_semana04.py [7]:
+
+      escala      el factor, redondeado a 2 cifras significativas
+      paso        el ultimo digito de ese redondeo (la tolerancia)
+      exacta      el factor antes de redondear
+      mayor_mm    el desplazamiento que se lleva al objetivo
+      caso        en que caso esta ese desplazamiento
+      objetivo_m  FRACCION_DIAGONAL * diagonal_m
+      diagonal_m  la diagonal de la caja envolvente de los nodos
+      por_que     el texto para el anexo
+
+    Sin desplazamiento (un modelo sin resolver) devuelve escala 0: el
+    visor lo lee como "no hay dato" y se queda con lo que tenia.
+    """
+    xs = [float(n['x']) for n in modelo['nodos']]
+    ys = [float(n['y']) for n in modelo['nodos']]
+    zs = [float(n['z']) for n in modelo['nodos']]
+    caja = (max(xs) - min(xs), max(ys) - min(ys), max(zs) - min(zs))
+    diagonal = math.sqrt(sum(l * l for l in caja))
+    objetivo = FRACCION_DIAGONAL * diagonal
+    peor = max(casos, key=lambda c: c['max_desplazamiento_mm'], default=None)
+    mayor = peor['max_desplazamiento_mm'] if peor else 0.0
+    if mayor <= 0.0 or objetivo <= 0.0:
+        return {'escala': 0.0, 'paso': 0.0, 'exacta': 0.0, 'mayor_mm': mayor,
+                'caso': peor['nombre'] if peor else '', 'objetivo_m': objetivo,
+                'diagonal_m': diagonal,
+                'por_que': 'sin desplazamiento que dibujar: no hay escala'}
+
+    exacta = objetivo / (mayor / 1000.0)
+    # Dos cifras significativas, para que sea un numero que se pueda
+    # decir en voz alta (x89, x82) y no un x89.1307. Es el mismo
+    # redondeo que la escala de semana05/carga_movil.py ('%.2g').
+    paso = 10.0 ** (math.floor(math.log10(exacta)) - 1)
+    escala = round(round(exacta / paso) * paso, 10)
+    por_que = ('solo grafica, no cambia ningun calculo: el mayor desplazamiento del '
+               'modelo (%.4f mm, en %s, de %d casos) se dibuja como %.2f m, el %g %% de '
+               'la diagonal de su caja envolvente (%.2f m, de %.2f x %.2f x %.2f m). '
+               'Factor exacto x%.4f, redondeado a x%g (2 cifras, paso %g). UNA para todo '
+               'el modelo: con una por caso, la deformada cambiaria de tamano al cambiar '
+               'de caso. El visor la usa de valor por defecto y el deslizador manda.'
+               % (mayor, peor['nombre'], len(casos), objetivo, 100.0 * FRACCION_DIAGONAL,
+                  diagonal, caja[0], caja[1], caja[2], exacta, escala, paso))
+    return {'escala': escala, 'paso': paso, 'exacta': exacta, 'mayor_mm': mayor,
+            'caso': peor['nombre'], 'objetivo_m': objetivo, 'diagonal_m': diagonal,
+            'por_que': por_que}
 
 
 if __name__ == '__main__':

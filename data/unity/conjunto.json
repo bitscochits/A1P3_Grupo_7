@@ -73,8 +73,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 9.65,
-   "h": 0.3,
+   "b": 0.3,
+   "h": 9.65,
    "b_h_deducidos": true
   },
   {
@@ -89,8 +89,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 3.7,
-   "h": 0.2,
+   "b": 0.2,
+   "h": 3.7,
    "b_h_deducidos": true
   },
   {
@@ -105,8 +105,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 3.2,
-   "h": 0.2,
+   "b": 0.2,
+   "h": 3.2,
    "b_h_deducidos": true
   },
   {
@@ -121,8 +121,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 3.75,
-   "h": 0.2,
+   "b": 0.2,
+   "h": 3.75,
    "b_h_deducidos": true
   },
   {
@@ -137,8 +137,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 4.33,
-   "h": 0.2,
+   "b": 0.2,
+   "h": 4.33,
    "b_h_deducidos": true
   },
   {
@@ -153,8 +153,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 3.87,
-   "h": 0.2,
+   "b": 0.2,
+   "h": 3.87,
    "b_h_deducidos": true
   },
   {
@@ -169,8 +169,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 4.83,
-   "h": 0.2,
+   "b": 0.2,
+   "h": 4.83,
    "b_h_deducidos": true
   },
   {
@@ -185,8 +185,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 15.0,
-   "h": 0.3,
+   "b": 0.3,
+   "h": 15.0,
    "b_h_deducidos": true
   },
   {
@@ -201,8 +201,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 14.77,
-   "h": 0.3,
+   "b": 0.3,
+   "h": 14.77,
    "b_h_deducidos": true
   },
   {
@@ -217,8 +217,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 11.5,
-   "h": 0.15,
+   "b": 0.15,
+   "h": 11.5,
    "b_h_deducidos": true
   },
   {
@@ -233,8 +233,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 3.63,
-   "h": 0.15,
+   "b": 0.15,
+   "h": 3.63,
    "b_h_deducidos": true
   },
   {
@@ -249,8 +249,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 7.45,
-   "h": 0.15,
+   "b": 0.15,
+   "h": 7.45,
    "b_h_deducidos": true
   },
   {
@@ -265,8 +265,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 12.07,
-   "h": 0.2,
+   "b": 0.2,
+   "h": 12.07,
    "b_h_deducidos": true
   },
   {
@@ -281,8 +281,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 7.95,
-   "h": 0.2,
+   "b": 0.2,
+   "h": 7.95,
    "b_h_deducidos": true
   },
   {
@@ -297,8 +297,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 2.36,
-   "h": 0.2,
+   "b": 0.2,
+   "h": 2.36,
    "b_h_deducidos": true
   },
   {
@@ -313,8 +313,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 5.8,
-   "h": 0.2,
+   "b": 0.2,
+   "h": 5.8,
    "b_h_deducidos": true
   },
   {
@@ -329,8 +329,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 8.2,
-   "h": 0.2,
+   "b": 0.2,
+   "h": 8.2,
    "b_h_deducidos": true
   },
   {
@@ -345,8 +345,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 1.68,
-   "h": 0.25,
+   "b": 0.25,
+   "h": 1.68,
    "b_h_deducidos": true
   },
   {
@@ -361,8 +361,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 2.35,
-   "h": 0.3,
+   "b": 0.3,
+   "h": 2.35,
    "b_h_deducidos": true
   },
   {
@@ -377,8 +377,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 2.35,
-   "h": 0.3,
+   "b": 0.3,
+   "h": 2.35,
    "b_h_deducidos": true
   },
   {
@@ -393,8 +393,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 1.48,
-   "h": 0.25,
+   "b": 0.25,
+   "h": 1.48,
    "b_h_deducidos": true
   },
   {
@@ -409,8 +409,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 16.85,
-   "h": 0.3,
+   "b": 0.3,
+   "h": 16.85,
    "b_h_deducidos": true
   },
   {
@@ -425,8 +425,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 8.2,
-   "h": 0.3,
+   "b": 0.3,
+   "h": 8.2,
    "b_h_deducidos": true
   },
   {
@@ -441,8 +441,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 3.05,
-   "h": 0.15,
+   "b": 0.15,
+   "h": 3.05,
    "b_h_deducidos": true
   },
   {
@@ -457,8 +457,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 6.55,
-   "h": 0.3,
+   "b": 0.3,
+   "h": 6.55,
    "b_h_deducidos": true
   },
   {
@@ -473,8 +473,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 8.2,
-   "h": 0.3,
+   "b": 0.3,
+   "h": 8.2,
    "b_h_deducidos": true
   },
   {
@@ -489,8 +489,8 @@
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
    "fpc_MPa": 28.0,
-   "b": 8.2,
-   "h": 0.3,
+   "b": 0.3,
+   "h": 8.2,
    "b_h_deducidos": true
   },
   {
@@ -543,7 +543,10 @@
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
-   "fpc_MPa": 28.0
+   "fpc_MPa": 28.0,
+   "b": 0.5,
+   "h": 0.5,
+   "b_h_deducidos": true
   },
   {
    "nombre": "lt2:BRAZO",

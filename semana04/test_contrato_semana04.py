@@ -386,6 +386,46 @@ def main(argv=None):
               '%s es identico byte a byte a %s'
               % (os.path.relpath(STREAMING, rutas.RAIZ), os.path.relpath(JSON, rutas.RAIZ)))
 
+    # ------------------------------------------------------------
+    print()
+    print('[7] la escala grafica de la deformada (info.escala_deformada)')
+    print('    El visor la usa de valor por defecto: si viene en 0 se queda con la de la')
+    print('    escena (x300, que sirve en el LT2 y deja al conjunto como una carpa), y si')
+    print('    no calza con el criterio la deformada sale de otro tamano que el declarado.')
+    # ------------------------------------------------------------
+    # El criterio y sus numeros los pone el exportador: aca no se
+    # reimplementan (una sola definicion de cada cosa). Se importa
+    # dentro de main porque arrastra OpenSees.
+    sys.path.insert(0, _AQUI)
+    import exportar_unity as eu              # noqa: E402
+    import contrato                          # noqa: E402
+
+    esc = info.get('escala_deformada')
+    numero = isinstance(esc, (int, float)) and not isinstance(esc, bool)
+    check(numero and esc > 0, 'escala_deformada = %s, mayor que 0' % esc)
+    check(isinstance(info.get('_escala_deformada_por_que'), str)
+          and len(info.get('_escala_deformada_por_que') or '') > 0,
+          'el criterio viaja al lado, en _escala_deformada_por_que',
+          (info.get('_escala_deformada_por_que') or '')[:150] + ' ...')
+    if numero and esc > 0:
+        ref = eu.escala_deformada(contrato.cargar_modelo(info.get('edificio')), casos)
+        check(esc == ref['escala'],
+              'es la que calcula exportar_unity.escala_deformada para %s: x%g'
+              % (info.get('edificio'), ref['escala']),
+              'el anexo trae x%s' % esc if esc != ref['escala'] else '')
+        # El objetivo declarado, con la tolerancia MEDIDA contra el
+        # redondeo: la escala se redondea a 2 cifras (paso), asi que el
+        # largo dibujado puede caer hasta medio paso de desplazamiento
+        # a cada lado del objetivo.
+        mayor_m = max([c.get('max_desplazamiento_mm') or 0.0 for c in casos]) / 1000.0
+        dibujado = esc * mayor_m
+        tol = ref['paso'] * mayor_m / 2.0 + 1e-9
+        check(abs(dibujado - ref['objetivo_m']) <= tol,
+              'escala x%g * %.4f mm = %.3f m = el objetivo declarado %.3f m '
+              '(+-%.4f m del redondeo a x%g)'
+              % (esc, mayor_m * 1000.0, dibujado, ref['objetivo_m'], tol, ref['paso']),
+              'el mayor desplazamiento es del caso %s' % ref['caso'])
+
     print()
     print('=' * 72)
     if fallos:

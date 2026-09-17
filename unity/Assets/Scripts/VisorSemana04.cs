@@ -77,11 +77,9 @@ using UnityEngine;
 // CONTRATO: las clases que JsonUtility llena desde semana04.json
 // ----------------------------------------------------------------
 // JsonUtility NO avisa cuando un nombre no calza: deja el campo en su
-// valor por defecto y sigue. Cada nombre de aca tiene que ser la clave
-// exacta del JSON. semana04/test_contrato_semana04.py lo comprueba en
-// las dos direcciones y verificar_unity_semana04.py le hace leer el
-// archivo a Unity de verdad. Un campo por linea, para que el test los
-// pueda leer, y nada de metodos dentro de estas clases.
+// valor por defecto y sigue. Cada nombre de aca es la clave exacta del
+// JSON; lo comprueban en las dos direcciones test_contrato_semana04.py
+// y verificar_unity_semana04.py. Un campo por linea y sin metodos.
 // ================================================================
 
 [System.Serializable]
@@ -98,6 +96,8 @@ public class InfoSemana04
     public int muro_demo;
     public int n_estaciones_cargada;
     public float cota_redondeo_kN;
+    public float escala_deformada;              // exageracion grafica sugerida
+    public string _escala_deformada_por_que;    // su criterio, declarado en Python
 }
 
 /// Esfuerzos de UNA barra en un caso. f son los 12 de localForce,

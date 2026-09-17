@@ -531,7 +531,7 @@ public class CapturaSemana05 : MonoBehaviour
         s4.mostrarDiagramas = false;
         s4.ElegirCaso(info.caso_por_defecto);
         s4.Redibujar();
-        visor.factorEscala = 300f;
+        qa.FijarEscalaAMano(300f);   // la captura fija la suya, no la del anexo
         Modo(ModoDeformada.CasoActivo);
         int nodo = NodoControl();
         PlegarInspectorNodo();
@@ -658,7 +658,7 @@ public class CapturaSemana05 : MonoBehaviour
 
         qa.LimpiarSeleccion();
         s4.mostrarDiagramas = false;
-        visor.factorEscala = 200f;
+        qa.FijarEscalaAMano(200f);   // la captura fija la suya, no la del anexo
         s4.MostrarMapaDC(true);
         PlegarPestanaCaso();
         PanelUI.FijarPlegable("sup.superposicion", true);
@@ -801,7 +801,7 @@ public class CapturaSemana05 : MonoBehaviour
         }
         qa.LimpiarSeleccion();
         Modo(ModoDeformada.Sin);
-        visor.factorEscala = 100f;
+        qa.FijarEscalaAMano(100f);   // la captura fija la suya, no la del anexo
         // El Excel del reanalisis se escribe dentro de /analizar: con 30 s de
         // la escena un libro lento cortaria la peticion.
         analizador.timeoutSegundos = Mathf.Max(analizador.timeoutSegundos, 120f);

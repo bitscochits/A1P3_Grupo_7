@@ -2305,9 +2305,17 @@ public class VisorQA : MonoBehaviour
                 // edificio de decenas de metros: sin amplificar no se ve
                 // NADA. El factor es puramente GRAFICO, no toca el
                 // analisis: la estructura no se deforma mas por subirlo.
+                // CUANTO amplificar depende del tamano del modelo y de su
+                // mayor desplazamiento, asi que no puede ser el mismo
+                // numero para todos (el x300 de la escena sirve en el LT2
+                // y deja al conjunto como una carpa): el valor por defecto
+                // lo calcula Python y viaja en el anexo, una por modelo.
+                float reco = EscalaRecomendada();
+                if (reco > 0f && !escalaDelAnexoPuesta) Diferir(FijarEscalaDelAnexo);
                 float escala = visor.factorEscala;
                 GUILayout.Label($"escala grafica x{F(escala, "0")}  (solo visual, no cambia el calculo)", PanelUI.Texto);
-                escala = GUILayout.HorizontalSlider(escala, 1f, 2000f);
+                GUILayout.Label(NotaEscalaRecomendada(reco), PanelUI.Tenue);
+                escala = GUILayout.HorizontalSlider(escala, 1f, Mathf.Max(2000f, 2f * reco));
                 Espacio(4f);
                 GUILayout.BeginHorizontal();
                 if (GUILayout.Button("x1", PanelUI.Boton)) escala = 1f;
@@ -2315,20 +2323,12 @@ public class VisorQA : MonoBehaviour
                 if (GUILayout.Button("x500", PanelUI.Boton)) escala = 500f;
                 if (GUILayout.Button("x1000", PanelUI.Boton)) escala = 1000f;
                 GUILayout.EndHorizontal();
-
-                if (!Mathf.Approximately(escala, visor.factorEscala))
-                {
-                    float nueva = escala;
-                    Diferir(() =>
-                    {
-                        visor.factorEscala = nueva;
-                        visor.Redibujar();
-                        // Las barras de armadura siguen la deformada, asi
-                        // que se redibujan con la misma escala.
-                        if (s3 != null) s3.Redibujar();
-                        refrescar = true;
-                    });
-                }
+                // Volver a la del anexo, como el "Escala del recorrido" de la
+                // carga movil. Siempre: un control que aparece rompe el Layout.
+                if (GUILayout.Button(reco > 0f ? $"Volver a la recomendada x{F(reco, "0")}"
+                                     : "Este anexo no trae escala recomendada", PanelUI.Boton)
+                    && reco > 0f) escala = reco;
+                if (!Mathf.Approximately(escala, visor.factorEscala)) Diferir(() => FijarEscala(escala));
             }
 
             if (PanelUI.Plegable("qa.caso.avanzado", "Avanzado: otras fuentes de deformada", false))
@@ -2662,6 +2662,74 @@ public class VisorQA : MonoBehaviour
                 return "Este JSON no trae w_peso_propio ni w_total_G: no se separa la losa del peso propio.";
         }
         return "";
+    }
+
+    // ============================================================
+    // LA ESCALA GRAFICA DE LA DEFORMADA
+    // ============================================================
+    // Va al final de la clase para no correr las lineas que citan los
+    // informes (CLAUDE.md seccion 6). El campo tambien.
+
+    /// La escala grafica de la deformada ya la decidio alguien: el anexo
+    /// la primera vez que se prende una, o el usuario con el deslizador.
+    /// Desde entonces el panel no la vuelve a poner en cada redibujo.
+    private bool escalaDelAnexoPuesta = false;
+
+    /// La exageracion que el anexo de la Semana 4 recomienda para ESTE
+    /// modelo (info.escala_deformada, calculada en Python: el mayor
+    /// desplazamiento de todos sus casos llevado a una fraccion del
+    /// tamano del edificio). 0 = no hay anexo o no trae el dato, y
+    /// entonces no se toca nada: manda el valor que guardo la escena.
+    float EscalaRecomendada()
+    {
+        if (s4 == null || s4.Anexo == null || s4.Anexo.info == null) return 0f;
+        float e = s4.Anexo.info.escala_deformada;
+        return e > 0f ? e : 0f;
+    }
+
+    /// La linea tenue debajo del deslizador: de donde sale el valor por
+    /// defecto y cual es. El criterio entero viaja en el anexo, en
+    /// info._escala_deformada_por_que.
+    string NotaEscalaRecomendada(float reco)
+    {
+        if (reco <= 0f)
+            return "Este anexo no trae escala recomendada: manda la escala que guardo la escena.";
+        return $"Recomendada x{F(reco, "0")} para este modelo (del anexo): el mayor "
+               + "desplazamiento de todos sus casos, dibujado como una fraccion del "
+               + "tamano del edificio. El deslizador manda sobre ella.";
+    }
+
+    /// Pone la escala grafica, redibuja y deja dicho que ya esta
+    /// decidida. Es el unico sitio que la mueve desde el panel.
+    void FijarEscala(float escala)
+    {
+        escalaDelAnexoPuesta = true;
+        visor.factorEscala = escala;
+        visor.Redibujar();
+        // Las barras de armadura siguen la deformada, asi que se
+        // redibujan con la misma escala.
+        if (s3 != null) s3.Redibujar();
+        refrescar = true;
+    }
+
+    /// El valor por defecto del anexo, la primera vez que se prende una
+    /// deformada. Se difiere a Update porque cambia el dibujo, y se
+    /// protege con la bandera porque OnGUI corre varias veces por frame
+    /// y cada evento lo encolaria otra vez.
+    void FijarEscalaDelAnexo()
+    {
+        if (escalaDelAnexoPuesta) return;
+        float reco = EscalaRecomendada();
+        if (reco > 0f) FijarEscala(reco);
+    }
+
+    /// Para las capturas (CapturaSemana04/05): fijan su propia escala y
+    /// no pasan por los botones del panel, asi que tienen que decir que
+    /// ya esta decidida o el panel les pondria la del anexo encima.
+    public void FijarEscalaAMano(float escala)
+    {
+        escalaDelAnexoPuesta = true;
+        visor.factorEscala = escala;
     }
 }
 

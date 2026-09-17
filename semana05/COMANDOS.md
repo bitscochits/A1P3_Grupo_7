@@ -248,10 +248,17 @@ Web y Android (no se hicieron, ver [`MOVIL.md`](MOVIL.md)):
 | cabecera | edificio, caso activo, "Desp. max", "PASAN 69/69" o "NO PASA n/m (k fuera de curva)", selección con Ver / Centrar / x, "Abrir Excel de resultados", "Ocultar (H)" |
 | **Vista** | Realista \| Tecnica, "Perfiles reales (b x h) en la tecnica", "Losas", "Suelo donde apoya el edificio", cámara (F, Planta, Elev. X, Elev. Y, Iso), filtro de piso, tamaño del texto y equipo |
 | **Capas** | estructura (nodos, columnas, vigas, muros, brazos, perfiles, losas), control de calidad (áreas tributarias, apoyos por tipo, diafragmas, ejes locales), Semana 3 (cargas y enfierradura) |
-| **Caso** | deformada (escala x1…x1000), casos del anexo (Semana 4), Superposicion (Semana 5), Diagramas, Curva P-M, "Columna demo (5)" y "Muro demo (9)", Mapa demanda / capacidad, Criticos del caso activo |
+| **Caso** | deformada (escala x1…x1000 y "Volver a la recomendada xNN", la del anexo), casos del anexo (Semana 4), Superposicion (Semana 5), Diagramas, Curva P-M, "Columna demo (5)" y "Muro demo (9)", Mapa demanda / capacidad, Criticos del caso activo |
 | **Elemento** | "Ir a ID" + Elemento / Nodo, "Centrar (C)", "Su piso" / "Todos los pisos", "Soltar (Esc)" y las secciones del inspector |
 | **Modificar** | URL del servidor, "Recalcular en el servidor  (Enter)", G / Q / EX / EY del reanálisis, equilibrio, "Abrir Excel de este reanalisis", Seleccion, Crear y guardar |
 | **Carga movil** | "Mostrar la carga movil", posición (slider, \|< < Play > >\|), "Donde esta la carga", "Reparto a los extremos de la viga", conservación y respuesta |
 
 Teclas: F encuadrar, C centrar la selección, Esc soltar, H ocultar el
 panel. En Modificar: Supr borrar, Enter recalcular.
+
+La **escala de la deformada** no es un número fijo: la calcula el
+exportador (`info.escala_deformada`, el mayor desplazamiento de todos los
+casos llevado al 5 % de la diagonal del edificio: lt2 x74, ingeniería x56,
+conjunto x83) y el panel la pone la primera vez que se prende una
+deformada. Es solo gráfica, el deslizador manda sobre ella y el botón
+"Volver a la recomendada xNN" la devuelve.

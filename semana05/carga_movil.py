@@ -147,6 +147,18 @@ RECORRIDOS = {
                      'de una viga a otra y la deformada se ve. Es el que propuso la '
                      'auditoria y se confirmo contra data/modelo/lt2.json.'),
     },
+    'conjunto': {
+        'z': 3.91, 'eje': 'x', 'coord': 55.0833,
+        '_por_que': ('El MISMO recorrido del LT2 visto en el marco del conjunto, '
+                     'para que el edificio unido muestre lo mismo que el cuerpo '
+                     'suelto. El conjunto usa el marco de Ingenieria, y el calce '
+                     'del LT2 (edificios/conjunto/calce.json: dx -35.082, dy 36.904, '
+                     'dz 0) mueve el eje y = 18.1793 a 18.1793 + 36.904 = 55.0833; '
+                     'la cota no cambia. Son los mismos 7 nodos, renumerados '
+                     '200101, 200121, 200116, 200102, 200119, 200103 y 200122 '
+                     '(200000 + id del LT2), comprobado contra '
+                     'data/unity/conjunto.json.'),
+    },
 }
 
 # Criterio de "indistinguible" para las verificaciones globales: los

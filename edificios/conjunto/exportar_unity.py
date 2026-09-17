@@ -62,8 +62,36 @@ CALCE = os.path.join(_AQUI, 'calce.json')
 
 def completar_b_h(modelo):
     r"""
-    Rellena `b` y `h` en las secciones que no los traen, deduciendolos de
-    A, Iy e Iz. Devuelve cuantas se completaron.
+    Rellena `b` y `h` en las secciones que no los traen: primero con el
+    `espesor`/`largo` que declare la propia seccion y, si no los trae,
+    deduciendolos de A, Iy e Iz. Devuelve (cuantas salieron del tamano
+    declarado, cuantas se dedujeron de las inercias).
+
+    ----------------------------------------------------------------
+    PRIMERO EL DATO DEL CUERPO, DESPUES LA DEDUCCION
+    ----------------------------------------------------------------
+    Deducir b y h de las inercias necesita saber CUAL de las dos es la
+    grande, y eso cambia de cuerpo en cuerpo: en el LT2 la grande es
+    `Iz` y en Ingenieria `Iy` (CLAUDE.md seccion 4, "Inercias" y
+    "vecxz"). Con la regla del LT2 -- b = sqrt(12*Iy/A),
+    h = sqrt(12*Iz/A) -- los 27 muros de Ingenieria salian CRUZADOS:
+    `ingenieria:muro_0` con b = 9.65 m de ancho y h = 0.30 m de canto,
+    justo al reves de lo que dice el contrato. Y no se ve: las dos
+    lecturas dan el mismo A, la misma Iy y la misma Iz, asi que la
+    comprobacion b*h = A las acepta a las dos.
+
+    Por eso se prefiere el dato del cuerpo. Una seccion de muro ya
+    viaja con `largo` y `espesor` medidos por su propio exportador, que
+    es el unico que sabe cual es cual: b = espesor, h = largo, la misma
+    convencion del LT2 (b = ancho, h = canto). La deduccion queda solo
+    para las secciones que no declaran ninguno de los dos.
+
+    Aca NO se reconstruye ningun dato de dibujo por elemento:
+    `dir_largo`, `largo` y `espesor` del ELEMENTO los emite cada cuerpo
+    con su propia convencion y `armar.py` los arrastra tal cual al
+    renumerar los tags (una sola definicion de cada cosa, CLAUDE.md
+    seccion 7.4). Una regla global del conjunto es precisamente lo que
+    dibujaba los muros de un cuerpo con la convencion del otro.
 
     ----------------------------------------------------------------
     POR QUE HACE FALTA
@@ -77,11 +105,18 @@ def completar_b_h(modelo):
     ----------------------------------------------------------------
     DE DONDE SALEN
     ----------------------------------------------------------------
-    Para una seccion rectangular llena:
+    Si la seccion declara su tamano de dibujo, de ahi: b = espesor,
+    h = largo. Es el unico camino que no supone nada.
+
+    Si no, para una seccion rectangular llena:
 
         A  = b * h          Iy = h * b^3 / 12       Iz = b * h^3 / 12
 
-    de donde  b = sqrt(12*Iy/A)  y  h = sqrt(12*Iz/A).
+    de donde  b = sqrt(12*Iy/A)  y  h = sqrt(12*Iz/A). OJO: esa
+    formula supone que la inercia grande esta en Iz --- la convencion
+    del LT2 ---, asi que solo vale para secciones que no dicen cual es
+    cual (un pilar, un brazo rigido: b y h son casi iguales o no tienen
+    un lado "fuerte" que confundir).
 
     Se comprueba que el resultado cierre (b*h == A) y si no cierra la
     seccion se deja como estaba: una seccion que no es un rectangulo
@@ -97,9 +132,16 @@ def completar_b_h(modelo):
     Ingenieria emita sus b/h desde su propio exportador, esta funcion
     deja de encontrar nada que completar y se puede borrar.
     """
-    completadas = 0
+    del_tamano, completadas = 0, 0
     for s in modelo.get('secciones', []):
         if s.get('b', 0) > 1e-3 and s.get('h', 0) > 1e-3:
+            continue
+        # El dato del cuerpo manda: b = espesor, h = largo.
+        if s.get('largo', 0) > 1e-3 and s.get('espesor', 0) > 1e-3:
+            s['b'] = round(float(s['espesor']), 4)
+            s['h'] = round(float(s['largo']), 4)
+            s['b_h_deducidos'] = True
+            del_tamano += 1
             continue
         A, Iy, Iz = s.get('A', 0), s.get('Iy', 0), s.get('Iz', 0)
         if min(A, Iy, Iz) <= 0:
@@ -111,7 +153,7 @@ def completar_b_h(modelo):
         s['b'], s['h'] = round(b, 4), round(h, 4)
         s['b_h_deducidos'] = True
         completadas += 1
-    return completadas
+    return del_tamano, completadas
 
 
 def tributarias_del_conjunto():
@@ -237,7 +279,7 @@ def main(caso=CASO_POR_DEFECTO):
     res = contrato.cargar_resultados(NOMBRE, caso)
 
     completo = contrato.unir(modelo, resultados=res)
-    deducidas = completar_b_h(completo)
+    del_tamano, deducidas = completar_b_h(completo)
     contrato.sellar_ejes_locales(completo)
     completo['areas_tributarias'], por_cuerpo = tributarias_del_conjunto()
     completo['info'] = dict(completo.get('info', {}))
@@ -273,9 +315,12 @@ def main(caso=CASO_POR_DEFECTO):
     print('  %d poligonos tributarios: %s'
           % (len(completo['areas_tributarias']),
              ', '.join('%s %d' % kv for kv in sorted(por_cuerpo.items()))))
+    if del_tamano:
+        print('  %d seccion(es) sin b/h: se tomaron de su propio '
+              'espesor/largo (b = espesor, h = largo)' % del_tamano)
     if deducidas:
-        print('  %d seccion(es) sin b/h: se dedujeron de A, Iy, Iz para '
-              'poder dibujarlas' % deducidas)
+        print('  %d seccion(es) sin b/h ni tamano declarado: se dedujeron '
+              'de A, Iy, Iz para poder dibujarlas' % deducidas)
     if cota is None:
         print('  AVISO: ningun cuerpo declara cota de terreno: el visor '
               'pondra el suelo en el apoyo mas bajo')

@@ -114,7 +114,7 @@ filas con "Cuenta en ..." = sí, o el corte basal sale al doble.
 | `sismo.py` | Un caso lateral: carga aplicada, corte basal, sentido de la deformada, torsión de piso (cociente NCh433) y centro de rigidez. |
 | `capacidad.py` | Fiber Section desde el modelo: M-φ, curva P-M nominal (ε_c = 0.003) y máxima, confinamiento de Mander desde el estribo real, sensibilidad, dibujo de la discretización. Columna o muro. |
 | `verificar_tributarias.py` | La losa que se aplica es la que se dibuja: área sellada = polígonos = carga, con el q implícito constante por piso. |
-| `test_contrato_unity.py <ed>` | Cada clave del JSON tiene su campo en el C#. `JsonUtility` no avisa si falta. |
+| `test_contrato_unity.py <ed>` | Cada clave del JSON tiene su campo en el C#. `JsonUtility` no avisa si falta. También los datos de **dibujo del muro**: `dir_largo` presente y unitario, `b = espesor` / `h = largo`, y en el conjunto iguales a los del cuerpo de origen. |
 | `verificar_todo.py` | Corre toda la suite (41 entradas) y resume. `--rapido` salta las lentas. |
 | `lanzar_unity.py app <ed>` | Copia a `StreamingAssets/` con el nombre **que la escena declara** y abre el visor. Otros modos: `sincronizar` (solo copia), `build`, `web`, `android` (avisa si falta el módulo), `editor` y `servidor`. |
 

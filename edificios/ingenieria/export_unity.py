@@ -102,11 +102,23 @@ def construir_json(desplazamientos=None):
     # Unity los necesita para DIBUJAR el muro como un prisma con su
     # ancho real en vez de una linea. Las dimensiones se calculan aca,
     # no en C#: Unity solo dibuja lo que se le manda.
+    #
+    # Y TAMBIEN 'b' y 'h', que en un muro de ESTE edificio son
+    # b = espesor y h = largo (CLAUDE.md seccion 4, "Inercias": aca la
+    # inercia grande, b*h^3/12, esta en Iy y no en Iz como en el LT2).
+    # Sin ellos el exportador del conjunto los deducia de A, Iy, Iz con
+    # la regla del LT2 -- b = sqrt(12*Iy/A), h = sqrt(12*Iz/A) -- y los
+    # dejaba CRUZADOS: el muro_0 salia con b = 9.65 m de "ancho" y
+    # h = 0.30 m de "canto". Las dos lecturas dan el mismo A, Iy y Iz,
+    # asi que la comprobacion b*h = A no las distingue: la unica forma
+    # de no equivocarse es que cada cuerpo declare su convencion.
     for im, (dirn, largo, A, Iy, Iz, J) in ed.MUROS_PROPS.items():
+        espesor = ed.MUROS[im][4]
         secciones.append({"nombre": f"muro_{im}", "A": A, "Iy": Iy,
                           "Iz": Iz, "J": J,
                           "largo": round(largo, 6),
-                          "espesor": round(ed.MUROS[im][4], 6)})
+                          "espesor": round(espesor, 6),
+                          "b": round(espesor, 6), "h": round(largo, 6)})
 
     # --- Nodos ---
     nodos = []
@@ -182,14 +194,24 @@ def construir_json(desplazamientos=None):
     # vecxz apunta a lo largo del muro para que su eje fuerte quede en
     # su propio plano. Sin ese vector, el servidor lo orientaria solo
     # segun la geometria y un muro no tiene orientacion "obvia".
-    # OJO CON LAS DOS CONVENCIONES DE vecxz. Aca vecxz apunta A LO
-    # LARGO del muro; en el modelo del LT2 apunta a su NORMAL. El visor
-    # unificado resuelve el empate prefiriendo 'dir_largo', que dice la
-    # direccion en planta sin ambiguedad. Se emite explicitamente en vez
-    # de dejar que el visor adivine desde vecxz.
+    # OJO CON LAS DOS CONVENCIONES DE vecxz (CLAUDE.md seccion 4,
+    # "vecxz"). Aca vecxz apunta A LO LARGO del muro --- la inercia
+    # grande queda en Iy ---; en el modelo del LT2 apunta a su NORMAL
+    # --- la inercia grande queda en Iz ---. Por eso 'dir_largo' de
+    # ESTE edificio es (vecxz[0], vecxz[1]) y en el LT2 es
+    # (-vecxz[1], vecxz[0]) (edificios/lt2/exportar_unity.py, "el largo
+    # corre perpendicular a ella").
+    #
+    # El visor unificado resuelve el empate prefiriendo 'dir_largo', que
+    # dice la direccion en planta sin ambiguedad. Se emite
+    # explicitamente en vez de dejar que el visor adivine desde vecxz:
+    # deducirlo con la regla del OTRO cuerpo gira el muro 90 grados
+    # (VisorEstructura.CrearPlacaMuro).
     for im, (dirn, largo, A, Iy, Iz, J) in ed.MUROS_PROPS.items():
         vec = [1.0, 0.0, 0.0] if dirn == 'X' else [0.0, 1.0, 0.0]
-        dir_largo = [1.0, 0.0] if dirn == 'X' else [0.0, 1.0]
+        # dir_largo = (vecxz[0], vecxz[1]): la convencion de ESTE
+        # edificio, donde vecxz ya corre a lo largo del muro.
+        dir_largo = [vec[0], vec[1]]
         for lev in range(ed.nLevels - 1):
             if (im, lev) not in ed.WALL:
                 continue

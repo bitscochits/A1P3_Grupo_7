@@ -278,10 +278,75 @@ def archivos_del_edificio(ed):
 _QUIEN_LO_GENERA = {
     'semana03.json': 'python semana03/exportar_unity.py {ed}',
     'semana04.json': 'python semana04/exportar_unity.py {ed}',
-    'superposicion.json': 'lo escribe semana05/superposicion.py',
-    'carga_movil.json': 'lo escribe semana05/carga_movil.py',
+    'superposicion.json': 'python semana05/superposicion.py {ed} --exportar',
+    'carga_movil.json': 'python semana05/carga_movil.py {ed}',
     'resultados.xlsx': 'python semana05/exportar_excel.py {ed}',
 }
+
+# Los anexos son UN archivo por nombre (semana03.json, semana04.json,
+# superposicion.json, carga_movil.json): el visor los cruza contra el
+# modelo y, si son de otro edificio, avisa y apaga los diagramas y la
+# deformada del caso activo. Por eso cambiar de edificio no es solo
+# copiar: hay que volver a escribirlos. El modo 'preparar' corre estos
+# pasos en orden y despues sincroniza, para que 'conjunto' se vea igual
+# de completo que 'lt2'.
+#
+#   nombre, argumentos, obligatorio, solo si falta este archivo
+PASOS_PREPARAR = (
+    ('anexo de Semana 4', ('semana04/exportar_unity.py', '{ed}'), True, None),
+    ('anexo de Semana 3', ('semana03/exportar_unity.py', '{ed}'), True, None),
+    ('superposicion E1..E3', ('semana05/superposicion.py', '{ed}', '--exportar'), True, None),
+    ('carga movil', ('semana05/carga_movil.py', '{ed}'), False, None),
+    ('Excel de resultados', ('semana05/exportar_excel.py', '{ed}'), False, 'excel'),
+)
+
+
+def preparar(ed=None, seco=False):
+    """Deja un edificio listo para el visor y lo sincroniza.
+
+    Corre los exportadores de los anexos de ese edificio (Semana 4,
+    Semana 3, superposicion y carga movil), genera el Excel si falta y
+    copia todo a las StreamingAssets. Los pasos opcionales que no estan
+    declarados para el edificio (la carga movil solo tiene recorrido en
+    algunos) se avisan y no cortan el resto.
+    """
+    ed = (ed or EDIFICIO).lower()
+    print()
+    print('  PREPARAR %s   (anexos + Excel + sincronizar)%s'
+          % (ed.upper(), '   EN SECO: no se escribe nada' if seco else ''))
+    print('  ' + '-' * 62)
+    fallidos = []
+    for nombre, argv, obligatorio, solo_si_falta in PASOS_PREPARAR:
+        cmd = [sys.executable] + [a.format(ed=ed) for a in argv]
+        if solo_si_falta == 'excel' and os.path.exists(rutas.excel_resultados(ed)):
+            print('  %-22s ya existe: %s' % (nombre, _rel(rutas.excel_resultados(ed))))
+            continue
+        if seco:
+            print('  %-22s correria: %s' % (nombre, ' '.join(cmd[1:])))
+            continue
+        t0 = time.time()
+        print('  %-22s %s' % (nombre, ' '.join(cmd[1:])), flush=True)
+        r = subprocess.run(cmd, cwd=_RAIZ, capture_output=True, text=True,
+                           encoding='utf-8', errors='replace',
+                           env=dict(os.environ, PYTHONIOENCODING='utf-8'))
+        if r.returncode == 0:
+            print('  %-22s OK   (%.1f s)' % ('', time.time() - t0))
+            continue
+        # La ultima linea con texto es la que dice por que fallo.
+        salida = [l for l in ((r.stdout or '') + (r.stderr or '')).splitlines() if l.strip()]
+        motivo = salida[-1].strip() if salida else 'codigo %d' % r.returncode
+        print('  %-22s %s: %s' % ('', 'FALLA' if obligatorio else 'sin hacer', motivo))
+        fallidos.append((nombre, obligatorio, motivo))
+    opcionales = [n for n, obl, _ in fallidos if not obl]
+    if opcionales:
+        print()
+        print('  Opcionales que no se pudieron hacer para %s: %s.' % (ed, ', '.join(opcionales)))
+        print('  El visor lo avisa en su panel y el resto funciona igual.')
+    duros = [n for n, obl, _ in fallidos if obl]
+    if duros:
+        raise RuntimeError('no se pudo preparar %s: %s' % (ed, ', '.join(duros)))
+    print()
+    return sincronizar(ed, seco=seco)
 
 
 def carpetas_streaming():
@@ -495,6 +560,7 @@ def _imprimir_sincronizacion(ed, registros, carpetas, seco):
                 print("       calza con el modelo; el de Semana 3 no avisa.")
             if como:
                 print("       Para tenerlo: %s" % como)
+                print("       O todo de una vez: python comun/lanzar_unity.py preparar %s" % ed)
     print("  (este paso solo copia archivos: Unity no se abre)")
 
 
@@ -833,7 +899,7 @@ def abrir_editor(version=None):
 
 
 # ============================================================
-MODOS = ('app', 'editor', 'sincronizar', 'build', 'web', 'android', 'servidor')
+MODOS = ('app', 'editor', 'preparar', 'sincronizar', 'build', 'web', 'android', 'servidor')
 
 
 def main(argv=None):
@@ -851,14 +917,16 @@ def main(argv=None):
                     help='sincronizar/build/web/android: decir que haria, sin escribir ni abrir Unity')
     ap.add_argument('--destino', metavar='CARPETA',
                     help='sincronizar: copiar a esta carpeta en vez de a las StreamingAssets')
+    ap.add_argument('--preparar', action='store_true',
+                    help='app/editor: escribir antes los anexos de ese edificio (como el modo preparar)')
     args = ap.parse_args(argv)
 
     # Ignorar --seco en 'app' o 'editor' seria peor que fallar: quien lo
     # pide espera que no se escriba ni se abra nada, y esos modos copian a
     # StreamingAssets y lanzan la app o el editor.
-    if args.seco and args.modo not in ('sincronizar', 'build', 'web', 'android'):
-        ap.error("--seco no sirve con el modo '%s' (solo sincronizar, build, "
-                 "web, android)" % args.modo)
+    if args.seco and args.modo not in ('preparar', 'sincronizar', 'build', 'web', 'android'):
+        ap.error("--seco no sirve con el modo '%s' (solo preparar, sincronizar, "
+                 "build, web, android)" % args.modo)
     if args.destino and args.modo != 'sincronizar':
         ap.error("--destino solo sirve con el modo 'sincronizar'")
 
@@ -880,6 +948,11 @@ def main(argv=None):
             carpetas = [os.path.abspath(args.destino)] if args.destino else None
             registros = sincronizar(EDIFICIO, seco=args.seco, carpetas=carpetas)
             return 1 if sincronizacion_fallida(registros) else 0
+        if args.modo == 'preparar':
+            registros = preparar(EDIFICIO, seco=args.seco)
+            return 1 if sincronizacion_fallida(registros) else 0
+        if args.preparar and args.modo in ('app', 'editor'):
+            preparar(EDIFICIO)
         if args.modo == 'editor':
             abrir_editor()
         elif args.modo == 'build':

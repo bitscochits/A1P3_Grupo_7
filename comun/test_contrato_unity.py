@@ -298,6 +298,133 @@ if muros:
     check(not sin_vec,
           "los muros traen vecxz (orientacion de su eje fuerte)")
 
+    # ------------------------------------------------------------
+    # dir_largo: hacia donde corre el LARGO del muro en planta.
+    #
+    # Es lo que orienta la placa en VisorEstructura.CrearPlacaMuro. Si
+    # no viene, el visor lo DEDUCE de vecxz con la regla del LT2 (el
+    # largo perpendicular a vecxz, que ahi es la normal del muro), y en
+    # Ingenieria vecxz ya corre A LO LARGO: el muro sale girado 90
+    # grados (CLAUDE.md seccion 4, "vecxz"). Cada cuerpo lo emite con
+    # SU convencion y nadie lo deduce.
+    # ------------------------------------------------------------
+    sin_dir = [m['id'] for m in muros
+               if not m.get('dir_largo') or len(m['dir_largo']) < 2]
+    check(not sin_dir,
+          "los muros traen dir_largo (el visor no tiene que deducirlo)",
+          f"sin dir_largo: {len(sin_dir)} ({sin_dir[:5]})" if sin_dir else "")
+
+    # Unitario, con la cota MEDIDA contra su causa (CLAUDE.md 7.3): el
+    # exportador del LT2 arma el versor dividiendo el delta en planta
+    # del muro por su 'largo' declarado (modelo_lt2.py, "normal al muro
+    # en planta"). Coordenadas y largo vienen del plano con 4 decimales,
+    # asi que la norma se aleja de 1 hasta 1e-4/largo; los componentes
+    # se redondean despues a 6 decimales, que agrega 1e-6. El muro 12
+    # del LT2 da 0.999965 con largo 2.8202 (1e-4/2.8202 = 3.5e-5).
+    no_unitarios = []
+    for m in muros:
+        dl = m.get('dir_largo') or []
+        if len(dl) < 2:
+            continue
+        norma = (float(dl[0]) ** 2 + float(dl[1]) ** 2) ** 0.5
+        cota = 1e-4 / max(float(m.get('largo', 0.0)), 1e-9) + 1e-6
+        if abs(norma - 1.0) > cota:
+            no_unitarios.append((m['id'], round(norma, 6), round(cota, 8)))
+    check(not no_unitarios,
+          "dir_largo es unitario dentro del redondeo del plano "
+          "(1e-4 m sobre el largo del muro)",
+          f"fuera de cota: {no_unitarios[:5]}" if no_unitarios else "")
+
+    # La SECCION y el ELEMENTO tienen que contar lo mismo. Una seccion
+    # que declara 'largo'/'espesor' y tambien 'b'/'h' los tiene que
+    # llevar en la convencion del contrato: b = espesor (ancho),
+    # h = largo (canto). Las dos lecturas dan el MISMO A, Iy y Iz, asi
+    # que cruzarlas no se nota en ningun numero: los muros de Ingenieria
+    # viajaban con b = 9.65 m y h = 0.30 m en el conjunto porque ahi se
+    # dedujeron de las inercias con la regla del LT2 (la inercia grande
+    # de un muro esta en Iz en el LT2 y en Iy en Ingenieria).
+    cruzadas = []
+    for s in datos['secciones']:
+        if not (s.get('largo', 0) > 1e-3 and s.get('espesor', 0) > 1e-3):
+            continue
+        if not (s.get('b', 0) > 1e-3 and s.get('h', 0) > 1e-3):
+            continue
+        if (abs(s['b'] - s['espesor']) > 1e-3
+                or abs(s['h'] - s['largo']) > 1e-3):
+            cruzadas.append('%s (b %.4g/esp %.4g, h %.4g/largo %.4g)'
+                            % (s['nombre'], s['b'], s['espesor'],
+                               s['h'], s['largo']))
+    check(not cruzadas,
+          "en las secciones con los dos pares, b = espesor y h = largo",
+          f"cruzadas: {cruzadas[:3]}" if cruzadas else "")
+
+
+# ------------------------------------------------------------
+# EL CONJUNTO NO REDIBUJA: ARRASTRA
+#
+# Los datos de dibujo del muro los emite cada cuerpo con su convencion
+# y el conjunto solo les corre el tag (armar.PASO_DE_TAG). Si alguna vez
+# el conjunto los recalculara con una regla propia, la regla seria la de
+# UNO de los dos cuerpos y los muros del otro saldrian girados: es
+# exactamente el error que este bloque vigila.
+#
+# El calce de hoy mueve los cuerpos pero NO los gira (giro_grados = 0 en
+# edificios/conjunto/calce.json), asi que las direcciones tienen que
+# salir IDENTICAS. Si algun dia se declara un giro, armar._remapear gira
+# vecxz y dir_largo con el cuerpo (lo hace ya) y comparar por igualdad
+# dejaria de tener sentido: ahi este bloque compara solo el TAMANO, que
+# no gira, y lo dice.
+# ------------------------------------------------------------
+if muros and EDIFICIO == 'conjunto':
+    print("\n[2b] Los muros del conjunto traen lo de su cuerpo de origen")
+    sys.path.insert(0, rutas.edificio('conjunto'))
+    import armar as _armar_conjunto          # noqa: E402
+
+    with open(_armar_conjunto.CALCE, encoding='utf-8') as f:
+        _calce = json.load(f)['edificios']
+
+    del_conjunto = {e['id']: e for e in datos['elementos']}
+    cuerpos = (datos['info'].get('cuerpos') or [])
+    comparados, difieren, ausentes = 0, [], []
+    for i, cuerpo in enumerate(cuerpos):
+        base = (i + 1) * _armar_conjunto.PASO_DE_TAG
+        giro = float((_calce.get(cuerpo) or {}).get('giro_grados', 0.0))
+        DIBUJO = ('dir_largo', 'largo', 'espesor', 'vecxz')
+        if abs(giro) > 1e-9:
+            DIBUJO = ('largo', 'espesor')
+            print(f"  [--  ] {cuerpo}: el calce lo gira {giro:+.1f} grados, "
+                  f"asi que dir_largo y vecxz NO pueden salir iguales "
+                  f"(los gira armar._remapear); se comparan largo y espesor")
+        ruta_cuerpo = rutas.unity(cuerpo)
+        if not os.path.exists(ruta_cuerpo):
+            print(f"  [--  ] {cuerpo}: no hay data/unity/{cuerpo}.json con "
+                  f"que comparar (exportalo y vuelve a correr)")
+            continue
+        with open(ruta_cuerpo, encoding='utf-8') as f:
+            suyo = json.load(f)
+        for m in [e for e in suyo['elementos'] if e['tipo'] == 'muro']:
+            c = del_conjunto.get(m['id'] + base)
+            if c is None:
+                ausentes.append('%s %s -> %s' % (cuerpo, m['id'],
+                                                 m['id'] + base))
+                continue
+            comparados += 1
+            for k in DIBUJO:
+                if c.get(k) != m.get(k):
+                    difieren.append('%s %s %s: cuerpo %s, conjunto %s'
+                                    % (cuerpo, m['id'], k, m.get(k),
+                                       c.get(k)))
+    check(not ausentes,
+          "cada muro de cada cuerpo tiene su elemento en el conjunto",
+          f"sin elemento: {ausentes[:5]}" if ausentes else "")
+    check(comparados == len(muros),
+          "se comparan TODOS los muros del conjunto, no una parte",
+          f"{comparados} comparados de {len(muros)} muros del conjunto")
+    check(not difieren,
+          f"dir_largo, largo, espesor y vecxz calzan con el cuerpo de "
+          f"origen ({comparados} muros)",
+          '; '.join(difieren[:4]) if difieren else "")
+
 
 # ============================================================
 print("\n[3] Coherencia numerica de lo exportado")
@@ -354,7 +481,7 @@ if not datos['areas_tributarias']:
 #    del mismo pano -- el total con Lx, Ly del pano
 #    (benchmark_3d.tributarias) y cada entrada con la formula del
 #    cordon sobre su poligono -- redondeadas cada una a 4 decimales
-#    (edificios/ingenieria/export_unity.py:176 y :435). Pueden caer a
+#    (edificios/ingenieria/export_unity.py:188 y :457). Pueden caer a
 #    los dos lados del redondeo: la viga 128 da 8.3971 contra 8.3972,
 #    una unidad, que es justo la cota con n = 1.
 #  - la coma flotante de esas cuentas antes de redondear: la formula
