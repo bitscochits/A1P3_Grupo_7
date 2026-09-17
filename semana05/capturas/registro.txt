@@ -1,0 +1,1179 @@
+CAPTURA SEMANA 5   2026-09-17 10:11:51
+Numeros leidos de lo que Unity cargo (float de 32 bits, formato G9).
+DATO servidor.url = http://localhost:5000/ping
+DATO servidor.responde = True
+
+==================== EQUIPO Y DATOS CARGADOS ====================
+DATO edificio = lt2
+DATO equipo.modelo = Katana 15 B13VFK (Micro-Star International Co., Ltd.)
+DATO equipo.cpu = 13th Gen Intel(R) Core(TM) i7-13620H (16 hilos)
+DATO equipo.so = Windows 11  (10.0.26200)
+DATO equipo.gpu = NVIDIA GeForce RTX 4060 Laptop GPU (Direct3D 12 [level 12.2])
+DATO equipo.ram_mb = 32471
+DATO equipo.vram_mb = 7956
+DATO pantalla = 1600x900
+DATO pantalla.dpi = 120
+DATO panel.escala = 1.25
+DATO panel.rect = (x:10.00, y:10.00, width:500.00, height:880.00)
+DATO unity = 6000.5.10f1
+DATO plataforma = WindowsPlayer
+Excel: C:/Users/Administrador/OneDrive/Escritorio/UANDES/202602/Metodos computacionales/P1/A1P1.0_Grupo_7/build/LaboratorioEstructural_Data/StreamingAssets\resultados.xlsx existe=True
+DATO excel.ruta = C:/Users/Administrador/OneDrive/Escritorio/UANDES/202602/Metodos computacionales/P1/A1P1.0_Grupo_7/build/LaboratorioEstructural_Data/StreamingAssets\resultados.xlsx
+DATO excel.existe = True
+DATO modelo.nodos = 232
+DATO modelo.elementos = 378
+DATO modelo.cota_terreno = -4.01000023
+DATO anexo.edificio = lt2
+DATO anexo.casos = 12
+DATO anexo.calza = True
+DATO anexo.aviso = 
+DATO anexo.caso_por_defecto = S3
+DATO anexo.columna_demo = 5
+DATO anexo.muro_demo = 9
+DATO superposicion.estados = 3
+DATO superposicion.nombres = E1(precalculado),E2(precalculado),E3(precalculado)
+DATO superposicion.aviso = 
+DATO superposicion.servidor_conectado = True
+DATO movil.hay = True
+DATO movil.posiciones = 30
+DATO movil.aviso = 
+DATO pestanas = Vista|Capas|Caso|Elemento|Modificar|Carga movil
+
+==================== A. VISTA GENERAL ====================
+
+=== FOTO 01_vista_general_realista_con_suelo.jpg ===
+DATO foto.01_vista_general_realista_con_suelo.tamano = 1600x900
+DATO foto.01_vista_general_realista_con_suelo.pestana = Vista
+DATO foto.01_vista_general_realista_con_suelo.vista = realista
+DATO foto.01_vista_general_realista_con_suelo.suelo = True
+DATO foto.01_vista_general_realista_con_suelo.piso = todos
+DATO foto.01_vista_general_realista_con_suelo.caso_activo = S3
+DATO foto.01_vista_general_realista_con_suelo.seleccion =  -1
+DATO foto.01_vista_general_realista_con_suelo.deformada = False
+DATO foto.01_vista_general_realista_con_suelo.escala = 300
+DATO foto.01_vista_general_realista_con_suelo.diagramas = no
+DATO foto.01_vista_general_realista_con_suelo.mapa_dc = no
+DATO foto.01_vista_general_realista_con_suelo.carga_movil = no
+DATO foto.01_vista_general_realista_con_suelo.cabecera.fuente = anexo
+DATO foto.01_vista_general_realista_con_suelo.cabecera.texto = Caso activo  S3   1.00 G + 0.50 Q + 1.00 EX | Desp. max 19.78 mm | NO PASA 2/69
+DATO foto.01_vista_general_realista_con_suelo.camara = centro (26.94, 1.93, 19.00) distancia 41.2
+
+=== FOTO 02_vista_general_tecnica.jpg ===
+DATO foto.02_vista_general_tecnica.tamano = 1600x900
+DATO foto.02_vista_general_tecnica.pestana = Vista
+DATO foto.02_vista_general_tecnica.vista = tecnica
+DATO foto.02_vista_general_tecnica.suelo = True
+DATO foto.02_vista_general_tecnica.piso = todos
+DATO foto.02_vista_general_tecnica.caso_activo = S3
+DATO foto.02_vista_general_tecnica.seleccion =  -1
+DATO foto.02_vista_general_tecnica.deformada = False
+DATO foto.02_vista_general_tecnica.escala = 300
+DATO foto.02_vista_general_tecnica.diagramas = no
+DATO foto.02_vista_general_tecnica.mapa_dc = no
+DATO foto.02_vista_general_tecnica.carga_movil = no
+DATO foto.02_vista_general_tecnica.cabecera.fuente = anexo
+DATO foto.02_vista_general_tecnica.cabecera.texto = Caso activo  S3   1.00 G + 0.50 Q + 1.00 EX | Desp. max 19.78 mm | NO PASA 2/69
+DATO foto.02_vista_general_tecnica.camara = centro (26.94, 1.93, 19.00) distancia 41.2
+
+==================== B. PANEL: UNA FOTO POR PESTANA ====================
+
+=== FOTO 03_panel_vista.jpg ===
+DATO foto.03_panel_vista.tamano = 1600x900
+DATO foto.03_panel_vista.pestana = Vista
+DATO foto.03_panel_vista.vista = realista
+DATO foto.03_panel_vista.suelo = True
+DATO foto.03_panel_vista.piso = todos
+DATO foto.03_panel_vista.caso_activo = S3
+DATO foto.03_panel_vista.seleccion = elemento 5
+DATO foto.03_panel_vista.deformada = False
+DATO foto.03_panel_vista.escala = 300
+DATO foto.03_panel_vista.diagramas = no
+DATO foto.03_panel_vista.mapa_dc = no
+DATO foto.03_panel_vista.carga_movil = no
+DATO foto.03_panel_vista.cabecera.fuente = anexo
+DATO foto.03_panel_vista.cabecera.texto = Caso activo  S3   1.00 G + 0.50 Q + 1.00 EX | Desp. max 19.78 mm | NO PASA 2/69
+DATO foto.03_panel_vista.camara = centro (26.94, 1.93, 19.00) distancia 41.2
+
+=== FOTO 04_panel_capas.jpg ===
+DATO foto.04_panel_capas.tamano = 1600x900
+DATO foto.04_panel_capas.pestana = Capas
+DATO foto.04_panel_capas.vista = realista
+DATO foto.04_panel_capas.suelo = True
+DATO foto.04_panel_capas.piso = todos
+DATO foto.04_panel_capas.caso_activo = S3
+DATO foto.04_panel_capas.seleccion = elemento 5
+DATO foto.04_panel_capas.deformada = False
+DATO foto.04_panel_capas.escala = 300
+DATO foto.04_panel_capas.diagramas = no
+DATO foto.04_panel_capas.mapa_dc = no
+DATO foto.04_panel_capas.carga_movil = no
+DATO foto.04_panel_capas.cabecera.fuente = anexo
+DATO foto.04_panel_capas.cabecera.texto = Caso activo  S3   1.00 G + 0.50 Q + 1.00 EX | Desp. max 19.78 mm | NO PASA 2/69
+DATO foto.04_panel_capas.camara = centro (26.94, 1.93, 19.00) distancia 41.2
+
+=== FOTO 05_panel_caso.jpg ===
+DATO foto.05_panel_caso.tamano = 1600x900
+DATO foto.05_panel_caso.pestana = Caso
+DATO foto.05_panel_caso.vista = realista
+DATO foto.05_panel_caso.suelo = True
+DATO foto.05_panel_caso.piso = todos
+DATO foto.05_panel_caso.caso_activo = S3
+DATO foto.05_panel_caso.seleccion = elemento 5
+DATO foto.05_panel_caso.deformada = False
+DATO foto.05_panel_caso.escala = 300
+DATO foto.05_panel_caso.diagramas = no
+DATO foto.05_panel_caso.mapa_dc = no
+DATO foto.05_panel_caso.carga_movil = no
+DATO foto.05_panel_caso.cabecera.fuente = anexo
+DATO foto.05_panel_caso.cabecera.texto = Caso activo  S3   1.00 G + 0.50 Q + 1.00 EX | Desp. max 19.78 mm | NO PASA 2/69
+DATO foto.05_panel_caso.camara = centro (26.94, 1.93, 19.00) distancia 41.2
+
+=== FOTO 06_panel_elemento.jpg ===
+DATO foto.06_panel_elemento.tamano = 1600x900
+DATO foto.06_panel_elemento.pestana = Elemento
+DATO foto.06_panel_elemento.vista = realista
+DATO foto.06_panel_elemento.suelo = True
+DATO foto.06_panel_elemento.piso = todos
+DATO foto.06_panel_elemento.caso_activo = S3
+DATO foto.06_panel_elemento.seleccion = elemento 5
+DATO foto.06_panel_elemento.deformada = False
+DATO foto.06_panel_elemento.escala = 300
+DATO foto.06_panel_elemento.diagramas = no
+DATO foto.06_panel_elemento.mapa_dc = no
+DATO foto.06_panel_elemento.carga_movil = no
+DATO foto.06_panel_elemento.cabecera.fuente = anexo
+DATO foto.06_panel_elemento.cabecera.texto = Caso activo  S3   1.00 G + 0.50 Q + 1.00 EX | Desp. max 19.78 mm | NO PASA 2/69
+DATO foto.06_panel_elemento.camara = centro (26.94, 1.93, 19.00) distancia 41.2
+
+=== FOTO 07_panel_modificar.jpg ===
+DATO foto.07_panel_modificar.tamano = 1600x900
+DATO foto.07_panel_modificar.pestana = Modificar
+DATO foto.07_panel_modificar.vista = realista
+DATO foto.07_panel_modificar.suelo = True
+DATO foto.07_panel_modificar.piso = todos
+DATO foto.07_panel_modificar.caso_activo = S3
+DATO foto.07_panel_modificar.seleccion = elemento 5
+DATO foto.07_panel_modificar.deformada = False
+DATO foto.07_panel_modificar.escala = 300
+DATO foto.07_panel_modificar.diagramas = no
+DATO foto.07_panel_modificar.mapa_dc = no
+DATO foto.07_panel_modificar.carga_movil = no
+DATO foto.07_panel_modificar.cabecera.fuente = anexo
+DATO foto.07_panel_modificar.cabecera.texto = Caso activo  S3   1.00 G + 0.50 Q + 1.00 EX | Desp. max 19.78 mm | NO PASA 2/69
+DATO foto.07_panel_modificar.camara = centro (26.94, 1.93, 19.00) distancia 41.2
+
+=== FOTO 08_panel_carga_movil.jpg ===
+DATO foto.08_panel_carga_movil.tamano = 1600x900
+DATO foto.08_panel_carga_movil.pestana = Carga movil
+DATO foto.08_panel_carga_movil.vista = realista
+DATO foto.08_panel_carga_movil.suelo = True
+DATO foto.08_panel_carga_movil.piso = todos
+DATO foto.08_panel_carga_movil.caso_activo = S3
+DATO foto.08_panel_carga_movil.seleccion = elemento 5
+DATO foto.08_panel_carga_movil.deformada = False
+DATO foto.08_panel_carga_movil.escala = 300
+DATO foto.08_panel_carga_movil.diagramas = no
+DATO foto.08_panel_carga_movil.mapa_dc = no
+DATO foto.08_panel_carga_movil.carga_movil = no
+DATO foto.08_panel_carga_movil.cabecera.fuente = anexo
+DATO foto.08_panel_carga_movil.cabecera.texto = Caso activo  S3   1.00 G + 0.50 Q + 1.00 EX | Desp. max 19.78 mm | NO PASA 2/69
+DATO foto.08_panel_carga_movil.camara = centro (26.94, 1.93, 19.00) distancia 41.2
+
+==================== C. LAS PREGUNTAS DEL VISOR ====================
+
+=== FOTO 09_donde_esta_columna_5.jpg ===
+DATO foto.09_donde_esta_columna_5.tamano = 1600x900
+DATO foto.09_donde_esta_columna_5.pestana = Elemento
+DATO foto.09_donde_esta_columna_5.vista = realista
+DATO foto.09_donde_esta_columna_5.suelo = True
+DATO foto.09_donde_esta_columna_5.piso = -7.97
+DATO foto.09_donde_esta_columna_5.caso_activo = S3
+DATO foto.09_donde_esta_columna_5.seleccion = elemento 5
+DATO foto.09_donde_esta_columna_5.deformada = False
+DATO foto.09_donde_esta_columna_5.escala = 300
+DATO foto.09_donde_esta_columna_5.diagramas = no
+DATO foto.09_donde_esta_columna_5.mapa_dc = no
+DATO foto.09_donde_esta_columna_5.carga_movil = no
+DATO foto.09_donde_esta_columna_5.cabecera.fuente = anexo
+DATO foto.09_donde_esta_columna_5.cabecera.texto = Caso activo  S3   1.00 G + 0.50 Q + 1.00 EX | Desp. max 19.78 mm | NO PASA 2/69
+DATO foto.09_donde_esta_columna_5.camara = centro (32.35, -5.99, 18.18) distancia 28.0
+  panel | [Identificacion y ubicacion]
+  panel | tipo      columna
+  panel | seccion   P 0.70x0.70
+  panel | nodos     5 -> 21
+  panel | largo     3.960 m
+  panel | nodo 5   (32.35, 18.18, -7.97)   APOYO [1 1 1 1 1 1] empotrado
+  panel | nodo 21   (32.35, 18.18, -4.01)
+  panel | piso      cota -7.97 m, nivel 1 de 6 contando desde abajo (su nodo mas bajo)
+  panel | 
+DATO ux.donde.seleccion = elemento 5
+DATO ux.donde.tipo = columna
+DATO ux.donde.seccion = P 0.70x0.70
+DATO ux.donde.n1.id = 5
+DATO ux.donde.n1.xyz_m = 32.3520012,18.1793003,-7.96999979
+DATO ux.donde.n2.id = 21
+DATO ux.donde.n2.xyz_m = 32.3520012,18.1793003,-4.01000023
+DATO ux.donde.unity_n1 = (32.352, -7.970, 18.179)
+DATO ux.donde.unity_n2 = (32.352, -4.010, 18.179)
+DATO ux.donde.camara_centro = (32.352, -5.990, 18.179)
+
+=== FOTO 10_como_esta_apoyado_nodo_5.jpg ===
+DATO foto.10_como_esta_apoyado_nodo_5.tamano = 1600x900
+DATO foto.10_como_esta_apoyado_nodo_5.pestana = Elemento
+DATO foto.10_como_esta_apoyado_nodo_5.vista = realista
+DATO foto.10_como_esta_apoyado_nodo_5.suelo = True
+DATO foto.10_como_esta_apoyado_nodo_5.piso = -7.97
+DATO foto.10_como_esta_apoyado_nodo_5.caso_activo = S3
+DATO foto.10_como_esta_apoyado_nodo_5.seleccion = nodo 5
+DATO foto.10_como_esta_apoyado_nodo_5.deformada = False
+DATO foto.10_como_esta_apoyado_nodo_5.escala = 300
+DATO foto.10_como_esta_apoyado_nodo_5.diagramas = no
+DATO foto.10_como_esta_apoyado_nodo_5.mapa_dc = no
+DATO foto.10_como_esta_apoyado_nodo_5.carga_movil = no
+DATO foto.10_como_esta_apoyado_nodo_5.cabecera.fuente = anexo
+DATO foto.10_como_esta_apoyado_nodo_5.cabecera.texto = Caso activo  S3   1.00 G + 0.50 Q + 1.00 EX | Desp. max 19.78 mm | NO PASA 2/69
+DATO foto.10_como_esta_apoyado_nodo_5.camara = centro (32.35, -7.97, 18.18) distancia 22.0
+  panel | [Donde esta]
+  panel | OpenSees  (x, y, z) = (32.352, 18.179, -7.970) m
+  panel |           cota -7.97 m, nivel 1 de 6 contando desde abajo
+  panel | Unity     (32.35, -7.97, 18.18)  (Y vertical)
+  panel | [Como esta apoyado]
+  panel | [ux uy uz rx ry rz] = [1 1 1 1 1 1]   (fijo)
+  panel | Empotrado: los 6 grados de libertad restringidos (no se traslada ni gira).
+  panel | [Diafragma]
+  panel | Fuera de todo diafragma: se mueve solo con sus barras.
+DATO ux.apoyo.nodo = 5
+DATO ux.apoyo.fijo = True
+DATO ux.apoyo.restricciones = 1,1,1,1,1,1
+DATO ux.apoyo.auxiliar = False
+DATO ux.apoyo.id = 5
+DATO ux.apoyo.xyz_m = 32.3520012,18.1793003,-7.96999979
+
+=== FOTO 11_que_lo_carga_viga_92_area_tributaria_y_w_G.jpg ===
+DATO foto.11_que_lo_carga_viga_92_area_tributaria_y_w_G.tamano = 1600x900
+DATO foto.11_que_lo_carga_viga_92_area_tributaria_y_w_G.pestana = Elemento
+DATO foto.11_que_lo_carga_viga_92_area_tributaria_y_w_G.vista = realista
+DATO foto.11_que_lo_carga_viga_92_area_tributaria_y_w_G.suelo = True
+DATO foto.11_que_lo_carga_viga_92_area_tributaria_y_w_G.piso = -4.01
+DATO foto.11_que_lo_carga_viga_92_area_tributaria_y_w_G.caso_activo = G
+DATO foto.11_que_lo_carga_viga_92_area_tributaria_y_w_G.seleccion = elemento 92
+DATO foto.11_que_lo_carga_viga_92_area_tributaria_y_w_G.deformada = False
+DATO foto.11_que_lo_carga_viga_92_area_tributaria_y_w_G.escala = 300
+DATO foto.11_que_lo_carga_viga_92_area_tributaria_y_w_G.diagramas = wz
+DATO foto.11_que_lo_carga_viga_92_area_tributaria_y_w_G.mapa_dc = no
+DATO foto.11_que_lo_carga_viga_92_area_tributaria_y_w_G.carga_movil = no
+DATO foto.11_que_lo_carga_viga_92_area_tributaria_y_w_G.cabecera.fuente = anexo
+DATO foto.11_que_lo_carga_viga_92_area_tributaria_y_w_G.cabecera.texto = Caso activo  G   Peso propio de barras + losa + peso muerto adicional del plano de cargas. Caso COMPLETO. | Desp. max 6.80 mm | PASAN 69/69
+DATO foto.11_que_lo_carga_viga_92_area_tributaria_y_w_G.camara = centro (29.85, -4.01, 18.18) distancia 17.5
+  panel | [Que lo carga (losa, peso propio y total en G)]
+  panel | A_trib    12.500 m2   (1 entrada(s), 2 pano(s))
+  panel | q_G       6.30 kN/m2 de losa  ->  78.75 kN
+  panel | w_losa    15.749 kN/m sobre la barra (luz 5.00 m)
+  panel | w_pp      12.000 kN/m de peso propio de la barra
+  panel | = w_G     27.749 kN/m, la w total que recibe OpenSees en G
+  panel | wz en G   -27.749 kN/m (casos_de_carga; diagrama wz)
+  panel | Q         wz -12.258 kN/m (Q del modelo, la de /analizar)
+  panel | [Esfuerzos, caso activo G]
+  panel | Peso propio de barras + losa + peso muerto adicional del plano de cargas. Caso COMPLETO.
+  panel |                extremo i     extremo j
+  panel |   N  kN            0.00          0.00
+  panel | * Vy kN            0.00          0.00
+  panel | * Vz kN          152.67        291.41
+  panel |   T  kN*m         13.62         13.62
+  panel | * My kN*m       -492.57        617.63
+  panel | * Mz kN*m          0.00          0.00
+  panel | (ejes locales; * = los que mandan en viga_x)
+  panel | max |My| = 617.63 kN*m en x = 5.00 m  (9 estaciones)
+  panel | max |Mz| = 0.00 kN*m en x = 0.00 m  (9 estaciones)
+  panel | carga repartida (beamUniform)  wx 0.000  wy 0.000  wz -27.749 kN/m
+DATO ux.carga.viga = 92
+DATO ux.carga.caso = G
+DATO ux.carga.entradas = 1
+DATO ux.carga.area_total_m2 = 12.5
+DATO ux.carga.trib0.area_m2 = 12.5
+DATO ux.carga.trib0.qG_kN_m2 = 6.29969978
+DATO ux.carga.trib0.carga_total_kN = 78.7465973
+DATO ux.carga.trib0.w_kN_m = 15.7493229
+DATO ux.carga.trib0.w_peso_propio_kN_m = 12
+DATO ux.carga.trib0.w_total_G_kN_m = 27.7493229
+DATO ux.carga.trib0.luz_m = 5
+DATO ux.carga.trib0.n_poligonos = 2
+DATO ux.carga.distribuida.G = 0,0,-27.7493229
+DATO ux.carga.distribuida.Q = 0,0,-12.2583132
+DATO ux.carga.anexo_w_local.G = 0,0,-27.7493
+DATO ux.carga.motivo_sin_diagrama = 
+
+=== FOTO 12_como_se_deforma_S3_nodo_207.jpg ===
+DATO foto.12_como_se_deforma_S3_nodo_207.tamano = 1600x900
+DATO foto.12_como_se_deforma_S3_nodo_207.pestana = Elemento
+DATO foto.12_como_se_deforma_S3_nodo_207.vista = realista
+DATO foto.12_como_se_deforma_S3_nodo_207.suelo = True
+DATO foto.12_como_se_deforma_S3_nodo_207.piso = todos
+DATO foto.12_como_se_deforma_S3_nodo_207.caso_activo = S3
+DATO foto.12_como_se_deforma_S3_nodo_207.seleccion = nodo 207
+DATO foto.12_como_se_deforma_S3_nodo_207.deformada = True
+DATO foto.12_como_se_deforma_S3_nodo_207.escala = 300
+DATO foto.12_como_se_deforma_S3_nodo_207.diagramas = no
+DATO foto.12_como_se_deforma_S3_nodo_207.mapa_dc = no
+DATO foto.12_como_se_deforma_S3_nodo_207.carga_movil = no
+DATO foto.12_como_se_deforma_S3_nodo_207.cabecera.fuente = anexo
+DATO foto.12_como_se_deforma_S3_nodo_207.cabecera.texto = Caso activo  S3   1.00 G + 0.50 Q + 1.00 EX | Desp. max 19.78 mm | NO PASA 2/69
+DATO foto.12_como_se_deforma_S3_nodo_207.camara = centro (26.94, 1.93, 19.00) distancia 41.2
+  panel | [Desplazamiento, caso activo S3]
+  panel | 1.00 G + 0.50 Q + 1.00 EX
+  panel | ux    18.190 mm   rx -3.185e-04 rad
+  panel | uy    -0.919 mm   ry -2.387e-04 rad
+  panel | uz    -7.705 mm   rz 2.721e-05 rad
+DATO ux.deforma.caso = S3
+DATO ux.deforma.descripcion = 1.00 G + 0.50 Q + 1.00 EX
+DATO ux.deforma.max_desplazamiento_mm = 19.7759991
+DATO ux.deforma.nodo = 207
+DATO ux.deforma.ux_m = 0.0181898996
+DATO ux.deforma.uy_m = -0.000919169979
+DATO ux.deforma.uz_m = -0.00770534016
+DATO ux.deforma.rx_rad = -0.000318520004
+DATO ux.deforma.ry_rad = -0.000238649998
+DATO ux.deforma.rz_rad = 2.72100006E-05
+DATO ux.deforma.hay_deformada = True
+DATO ux.deforma.escala = 300
+DATO ux.deforma.dibujado_unity = (32.8090, 9.5184, 17.9036)
+DATO ux.deforma.original_unity = (27.3520, 11.8300, 18.1793)
+
+=== FOTO 13_que_fuerzas_tiene_viga_92_My_S3.jpg ===
+DATO foto.13_que_fuerzas_tiene_viga_92_My_S3.tamano = 1600x900
+DATO foto.13_que_fuerzas_tiene_viga_92_My_S3.pestana = Elemento
+DATO foto.13_que_fuerzas_tiene_viga_92_My_S3.vista = realista
+DATO foto.13_que_fuerzas_tiene_viga_92_My_S3.suelo = True
+DATO foto.13_que_fuerzas_tiene_viga_92_My_S3.piso = -4.01
+DATO foto.13_que_fuerzas_tiene_viga_92_My_S3.caso_activo = S3
+DATO foto.13_que_fuerzas_tiene_viga_92_My_S3.seleccion = elemento 92
+DATO foto.13_que_fuerzas_tiene_viga_92_My_S3.deformada = False
+DATO foto.13_que_fuerzas_tiene_viga_92_My_S3.escala = 300
+DATO foto.13_que_fuerzas_tiene_viga_92_My_S3.diagramas = My
+DATO foto.13_que_fuerzas_tiene_viga_92_My_S3.mapa_dc = no
+DATO foto.13_que_fuerzas_tiene_viga_92_My_S3.carga_movil = no
+DATO foto.13_que_fuerzas_tiene_viga_92_My_S3.cabecera.fuente = anexo
+DATO foto.13_que_fuerzas_tiene_viga_92_My_S3.cabecera.texto = Caso activo  S3   1.00 G + 0.50 Q + 1.00 EX | Desp. max 19.78 mm | NO PASA 2/69
+DATO foto.13_que_fuerzas_tiene_viga_92_My_S3.camara = centro (29.85, -4.01, 18.18) distancia 17.5
+  panel | [Esfuerzos, caso activo S3]
+  panel | 1.00 G + 0.50 Q + 1.00 EX
+  panel |                extremo i     extremo j
+  panel |   N  kN            0.00          0.00
+  panel | * Vy kN            0.00          0.00
+  panel | * Vz kN          216.14        373.63
+  panel |   T  kN*m         17.66         17.66
+  panel | * My kN*m       -562.78        911.65
+  panel | * Mz kN*m          0.00          0.00
+  panel | (ejes locales; * = los que mandan en viga_x)
+  panel | max |My| = 911.65 kN*m en x = 5.00 m  (9 estaciones)
+  panel | max |Mz| = 0.00 kN*m en x = 0.00 m  (9 estaciones)
+  panel | carga repartida (beamUniform)  wx 0.000  wy 0.000  wz -31.499 kN/m
+DATO ux.fuerzas.viga = 92
+DATO ux.fuerzas.caso = S3
+DATO ux.fuerzas.magnitud = My
+DATO ux.fuerzas.estaciones = 9
+DATO ux.fuerzas.N_i = 0
+DATO ux.fuerzas.N_j = 0
+DATO ux.fuerzas.Vy_i = 0
+DATO ux.fuerzas.Vy_j = 0
+DATO ux.fuerzas.Vz_i = 216.137405
+DATO ux.fuerzas.Vz_j = 373.634003
+DATO ux.fuerzas.T_i = 17.6595993
+DATO ux.fuerzas.T_j = 17.6595993
+DATO ux.fuerzas.My_i = -562.781799
+DATO ux.fuerzas.My_j = 911.646729
+DATO ux.fuerzas.Mz_i = 0
+DATO ux.fuerzas.Mz_j = 0
+DATO ux.fuerzas.w_local = 0,0,-31.4993
+DATO ux.fuerzas.My_max_abs_valor = 911.646729
+DATO ux.fuerzas.My_max_abs_x = 5
+DATO ux.fuerzas.motivo_sin_diagrama = 
+DATO ux.fuerzas.aviso_de_lectura = 
+DATO scroll.qa.s4.demanda / capacidad = 442
+
+=== FOTO 14_capacidad_columna_5_PM_y_mapa_DC_1.2G+1.0Q+1.4EX.jpg ===
+DATO foto.14_capacidad_columna_5_PM_y_mapa_DC_1.2G+1.0Q+1.4EX.tamano = 1600x900
+DATO foto.14_capacidad_columna_5_PM_y_mapa_DC_1.2G+1.0Q+1.4EX.pestana = Elemento
+DATO foto.14_capacidad_columna_5_PM_y_mapa_DC_1.2G+1.0Q+1.4EX.vista = realista
+DATO foto.14_capacidad_columna_5_PM_y_mapa_DC_1.2G+1.0Q+1.4EX.suelo = True
+DATO foto.14_capacidad_columna_5_PM_y_mapa_DC_1.2G+1.0Q+1.4EX.piso = todos
+DATO foto.14_capacidad_columna_5_PM_y_mapa_DC_1.2G+1.0Q+1.4EX.caso_activo = 1.2G+1.0Q+1.4EX
+DATO foto.14_capacidad_columna_5_PM_y_mapa_DC_1.2G+1.0Q+1.4EX.seleccion = elemento 5
+DATO foto.14_capacidad_columna_5_PM_y_mapa_DC_1.2G+1.0Q+1.4EX.deformada = False
+DATO foto.14_capacidad_columna_5_PM_y_mapa_DC_1.2G+1.0Q+1.4EX.escala = 300
+DATO foto.14_capacidad_columna_5_PM_y_mapa_DC_1.2G+1.0Q+1.4EX.diagramas = no
+DATO foto.14_capacidad_columna_5_PM_y_mapa_DC_1.2G+1.0Q+1.4EX.mapa_dc = si, 378 barras pintadas
+DATO foto.14_capacidad_columna_5_PM_y_mapa_DC_1.2G+1.0Q+1.4EX.carga_movil = no
+DATO foto.14_capacidad_columna_5_PM_y_mapa_DC_1.2G+1.0Q+1.4EX.cabecera.fuente = anexo
+DATO foto.14_capacidad_columna_5_PM_y_mapa_DC_1.2G+1.0Q+1.4EX.cabecera.texto = Caso activo  1.2G+1.0Q+1.4EX   1.20 G + 1.00 Q + 1.40 EX | Desp. max 27.25 mm | NO PASA 4/69 (1 fuera de curva)
+DATO foto.14_capacidad_columna_5_PM_y_mapa_DC_1.2G+1.0Q+1.4EX.camara = centro (26.94, 1.93, 19.00) distancia 41.2
+  panel | [Demanda / capacidad]
+  panel | familia 1: P 0.70x0.70 | 0.70 x 0.70 m | 20 barras | As = 98.17 cm2 | estribo E%%C12a10 | malla -
+  panel | P 6301.0 kN   M 374.0 kN*m   extremo i (inferior)
+  panel | Mn 1748.4 kN*m   u 0.214   PASA
+DATO ux.capacidad.caso_con_mas_no_pasa = 1.2G+1.0Q+1.4EX
+DATO ux.capacidad.mapa_activo = True
+DATO ux.capacidad.mapa_pintadas = 378
+DATO ux.capacidad.no_pasan = 4
+DATO ux.capacidad.fuera_de_curva = 1
+DATO ux.capacidad.con_fierro = 69
+DATO ux.capacidad.elem.5.P = 6301.04688
+DATO ux.capacidad.elem.5.M = 373.962097
+DATO ux.capacidad.elem.5.Mn = 1748.35925
+DATO ux.capacidad.elem.5.u = 0.213892996
+DATO ux.capacidad.elem.5.extremo = i (inferior)
+DATO ux.capacidad.elem.5.pasa = True
+DATO ux.capacidad.elem.5.familia = 1
+DATO ux.capacidad.familia = P 0.70x0.70 | 0.70 x 0.70 m | 20 barras | As = 98.17 cm2 | estribo E%%C12a10 | malla -
+DATO ux.capacidad.no_pasa.12.u = 2.22846293
+DATO ux.capacidad.no_pasa.28.u = 9999
+DATO ux.capacidad.no_pasa.29.u = 2.13014007
+DATO ux.capacidad.no_pasa.45.u = 1.21409094
+DATO ux.capacidad.no_pasa.ids = 12,28,29,45
+
+=== FOTO 14b_mapa_DC_leyenda_y_criticos_1.2G+1.0Q+1.4EX.jpg ===
+DATO foto.14b_mapa_DC_leyenda_y_criticos_1.2G+1.0Q+1.4EX.tamano = 1600x900
+DATO foto.14b_mapa_DC_leyenda_y_criticos_1.2G+1.0Q+1.4EX.pestana = Caso
+DATO foto.14b_mapa_DC_leyenda_y_criticos_1.2G+1.0Q+1.4EX.vista = realista
+DATO foto.14b_mapa_DC_leyenda_y_criticos_1.2G+1.0Q+1.4EX.suelo = True
+DATO foto.14b_mapa_DC_leyenda_y_criticos_1.2G+1.0Q+1.4EX.piso = todos
+DATO foto.14b_mapa_DC_leyenda_y_criticos_1.2G+1.0Q+1.4EX.caso_activo = 1.2G+1.0Q+1.4EX
+DATO foto.14b_mapa_DC_leyenda_y_criticos_1.2G+1.0Q+1.4EX.seleccion = elemento 5
+DATO foto.14b_mapa_DC_leyenda_y_criticos_1.2G+1.0Q+1.4EX.deformada = False
+DATO foto.14b_mapa_DC_leyenda_y_criticos_1.2G+1.0Q+1.4EX.escala = 300
+DATO foto.14b_mapa_DC_leyenda_y_criticos_1.2G+1.0Q+1.4EX.diagramas = no
+DATO foto.14b_mapa_DC_leyenda_y_criticos_1.2G+1.0Q+1.4EX.mapa_dc = si, 378 barras pintadas
+DATO foto.14b_mapa_DC_leyenda_y_criticos_1.2G+1.0Q+1.4EX.carga_movil = no
+DATO foto.14b_mapa_DC_leyenda_y_criticos_1.2G+1.0Q+1.4EX.cabecera.fuente = anexo
+DATO foto.14b_mapa_DC_leyenda_y_criticos_1.2G+1.0Q+1.4EX.cabecera.texto = Caso activo  1.2G+1.0Q+1.4EX   1.20 G + 1.00 Q + 1.40 EX | Desp. max 27.25 mm | NO PASA 4/69 (1 fuera de curva)
+DATO foto.14b_mapa_DC_leyenda_y_criticos_1.2G+1.0Q+1.4EX.camara = centro (26.94, 1.93, 19.00) distancia 41.2
+
+==================== D. SUPERPOSICION ====================
+DATO control.columna = 5
+DATO control.muro = 9
+DATO control.viga = 92
+DATO control.nodo = 207
+
+=== FOTO 15_superposicion_E1_precalculado.jpg ===
+DATO foto.15_superposicion_E1_precalculado.tamano = 1600x900
+DATO foto.15_superposicion_E1_precalculado.pestana = Caso
+DATO foto.15_superposicion_E1_precalculado.vista = realista
+DATO foto.15_superposicion_E1_precalculado.suelo = True
+DATO foto.15_superposicion_E1_precalculado.piso = todos
+DATO foto.15_superposicion_E1_precalculado.caso_activo = E1
+DATO foto.15_superposicion_E1_precalculado.seleccion =  -1
+DATO foto.15_superposicion_E1_precalculado.deformada = True
+DATO foto.15_superposicion_E1_precalculado.escala = 200
+DATO foto.15_superposicion_E1_precalculado.diagramas = no
+DATO foto.15_superposicion_E1_precalculado.mapa_dc = si, 378 barras pintadas
+DATO foto.15_superposicion_E1_precalculado.carga_movil = no
+DATO foto.15_superposicion_E1_precalculado.cabecera.fuente = anexo
+DATO foto.15_superposicion_E1_precalculado.cabecera.texto = Caso activo  E1   1.00 G + 1.00 Q | Desp. max 8.79 mm | PASAN 69/69
+DATO foto.15_superposicion_E1_precalculado.camara = centro (26.94, 1.93, 19.00) distancia 41.2
+DATO sup.pre.E1.nombre = E1
+DATO sup.pre.E1.tipo = superposicion
+DATO sup.pre.E1.descripcion = 1.00 G + 1.00 Q
+DATO sup.pre.E1.factores = 1,1,0,0
+DATO sup.pre.E1.max_desplazamiento_mm = 8.78559971
+DATO sup.pre.E1.no_pasan = 0
+DATO sup.pre.E1.fuera_de_curva = 0
+DATO sup.pre.E1.con_fierro = 69
+DATO sup.pre.E1.desplazamientos = 232
+DATO sup.pre.E1.esfuerzos = 378
+DATO sup.pre.E1.nodo.207.ux_m = 0.00120688998
+DATO sup.pre.E1.nodo.207.uy_m = -3.79500016E-05
+DATO sup.pre.E1.nodo.207.uz_m = -0.00870222971
+DATO sup.pre.E1.elem.5.estaciones = 2
+DATO sup.pre.E1.elem.5.N_i = -5409.62061
+DATO sup.pre.E1.elem.5.N_j = -5409.62061
+DATO sup.pre.E1.elem.5.Vy_i = 15.3688002
+DATO sup.pre.E1.elem.5.Vy_j = 15.3688002
+DATO sup.pre.E1.elem.5.Vz_i = 7.48909998
+DATO sup.pre.E1.elem.5.Vz_j = 7.48909998
+DATO sup.pre.E1.elem.5.T_i = 0.0970999971
+DATO sup.pre.E1.elem.5.T_j = 0.0970999971
+DATO sup.pre.E1.elem.5.My_i = -14.8774004
+DATO sup.pre.E1.elem.5.My_j = 14.7793999
+DATO sup.pre.E1.elem.5.Mz_i = 20.0757008
+DATO sup.pre.E1.elem.5.Mz_j = -40.7846985
+DATO sup.pre.E1.elem.5.w_local = 0,0,0
+DATO sup.pre.E1.elem.5.My_max_abs_valor = -14.8774004
+DATO sup.pre.E1.elem.5.My_max_abs_x = 0
+DATO sup.pre.E1.elem.5.P = 5409.62061
+DATO sup.pre.E1.elem.5.M = 43.3801003
+DATO sup.pre.E1.elem.5.Mn = 1754.87488
+DATO sup.pre.E1.elem.5.u = 0.0247200001
+DATO sup.pre.E1.elem.5.extremo = j (superior)
+DATO sup.pre.E1.elem.5.pasa = True
+DATO sup.pre.E1.elem.5.familia = 1
+DATO sup.pre.E1.elem.9.estaciones = 2
+DATO sup.pre.E1.elem.9.N_i = -3591.01392
+DATO sup.pre.E1.elem.9.N_j = -3591.01392
+DATO sup.pre.E1.elem.9.Vy_i = -24.3369007
+DATO sup.pre.E1.elem.9.Vy_j = -24.3369007
+DATO sup.pre.E1.elem.9.Vz_i = -96.9946976
+DATO sup.pre.E1.elem.9.Vz_j = -96.9946976
+DATO sup.pre.E1.elem.9.T_i = 0.116499998
+DATO sup.pre.E1.elem.9.T_j = 0.116499998
+DATO sup.pre.E1.elem.9.My_i = 130.746094
+DATO sup.pre.E1.elem.9.My_j = -253.352905
+DATO sup.pre.E1.elem.9.Mz_i = 450.589111
+DATO sup.pre.E1.elem.9.Mz_j = 546.963196
+DATO sup.pre.E1.elem.9.w_local = 0,0,0
+DATO sup.pre.E1.elem.9.My_max_abs_valor = -253.352905
+DATO sup.pre.E1.elem.9.My_max_abs_x = 3.96000004
+DATO sup.pre.E1.elem.9.P = 3591.01392
+DATO sup.pre.E1.elem.9.M = 546.963196
+DATO sup.pre.E1.elem.9.Mn = 27759.1191
+DATO sup.pre.E1.elem.9.u = 0.0197039992
+DATO sup.pre.E1.elem.9.extremo = j (superior)
+DATO sup.pre.E1.elem.9.pasa = True
+DATO sup.pre.E1.elem.9.familia = 2
+DATO sup.pre.E1.elem.92.estaciones = 9
+DATO sup.pre.E1.elem.92.N_i = 0
+DATO sup.pre.E1.elem.92.N_j = 0
+DATO sup.pre.E1.elem.92.Vy_i = 0
+DATO sup.pre.E1.elem.92.Vy_j = 0
+DATO sup.pre.E1.elem.92.Vz_i = 198.525208
+DATO sup.pre.E1.elem.92.Vz_j = 374.77179
+DATO sup.pre.E1.elem.92.T_i = 18.2432003
+DATO sup.pre.E1.elem.92.T_j = 18.2432003
+DATO sup.pre.E1.elem.92.My_i = -639.537903
+DATO sup.pre.E1.elem.92.My_j = 793.70459
+DATO sup.pre.E1.elem.92.Mz_i = 0
+DATO sup.pre.E1.elem.92.Mz_j = 0
+DATO sup.pre.E1.elem.92.w_local = 0,0,-35.2492981
+DATO sup.pre.E1.elem.92.My_max_abs_valor = 793.70459
+DATO sup.pre.E1.elem.92.My_max_abs_x = 5
+DATO sup.pre.E1.no_pasa.ids = 
+DATO sup.pre.E1.equilibrio.aplicada_kN = 0,0,-41696.6602
+DATO sup.pre.E1.equilibrio.reaccion_kN = 0.000199999995,-0.000300000014,41696.6602
+DATO sup.pre.E1.equilibrio.error_kN = 0.000199999995,-0.000300000014,-0.00013113
+DATO sup.pre.E1.equilibrio.confiable = True
+DATO sup.pre.E1.origen = precalculado por semana05/superposicion.py (StreamingAssets/superposicion.json), sin servidor. Factores: G 1, Q 1, EX 0, EY 0.
+DATO sup.pre.E1.caso_activo = E1
+
+=== FOTO 16_superposicion_E2_precalculado.jpg ===
+DATO foto.16_superposicion_E2_precalculado.tamano = 1600x900
+DATO foto.16_superposicion_E2_precalculado.pestana = Caso
+DATO foto.16_superposicion_E2_precalculado.vista = realista
+DATO foto.16_superposicion_E2_precalculado.suelo = True
+DATO foto.16_superposicion_E2_precalculado.piso = todos
+DATO foto.16_superposicion_E2_precalculado.caso_activo = E2
+DATO foto.16_superposicion_E2_precalculado.seleccion =  -1
+DATO foto.16_superposicion_E2_precalculado.deformada = True
+DATO foto.16_superposicion_E2_precalculado.escala = 200
+DATO foto.16_superposicion_E2_precalculado.diagramas = no
+DATO foto.16_superposicion_E2_precalculado.mapa_dc = si, 378 barras pintadas
+DATO foto.16_superposicion_E2_precalculado.carga_movil = no
+DATO foto.16_superposicion_E2_precalculado.cabecera.fuente = anexo
+DATO foto.16_superposicion_E2_precalculado.cabecera.texto = Caso activo  E2   1.20 G + 1.60 Q | Desp. max 11.34 mm | PASAN 69/69
+DATO foto.16_superposicion_E2_precalculado.camara = centro (26.94, 1.93, 19.00) distancia 41.2
+DATO sup.pre.E2.nombre = E2
+DATO sup.pre.E2.tipo = superposicion
+DATO sup.pre.E2.descripcion = 1.20 G + 1.60 Q
+DATO sup.pre.E2.factores = 1.20000005,1.60000002,0,0
+DATO sup.pre.E2.max_desplazamiento_mm = 11.3393002
+DATO sup.pre.E2.no_pasan = 0
+DATO sup.pre.E2.fuera_de_curva = 0
+DATO sup.pre.E2.con_fierro = 69
+DATO sup.pre.E2.desplazamientos = 232
+DATO sup.pre.E2.esfuerzos = 378
+DATO sup.pre.E2.nodo.207.ux_m = 0.00150391005
+DATO sup.pre.E2.nodo.207.uy_m = -5.92899996E-05
+DATO sup.pre.E2.nodo.207.uz_m = -0.0112389904
+DATO sup.pre.E2.elem.5.estaciones = 2
+DATO sup.pre.E2.elem.5.N_i = -6954.34521
+DATO sup.pre.E2.elem.5.N_j = -6954.34521
+DATO sup.pre.E2.elem.5.Vy_i = 19.9484005
+DATO sup.pre.E2.elem.5.Vy_j = 19.9484005
+DATO sup.pre.E2.elem.5.Vz_i = 10.2466002
+DATO sup.pre.E2.elem.5.Vz_j = 10.2466002
+DATO sup.pre.E2.elem.5.T_i = 0.121399999
+DATO sup.pre.E2.elem.5.T_j = 0.121399999
+DATO sup.pre.E2.elem.5.My_i = -19.7353992
+DATO sup.pre.E2.elem.5.My_j = 20.8409996
+DATO sup.pre.E2.elem.5.Mz_i = 26.1186008
+DATO sup.pre.E2.elem.5.Mz_j = -52.8769989
+DATO sup.pre.E2.elem.5.w_local = 0,0,0
+DATO sup.pre.E2.elem.5.My_max_abs_valor = 20.8409996
+DATO sup.pre.E2.elem.5.My_max_abs_x = 3.96000004
+DATO sup.pre.E2.elem.5.P = 6954.34521
+DATO sup.pre.E2.elem.5.M = 56.8359985
+DATO sup.pre.E2.elem.5.Mn = 1697.77795
+DATO sup.pre.E2.elem.5.u = 0.0334770009
+DATO sup.pre.E2.elem.5.extremo = j (superior)
+DATO sup.pre.E2.elem.5.pasa = True
+DATO sup.pre.E2.elem.5.familia = 1
+DATO sup.pre.E2.elem.9.estaciones = 2
+DATO sup.pre.E2.elem.9.N_i = -4551.83838
+DATO sup.pre.E2.elem.9.N_j = -4551.83838
+DATO sup.pre.E2.elem.9.Vy_i = -32.9819984
+DATO sup.pre.E2.elem.9.Vy_j = -32.9819984
+DATO sup.pre.E2.elem.9.Vz_i = -124.0354
+DATO sup.pre.E2.elem.9.Vz_j = -124.0354
+DATO sup.pre.E2.elem.9.T_i = 0.145600006
+DATO sup.pre.E2.elem.9.T_j = 0.145600006
+DATO sup.pre.E2.elem.9.My_i = 167.1026
+DATO sup.pre.E2.elem.9.My_j = -324.077515
+DATO sup.pre.E2.elem.9.Mz_i = 533.254822
+DATO sup.pre.E2.elem.9.Mz_j = 663.863586
+DATO sup.pre.E2.elem.9.w_local = 0,0,0
+DATO sup.pre.E2.elem.9.My_max_abs_valor = -324.077515
+DATO sup.pre.E2.elem.9.My_max_abs_x = 3.96000004
+DATO sup.pre.E2.elem.9.P = 4551.83838
+DATO sup.pre.E2.elem.9.M = 663.863403
+DATO sup.pre.E2.elem.9.Mn = 30352.998
+DATO sup.pre.E2.elem.9.u = 0.0218710005
+DATO sup.pre.E2.elem.9.extremo = j (superior)
+DATO sup.pre.E2.elem.9.pasa = True
+DATO sup.pre.E2.elem.9.familia = 2
+DATO sup.pre.E2.elem.92.estaciones = 9
+DATO sup.pre.E2.elem.92.N_i = 0
+DATO sup.pre.E2.elem.92.N_j = 0
+DATO sup.pre.E2.elem.92.Vy_i = 0
+DATO sup.pre.E2.elem.92.Vy_j = 0
+DATO sup.pre.E2.elem.92.Vz_i = 256.572998
+DATO sup.pre.E2.elem.92.Vz_j = 483.069
+DATO sup.pre.E2.elem.92.T_i = 23.7413998
+DATO sup.pre.E2.elem.92.T_j = 23.7413998
+DATO sup.pre.E2.elem.92.My_i = -826.231201
+DATO sup.pre.E2.elem.92.My_j = 1022.87378
+DATO sup.pre.E2.elem.92.Mz_i = 0
+DATO sup.pre.E2.elem.92.Mz_j = 0
+DATO sup.pre.E2.elem.92.w_local = 0,0,-45.2991982
+DATO sup.pre.E2.elem.92.My_max_abs_valor = 1022.87378
+DATO sup.pre.E2.elem.92.My_max_abs_x = 5
+DATO sup.pre.E2.no_pasa.ids = 
+DATO sup.pre.E2.equilibrio.aplicada_kN = 0,0,-53055.0664
+DATO sup.pre.E2.equilibrio.reaccion_kN = 0.000300000014,-0.00039999999,53055.0664
+DATO sup.pre.E2.equilibrio.error_kN = 0.000280000007,-0.00039999999,-0.000153360001
+DATO sup.pre.E2.equilibrio.confiable = True
+DATO sup.pre.E2.origen = precalculado por semana05/superposicion.py (StreamingAssets/superposicion.json), sin servidor. Factores: G 1.2, Q 1.6, EX 0, EY 0.
+DATO sup.pre.E2.caso_activo = E2
+
+=== FOTO 17_superposicion_E3_precalculado.jpg ===
+DATO foto.17_superposicion_E3_precalculado.tamano = 1600x900
+DATO foto.17_superposicion_E3_precalculado.pestana = Caso
+DATO foto.17_superposicion_E3_precalculado.vista = realista
+DATO foto.17_superposicion_E3_precalculado.suelo = True
+DATO foto.17_superposicion_E3_precalculado.piso = todos
+DATO foto.17_superposicion_E3_precalculado.caso_activo = E3
+DATO foto.17_superposicion_E3_precalculado.seleccion =  -1
+DATO foto.17_superposicion_E3_precalculado.deformada = True
+DATO foto.17_superposicion_E3_precalculado.escala = 200
+DATO foto.17_superposicion_E3_precalculado.diagramas = no
+DATO foto.17_superposicion_E3_precalculado.mapa_dc = si, 378 barras pintadas
+DATO foto.17_superposicion_E3_precalculado.carga_movil = no
+DATO foto.17_superposicion_E3_precalculado.cabecera.fuente = anexo
+DATO foto.17_superposicion_E3_precalculado.cabecera.texto = Caso activo  E3   1.20 G + 1.00 Q - 1.40 EX | Desp. max 24.63 mm | NO PASA 4/69 (1 fuera de curva)
+DATO foto.17_superposicion_E3_precalculado.camara = centro (26.94, 1.93, 19.00) distancia 41.2
+DATO sup.pre.E3.nombre = E3
+DATO sup.pre.E3.tipo = superposicion
+DATO sup.pre.E3.descripcion = 1.20 G + 1.00 Q - 1.40 EX
+DATO sup.pre.E3.factores = 1.20000005,1,-1.39999998,0
+DATO sup.pre.E3.max_desplazamiento_mm = 24.6285
+DATO sup.pre.E3.no_pasan = 4
+DATO sup.pre.E3.fuera_de_curva = 1
+DATO sup.pre.E3.con_fierro = 69
+DATO sup.pre.E3.desplazamientos = 232
+DATO sup.pre.E3.esfuerzos = 378
+DATO sup.pre.E3.nodo.207.ux_m = -0.0224531498
+DATO sup.pre.E3.nodo.207.uy_m = 0.00121910998
+DATO sup.pre.E3.nodo.207.uz_m = -0.0100466199
+DATO sup.pre.E3.elem.5.estaciones = 2
+DATO sup.pre.E3.elem.5.N_i = -6219.24121
+DATO sup.pre.E3.elem.5.N_j = -6219.24121
+DATO sup.pre.E3.elem.5.Vy_i = 10.4422998
+DATO sup.pre.E3.elem.5.Vy_j = 10.4422998
+DATO sup.pre.E3.elem.5.Vz_i = -121.739304
+DATO sup.pre.E3.elem.5.Vz_j = -121.739304
+DATO sup.pre.E3.elem.5.T_i = -0.200499997
+DATO sup.pre.E3.elem.5.T_j = -0.200499997
+DATO sup.pre.E3.elem.5.My_i = 337.733612
+DATO sup.pre.E3.elem.5.My_j = -144.354004
+DATO sup.pre.E3.elem.5.Mz_i = 3.80819988
+DATO sup.pre.E3.elem.5.Mz_j = -37.5432014
+DATO sup.pre.E3.elem.5.w_local = 0,0,0
+DATO sup.pre.E3.elem.5.My_max_abs_valor = 337.733612
+DATO sup.pre.E3.elem.5.My_max_abs_x = 0
+DATO sup.pre.E3.elem.5.P = 6219.24121
+DATO sup.pre.E3.elem.5.M = 337.755005
+DATO sup.pre.E3.elem.5.Mn = 1750.40234
+DATO sup.pre.E3.elem.5.u = 0.192958996
+DATO sup.pre.E3.elem.5.extremo = i (inferior)
+DATO sup.pre.E3.elem.5.pasa = True
+DATO sup.pre.E3.elem.5.familia = 1
+DATO sup.pre.E3.elem.9.estaciones = 2
+DATO sup.pre.E3.elem.9.N_i = -3285.09912
+DATO sup.pre.E3.elem.9.N_j = -3285.09912
+DATO sup.pre.E3.elem.9.Vy_i = 285.869293
+DATO sup.pre.E3.elem.9.Vy_j = 285.869293
+DATO sup.pre.E3.elem.9.Vz_i = -20.8353996
+DATO sup.pre.E3.elem.9.Vz_j = -20.8353996
+DATO sup.pre.E3.elem.9.T_i = -0.240700006
+DATO sup.pre.E3.elem.9.T_j = -0.240700006
+DATO sup.pre.E3.elem.9.My_i = -64.3597031
+DATO sup.pre.E3.elem.9.My_j = -146.867798
+DATO sup.pre.E3.elem.9.Mz_i = 4826.69727
+DATO sup.pre.E3.elem.9.Mz_j = 3694.65479
+DATO sup.pre.E3.elem.9.w_local = 0,0,0
+DATO sup.pre.E3.elem.9.My_max_abs_valor = -146.867798
+DATO sup.pre.E3.elem.9.My_max_abs_x = 3.96000004
+DATO sup.pre.E3.elem.9.P = 3285.09912
+DATO sup.pre.E3.elem.9.M = 4826.69727
+DATO sup.pre.E3.elem.9.Mn = 26874.1309
+DATO sup.pre.E3.elem.9.u = 0.179603994
+DATO sup.pre.E3.elem.9.extremo = i (inferior)
+DATO sup.pre.E3.elem.9.pasa = True
+DATO sup.pre.E3.elem.9.familia = 2
+DATO sup.pre.E3.elem.92.estaciones = 9
+DATO sup.pre.E3.elem.92.N_i = 0
+DATO sup.pre.E3.elem.92.N_j = 0
+DATO sup.pre.E3.elem.92.Vy_i = 0
+DATO sup.pre.E3.elem.92.Vy_j = 0
+DATO sup.pre.E3.elem.92.Vz_i = 172.301895
+DATO sup.pre.E3.elem.92.Vz_j = 376.297791
+DATO sup.pre.E3.elem.92.T_i = 18.5473003
+DATO sup.pre.E3.elem.92.T_j = 18.5473003
+DATO sup.pre.E3.elem.92.My_i = -742.636108
+DATO sup.pre.E3.elem.92.My_j = 628.863098
+DATO sup.pre.E3.elem.92.Mz_i = 0
+DATO sup.pre.E3.elem.92.Mz_j = 0
+DATO sup.pre.E3.elem.92.w_local = 0,0,-40.7991982
+DATO sup.pre.E3.elem.92.My_max_abs_valor = -742.636108
+DATO sup.pre.E3.elem.92.My_max_abs_x = 0
+DATO sup.pre.E3.no_pasa.14.u = 1.23025405
+DATO sup.pre.E3.no_pasa.15.u = 1.46158195
+DATO sup.pre.E3.no_pasa.16.u = 9999
+DATO sup.pre.E3.no_pasa.29.u = 1.07662797
+DATO sup.pre.E3.no_pasa.ids = 14,15,16,29
+DATO sup.pre.E3.equilibrio.aplicada_kN = -5309.19482,0,-48526.457
+DATO sup.pre.E3.equilibrio.reaccion_kN = 5309.19482,-0.000300000014,48526.457
+DATO sup.pre.E3.equilibrio.error_kN = 0.000200940005,-0.000339999999,-0.000299359992
+DATO sup.pre.E3.equilibrio.confiable = True
+DATO sup.pre.E3.origen = precalculado por semana05/superposicion.py (StreamingAssets/superposicion.json), sin servidor. Factores: G 1.2, Q 1, EX -1.4, EY 0.
+DATO sup.pre.E3.caso_activo = E3
+DATO sup.libre.estado_de_referencia = E3
+DATO sup.libre.lambdas = 1.20000005,1,-1.39999998,0
+DATO sup.libre.pedido_salio = True
+DATO sup.libre.segundos = 0.316196442
+DATO sup.libre.mensaje = LIBRE = 1.20 G + 1.00 Q - 1.40 EX
+DATO sup.libre.hecho = True
+DATO scroll.sup.factores_libres = 557
+
+=== FOTO 18_superposicion_E3_LIBRE_servidor.jpg ===
+DATO foto.18_superposicion_E3_LIBRE_servidor.tamano = 1600x900
+DATO foto.18_superposicion_E3_LIBRE_servidor.pestana = Caso
+DATO foto.18_superposicion_E3_LIBRE_servidor.vista = realista
+DATO foto.18_superposicion_E3_LIBRE_servidor.suelo = True
+DATO foto.18_superposicion_E3_LIBRE_servidor.piso = todos
+DATO foto.18_superposicion_E3_LIBRE_servidor.caso_activo = LIBRE
+DATO foto.18_superposicion_E3_LIBRE_servidor.seleccion =  -1
+DATO foto.18_superposicion_E3_LIBRE_servidor.deformada = True
+DATO foto.18_superposicion_E3_LIBRE_servidor.escala = 200
+DATO foto.18_superposicion_E3_LIBRE_servidor.diagramas = no
+DATO foto.18_superposicion_E3_LIBRE_servidor.mapa_dc = si, 378 barras pintadas
+DATO foto.18_superposicion_E3_LIBRE_servidor.carga_movil = no
+DATO foto.18_superposicion_E3_LIBRE_servidor.cabecera.fuente = anexo
+DATO foto.18_superposicion_E3_LIBRE_servidor.cabecera.texto = Caso activo  LIBRE   1.20 G + 1.00 Q - 1.40 EX | Desp. max 24.63 mm | NO PASA 4/69 (1 fuera de curva)
+DATO foto.18_superposicion_E3_LIBRE_servidor.camara = centro (26.94, 1.93, 19.00) distancia 41.2
+DATO sup.libre.E3.nombre = LIBRE
+DATO sup.libre.E3.tipo = superposicion
+DATO sup.libre.E3.descripcion = 1.20 G + 1.00 Q - 1.40 EX
+DATO sup.libre.E3.factores = 1.20000005,1,-1.39999998,0
+DATO sup.libre.E3.max_desplazamiento_mm = 24.6285
+DATO sup.libre.E3.no_pasan = 4
+DATO sup.libre.E3.fuera_de_curva = 1
+DATO sup.libre.E3.con_fierro = 69
+DATO sup.libre.E3.desplazamientos = 232
+DATO sup.libre.E3.esfuerzos = 378
+DATO sup.libre.E3.nodo.207.ux_m = -0.0224531498
+DATO sup.libre.E3.nodo.207.uy_m = 0.00121910998
+DATO sup.libre.E3.nodo.207.uz_m = -0.0100466199
+DATO sup.libre.E3.elem.5.estaciones = 2
+DATO sup.libre.E3.elem.5.N_i = -6219.24121
+DATO sup.libre.E3.elem.5.N_j = -6219.24121
+DATO sup.libre.E3.elem.5.Vy_i = 10.4422998
+DATO sup.libre.E3.elem.5.Vy_j = 10.4422998
+DATO sup.libre.E3.elem.5.Vz_i = -121.739304
+DATO sup.libre.E3.elem.5.Vz_j = -121.739304
+DATO sup.libre.E3.elem.5.T_i = -0.200499997
+DATO sup.libre.E3.elem.5.T_j = -0.200499997
+DATO sup.libre.E3.elem.5.My_i = 337.733612
+DATO sup.libre.E3.elem.5.My_j = -144.354004
+DATO sup.libre.E3.elem.5.Mz_i = 3.80819988
+DATO sup.libre.E3.elem.5.Mz_j = -37.5432014
+DATO sup.libre.E3.elem.5.w_local = 0,0,0
+DATO sup.libre.E3.elem.5.My_max_abs_valor = 337.733612
+DATO sup.libre.E3.elem.5.My_max_abs_x = 0
+DATO sup.libre.E3.elem.5.P = 6219.24121
+DATO sup.libre.E3.elem.5.M = 337.755005
+DATO sup.libre.E3.elem.5.Mn = 1750.40234
+DATO sup.libre.E3.elem.5.u = 0.192958996
+DATO sup.libre.E3.elem.5.extremo = i (inferior)
+DATO sup.libre.E3.elem.5.pasa = True
+DATO sup.libre.E3.elem.5.familia = 1
+DATO sup.libre.E3.elem.9.estaciones = 2
+DATO sup.libre.E3.elem.9.N_i = -3285.09912
+DATO sup.libre.E3.elem.9.N_j = -3285.09912
+DATO sup.libre.E3.elem.9.Vy_i = 285.869293
+DATO sup.libre.E3.elem.9.Vy_j = 285.869293
+DATO sup.libre.E3.elem.9.Vz_i = -20.8353996
+DATO sup.libre.E3.elem.9.Vz_j = -20.8353996
+DATO sup.libre.E3.elem.9.T_i = -0.240700006
+DATO sup.libre.E3.elem.9.T_j = -0.240700006
+DATO sup.libre.E3.elem.9.My_i = -64.3597031
+DATO sup.libre.E3.elem.9.My_j = -146.867798
+DATO sup.libre.E3.elem.9.Mz_i = 4826.69727
+DATO sup.libre.E3.elem.9.Mz_j = 3694.65479
+DATO sup.libre.E3.elem.9.w_local = 0,0,0
+DATO sup.libre.E3.elem.9.My_max_abs_valor = -146.867798
+DATO sup.libre.E3.elem.9.My_max_abs_x = 3.96000004
+DATO sup.libre.E3.elem.9.P = 3285.09912
+DATO sup.libre.E3.elem.9.M = 4826.69727
+DATO sup.libre.E3.elem.9.Mn = 26874.1309
+DATO sup.libre.E3.elem.9.u = 0.179603994
+DATO sup.libre.E3.elem.9.extremo = i (inferior)
+DATO sup.libre.E3.elem.9.pasa = True
+DATO sup.libre.E3.elem.9.familia = 2
+DATO sup.libre.E3.elem.92.estaciones = 9
+DATO sup.libre.E3.elem.92.N_i = 0
+DATO sup.libre.E3.elem.92.N_j = 0
+DATO sup.libre.E3.elem.92.Vy_i = 0
+DATO sup.libre.E3.elem.92.Vy_j = 0
+DATO sup.libre.E3.elem.92.Vz_i = 172.301895
+DATO sup.libre.E3.elem.92.Vz_j = 376.297791
+DATO sup.libre.E3.elem.92.T_i = 18.5473003
+DATO sup.libre.E3.elem.92.T_j = 18.5473003
+DATO sup.libre.E3.elem.92.My_i = -742.636108
+DATO sup.libre.E3.elem.92.My_j = 628.863098
+DATO sup.libre.E3.elem.92.Mz_i = 0
+DATO sup.libre.E3.elem.92.Mz_j = 0
+DATO sup.libre.E3.elem.92.w_local = 0,0,-40.7991982
+DATO sup.libre.E3.elem.92.My_max_abs_valor = -742.636108
+DATO sup.libre.E3.elem.92.My_max_abs_x = 0
+DATO sup.libre.E3.no_pasa.14.u = 1.23025405
+DATO sup.libre.E3.no_pasa.15.u = 1.46158195
+DATO sup.libre.E3.no_pasa.16.u = 9999
+DATO sup.libre.E3.no_pasa.29.u = 1.07662797
+DATO sup.libre.E3.no_pasa.ids = 14,15,16,29
+DATO sup.libre.E3.equilibrio.aplicada_kN = -5309.19482,0,-48526.457
+DATO sup.libre.E3.equilibrio.reaccion_kN = 5309.19482,-0.000300000014,48526.457
+DATO sup.libre.E3.equilibrio.error_kN = 0.000200940005,-0.000339999999,-0.000299359992
+DATO sup.libre.E3.equilibrio.confiable = True
+DATO sup.libre.E3.origen = combinado por semana05/servidor_s5.py (Python, POST http://localhost:5000/combinar) a las 10:12:23, en 0.28 s. Factores que uso Python: G 1.2, Q 1, EX -1.4, EY 0.
+DATO sup.libre.E3.caso_activo = LIBRE
+
+==================== F. CARGA MOVIL ====================
+DATO movil.activo = True
+DATO movil.P_kN = 100
+DATO movil.escala_json = 1600
+DATO movil.recorrido = 203,204,205,206,207,208
+DATO movil.largo_m = 27.7250004
+DATO movil.indice_uz_bajo_carga_min = 25
+
+=== FOTO 19_carga_movil_posicion_12_viga_205.jpg ===
+DATO foto.19_carga_movil_posicion_12_viga_205.tamano = 1600x900
+DATO foto.19_carga_movil_posicion_12_viga_205.pestana = Carga movil
+DATO foto.19_carga_movil_posicion_12_viga_205.vista = realista
+DATO foto.19_carga_movil_posicion_12_viga_205.suelo = True
+DATO foto.19_carga_movil_posicion_12_viga_205.piso = todos
+DATO foto.19_carga_movil_posicion_12_viga_205.caso_activo = LIBRE
+DATO foto.19_carga_movil_posicion_12_viga_205.seleccion =  -1
+DATO foto.19_carga_movil_posicion_12_viga_205.deformada = True
+DATO foto.19_carga_movil_posicion_12_viga_205.escala = 1600
+DATO foto.19_carga_movil_posicion_12_viga_205.diagramas = no
+DATO foto.19_carga_movil_posicion_12_viga_205.mapa_dc = no
+DATO foto.19_carga_movil_posicion_12_viga_205.carga_movil = posicion 12
+DATO foto.19_carga_movil_posicion_12_viga_205.cabecera.fuente = carga_movil
+DATO foto.19_carga_movil_posicion_12_viga_205.cabecera.texto = Carga movil · posicion 13/30 · x = 24.85 m · P = 100 kN · UZ max -0.490 mm (nodo 116) | D/C: no se calcula para la carga movil (el NO PASA es del anexo) | 
+DATO foto.19_carga_movil_posicion_12_viga_205.camara = centro (27.85, 3.91, 18.18) distancia 34.7
+DATO movil.p12.indice = 12
+DATO movil.p12.indice_mostrado = 12
+DATO movil.p12.elemento = 205
+DATO movil.p12.xL = 0.5
+DATO movil.p12.a_m = 2.5
+DATO movil.p12.L_m = 5
+DATO movil.p12.s_m = 10
+DATO movil.p12.x = 24.8519993
+DATO movil.p12.y = 18.1793003
+DATO movil.p12.z = 3.91000009
+DATO movil.p12.Pz_local_kN = -100
+DATO movil.p12.max_desplazamiento_mm = 0.490099996
+DATO movil.p12.nodo_max_desplazamiento = 116
+DATO movil.p12.uz_min_mm = -0.489899993
+DATO movil.p12.nodo_uz_min = 116
+DATO movil.p12.uz_bajo_carga_mm = -0.459800005
+DATO movil.p12.M_bajo_carga_kNm = -83.5202026
+DATO movil.p12.u_carga_m = 1.28800002E-05,-3.0999999E-07,-0.000459829986
+DATO movil.p12.desplazamiento_nodo_uz_min.uz_m = -0.000489929982
+DATO movil.p12.reparto.nodo_i = 102
+DATO movil.p12.reparto.nodo_j = 116
+DATO movil.p12.reparto.V_i_kN = 77.6016006
+DATO movil.p12.reparto.V_j_kN = 22.3983994
+DATO movil.p12.reparto.porcentaje_i = 77.5999985
+DATO movil.p12.reparto.porcentaje_j = 22.3999996
+DATO movil.p12.reparto.palanca_i_kN = 50
+DATO movil.p12.reparto.palanca_j_kN = 50
+DATO movil.p12.reparto.My_i_kNm = -110.483803
+DATO movil.p12.reparto.My_j_kNm = -27.5240993
+DATO movil.p12.reparto.momentos_sobre_L_kN = -27.6016006
+DATO movil.p12.conservacion.P_kN = 100
+DATO movil.p12.conservacion.suma_Rz_kN = 100
+DATO movil.p12.conservacion.error_kN = 0
+DATO movil.p12.conservacion.cota_kN = 0.00079999998
+DATO movil.p12.conservacion.suma_Rx_kN = 9.99999975E-05
+DATO movil.p12.conservacion.suma_Ry_kN = 0
+DATO movil.p12.conservacion.cumple = True
+DATO movil.p12.equilibrio.aplicada_kN = 0,0,-100
+DATO movil.p12.equilibrio.reaccion_kN = 9.99999975E-05,0,100
+DATO movil.p12.equilibrio.error_kN = 9.99999975E-05,0,0
+DATO movil.p12.hay_deformada = True
+DATO movil.p12.escala = 1600
+
+=== FOTO 20_carga_movil_posicion_25_viga_208.jpg ===
+DATO foto.20_carga_movil_posicion_25_viga_208.tamano = 1600x900
+DATO foto.20_carga_movil_posicion_25_viga_208.pestana = Carga movil
+DATO foto.20_carga_movil_posicion_25_viga_208.vista = realista
+DATO foto.20_carga_movil_posicion_25_viga_208.suelo = True
+DATO foto.20_carga_movil_posicion_25_viga_208.piso = todos
+DATO foto.20_carga_movil_posicion_25_viga_208.caso_activo = LIBRE
+DATO foto.20_carga_movil_posicion_25_viga_208.seleccion =  -1
+DATO foto.20_carga_movil_posicion_25_viga_208.deformada = True
+DATO foto.20_carga_movil_posicion_25_viga_208.escala = 1600
+DATO foto.20_carga_movil_posicion_25_viga_208.diagramas = no
+DATO foto.20_carga_movil_posicion_25_viga_208.mapa_dc = no
+DATO foto.20_carga_movil_posicion_25_viga_208.carga_movil = posicion 25
+DATO foto.20_carga_movil_posicion_25_viga_208.cabecera.fuente = carga_movil
+DATO foto.20_carga_movil_posicion_25_viga_208.cabecera.texto = Carga movil · posicion 26/30 · x = 37.87 m · P = 100 kN · UZ max -0.954 mm (nodo 119) | D/C: no se calcula para la carga movil (el NO PASA es del anexo) | 
+DATO foto.20_carga_movil_posicion_25_viga_208.camara = centro (27.85, 3.91, 18.18) distancia 34.7
+DATO movil.p25.indice = 25
+DATO movil.p25.indice_mostrado = 25
+DATO movil.p25.elemento = 208
+DATO movil.p25.xL = 0.100000001
+DATO movil.p25.a_m = 0.522499979
+DATO movil.p25.L_m = 5.2249999
+DATO movil.p25.s_m = 23.0224991
+DATO movil.p25.x = 37.8745003
+DATO movil.p25.y = 18.1793003
+DATO movil.p25.z = 3.91000009
+DATO movil.p25.Pz_local_kN = -100
+DATO movil.p25.max_desplazamiento_mm = 0.954200029
+DATO movil.p25.nodo_max_desplazamiento = 119
+DATO movil.p25.uz_min_mm = -0.954100013
+DATO movil.p25.nodo_uz_min = 119
+DATO movil.p25.uz_bajo_carga_mm = -0.963500023
+DATO movil.p25.M_bajo_carga_kNm = -127.265503
+DATO movil.p25.u_carga_m = 2.23000006E-06,1.16399997E-05,-0.000963470025
+DATO movil.p25.desplazamiento_nodo_uz_min.uz_m = -0.000954080024
+DATO movil.p25.reparto.nodo_i = 119
+DATO movil.p25.reparto.nodo_j = 122
+DATO movil.p25.reparto.V_i_kN = 52.6837006
+DATO movil.p25.reparto.V_j_kN = 47.3162994
+DATO movil.p25.reparto.porcentaje_i = 52.6800003
+DATO movil.p25.reparto.porcentaje_j = 47.3199997
+DATO movil.p25.reparto.palanca_i_kN = 90
+DATO movil.p25.reparto.palanca_j_kN = 10
+DATO movil.p25.reparto.My_i_kNm = 99.7382965
+DATO movil.p25.reparto.My_j_kNm = 95.2390976
+DATO movil.p25.reparto.momentos_sobre_L_kN = 37.3162003
+DATO movil.p25.conservacion.P_kN = 100
+DATO movil.p25.conservacion.suma_Rz_kN = 99.9999008
+DATO movil.p25.conservacion.error_kN = -9.99999975E-05
+DATO movil.p25.conservacion.cota_kN = 0.00079999998
+DATO movil.p25.conservacion.suma_Rx_kN = -9.99999975E-05
+DATO movil.p25.conservacion.suma_Ry_kN = -9.99999975E-05
+DATO movil.p25.conservacion.cumple = True
+DATO movil.p25.equilibrio.aplicada_kN = 0,0,-100
+DATO movil.p25.equilibrio.reaccion_kN = -9.99999975E-05,-9.99999975E-05,99.9999008
+DATO movil.p25.equilibrio.error_kN = -9.99999975E-05,-9.99999975E-05,-9.99999975E-05
+DATO movil.p25.hay_deformada = True
+DATO movil.p25.escala = 1600
+DATO movil.hecho = True
+
+==================== E. M1: BORRAR LA COLUMNA 69 Y REANALIZAR ====================
+DATO m1.url = http://localhost:5000/analizar
+DATO m1.timeout_s = 120
+DATO m1.antes.peticion_salio = True
+DATO m1.antes.ok = True
+DATO m1.antes.segundos = 3.80584717
+DATO m1.antes.estado = OK: 4 caso(s) [G, Q, EX, EY] en 3.8 s
+DATO m1.antes.error = 
+DATO m1.antes.elementos_enviados = 378
+DATO m1.antes.G.ok = True
+DATO m1.antes.G.max_desplazamiento_m = 0.00671146018
+DATO m1.antes.G.nodo.186.ux_m = 0.00106777996
+DATO m1.antes.G.nodo.186.uy_m = 5.67499992E-05
+DATO m1.antes.G.nodo.186.uz_m = -0.00364514999
+DATO m1.antes.G.equilibrio.aplicada_kN = 0,0,-34148.9766
+DATO m1.antes.G.equilibrio.reaccion_kN = 0,-0.000199999995,34148.9766
+DATO m1.antes.G.equilibrio.error_kN = 0,-0.000199999995,-8.8099996E-06
+DATO m1.antes.G.equilibrio.confiable = True
+DATO m1.antes.G.equilibrio.nodos_en_diafragma = 216
+DATO m1.antes.G.elem.314.N_i = 0
+DATO m1.antes.G.elem.314.Vz_i = 115.225197
+DATO m1.antes.G.elem.314.My_i = -132.169006
+DATO m1.antes.G.elem.314.My_j = 103.871498
+DATO m1.antes.G.elem.315.N_i = 0
+DATO m1.antes.G.elem.315.Vz_i = 142.140701
+DATO m1.antes.G.elem.315.My_i = -165.3452
+DATO m1.antes.G.elem.315.My_j = 188.846603
+DATO m1.antes.G.elem.337.N_i = 0
+DATO m1.antes.G.elem.337.Vz_i = -140.940506
+DATO m1.antes.G.elem.337.My_i = 457.871002
+DATO m1.antes.G.elem.337.My_j = 575.310974
+DATO m1.antes.G.elem.338.N_i = 0
+DATO m1.antes.G.elem.338.Vz_i = 255.635803
+DATO m1.antes.G.elem.338.My_i = -506.555603
+DATO m1.antes.G.elem.338.My_j = -443.144196
+DATO m1.antes.Q.ok = True
+DATO m1.antes.Q.max_desplazamiento_m = 0.00290515996
+DATO m1.antes.Q.nodo.186.ux_m = 0.000189619997
+DATO m1.antes.Q.nodo.186.uy_m = -3.52099996E-05
+DATO m1.antes.Q.nodo.186.uz_m = -0.00141121994
+DATO m1.antes.Q.equilibrio.aplicada_kN = 0,0,-11361.002
+DATO m1.antes.Q.equilibrio.reaccion_kN = 0,-9.99999975E-05,11361.002
+DATO m1.antes.Q.equilibrio.error_kN = 0,-9.99999975E-05,-7.88600009E-05
+DATO m1.antes.Q.equilibrio.confiable = True
+DATO m1.antes.Q.equilibrio.nodos_en_diafragma = 216
+DATO m1.antes.EX.ok = True
+DATO m1.antes.EX.max_desplazamiento_m = 0.0164150801
+DATO m1.antes.EX.nodo.186.ux_m = 0.0163149796
+DATO m1.antes.EX.nodo.186.uy_m = -0.000792540028
+DATO m1.antes.EX.nodo.186.uz_m = -2.60100005E-05
+DATO m1.antes.EX.equilibrio.aplicada_kN = 3633.06299,0,0
+DATO m1.antes.EX.equilibrio.reaccion_kN = -3633.06299,0,0
+DATO m1.antes.EX.equilibrio.error_kN = -8.11999998E-05,0,0
+DATO m1.antes.EX.equilibrio.confiable = True
+DATO m1.antes.EX.equilibrio.nodos_en_diafragma = 216
+DATO m1.antes.EY.ok = True
+DATO m1.antes.EY.max_desplazamiento_m = 0.0152572002
+DATO m1.antes.EY.nodo.186.ux_m = -0.00139608001
+DATO m1.antes.EY.nodo.186.uy_m = 0.0068159299
+DATO m1.antes.EY.nodo.186.uz_m = -5.18400011E-05
+DATO m1.antes.EY.equilibrio.aplicada_kN = 0,3633.06299,0
+DATO m1.antes.EY.equilibrio.reaccion_kN = -9.99999975E-05,-3633.06299,0
+DATO m1.antes.EY.equilibrio.error_kN = -9.99999975E-05,1.87999995E-05,0
+DATO m1.antes.EY.equilibrio.confiable = True
+DATO m1.antes.EY.equilibrio.nodos_en_diafragma = 216
+DATO m1.borrado = True
+DATO m1.elementos_despues = 377
+DATO m1.existe_columna = False
+DATO m1.anexo_desactualizado = True
+DATO m1.motivo = borrar elemento 69
+DATO m1.aviso_anexo = Resultados del modelo ORIGINAL: el modelo se edito (borrar elemento 69). Los casos de semana04.json, E1..E3 y LIBRE no son de esta geometria. Recalcula con el servidor (pestana Modificar) o re-exporta: python semana04/exportar_unity.py <edificio>
+DATO m1.anexo_calza = False
+DATO m1.movil_aviso = Se edito el modelo (borrar elemento 69): la carga movil precalculada es del modelo original y se apago. Vuelve a cargar la escena para usarla.
+DATO m1.despues.peticion_salio = True
+DATO m1.despues.ok = True
+DATO m1.despues.segundos = 3.16154861
+DATO m1.despues.estado = OK: 4 caso(s) [G, Q, EX, EY] en 3.1 s
+DATO m1.despues.error = 
+DATO m1.despues.elementos_enviados = 377
+DATO m1.despues.G.ok = True
+DATO m1.despues.G.max_desplazamiento_m = 0.0215987507
+DATO m1.despues.G.nodo.186.ux_m = 0.00116758002
+DATO m1.despues.G.nodo.186.uy_m = 7.67399979E-05
+DATO m1.despues.G.nodo.186.uz_m = -0.0215987507
+DATO m1.despues.G.equilibrio.aplicada_kN = 0,0,-34148.9766
+DATO m1.despues.G.equilibrio.reaccion_kN = -0.000199999995,0.000199999995,34148.9766
+DATO m1.despues.G.equilibrio.error_kN = -0.000199999995,0.000199999995,-0.000208810001
+DATO m1.despues.G.equilibrio.confiable = True
+DATO m1.despues.G.equilibrio.nodos_en_diafragma = 216
+DATO m1.despues.G.elem.314.N_i = 0
+DATO m1.despues.G.elem.314.Vz_i = 343.324493
+DATO m1.despues.G.elem.314.My_i = -871.713501
+DATO m1.despues.G.elem.314.My_j = -810.304077
+DATO m1.despues.G.elem.315.N_i = 0
+DATO m1.despues.G.elem.315.Vz_i = -33.4710007
+DATO m1.despues.G.elem.315.My_i = 762.91571
+DATO m1.despues.G.elem.315.My_j = 823.529724
+DATO m1.despues.G.elem.337.N_i = 0
+DATO m1.despues.G.elem.337.Vz_i = 67.5786972
+DATO m1.despues.G.elem.337.My_i = 268.932587
+DATO m1.despues.G.elem.337.My_j = -278.346985
+DATO m1.despues.G.elem.338.N_i = 0
+DATO m1.despues.G.elem.338.Vz_i = 66.0835037
+DATO m1.despues.G.elem.338.My_i = 286.964508
+DATO m1.despues.G.elem.338.My_j = -288.90271
+DATO m1.despues.Q.ok = True
+DATO m1.despues.Q.max_desplazamiento_m = 0.00629423
+DATO m1.despues.Q.nodo.186.ux_m = 0.000230589998
+DATO m1.despues.Q.nodo.186.uy_m = -3.354E-05
+DATO m1.despues.Q.nodo.186.uz_m = -0.00629423
+DATO m1.despues.Q.equilibrio.aplicada_kN = 0,0,-11361.002
+DATO m1.despues.Q.equilibrio.reaccion_kN = 9.99999975E-05,-0.000199999995,11361.002
+DATO m1.despues.Q.equilibrio.error_kN = 9.99999975E-05,-0.000199999995,2.11400002E-05
+DATO m1.despues.Q.equilibrio.confiable = True
+DATO m1.despues.Q.equilibrio.nodos_en_diafragma = 216
+DATO m1.despues.EX.ok = True
+DATO m1.despues.EX.max_desplazamiento_m = 0.0166506507
+DATO m1.despues.EX.nodo.186.ux_m = 0.01654456
+DATO m1.despues.EX.nodo.186.uy_m = -0.000808159995
+DATO m1.despues.EX.nodo.186.uz_m = -0.000125139995
+DATO m1.despues.EX.equilibrio.aplicada_kN = 3633.06299,0,0
+DATO m1.despues.EX.equilibrio.reaccion_kN = -3633.06299,0,0.000199999995
+DATO m1.despues.EX.equilibrio.error_kN = -8.11999998E-05,0,0.000199999995
+DATO m1.despues.EX.equilibrio.confiable = True
+DATO m1.despues.EX.equilibrio.nodos_en_diafragma = 216
+DATO m1.despues.EY.ok = True
+DATO m1.despues.EY.max_desplazamiento_m = 0.0153495604
+DATO m1.despues.EY.nodo.186.ux_m = -0.00141900999
+DATO m1.despues.EY.nodo.186.uy_m = 0.00687101018
+DATO m1.despues.EY.nodo.186.uz_m = -0.000115570001
+DATO m1.despues.EY.equilibrio.aplicada_kN = 0,3633.06299,0
+DATO m1.despues.EY.equilibrio.reaccion_kN = 9.99999975E-05,-3633.06299,-9.99999975E-05
+DATO m1.despues.EY.equilibrio.error_kN = 9.99999975E-05,1.87999995E-05,-9.99999975E-05
+DATO m1.despues.EY.equilibrio.confiable = True
+DATO m1.despues.EY.equilibrio.nodos_en_diafragma = 216
+DATO m1.desactualizado_analizador = False
+DATO m1.excel = C:\Users\Administrador\OneDrive\Escritorio\UANDES\202602\Metodos computacionales\P1\A1P1.0_Grupo_7\results\excel\reanalisis_lt2.xlsx
+DATO m1.excel_existe = True
+DATO m1.excel_error = 
+DATO m1.caso_mostrado = G
+DATO m1.hay_deformada = True
+DATO m1.escala = 100
+DATO m1.hecho = True
+DATO scroll.editor.caso_mostrado = 306
+
+=== FOTO 21_M1_sin_columna_69_deformada_G_y_equilibrio.jpg ===
+DATO foto.21_M1_sin_columna_69_deformada_G_y_equilibrio.tamano = 1600x900
+DATO foto.21_M1_sin_columna_69_deformada_G_y_equilibrio.pestana = Modificar
+DATO foto.21_M1_sin_columna_69_deformada_G_y_equilibrio.vista = realista
+DATO foto.21_M1_sin_columna_69_deformada_G_y_equilibrio.suelo = True
+DATO foto.21_M1_sin_columna_69_deformada_G_y_equilibrio.piso = todos
+DATO foto.21_M1_sin_columna_69_deformada_G_y_equilibrio.caso_activo = LIBRE
+DATO foto.21_M1_sin_columna_69_deformada_G_y_equilibrio.seleccion =  -1
+DATO foto.21_M1_sin_columna_69_deformada_G_y_equilibrio.deformada = True
+DATO foto.21_M1_sin_columna_69_deformada_G_y_equilibrio.escala = 100
+DATO foto.21_M1_sin_columna_69_deformada_G_y_equilibrio.diagramas = no
+DATO foto.21_M1_sin_columna_69_deformada_G_y_equilibrio.mapa_dc = no
+DATO foto.21_M1_sin_columna_69_deformada_G_y_equilibrio.carga_movil = no
+DATO foto.21_M1_sin_columna_69_deformada_G_y_equilibrio.cabecera.fuente = reanalisis
+DATO foto.21_M1_sin_columna_69_deformada_G_y_equilibrio.cabecera.texto = Reanalisis del servidor (modelo editado) · caso G · Max. componente 21.60 mm | D/C: sin recalcular (anexo del modelo original) | 
+DATO foto.21_M1_sin_columna_69_deformada_G_y_equilibrio.camara = centro (32.35, 5.83, 18.18) distancia 42.0
+
+=== FOTO 22_M1_nodo_186_UZ_G.jpg ===
+DATO foto.22_M1_nodo_186_UZ_G.tamano = 1600x900
+DATO foto.22_M1_nodo_186_UZ_G.pestana = Modificar
+DATO foto.22_M1_nodo_186_UZ_G.vista = realista
+DATO foto.22_M1_nodo_186_UZ_G.suelo = True
+DATO foto.22_M1_nodo_186_UZ_G.piso = todos
+DATO foto.22_M1_nodo_186_UZ_G.caso_activo = LIBRE
+DATO foto.22_M1_nodo_186_UZ_G.seleccion = nodo 186
+DATO foto.22_M1_nodo_186_UZ_G.deformada = True
+DATO foto.22_M1_nodo_186_UZ_G.escala = 100
+DATO foto.22_M1_nodo_186_UZ_G.diagramas = no
+DATO foto.22_M1_nodo_186_UZ_G.mapa_dc = no
+DATO foto.22_M1_nodo_186_UZ_G.carga_movil = no
+DATO foto.22_M1_nodo_186_UZ_G.cabecera.fuente = reanalisis
+DATO foto.22_M1_nodo_186_UZ_G.cabecera.texto = Reanalisis del servidor (modelo editado) · caso G · Max. componente 21.60 mm | D/C: sin recalcular (anexo del modelo original) | 
+DATO foto.22_M1_nodo_186_UZ_G.camara = centro (32.35, 5.83, 18.18) distancia 42.0
+DATO m1.seleccion_editor = nodo 186, elemento -1
+
+==================== FIN ====================
+DATO fotos = 23
+DATO segundos = 47.6530762
+DATO log.errores = 0
+DATO salida = 0

@@ -1,0 +1,1809 @@
+{
+ "generado_por": "semana05/verificar_superposicion.py",
+ "comando": "python semana05/verificar_superposicion.py lt2",
+ "edificio": "lt2",
+ "parametros": [
+  "q_Q                 = 3.0000 kN/m2   (NCh1537 Of.2009, Tabla 4: salas de clases)",
+  "coeficiente sismico = 0.1000",
+  "fraccion de Q       = 0.50",
+  "patron en altura    = potencia k = 1 (triangular invertido)",
+  "combinacion (S3)    = 1.00 G + 0.50 Q + 1.00 EX"
+ ],
+ "vias": {
+  "1": "combinar.resolver_explicito (OpenSees con la carga combinada, la referencia)",
+  "2": "superposicion.caso_combinado (suma lineal de los casos base)",
+  "3": "POST /combinar de servidor_s5.py por app.test_client()",
+  "4": "data/unity/superposicion_<ed>.json (precalculado, exe sin servidor)"
+ },
+ "cotas": [
+  "r = medio ultimo decimal MEDIDO con combinar.decimales_de (servidor: desplazamientos 8 decimales, fuerzas y reacciones 4; vias: lo que escriben)",
+  "e_lin = r_base * sum|lambda| + r_explicita",
+  "cota = e_lin + r_via + 4 eps * tamano (eps de coma flotante, FACTOR_COMA_FLOTANTE)",
+  "estaciones My, Mz: e_lin (1 + x); N, Vy, Vz, T: e_lin",
+  "max_desplazamiento_mm: 1000 sqrt(3) (e_lin_u + r_via_u) + r_mm",
+  "D/C: P y M de muro e_lin; M de columna sqrt(2) e_lin; Mn pendiente * e_lin; u (dM + u dMn) / (Mn - dMn) + r_u",
+  "reacciones: e_lin con r de reacciones; equilibrio: filas que cuentan * r + 5e-9",
+  "vias (3) y (4) contra (2), y E2 contra el anexo: identidad exacta"
+ ],
+ "estados": [
+  {
+   "nombre": "E1",
+   "descripcion": "1.0G + 1.0Q",
+   "lambdas": {
+    "G": 1.0,
+    "Q": 1.0,
+    "EX": 0.0,
+    "EY": 0.0
+   },
+   "suma_abs_lambdas": 2.0,
+   "tiempos_s": {
+    "explicita": 0.0219,
+    "caso_combinado": 0.0118,
+    "post_combinar": 10.8859
+   },
+   "cierre_bloque_caso": {
+    "cociente": 0.7678571424520488,
+    "elemento": 156,
+    "componente": "My"
+   },
+   "e_lin": {
+    "desplazamientos_m": 1.5000000000000002e-08,
+    "fuerzas_kN": 0.00015000000000000001,
+    "reacciones_kN": 0.00015000000000000001
+   },
+   "comparaciones": [
+    {
+     "n_comparados": 1392,
+     "peor_abs": 1.000000000000001e-08,
+     "cota_en_el_peor": 2.000000000000095e-08,
+     "cociente": 0.49999999999997674,
+     "donde": "nodo 52 rx",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "2",
+     "familia": "desplazamientos"
+    },
+    {
+     "n_comparados": 1392,
+     "peor_abs": 1.000000000000001e-08,
+     "cota_en_el_peor": 2.000000000000095e-08,
+     "cociente": 0.49999999999997674,
+     "donde": "nodo 52 rx",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "3",
+     "familia": "desplazamientos"
+    },
+    {
+     "n_comparados": 1392,
+     "peor_abs": 1.000000000000001e-08,
+     "cota_en_el_peor": 2.000000000000095e-08,
+     "cociente": 0.49999999999997674,
+     "donde": "nodo 52 rx",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "4",
+     "familia": "desplazamientos"
+    },
+    {
+     "n_comparados": 1,
+     "peor_abs": 2.2280660978424294e-06,
+     "cota_en_el_peor": 8.464101615918073e-05,
+     "cociente": 0.026323716313284815,
+     "donde": "mm",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "2",
+     "familia": "max_desplazamiento_mm"
+    },
+    {
+     "n_comparados": 1,
+     "peor_abs": 2.2280660978424294e-06,
+     "cota_en_el_peor": 8.464101615918073e-05,
+     "cociente": 0.026323716313284815,
+     "donde": "mm",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "3",
+     "familia": "max_desplazamiento_mm"
+    },
+    {
+     "n_comparados": 1,
+     "peor_abs": 2.2280660978424294e-06,
+     "cota_en_el_peor": 8.464101615918073e-05,
+     "cociente": 0.026323716313284815,
+     "donde": "mm",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "4",
+     "familia": "max_desplazamiento_mm"
+    },
+    {
+     "n_comparados": 4536,
+     "peor_abs": 9.99999999999994e-05,
+     "cota_en_el_peor": 0.00020000000000003777,
+     "cociente": 0.4999999999999026,
+     "donde": "elemento 355 f[4]",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "2",
+     "familia": "fuerzas f"
+    },
+    {
+     "n_comparados": 4536,
+     "peor_abs": 9.99999999999994e-05,
+     "cota_en_el_peor": 0.00020000000000003777,
+     "cociente": 0.4999999999999026,
+     "donde": "elemento 355 f[4]",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "3",
+     "familia": "fuerzas f"
+    },
+    {
+     "n_comparados": 4536,
+     "peor_abs": 9.99999999999994e-05,
+     "cota_en_el_peor": 0.00020000000000003777,
+     "cociente": 0.4999999999999026,
+     "donde": "elemento 355 f[4]",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "4",
+     "familia": "fuerzas f"
+    },
+    {
+     "n_comparados": 2296,
+     "peor_abs": 4.999999999927285e-05,
+     "cota_en_el_peor": 5.00000000003106e-05,
+     "cociente": 0.9999999999792449,
+     "donde": "elemento 355 x[4]",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "2",
+     "familia": "estaciones x"
+    },
+    {
+     "n_comparados": 2296,
+     "peor_abs": 4.999999999927285e-05,
+     "cota_en_el_peor": 5.00000000003106e-05,
+     "cociente": 0.9999999999792449,
+     "donde": "elemento 355 x[4]",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "3",
+     "familia": "estaciones x"
+    },
+    {
+     "n_comparados": 2296,
+     "peor_abs": 4.999999999927285e-05,
+     "cota_en_el_peor": 5.00000000003106e-05,
+     "cociente": 0.9999999999792449,
+     "donde": "elemento 355 x[4]",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "4",
+     "familia": "estaciones x"
+    },
+    {
+     "n_comparados": 13776,
+     "peor_abs": 0.00014999999996234692,
+     "cota_en_el_peor": 0.00020000000111215316,
+     "cociente": 0.7499999956411603,
+     "donde": "elemento 204 Vz(x=2.3438)",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "2",
+     "familia": "estaciones N..Mz"
+    },
+    {
+     "n_comparados": 13776,
+     "peor_abs": 0.00014999999996234692,
+     "cota_en_el_peor": 0.00020000000111215316,
+     "cociente": 0.7499999956411603,
+     "donde": "elemento 204 Vz(x=2.3438)",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "3",
+     "familia": "estaciones N..Mz"
+    },
+    {
+     "n_comparados": 13776,
+     "peor_abs": 0.00014999999996234692,
+     "cota_en_el_peor": 0.00020000000111215316,
+     "cociente": 0.7499999956411603,
+     "donde": "elemento 204 Vz(x=2.3438)",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "4",
+     "familia": "estaciones N..Mz"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 9.999999997489795e-05,
+     "cota_en_el_peor": 0.000200000003941331,
+     "cociente": 0.49999999002116247,
+     "donde": "elemento 40 P",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "2",
+     "familia": "D/C P"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 9.999999997489795e-05,
+     "cota_en_el_peor": 0.000200000003941331,
+     "cociente": 0.49999999002116247,
+     "donde": "elemento 40 P",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "3",
+     "familia": "D/C P"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 9.999999997489795e-05,
+     "cota_en_el_peor": 0.000200000003941331,
+     "cociente": 0.49999999002116247,
+     "donde": "elemento 40 P",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "4",
+     "familia": "D/C P"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 0.0001489955837374879,
+     "cota_en_el_peor": 0.0002621320382972953,
+     "cociente": 0.5683989820752302,
+     "donde": "elemento 40 M",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "2",
+     "familia": "D/C M"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 0.0001489955837374879,
+     "cota_en_el_peor": 0.0002621320382972953,
+     "cociente": 0.5683989820752302,
+     "donde": "elemento 40 M",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "3",
+     "familia": "D/C M"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 0.0001489955837374879,
+     "cota_en_el_peor": 0.0002621320382972953,
+     "cociente": 0.5683989820752302,
+     "donde": "elemento 40 M",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "4",
+     "familia": "D/C M"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 9.999999999998899e-05,
+     "cota_en_el_peor": 0.00020000000412204316,
+     "cociente": 0.4999999896948373,
+     "donde": "elemento 62 M fuera",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "2",
+     "familia": "D/C M fuera de plano"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 9.999999999998899e-05,
+     "cota_en_el_peor": 0.00020000000412204316,
+     "cociente": 0.4999999896948373,
+     "donde": "elemento 62 M fuera",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "3",
+     "familia": "D/C M fuera de plano"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 9.999999999998899e-05,
+     "cota_en_el_peor": 0.00020000000412204316,
+     "cociente": 0.4999999896948373,
+     "donde": "elemento 62 M fuera",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "4",
+     "familia": "D/C M fuera de plano"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 4.843854367209133e-05,
+     "cota_en_el_peor": 6.523961670551183e-05,
+     "cociente": 0.7424713098904359,
+     "donde": "elemento 7 Mn",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "2",
+     "familia": "D/C Mn"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 4.843854367209133e-05,
+     "cota_en_el_peor": 6.523961670551183e-05,
+     "cociente": 0.7424713098904359,
+     "donde": "elemento 7 Mn",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "3",
+     "familia": "D/C Mn"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 4.843854367209133e-05,
+     "cota_en_el_peor": 6.523961670551183e-05,
+     "cociente": 0.7424713098904359,
+     "donde": "elemento 7 Mn",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "4",
+     "familia": "D/C Mn"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 4.520280140196675e-07,
+     "cota_en_el_peor": 5.552652813278497e-07,
+     "cociente": 0.8140757746255939,
+     "donde": "elemento 61 u",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "2",
+     "familia": "D/C u"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 4.520280140196675e-07,
+     "cota_en_el_peor": 5.552652813278497e-07,
+     "cociente": 0.8140757746255939,
+     "donde": "elemento 61 u",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "3",
+     "familia": "D/C u"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 4.520280140196675e-07,
+     "cota_en_el_peor": 5.552652813278497e-07,
+     "cociente": 0.8140757746255939,
+     "donde": "elemento 61 u",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "4",
+     "familia": "D/C u"
+    },
+    {
+     "n_comparados": 345,
+     "peor_abs": 4.992074416759751e-07,
+     "cota_en_el_peor": 5.000042449014417e-07,
+     "cociente": 0.9984064070783565,
+     "donde": "elemento 7 u",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E1",
+     "via": "2",
+     "familia": "D/C = dc.revisar"
+    },
+    {
+     "n_comparados": 126,
+     "peor_abs": 9.999999999999593e-05,
+     "cota_en_el_peor": 0.00015000000000005783,
+     "cociente": 0.6666666666663825,
+     "donde": "nodo 14 mz",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "familia": "reacciones",
+     "via": "superposicion",
+     "estado": "E1"
+    }
+   ],
+   "identidades": [
+    {
+     "que": "(3) = (2)",
+     "hojas": 24372,
+     "primera_diferencia": null
+    },
+    {
+     "que": "(4) = (2)",
+     "hojas": 24372,
+     "primera_diferencia": null
+    }
+   ],
+   "indecidibles_por_redondeo": [],
+   "equilibrio": [
+    {
+     "eje": "Fx",
+     "filas_que_cuentan": 16,
+     "aplicada_kN": 0.0,
+     "reaccion_explicita_kN": 0.0001,
+     "error_explicita_kN": 0.0001,
+     "cota_explicita_kN": 0.0008000050012656199,
+     "reaccion_superpuesta_kN": 0.0002,
+     "error_superpuesta_kN": 0.0002,
+     "cota_superpuesta_kN": 0.0016000050012656198,
+     "dif_reacciones_kN": 0.0001,
+     "cota_dif_kN": 0.00250000000126562
+    },
+    {
+     "eje": "Fy",
+     "filas_que_cuentan": 16,
+     "aplicada_kN": 0.0,
+     "reaccion_explicita_kN": -0.0001,
+     "error_explicita_kN": -0.0001,
+     "cota_explicita_kN": 0.0008000050012666884,
+     "reaccion_superpuesta_kN": -0.0003,
+     "error_superpuesta_kN": -0.0003,
+     "cota_superpuesta_kN": 0.0016000050012666884,
+     "dif_reacciones_kN": -0.00019999999999999998,
+     "cota_dif_kN": 0.002500000001266688
+    },
+    {
+     "eje": "Fz",
+     "filas_que_cuentan": 16,
+     "aplicada_kN": -41696.661,
+     "reaccion_explicita_kN": 41696.661,
+     "error_explicita_kN": -3.113e-05,
+     "cota_explicita_kN": 0.0008000052222044468,
+     "reaccion_superpuesta_kN": 41696.6609,
+     "error_superpuesta_kN": -0.00013113,
+     "cota_superpuesta_kN": 0.001600005222204447,
+     "dif_reacciones_kN": -9.999999747378752e-05,
+     "cota_dif_kN": 0.0025000002222044467
+    }
+   ],
+   "suma_directa_de_todas_las_filas_kN": [
+    9.99999999961032e-05,
+    -0.00010000000000399273,
+    41696.661
+   ],
+   "control": {
+    "max_desplazamiento_mm": 8.7856,
+    "max_desplazamiento_mm_explicita": 8.7856,
+    "no_pasan": 0,
+    "no_pasan_explicita": 0,
+    "fuera_de_curva": 0,
+    "con_fierro": 69,
+    "lista_no_pasan": [],
+    "columna": {
+     "id": 5,
+     "objeto_unity": "Elem_5_columna",
+     "familia": 1,
+     "plano": "",
+     "P": 5409.6204,
+     "M": 43.3801,
+     "M_fuera_plano": 0.0,
+     "extremo": "j (superior)",
+     "Mn": 1754.8749,
+     "u": 0.02472,
+     "pasa": true,
+     "explicita": {
+      "P": 5409.6205,
+      "M": 43.3801,
+      "Mn": 1754.8749,
+      "u": 0.02472,
+      "extremo": "j (superior)"
+     },
+     "Mn_de_su_propia_curva": 1754.8749,
+     "suma_lambda_u_de_los_casos_base": 0.026913
+    },
+    "muro": {
+     "id": 9,
+     "objeto_unity": "Elem_9_muro",
+     "familia": 2,
+     "plano": "Mz",
+     "P": 3591.014,
+     "M": 546.9632,
+     "M_fuera_plano": 253.353,
+     "extremo": "j (superior)",
+     "Mn": 27759.1199,
+     "u": 0.019704,
+     "pasa": true,
+     "explicita": {
+      "P": 3591.014,
+      "M": 546.9632,
+      "Mn": 27759.1199,
+      "u": 0.019704,
+      "extremo": "j (superior)"
+     },
+     "Mn_de_su_propia_curva": 27759.1199,
+     "suma_lambda_u_de_los_casos_base": 0.021293
+    },
+    "viga": {
+     "id": 92,
+     "objeto_unity": "Elem_92_viga_x",
+     "w": [
+      0.0,
+      0.0,
+      -35.2493
+     ],
+     "x": [
+      0.0,
+      0.625,
+      1.25,
+      1.875,
+      2.5,
+      3.125,
+      3.75,
+      4.375,
+      5.0
+     ],
+     "My": [
+      -639.5379,
+      -508.575,
+      -363.8429,
+      -205.3414,
+      -33.0708,
+      152.9692,
+      352.7784,
+      566.3569,
+      793.7046
+     ],
+     "My_0": -639.5379,
+     "My_L": 793.7046,
+     "max_abs_My": 793.7046,
+     "x_de_max_abs_My": 5.0,
+     "explicita": {
+      "My_0": -639.5378,
+      "My_L": 793.7048
+     }
+    },
+    "nodo": {
+     "id": 207,
+     "ux": 0.00120689,
+     "uy": -3.795e-05,
+     "uz": -0.00870223,
+     "explicita": {
+      "ux": 0.00120688,
+      "uy": -3.795e-05,
+      "uz": -0.00870223
+     }
+    }
+   }
+  },
+  {
+   "nombre": "E2",
+   "descripcion": "1.2G + 1.6Q",
+   "lambdas": {
+    "G": 1.2,
+    "Q": 1.6,
+    "EX": 0.0,
+    "EY": 0.0
+   },
+   "suma_abs_lambdas": 2.8,
+   "tiempos_s": {
+    "explicita": 0.28,
+    "caso_combinado": 0.0686,
+    "post_combinar": 0.1213
+   },
+   "cierre_bloque_caso": {
+    "cociente": 0.7875776376478332,
+    "elemento": 146,
+    "componente": "My"
+   },
+   "e_lin": {
+    "desplazamientos_m": 1.8999999999999998e-08,
+    "fuerzas_kN": 0.00018999999999999998,
+    "reacciones_kN": 0.00018999999999999998
+   },
+   "comparaciones": [
+    {
+     "n_comparados": 1392,
+     "peor_abs": 1.999999999999981e-08,
+     "cota_en_el_peor": 2.400000000003541e-08,
+     "cociente": 0.8333333333320958,
+     "donde": "nodo 59 uy",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "2",
+     "familia": "desplazamientos"
+    },
+    {
+     "n_comparados": 1392,
+     "peor_abs": 1.999999999999981e-08,
+     "cota_en_el_peor": 2.400000000003541e-08,
+     "cociente": 0.8333333333320958,
+     "donde": "nodo 59 uy",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "3",
+     "familia": "desplazamientos"
+    },
+    {
+     "n_comparados": 1392,
+     "peor_abs": 1.999999999999981e-08,
+     "cota_en_el_peor": 2.400000000003541e-08,
+     "cociente": 0.8333333333320958,
+     "donde": "nodo 59 uy",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "4",
+     "familia": "desplazamientos"
+    },
+    {
+     "n_comparados": 1,
+     "peor_abs": 1.7736715909322243e-05,
+     "cota_en_el_peor": 9.15692193917244e-05,
+     "cociente": 0.19369735842615696,
+     "donde": "mm",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "2",
+     "familia": "max_desplazamiento_mm"
+    },
+    {
+     "n_comparados": 1,
+     "peor_abs": 1.7736715909322243e-05,
+     "cota_en_el_peor": 9.15692193917244e-05,
+     "cociente": 0.19369735842615696,
+     "donde": "mm",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "3",
+     "familia": "max_desplazamiento_mm"
+    },
+    {
+     "n_comparados": 1,
+     "peor_abs": 1.7736715909322243e-05,
+     "cota_en_el_peor": 9.15692193917244e-05,
+     "cociente": 0.19369735842615696,
+     "donde": "mm",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "4",
+     "familia": "max_desplazamiento_mm"
+    },
+    {
+     "n_comparados": 4536,
+     "peor_abs": 0.00019999999999997797,
+     "cota_en_el_peor": 0.000240000000001012,
+     "cociente": 0.8333333333297277,
+     "donde": "elemento 200 f[3]",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "2",
+     "familia": "fuerzas f"
+    },
+    {
+     "n_comparados": 4536,
+     "peor_abs": 0.00019999999999997797,
+     "cota_en_el_peor": 0.000240000000001012,
+     "cociente": 0.8333333333297277,
+     "donde": "elemento 200 f[3]",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "3",
+     "familia": "fuerzas f"
+    },
+    {
+     "n_comparados": 4536,
+     "peor_abs": 0.00019999999999997797,
+     "cota_en_el_peor": 0.000240000000001012,
+     "cociente": 0.8333333333297277,
+     "donde": "elemento 200 f[3]",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "4",
+     "familia": "fuerzas f"
+    },
+    {
+     "n_comparados": 2296,
+     "peor_abs": 4.999999999927285e-05,
+     "cota_en_el_peor": 5.00000000003106e-05,
+     "cociente": 0.9999999999792449,
+     "donde": "elemento 355 x[4]",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "2",
+     "familia": "estaciones x"
+    },
+    {
+     "n_comparados": 2296,
+     "peor_abs": 4.999999999927285e-05,
+     "cota_en_el_peor": 5.00000000003106e-05,
+     "cociente": 0.9999999999792449,
+     "donde": "elemento 355 x[4]",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "3",
+     "familia": "estaciones x"
+    },
+    {
+     "n_comparados": 2296,
+     "peor_abs": 4.999999999927285e-05,
+     "cota_en_el_peor": 5.00000000003106e-05,
+     "cociente": 0.9999999999792449,
+     "donde": "elemento 355 x[4]",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "4",
+     "familia": "estaciones x"
+    },
+    {
+     "n_comparados": 13776,
+     "peor_abs": 0.00020850000001360058,
+     "cota_en_el_peor": 0.00024000000073338067,
+     "cociente": 0.8687499974019839,
+     "donde": "elemento 107 Vz(x=1.2500)",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "2",
+     "familia": "estaciones N..Mz"
+    },
+    {
+     "n_comparados": 13776,
+     "peor_abs": 0.00020850000001360058,
+     "cota_en_el_peor": 0.00024000000073338067,
+     "cociente": 0.8687499974019839,
+     "donde": "elemento 107 Vz(x=1.2500)",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "3",
+     "familia": "estaciones N..Mz"
+    },
+    {
+     "n_comparados": 13776,
+     "peor_abs": 0.00020850000001360058,
+     "cota_en_el_peor": 0.00024000000073338067,
+     "cociente": 0.8687499974019839,
+     "donde": "elemento 107 Vz(x=1.2500)",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "4",
+     "familia": "estaciones N..Mz"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 0.0002000000000066393,
+     "cota_en_el_peor": 0.00024000000916837838,
+     "cociente": 0.8333333015263512,
+     "donde": "elemento 60 P",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "2",
+     "familia": "D/C P"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 0.0002000000000066393,
+     "cota_en_el_peor": 0.00024000000916837838,
+     "cociente": 0.8333333015263512,
+     "donde": "elemento 60 P",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "3",
+     "familia": "D/C P"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 0.0002000000000066393,
+     "cota_en_el_peor": 0.00024000000916837838,
+     "cociente": 0.8333333015263512,
+     "donde": "elemento 60 P",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "4",
+     "familia": "D/C P"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 0.00014440030457762987,
+     "cota_en_el_peor": 0.0003187005866753972,
+     "cociente": 0.4530908025114632,
+     "donde": "elemento 68 M",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "2",
+     "familia": "D/C M"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 0.00014440030457762987,
+     "cota_en_el_peor": 0.0003187005866753972,
+     "cociente": 0.4530908025114632,
+     "donde": "elemento 68 M",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "3",
+     "familia": "D/C M"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 0.00014440030457762987,
+     "cota_en_el_peor": 0.0003187005866753972,
+     "cociente": 0.4530908025114632,
+     "donde": "elemento 68 M",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "4",
+     "familia": "D/C M"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 9.999999999976694e-05,
+     "cota_en_el_peor": 0.00024000000483294002,
+     "cociente": 0.4166666582751749,
+     "donde": "elemento 80 M fuera",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "2",
+     "familia": "D/C M fuera de plano"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 9.999999999976694e-05,
+     "cota_en_el_peor": 0.00024000000483294002,
+     "cociente": 0.4166666582751749,
+     "donde": "elemento 80 M fuera",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "3",
+     "familia": "D/C M fuera de plano"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 9.999999999976694e-05,
+     "cota_en_el_peor": 0.00024000000483294002,
+     "cociente": 0.4166666582751749,
+     "donde": "elemento 80 M fuera",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "4",
+     "familia": "D/C M fuera de plano"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 0.0002123935878444172,
+     "cota_en_el_peor": 0.00024399451065900928,
+     "cociente": 0.8704851075163922,
+     "donde": "elemento 60 Mn",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "2",
+     "familia": "D/C Mn"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 0.0002123935878444172,
+     "cota_en_el_peor": 0.00024399451065900928,
+     "cociente": 0.8704851075163922,
+     "donde": "elemento 60 Mn",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "3",
+     "familia": "D/C Mn"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 0.0002123935878444172,
+     "cota_en_el_peor": 0.00024399451065900928,
+     "cociente": 0.8704851075163922,
+     "donde": "elemento 60 Mn",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "4",
+     "familia": "D/C Mn"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 4.913631722917519e-07,
+     "cota_en_el_peor": 5.43864482984647e-07,
+     "cociente": 0.9034661899508941,
+     "donde": "elemento 28 u",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "2",
+     "familia": "D/C u"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 4.913631722917519e-07,
+     "cota_en_el_peor": 5.43864482984647e-07,
+     "cociente": 0.9034661899508941,
+     "donde": "elemento 28 u",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "3",
+     "familia": "D/C u"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 4.913631722917519e-07,
+     "cota_en_el_peor": 5.43864482984647e-07,
+     "cociente": 0.9034661899508941,
+     "donde": "elemento 28 u",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "4",
+     "familia": "D/C u"
+    },
+    {
+     "n_comparados": 345,
+     "peor_abs": 4.964526753997722e-07,
+     "cota_en_el_peor": 5.000043064163198e-07,
+     "cociente": 0.992896799145585,
+     "donde": "elemento 18 u",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E2",
+     "via": "2",
+     "familia": "D/C = dc.revisar"
+    },
+    {
+     "n_comparados": 126,
+     "peor_abs": 0.0001600000000010482,
+     "cota_en_el_peor": 0.0001900000000420661,
+     "cociente": 0.842105262976969,
+     "donde": "nodo 7 fx",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "familia": "reacciones",
+     "via": "superposicion",
+     "estado": "E2"
+    }
+   ],
+   "identidades": [
+    {
+     "que": "(3) = (2)",
+     "hojas": 24372,
+     "primera_diferencia": null
+    },
+    {
+     "que": "(4) = (2)",
+     "hojas": 24372,
+     "primera_diferencia": null
+    },
+    {
+     "que": "(2) = anexo '1.2G+1.6Q'",
+     "hojas": 24370,
+     "primera_diferencia": null
+    }
+   ],
+   "indecidibles_por_redondeo": [],
+   "equilibrio": [
+    {
+     "eje": "Fx",
+     "filas_que_cuentan": 16,
+     "aplicada_kN": 0.0,
+     "reaccion_explicita_kN": 0.0,
+     "error_explicita_kN": 0.0,
+     "cota_explicita_kN": 0.0008000050020556047,
+     "reaccion_superpuesta_kN": 0.0003,
+     "error_superpuesta_kN": 0.00028,
+     "cota_superpuesta_kN": 0.0022400050020556046,
+     "dif_reacciones_kN": 0.0003,
+     "cota_dif_kN": 0.0031400000020556044
+    },
+    {
+     "eje": "Fy",
+     "filas_que_cuentan": 16,
+     "aplicada_kN": 0.0,
+     "reaccion_explicita_kN": -0.0001,
+     "error_explicita_kN": -0.0001,
+     "cota_explicita_kN": 0.0008000050020801865,
+     "reaccion_superpuesta_kN": -0.0004,
+     "error_superpuesta_kN": -0.0004,
+     "cota_superpuesta_kN": 0.002240005002080186,
+     "dif_reacciones_kN": -0.00030000000000000003,
+     "cota_dif_kN": 0.003140000002080186
+    },
+    {
+     "eje": "Fz",
+     "filas_que_cuentan": 16,
+     "aplicada_kN": -53055.066,
+     "reaccion_explicita_kN": 53055.066,
+     "error_explicita_kN": 4.664e-05,
+     "cota_explicita_kN": 0.0008000053581299715,
+     "reaccion_superpuesta_kN": 53055.0658,
+     "error_superpuesta_kN": -0.00015336,
+     "cota_superpuesta_kN": 0.002240005358129971,
+     "dif_reacciones_kN": -0.00020000000222353265,
+     "cota_dif_kN": 0.003140000358129971
+    }
+   ],
+   "suma_directa_de_todas_las_filas_kN": [
+    9.43689570931383e-15,
+    -0.00010000000000278536,
+    53055.066
+   ],
+   "control": {
+    "max_desplazamiento_mm": 11.3393,
+    "max_desplazamiento_mm_explicita": 11.3393,
+    "no_pasan": 0,
+    "no_pasan_explicita": 0,
+    "fuera_de_curva": 0,
+    "con_fierro": 69,
+    "lista_no_pasan": [],
+    "columna": {
+     "id": 5,
+     "objeto_unity": "Elem_5_columna",
+     "familia": 1,
+     "plano": "",
+     "P": 6954.3451,
+     "M": 56.836,
+     "M_fuera_plano": 0.0,
+     "extremo": "j (superior)",
+     "Mn": 1697.7779,
+     "u": 0.033477,
+     "pasa": true,
+     "explicita": {
+      "P": 6954.3452,
+      "M": 56.8361,
+      "Mn": 1697.7779,
+      "u": 0.033477,
+      "extremo": "j (superior)"
+     },
+     "Mn_de_su_propia_curva": 1697.7779,
+     "suma_lambda_u_de_los_casos_base": 0.035854
+    },
+    "muro": {
+     "id": 9,
+     "objeto_unity": "Elem_9_muro",
+     "familia": 2,
+     "plano": "Mz",
+     "P": 4551.8382,
+     "M": 663.8634,
+     "M_fuera_plano": 324.0776,
+     "extremo": "j (superior)",
+     "Mn": 30352.9987,
+     "u": 0.021871,
+     "pasa": true,
+     "explicita": {
+      "P": 4551.8381,
+      "M": 663.8634,
+      "Mn": 30352.9984,
+      "u": 0.021871,
+      "extremo": "j (superior)"
+     },
+     "Mn_de_su_propia_curva": 30352.9984,
+     "suma_lambda_u_de_los_casos_base": 0.025944
+    },
+    "viga": {
+     "id": 92,
+     "objeto_unity": "Elem_92_viga_x",
+     "w": [
+      0.0,
+      0.0,
+      -45.2992
+     ],
+     "x": [
+      0.0,
+      0.625,
+      1.25,
+      1.875,
+      2.5,
+      3.125,
+      3.75,
+      4.375,
+      5.0
+     ],
+     "My": [
+      -826.2312,
+      -657.0256,
+      -470.1249,
+      -265.5293,
+      -43.2387,
+      196.7469,
+      454.4276,
+      729.8032,
+      1022.8738
+     ],
+     "My_0": -826.2312,
+     "My_L": 1022.8738,
+     "max_abs_My": 1022.8738,
+     "x_de_max_abs_My": 5.0,
+     "explicita": {
+      "My_0": -826.2311,
+      "My_L": 1022.8739
+     }
+    },
+    "nodo": {
+     "id": 207,
+     "ux": 0.00150391,
+     "uy": -5.929e-05,
+     "uz": -0.01123899,
+     "explicita": {
+      "ux": 0.0015039,
+      "uy": -5.929e-05,
+      "uz": -0.01123899
+     }
+    }
+   }
+  },
+  {
+   "nombre": "E3",
+   "descripcion": "1.2G + 1.0Q - 1.4EX",
+   "lambdas": {
+    "G": 1.2,
+    "Q": 1.0,
+    "EX": -1.4,
+    "EY": 0.0
+   },
+   "suma_abs_lambdas": 3.5999999999999996,
+   "tiempos_s": {
+    "explicita": 0.1605,
+    "caso_combinado": 0.0966,
+    "post_combinar": 0.0692
+   },
+   "cierre_bloque_caso": {
+    "cociente": 0.6865079357569445,
+    "elemento": 156,
+    "componente": "My"
+   },
+   "e_lin": {
+    "desplazamientos_m": 2.3e-08,
+    "fuerzas_kN": 0.00022999999999999998,
+    "reacciones_kN": 0.00022999999999999998
+   },
+   "comparaciones": [
+    {
+     "n_comparados": 1392,
+     "peor_abs": 2.0000000000000007e-08,
+     "cota_en_el_peor": 2.8000000000079607e-08,
+     "cociente": 0.7142857142836837,
+     "donde": "nodo 197 rx",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "2",
+     "familia": "desplazamientos"
+    },
+    {
+     "n_comparados": 1392,
+     "peor_abs": 2.0000000000000007e-08,
+     "cota_en_el_peor": 2.8000000000079607e-08,
+     "cociente": 0.7142857142836837,
+     "donde": "nodo 197 rx",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "3",
+     "familia": "desplazamientos"
+    },
+    {
+     "n_comparados": 1392,
+     "peor_abs": 2.0000000000000007e-08,
+     "cota_en_el_peor": 2.8000000000079607e-08,
+     "cociente": 0.7142857142836837,
+     "donde": "nodo 197 rx",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "4",
+     "familia": "desplazamientos"
+    },
+    {
+     "n_comparados": 1,
+     "peor_abs": 5.7541965386320726e-05,
+     "cota_en_el_peor": 9.849742263380312e-05,
+     "cociente": 0.5841976759153596,
+     "donde": "mm",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "2",
+     "familia": "max_desplazamiento_mm"
+    },
+    {
+     "n_comparados": 1,
+     "peor_abs": 5.7541965386320726e-05,
+     "cota_en_el_peor": 9.849742263380312e-05,
+     "cociente": 0.5841976759153596,
+     "donde": "mm",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "3",
+     "familia": "max_desplazamiento_mm"
+    },
+    {
+     "n_comparados": 1,
+     "peor_abs": 5.7541965386320726e-05,
+     "cota_en_el_peor": 9.849742263380312e-05,
+     "cociente": 0.5841976759153596,
+     "donde": "mm",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "4",
+     "familia": "max_desplazamiento_mm"
+    },
+    {
+     "n_comparados": 4536,
+     "peor_abs": 0.00019999999999997797,
+     "cota_en_el_peor": 0.0002800000000018102,
+     "cociente": 0.7142857142810177,
+     "donde": "elemento 47 f[4]",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "2",
+     "familia": "fuerzas f"
+    },
+    {
+     "n_comparados": 4536,
+     "peor_abs": 0.00019999999999997797,
+     "cota_en_el_peor": 0.0002800000000018102,
+     "cociente": 0.7142857142810177,
+     "donde": "elemento 47 f[4]",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "3",
+     "familia": "fuerzas f"
+    },
+    {
+     "n_comparados": 4536,
+     "peor_abs": 0.00019999999999997797,
+     "cota_en_el_peor": 0.0002800000000018102,
+     "cociente": 0.7142857142810177,
+     "donde": "elemento 47 f[4]",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "4",
+     "familia": "fuerzas f"
+    },
+    {
+     "n_comparados": 2296,
+     "peor_abs": 4.999999999927285e-05,
+     "cota_en_el_peor": 5.00000000003106e-05,
+     "cociente": 0.9999999999792449,
+     "donde": "elemento 355 x[4]",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "2",
+     "familia": "estaciones x"
+    },
+    {
+     "n_comparados": 2296,
+     "peor_abs": 4.999999999927285e-05,
+     "cota_en_el_peor": 5.00000000003106e-05,
+     "cociente": 0.9999999999792449,
+     "donde": "elemento 355 x[4]",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "3",
+     "familia": "estaciones x"
+    },
+    {
+     "n_comparados": 2296,
+     "peor_abs": 4.999999999927285e-05,
+     "cota_en_el_peor": 5.00000000003106e-05,
+     "cociente": 0.9999999999792449,
+     "donde": "elemento 355 x[4]",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "4",
+     "familia": "estaciones x"
+    },
+    {
+     "n_comparados": 13776,
+     "peor_abs": 0.0002061324999971248,
+     "cota_en_el_peor": 0.00028000000034897164,
+     "cociente": 0.7361874990722008,
+     "donde": "elemento 284 Vz(x=0.4438)",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "2",
+     "familia": "estaciones N..Mz"
+    },
+    {
+     "n_comparados": 13776,
+     "peor_abs": 0.0002061324999971248,
+     "cota_en_el_peor": 0.00028000000034897164,
+     "cociente": 0.7361874990722008,
+     "donde": "elemento 284 Vz(x=0.4438)",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "3",
+     "familia": "estaciones N..Mz"
+    },
+    {
+     "n_comparados": 13776,
+     "peor_abs": 0.0002061324999971248,
+     "cota_en_el_peor": 0.00028000000034897164,
+     "cociente": 0.7361874990722008,
+     "donde": "elemento 284 Vz(x=0.4438)",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "4",
+     "familia": "estaciones N..Mz"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 0.00019999999999242846,
+     "cota_en_el_peor": 0.00028000000938061757,
+     "cociente": 0.714285690328527,
+     "donde": "elemento 76 P",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "2",
+     "familia": "D/C P"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 0.00019999999999242846,
+     "cota_en_el_peor": 0.00028000000938061757,
+     "cociente": 0.714285690328527,
+     "donde": "elemento 76 P",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "3",
+     "familia": "D/C P"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 0.00019999999999242846,
+     "cota_en_el_peor": 0.00028000000938061757,
+     "cociente": 0.714285690328527,
+     "donde": "elemento 76 P",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "4",
+     "familia": "D/C P"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 0.00020000000006348273,
+     "cota_en_el_peor": 0.00028000000816402125,
+     "cociente": 0.7142856936858542,
+     "donde": "elemento 30 M",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "2",
+     "familia": "D/C M"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 0.00020000000006348273,
+     "cota_en_el_peor": 0.00028000000816402125,
+     "cociente": 0.7142856936858542,
+     "donde": "elemento 30 M",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "3",
+     "familia": "D/C M"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 0.00020000000006348273,
+     "cota_en_el_peor": 0.00028000000816402125,
+     "cociente": 0.7142856936858542,
+     "donde": "elemento 30 M",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "4",
+     "familia": "D/C M"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 0.00019999999999997797,
+     "cota_en_el_peor": 0.00028000000768991086,
+     "cociente": 0.7142856946685167,
+     "donde": "elemento 47 M fuera",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "2",
+     "familia": "D/C M fuera de plano"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 0.00019999999999997797,
+     "cota_en_el_peor": 0.00028000000768991086,
+     "cociente": 0.7142856946685167,
+     "donde": "elemento 47 M fuera",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "3",
+     "familia": "D/C M fuera de plano"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 0.00019999999999997797,
+     "cota_en_el_peor": 0.00028000000768991086,
+     "cociente": 0.7142856946685167,
+     "donde": "elemento 47 M fuera",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "4",
+     "familia": "D/C M fuera de plano"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 3.9150730344772455e-05,
+     "cota_en_el_peor": 5.1270640692458893e-05,
+     "cociente": 0.7636091497200836,
+     "donde": "elemento 4 Mn",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "2",
+     "familia": "D/C Mn"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 3.9150730344772455e-05,
+     "cota_en_el_peor": 5.1270640692458893e-05,
+     "cociente": 0.7636091497200836,
+     "donde": "elemento 4 Mn",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "3",
+     "familia": "D/C Mn"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 3.9150730344772455e-05,
+     "cota_en_el_peor": 5.1270640692458893e-05,
+     "cociente": 0.7636091497200836,
+     "donde": "elemento 4 Mn",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "4",
+     "familia": "D/C Mn"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 4.887049333685001e-07,
+     "cota_en_el_peor": 5.330237185486813e-07,
+     "cociente": 0.9168540092346122,
+     "donde": "elemento 28 u",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "2",
+     "familia": "D/C u"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 4.887049333685001e-07,
+     "cota_en_el_peor": 5.330237185486813e-07,
+     "cociente": 0.9168540092346122,
+     "donde": "elemento 28 u",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "3",
+     "familia": "D/C u"
+    },
+    {
+     "n_comparados": 69,
+     "peor_abs": 4.887049333685001e-07,
+     "cota_en_el_peor": 5.330237185486813e-07,
+     "cociente": 0.9168540092346122,
+     "donde": "elemento 28 u",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "4",
+     "familia": "D/C u"
+    },
+    {
+     "n_comparados": 345,
+     "peor_abs": 4.953908503968485e-07,
+     "cota_en_el_peor": 5.000020815031554e-07,
+     "cociente": 0.9907775761803949,
+     "donde": "elemento 66 u",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "estado": "E3",
+     "via": "2",
+     "familia": "D/C = dc.revisar"
+    },
+    {
+     "n_comparados": 126,
+     "peor_abs": 0.00014000000000224944,
+     "cota_en_el_peor": 0.00023000000004959884,
+     "cociente": 0.6086956520524297,
+     "donde": "nodo 4 mx",
+     "fuera_de_cota": 0,
+     "calza": true,
+     "familia": "reacciones",
+     "via": "superposicion",
+     "estado": "E3"
+    }
+   ],
+   "identidades": [
+    {
+     "que": "(3) = (2)",
+     "hojas": 24372,
+     "primera_diferencia": null
+    },
+    {
+     "que": "(4) = (2)",
+     "hojas": 24372,
+     "primera_diferencia": null
+    }
+   ],
+   "indecidibles_por_redondeo": [],
+   "equilibrio": [
+    {
+     "eje": "Fx",
+     "filas_que_cuentan": 16,
+     "aplicada_kN": -5309.1948,
+     "reaccion_explicita_kN": 5309.1947,
+     "error_explicita_kN": -0.00011906,
+     "cota_explicita_kN": 0.0008000050652443197,
+     "reaccion_superpuesta_kN": 5309.195,
+     "error_superpuesta_kN": 0.00020094,
+     "cota_superpuesta_kN": 0.002880005065244319,
+     "dif_reacciones_kN": 0.00029999999969732016,
+     "cota_dif_kN": 0.003780000065244319
+    },
+    {
+     "eje": "Fy",
+     "filas_que_cuentan": 16,
+     "aplicada_kN": 0.0,
+     "reaccion_explicita_kN": -0.0001,
+     "error_explicita_kN": -0.0001,
+     "cota_explicita_kN": 0.000800005006561844,
+     "reaccion_superpuesta_kN": -0.0003,
+     "error_superpuesta_kN": -0.00034,
+     "cota_superpuesta_kN": 0.0028800050065618437,
+     "dif_reacciones_kN": -0.00019999999999999998,
+     "cota_dif_kN": 0.0037800000065618435
+    },
+    {
+     "eje": "Fz",
+     "filas_que_cuentan": 16,
+     "aplicada_kN": -48526.4569,
+     "reaccion_explicita_kN": 48526.457,
+     "error_explicita_kN": 0.00012064,
+     "cota_explicita_kN": 0.0008000054564603989,
+     "reaccion_superpuesta_kN": 48526.4566,
+     "error_superpuesta_kN": -0.00029936,
+     "cota_superpuesta_kN": 0.0028800054564603987,
+     "dif_reacciones_kN": -0.0004000000044470653,
+     "cota_dif_kN": 0.0037800004564603985
+    }
+   ],
+   "suma_directa_de_todas_las_filas_kN": [
+    10618.3895,
+    -9.999999994758646e-05,
+    48526.457
+   ],
+   "control": {
+    "max_desplazamiento_mm": 24.6285,
+    "max_desplazamiento_mm_explicita": 24.6286,
+    "no_pasan": 4,
+    "no_pasan_explicita": 4,
+    "fuera_de_curva": 1,
+    "con_fierro": 69,
+    "lista_no_pasan": [
+     {
+      "id": 14,
+      "objeto_unity": "Elem_14_muro",
+      "P": -1041.697,
+      "M": 1189.5904,
+      "Mn": 966.9471,
+      "u": 1.230254,
+      "u_explicita": 1.230254
+     },
+     {
+      "id": 15,
+      "objeto_unity": "Elem_15_muro",
+      "P": -799.0082,
+      "M": 1178.1383,
+      "Mn": 806.0708,
+      "u": 1.461582,
+      "u_explicita": 1.461582
+     },
+     {
+      "id": 16,
+      "objeto_unity": "Elem_16_muro",
+      "P": -5316.0493,
+      "M": 3152.0277,
+      "Mn": 0.0,
+      "u": 9999.0,
+      "u_explicita": 9999.0
+     },
+     {
+      "id": 29,
+      "objeto_unity": "Elem_29_muro",
+      "P": 1998.9404,
+      "M": 6052.5555,
+      "Mn": 5621.7696,
+      "u": 1.076628,
+      "u_explicita": 1.076628
+     }
+    ],
+    "columna": {
+     "id": 5,
+     "objeto_unity": "Elem_5_columna",
+     "familia": 1,
+     "plano": "",
+     "P": 6219.2412,
+     "M": 337.755,
+     "M_fuera_plano": 0.0,
+     "extremo": "i (inferior)",
+     "Mn": 1750.4023,
+     "u": 0.192959,
+     "pasa": true,
+     "explicita": {
+      "P": 6219.2413,
+      "M": 337.7551,
+      "Mn": 1750.4023,
+      "u": 0.192959,
+      "extremo": "i (inferior)"
+     },
+     "Mn_de_su_propia_curva": 1750.4023,
+     "suma_lambda_u_de_los_casos_base": -0.266485
+    },
+    "muro": {
+     "id": 9,
+     "objeto_unity": "Elem_9_muro",
+     "familia": 2,
+     "plano": "Mz",
+     "P": 3285.0992,
+     "M": 4826.6975,
+     "M_fuera_plano": 64.3597,
+     "extremo": "i (inferior)",
+     "Mn": 26874.1318,
+     "u": 0.179604,
+     "pasa": true,
+     "explicita": {
+      "P": 3285.0991,
+      "M": 4826.6975,
+      "Mn": 26874.1316,
+      "u": 0.179604,
+      "extremo": "i (inferior)"
+     },
+     "Mn_de_su_propia_curva": 26874.1316,
+     "suma_lambda_u_de_los_casos_base": -0.19726
+    },
+    "viga": {
+     "id": 92,
+     "objeto_unity": "Elem_92_viga_x",
+     "w": [
+      0.0,
+      0.0,
+      -40.7992
+     ],
+     "x": [
+      0.0,
+      0.625,
+      1.25,
+      1.875,
+      2.5,
+      3.125,
+      3.75,
+      4.375,
+      5.0
+     ],
+     "My": [
+      -742.6361,
+      -626.9788,
+      -495.3844,
+      -347.8528,
+      -184.3839,
+      -4.978,
+      190.3652,
+      401.6456,
+      628.8631
+     ],
+     "My_0": -742.6361,
+     "My_L": 628.8631,
+     "max_abs_My": -742.6361,
+     "x_de_max_abs_My": 0.0,
+     "explicita": {
+      "My_0": -742.6359,
+      "My_L": 628.8635
+     }
+    },
+    "nodo": {
+     "id": 207,
+     "ux": -0.02245315,
+     "uy": 0.00121911,
+     "uz": -0.01004662,
+     "explicita": {
+      "ux": -0.02245317,
+      "uy": 0.00121911,
+      "uz": -0.01004663
+     }
+    }
+   }
+  }
+ ],
+ "notas_cocientes": [
+  "estaciones x = 1.000: una estacion k L / 8 puede tener un decimal mas de los que el anexo escribe; si ese decimal es un 5, el error es exactamente el medio ultimo decimal. Es el redondeo mismo, no un desvio (el caso concreto se imprime abajo).",
+  "D/C = dc.revisar ~ 0.99: dc.revisar arma el mismo punto con las mismas fuerzas base, asi que solo difiere el redondeo de salida (u a 6 decimales, P, M y Mn a 4); entre todos los elementos con fierro por 5 campos siempre hay uno pegado al medio decimal.",
+  "elemento 355: L = 0.3497 m, x[4] = 0.17485 exacta, escrita 0.1748; error 5.000e-05"
+ ],
+ "ids_control": {
+  "columna": 5,
+  "muro": 9,
+  "viga": 92,
+  "nodo": 207
+ },
+ "fallas": [],
+ "pendientes": [],
+ "resultado": "CALZA",
+ "segundos": 18.1
+}

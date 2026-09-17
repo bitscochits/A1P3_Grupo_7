@@ -1,0 +1,529 @@
+======================================================================================================================
+  UNITY CONTRA PYTHON   registro semana05\capturas\registro.txt
+  edificio lt2; 1053 datos; equipo 13th Gen Intel(R) Core(TM) i7-13620H (16 hilos) | Windows 11  (10.0.26200) | NVIDIA GeForce RTX 4060 Laptop GPU (Direct3D 12 [level 12.2]) | RAM 32471 MB | pantalla 1600x900 a 120 dpi
+  tolerancia por fila = suma de sus causas (f32, ref, impr, ent32): ver el encabezado del script
+======================================================================================================================
+
+======================================================================================================================
+  [1] SUPERPOSICION: Unity contra semana05/evidencia/superposicion_lt2_control.csv
+======================================================================================================================
+  dato                                               Unity             Python            |dif|     tol       causa      
+  sup.pre.E1.max_desplazamiento_mm                   8.78559971        8.7856            2.90e-07  9.54e-07  f32+ref    ok
+  cabecera foto 15 fuente                            anexo             anexo                                 igual      ok
+  cabecera foto 15 "Desp. max"                       Desp. max 8.79 mm Desp. max 8.79 mm                     contiene   ok
+  sup.pre.E1.no_pasan                                0                 0                                     igual      ok
+  sup.pre.E1.con_fierro                              69                69                                    igual      ok
+  sup.pre.E1.elem.5.P                                5409.62061        5409.6204         2.10e-04  4.88e-04  f32+ref    ok
+  sup.pre.E1.elem.5.M                                43.3801003        43.3801           3.00e-07  3.81e-06  f32+ref    ok
+  sup.pre.E1.elem.5.Mn                               1754.87488        1754.8749         2.00e-05  1.22e-04  f32+ref    ok
+  sup.pre.E1.elem.5.u                                0.0247200001      0.02472           1.00e-10  1.86e-09  f32+ref    ok
+  sup.pre.E1.elem.5.extremo                          j (superior)      j (superior)                          igual      ok
+  sup.pre.E1.elem.5.pasa                             True              True                                  igual      ok
+  sup.pre.E1.elem.9.P                                3591.01392        3591.014          8.00e-05  2.44e-04  f32+ref    ok
+  sup.pre.E1.elem.9.M                                546.963196        546.9632          4.00e-06  6.10e-05  f32+ref    ok
+  sup.pre.E1.elem.9.Mn                               27759.1191        27759.1199        8.00e-04  1.95e-03  f32+ref    ok
+  sup.pre.E1.elem.9.u                                0.0197039992      0.019704          8.00e-10  1.86e-09  f32+ref    ok
+  sup.pre.E1.elem.9.extremo                          j (superior)      j (superior)                          igual      ok
+  sup.pre.E1.elem.9.pasa                             True              True                                  igual      ok
+  sup.pre.E1.elem.92.My_i                            -639.537903       -639.5379         3.00e-06  6.10e-05  f32+ref    ok
+  sup.pre.E1.elem.92.My_j                            793.70459         793.7046          1.00e-05  6.10e-05  f32+ref    ok
+  sup.pre.E1.elem.92.My_max_abs_valor                793.70459         793.7046          1.00e-05  6.10e-05  f32+ref    ok
+  sup.pre.E1.elem.92.My_max_abs_x                    5                 5                 0.00e+00  5.05e-05  f32+impr   ok
+  sup.pre.E1.nodo.207.ux_m                           0.00120688998     0.00120689        2.00e-11  1.16e-10  f32+ref    ok
+  sup.pre.E1.nodo.207.uy_m                           -3.79500016e-05   -3.795e-05        1.60e-12  3.64e-12  f32+ref    ok
+  sup.pre.E1.nodo.207.uz_m                           -0.00870222971    -0.00870223       2.90e-10  9.31e-10  f32+ref    ok
+  sup.pre.E1.no_pasa.ids                                                                                     igual      ok
+  sup.pre.E1.equilibrio.aplicada_kN[Fx]              0                 0                 0.00e+00  1.40e-45  f32        ok
+  sup.pre.E1.equilibrio.aplicada_kN[Fy]              0                 0                 0.00e+00  1.40e-45  f32        ok
+  sup.pre.E1.equilibrio.aplicada_kN[Fz]              -41696.6602       -41696.661        8.00e-04  3.91e-03  f32        ok
+  sup.pre.E1.equilibrio.reaccion_kN[Fx]              0.000199999995    0.0002            5.00e-12  1.46e-11  f32        ok
+  sup.pre.E1.equilibrio.reaccion_kN[Fy]              -0.000300000014   -0.0003           1.40e-11  2.91e-11  f32        ok
+  sup.pre.E1.equilibrio.reaccion_kN[Fz]              41696.6602        41696.6609        7.00e-04  3.91e-03  f32        ok
+  sup.pre.E1.equilibrio.error_kN[Fx]                 0.000199999995    0.0002            5.00e-12  1.46e-11  f32        ok
+  sup.pre.E1.equilibrio.error_kN[Fy]                 -0.000300000014   -0.0003           1.40e-11  2.91e-11  f32        ok
+  sup.pre.E1.equilibrio.error_kN[Fz]                 -0.00013113       -0.00013113       0.00e+00  1.46e-11  f32        ok
+  sup.pre.E2.max_desplazamiento_mm                   11.3393002        11.3393           2.00e-07  9.54e-07  f32+ref    ok
+  cabecera foto 16 fuente                            anexo             anexo                                 igual      ok
+  cabecera foto 16 "Desp. max"                       Desp. max 11.34 m Desp. max 11.34 m                     contiene   ok
+  sup.pre.E2.no_pasan                                0                 0                                     igual      ok
+  sup.pre.E2.con_fierro                              69                69                                    igual      ok
+  sup.pre.E2.elem.5.P                                6954.34521        6954.3451         1.10e-04  4.88e-04  f32+ref    ok
+  sup.pre.E2.elem.5.M                                56.8359985        56.836            1.50e-06  3.81e-06  f32+ref    ok
+  sup.pre.E2.elem.5.Mn                               1697.77795        1697.7779         5.00e-05  1.22e-04  f32+ref    ok
+  sup.pre.E2.elem.5.u                                0.0334770009      0.033477          9.00e-10  3.73e-09  f32+ref    ok
+  sup.pre.E2.elem.5.extremo                          j (superior)      j (superior)                          igual      ok
+  sup.pre.E2.elem.5.pasa                             True              True                                  igual      ok
+  sup.pre.E2.elem.9.P                                4551.83838        4551.8382         1.80e-04  4.88e-04  f32+ref    ok
+  sup.pre.E2.elem.9.M                                663.863403        663.8634          3.00e-06  6.10e-05  f32+ref    ok
+  sup.pre.E2.elem.9.Mn                               30352.998         30352.9987        7.00e-04  1.95e-03  f32+ref    ok
+  sup.pre.E2.elem.9.u                                0.0218710005      0.021871          5.00e-10  1.86e-09  f32+ref    ok
+  sup.pre.E2.elem.9.extremo                          j (superior)      j (superior)                          igual      ok
+  sup.pre.E2.elem.9.pasa                             True              True                                  igual      ok
+  sup.pre.E2.elem.92.My_i                            -826.231201       -826.2312         1.00e-06  6.10e-05  f32+ref    ok
+  sup.pre.E2.elem.92.My_j                            1022.87378        1022.8738         2.00e-05  6.10e-05  f32+ref    ok
+  sup.pre.E2.elem.92.My_max_abs_valor                1022.87378        1022.8738         2.00e-05  6.10e-05  f32+ref    ok
+  sup.pre.E2.elem.92.My_max_abs_x                    5                 5                 0.00e+00  5.05e-05  f32+impr   ok
+  sup.pre.E2.nodo.207.ux_m                           0.00150391005     0.00150391        5.00e-11  1.16e-10  f32+ref    ok
+  sup.pre.E2.nodo.207.uy_m                           -5.92899996e-05   -5.929e-05        4.00e-13  3.64e-12  f32+ref    ok
+  sup.pre.E2.nodo.207.uz_m                           -0.0112389904     -0.01123899       4.00e-10  9.31e-10  f32+ref    ok
+  sup.pre.E2.no_pasa.ids                                                                                     igual      ok
+  sup.pre.E2.equilibrio.aplicada_kN[Fx]              0                 0                 0.00e+00  1.40e-45  f32        ok
+  sup.pre.E2.equilibrio.aplicada_kN[Fy]              0                 0                 0.00e+00  1.40e-45  f32        ok
+  sup.pre.E2.equilibrio.aplicada_kN[Fz]              -53055.0664       -53055.066        4.00e-04  3.91e-03  f32        ok
+  sup.pre.E2.equilibrio.reaccion_kN[Fx]              0.000300000014    0.0003            1.40e-11  2.91e-11  f32        ok
+  sup.pre.E2.equilibrio.reaccion_kN[Fy]              -0.00039999999    -0.0004           1.00e-11  2.91e-11  f32        ok
+  sup.pre.E2.equilibrio.reaccion_kN[Fz]              53055.0664        53055.0658        6.00e-04  3.91e-03  f32        ok
+  sup.pre.E2.equilibrio.error_kN[Fx]                 0.000280000007    0.00028           7.00e-12  2.91e-11  f32        ok
+  sup.pre.E2.equilibrio.error_kN[Fy]                 -0.00039999999    -0.0004           1.00e-11  2.91e-11  f32        ok
+  sup.pre.E2.equilibrio.error_kN[Fz]                 -0.000153360001   -0.00015336       1.00e-12  1.46e-11  f32        ok
+  sup.pre.E3.max_desplazamiento_mm                   24.6285           24.6285           0.00e+00  1.91e-06  f32+ref    ok
+  cabecera foto 17 fuente                            anexo             anexo                                 igual      ok
+  cabecera foto 17 "Desp. max"                       Desp. max 24.63 m Desp. max 24.63 m                     contiene   ok
+  sup.pre.E3.no_pasan                                4                 4                                     igual      ok
+  sup.pre.E3.con_fierro                              69                69                                    igual      ok
+  sup.pre.E3.elem.5.P                                6219.24121        6219.2412         1.00e-05  4.88e-04  f32+ref    ok
+  sup.pre.E3.elem.5.M                                337.755005        337.755           5.00e-06  3.05e-05  f32+ref    ok
+  sup.pre.E3.elem.5.Mn                               1750.40234        1750.4023         4.00e-05  1.22e-04  f32+ref    ok
+  sup.pre.E3.elem.5.u                                0.192958996       0.192959          4.00e-09  1.49e-08  f32+ref    ok
+  sup.pre.E3.elem.5.extremo                          i (inferior)      i (inferior)                          igual      ok
+  sup.pre.E3.elem.5.pasa                             True              True                                  igual      ok
+  sup.pre.E3.elem.9.P                                3285.09912        3285.0992         8.00e-05  2.44e-04  f32+ref    ok
+  sup.pre.E3.elem.9.M                                4826.69727        4826.6975         2.30e-04  4.88e-04  f32+ref    ok
+  sup.pre.E3.elem.9.Mn                               26874.1309        26874.1318        9.00e-04  1.95e-03  f32+ref    ok
+  sup.pre.E3.elem.9.u                                0.179603994       0.179604          6.00e-09  1.49e-08  f32+ref    ok
+  sup.pre.E3.elem.9.extremo                          i (inferior)      i (inferior)                          igual      ok
+  sup.pre.E3.elem.9.pasa                             True              True                                  igual      ok
+  sup.pre.E3.elem.92.My_i                            -742.636108       -742.6361         8.00e-06  6.10e-05  f32+ref    ok
+  sup.pre.E3.elem.92.My_j                            628.863098        628.8631          2.00e-06  6.10e-05  f32+ref    ok
+  sup.pre.E3.elem.92.My_max_abs_valor                -742.636108       -742.6361         8.00e-06  6.10e-05  f32+ref    ok
+  sup.pre.E3.elem.92.My_max_abs_x                    0                 0                 0.00e+00  5.00e-05  f32+impr   ok
+  sup.pre.E3.nodo.207.ux_m                           -0.0224531498     -0.02245315       2.00e-10  1.86e-09  f32+ref    ok
+  sup.pre.E3.nodo.207.uy_m                           0.00121910998     0.00121911        2.00e-11  1.16e-10  f32+ref    ok
+  sup.pre.E3.nodo.207.uz_m                           -0.0100466199     -0.01004662       1.00e-10  9.31e-10  f32+ref    ok
+  sup.pre.E3.no_pasa.14.u                            1.23025405        1.230254          5.00e-08  1.19e-07  f32+ref    ok
+  sup.pre.E3.no_pasa.15.u                            1.46158195        1.461582          5.00e-08  1.19e-07  f32+ref    ok
+  sup.pre.E3.no_pasa.16.u                            9999              9999              0.00e+00  9.77e-04  f32+ref    ok
+  sup.pre.E3.no_pasa.29.u                            1.07662797        1.076628          3.00e-08  1.19e-07  f32+ref    ok
+  sup.pre.E3.no_pasa.ids                             14,15,16,29       14,15,16,29                           igual      ok
+  sup.pre.E3.equilibrio.aplicada_kN[Fx]              -5309.19482       -5309.1948        2.00e-05  4.88e-04  f32        ok
+  sup.pre.E3.equilibrio.aplicada_kN[Fy]              0                 0                 0.00e+00  1.40e-45  f32        ok
+  sup.pre.E3.equilibrio.aplicada_kN[Fz]              -48526.457        -48526.4569       1.00e-04  3.91e-03  f32        ok
+  sup.pre.E3.equilibrio.reaccion_kN[Fx]              5309.19482        5309.195          1.80e-04  4.88e-04  f32        ok
+  sup.pre.E3.equilibrio.reaccion_kN[Fy]              -0.000300000014   -0.0003           1.40e-11  2.91e-11  f32        ok
+  sup.pre.E3.equilibrio.reaccion_kN[Fz]              48526.457         48526.4566        4.00e-04  3.91e-03  f32        ok
+  sup.pre.E3.equilibrio.error_kN[Fx]                 0.000200940005    0.00020094        5.00e-12  1.46e-11  f32        ok
+  sup.pre.E3.equilibrio.error_kN[Fy]                 -0.000339999999   -0.00034          1.00e-12  2.91e-11  f32        ok
+  sup.pre.E3.equilibrio.error_kN[Fz]                 -0.000299359992   -0.00029936       8.00e-12  2.91e-11  f32        ok
+  sup.libre.E3.max_desplazamiento_mm                 24.6285           24.6285           0.00e+00  1.91e-06  f32+ref    ok
+  cabecera foto 18 fuente                            anexo             anexo                                 igual      ok
+  cabecera foto 18 "Desp. max"                       Desp. max 24.63 m Desp. max 24.63 m                     contiene   ok
+  sup.libre.E3.no_pasan                              4                 4                                     igual      ok
+  sup.libre.E3.con_fierro                            69                69                                    igual      ok
+  sup.libre.E3.elem.5.P                              6219.24121        6219.2412         1.00e-05  4.88e-04  f32+ref    ok
+  sup.libre.E3.elem.5.M                              337.755005        337.755           5.00e-06  3.05e-05  f32+ref    ok
+  sup.libre.E3.elem.5.Mn                             1750.40234        1750.4023         4.00e-05  1.22e-04  f32+ref    ok
+  sup.libre.E3.elem.5.u                              0.192958996       0.192959          4.00e-09  1.49e-08  f32+ref    ok
+  sup.libre.E3.elem.5.extremo                        i (inferior)      i (inferior)                          igual      ok
+  sup.libre.E3.elem.5.pasa                           True              True                                  igual      ok
+  sup.libre.E3.elem.9.P                              3285.09912        3285.0992         8.00e-05  2.44e-04  f32+ref    ok
+  sup.libre.E3.elem.9.M                              4826.69727        4826.6975         2.30e-04  4.88e-04  f32+ref    ok
+  sup.libre.E3.elem.9.Mn                             26874.1309        26874.1318        9.00e-04  1.95e-03  f32+ref    ok
+  sup.libre.E3.elem.9.u                              0.179603994       0.179604          6.00e-09  1.49e-08  f32+ref    ok
+  sup.libre.E3.elem.9.extremo                        i (inferior)      i (inferior)                          igual      ok
+  sup.libre.E3.elem.9.pasa                           True              True                                  igual      ok
+  sup.libre.E3.elem.92.My_i                          -742.636108       -742.6361         8.00e-06  6.10e-05  f32+ref    ok
+  sup.libre.E3.elem.92.My_j                          628.863098        628.8631          2.00e-06  6.10e-05  f32+ref    ok
+  sup.libre.E3.elem.92.My_max_abs_valor              -742.636108       -742.6361         8.00e-06  6.10e-05  f32+ref    ok
+  sup.libre.E3.elem.92.My_max_abs_x                  0                 0                 0.00e+00  5.00e-05  f32+impr   ok
+  sup.libre.E3.nodo.207.ux_m                         -0.0224531498     -0.02245315       2.00e-10  1.86e-09  f32+ref    ok
+  sup.libre.E3.nodo.207.uy_m                         0.00121910998     0.00121911        2.00e-11  1.16e-10  f32+ref    ok
+  sup.libre.E3.nodo.207.uz_m                         -0.0100466199     -0.01004662       1.00e-10  9.31e-10  f32+ref    ok
+  sup.libre.E3.no_pasa.14.u                          1.23025405        1.230254          5.00e-08  1.19e-07  f32+ref    ok
+  sup.libre.E3.no_pasa.15.u                          1.46158195        1.461582          5.00e-08  1.19e-07  f32+ref    ok
+  sup.libre.E3.no_pasa.16.u                          9999              9999              0.00e+00  9.77e-04  f32+ref    ok
+  sup.libre.E3.no_pasa.29.u                          1.07662797        1.076628          3.00e-08  1.19e-07  f32+ref    ok
+  sup.libre.E3.no_pasa.ids                           14,15,16,29       14,15,16,29                           igual      ok
+  sup.libre.E3.equilibrio.aplicada_kN[Fx]            -5309.19482       -5309.1948        2.00e-05  4.88e-04  f32        ok
+  sup.libre.E3.equilibrio.aplicada_kN[Fy]            0                 0                 0.00e+00  1.40e-45  f32        ok
+  sup.libre.E3.equilibrio.aplicada_kN[Fz]            -48526.457        -48526.4569       1.00e-04  3.91e-03  f32        ok
+  sup.libre.E3.equilibrio.reaccion_kN[Fx]            5309.19482        5309.195          1.80e-04  4.88e-04  f32        ok
+  sup.libre.E3.equilibrio.reaccion_kN[Fy]            -0.000300000014   -0.0003           1.40e-11  2.91e-11  f32        ok
+  sup.libre.E3.equilibrio.reaccion_kN[Fz]            48526.457         48526.4566        4.00e-04  3.91e-03  f32        ok
+  sup.libre.E3.equilibrio.error_kN[Fx]               0.000200940005    0.00020094        5.00e-12  1.46e-11  f32        ok
+  sup.libre.E3.equilibrio.error_kN[Fy]               -0.000339999999   -0.00034          1.00e-12  2.91e-11  f32        ok
+  sup.libre.E3.equilibrio.error_kN[Fz]               -0.000299359992   -0.00029936       8.00e-12  2.91e-11  f32        ok
+  -> 144 filas, 0 FALLA
+
+  referencia: python C:\Users\Administrador\OneDrive\Escritorio\UANDES\202602\Metodos computacionales\P1\A1P1.0_Grupo_7\semana05\reanalisis_demo.py lt2 --borrar-elemento 69 --nodo 186 --elemento 337 --float32  (rc 0, TODO OK; 120 numeros leidos de su salida)
+  entrada32 medida contra la misma demo sin --float32 (rc 0)
+  srv: 21 nodos con restriccion -> una suma de reacciones puede moverse 2.1e-03 kN
+
+======================================================================================================================
+  [2] M1 (borrar la columna 69): Unity + POST /analizar contra reanalisis_demo.py --float32
+======================================================================================================================
+  dato                                               Unity             Python            |dif|     tol       causa      
+  reanalisis_demo.py --float32 rc                    0                 0                                     igual      ok
+  reanalisis_demo.py --float32 TODO OK               True              True                                  igual      ok
+  m1.antes.ok                                        True              True                                  igual      ok
+  m1.despues.ok                                      True              True                                  igual      ok
+  m1.borrado                                         True              True                                  igual      ok
+  m1.anexo_desactualizado                            True              True                                  igual      ok
+  m1.excel_existe                                    True              True                                  igual      ok
+  m1.existe_columna                                  False             False                                 igual      ok
+  m1.motivo                                          borrar elemento 6 borrar elemento 6                     igual      ok
+  m1.elementos_despues                               377               377                                   igual      ok
+  m1.antes.EX.equilibrio.aplicada_kN[Fx]             3633.06299        3633.063          1.00e-05  2.84e-03  f32+impr+ent32+srv ok
+  m1.antes.EX.equilibrio.aplicada_kN[Fy]             0                 0                 0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.antes.EX.equilibrio.aplicada_kN[Fz]             0                 0                 0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.antes.EX.max_desplazamiento_m                   16.4150801        16.41508          1.00e-07  1.69e-05  f32+impr+ent32+srv ok
+  m1.antes.EX.nodo.186.ux_m                          16.3149796        16.31498          4.00e-07  1.69e-05  f32+impr+ent32+srv ok
+  m1.antes.EX.nodo.186.uy_m                          -0.792540028      -0.79254          2.80e-08  1.51e-05  f32+impr+ent32+srv ok
+  m1.antes.EX.nodo.186.uz_m                          -0.0260100005     -0.02601          5.00e-10  1.50e-05  f32+impr+ent32+srv ok
+  m1.antes.EX.equilibrio.error_kN (peor |error|)     8.11999998e-05    0.0001            1.88e-05  2.22e-03  f32+impr+ent32+srv ok
+  m1.antes.EX.equilibrio.reaccion_kN[Fx]             -3633.06299       -3633.063         1.00e-05  2.84e-03  f32+impr+ent32+srv ok
+  m1.antes.EX.equilibrio.reaccion_kN[Fy]             0                 0                 0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.antes.EX.equilibrio.reaccion_kN[Fz]             0                 0                 0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.antes.EY.equilibrio.aplicada_kN[Fx]             0                 0                 0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.antes.EY.equilibrio.aplicada_kN[Fy]             3633.06299        3633.063          1.00e-05  2.84e-03  f32+impr+ent32+srv ok
+  m1.antes.EY.equilibrio.aplicada_kN[Fz]             0                 0                 0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.antes.EY.max_desplazamiento_m                   15.2572002        15.2572           2.00e-07  2.59e-05  f32+impr+ent32+srv ok
+  m1.antes.EY.nodo.186.ux_m                          -1.39608001       -1.39608          1.00e-08  1.51e-05  f32+impr+ent32+srv ok
+  m1.antes.EY.nodo.186.uy_m                          6.8159299         6.81593           1.00e-07  1.55e-05  f32+impr+ent32+srv ok
+  m1.antes.EY.nodo.186.uz_m                          -0.0518400011     -0.05184          1.10e-09  1.50e-05  f32+impr+ent32+srv ok
+  m1.antes.EY.equilibrio.error_kN (peor |error|)     9.99999975e-05    0.0001            2.50e-12  2.11e-03  f32+impr+ent32+srv ok
+  m1.antes.EY.equilibrio.reaccion_kN[Fx]             -9.99999975e-05   -0                1.00e-04  2.60e-03  f32+impr+ent32+srv ok
+  m1.antes.EY.equilibrio.reaccion_kN[Fy]             -3633.06299       -3633.063         1.00e-05  2.84e-03  f32+impr+ent32+srv ok
+  m1.antes.EY.equilibrio.reaccion_kN[Fz]             0                 -0                0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.antes.G.equilibrio.aplicada_kN[Fx]              0                 0                 0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.antes.G.equilibrio.aplicada_kN[Fy]              0                 0                 0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.antes.G.equilibrio.aplicada_kN[Fz]              -34148.9766       -34148.979        2.40e-03  6.51e-03  f32+impr+ent32+srv ok
+  m1.antes.G.elem.314.My_i                           -132.169006       -132.169          6.00e-06  6.15e-04  f32+impr+ent32+srv ok
+  m1.antes.G.elem.314.My_j                           103.871498        103.871           4.98e-04  6.08e-04  f32+impr+ent32+srv ok
+  m1.antes.G.elem.314.N_i                            0                 0                 0.00e+00  6.00e-04  f32+impr+ent32+srv ok
+  m1.antes.G.elem.314.Vz_i                           115.225197        115.225           1.97e-04  6.08e-04  f32+impr+ent32+srv ok
+  m1.antes.G.elem.315.My_i                           -165.3452         -165.345          2.00e-04  6.15e-04  f32+impr+ent32+srv ok
+  m1.antes.G.elem.315.My_j                           188.846603        188.847           3.97e-04  6.15e-04  f32+impr+ent32+srv ok
+  m1.antes.G.elem.315.N_i                            0                 0                 0.00e+00  6.00e-04  f32+impr+ent32+srv ok
+  m1.antes.G.elem.315.Vz_i                           142.140701        142.141           2.99e-04  6.15e-04  f32+impr+ent32+srv ok
+  m1.antes.G.elem.337.My_i                           457.871002        457.871           2.00e-06  6.31e-04  f32+impr+ent32+srv ok
+  m1.antes.G.elem.337.My_j                           575.310974        575.311           2.60e-05  6.61e-04  f32+impr+ent32+srv ok
+  m1.antes.G.elem.337.N_i                            0                 0                 0.00e+00  6.00e-04  f32+impr+ent32+srv ok
+  m1.antes.G.elem.337.Vz_i                           -140.940506       -140.941          4.94e-04  6.15e-04  f32+impr+ent32+srv ok
+  m1.antes.G.elem.338.My_i                           -506.555603       -506.556          3.97e-04  6.31e-04  f32+impr+ent32+srv ok
+  m1.antes.G.elem.338.My_j                           -443.144196       -443.144          1.96e-04  6.31e-04  f32+impr+ent32+srv ok
+  m1.antes.G.elem.338.N_i                            0                 0                 0.00e+00  6.00e-04  f32+impr+ent32+srv ok
+  m1.antes.G.elem.338.Vz_i                           255.635803        255.636           1.97e-04  6.15e-04  f32+impr+ent32+srv ok
+  m1.antes.G.max_desplazamiento_m                    6.71146018        6.71145           1.02e-05  1.55e-05  f32+impr+ent32+srv ok
+  m1.antes.G.nodo.186.ux_m                           1.06777996        1.06778           4.00e-08  1.51e-05  f32+impr+ent32+srv ok
+  m1.antes.G.nodo.186.uy_m                           0.0567499992      0.05675           8.00e-10  1.50e-05  f32+impr+ent32+srv ok
+  m1.antes.G.nodo.186.uz_m                           -3.64514999       -3.64515          1.00e-08  1.52e-05  f32+impr+ent32+srv ok
+  m1.antes.G.equilibrio.error_kN (peor |error|)      0.000199999995    0.0002            5.00e-12  2.11e-03  f32+impr+ent32+srv ok
+  m1.antes.G.equilibrio.reaccion_kN[Fx]              0                 0                 0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.antes.G.equilibrio.reaccion_kN[Fy]              -0.000199999995   -0                2.00e-04  2.60e-03  f32+impr+ent32+srv ok
+  m1.antes.G.equilibrio.reaccion_kN[Fz]              34148.9766        34148.979         2.40e-03  6.51e-03  f32+impr+ent32+srv ok
+  m1.antes.Q.equilibrio.aplicada_kN[Fx]              0                 0                 0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.antes.Q.equilibrio.aplicada_kN[Fy]              0                 0                 0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.antes.Q.equilibrio.aplicada_kN[Fz]              -11361.002        -11361.002        0.00e+00  4.58e-03  f32+impr+ent32+srv ok
+  m1.antes.Q.max_desplazamiento_m                    2.90515996        2.90516           4.00e-08  1.52e-05  f32+impr+ent32+srv ok
+  m1.antes.Q.nodo.186.ux_m                           0.189619997       0.18962           3.00e-09  1.50e-05  f32+impr+ent32+srv ok
+  m1.antes.Q.nodo.186.uy_m                           -0.0352099996     -0.03521          4.00e-10  1.50e-05  f32+impr+ent32+srv ok
+  m1.antes.Q.nodo.186.uz_m                           -1.41121994       -1.41122          6.00e-08  1.51e-05  f32+impr+ent32+srv ok
+  m1.antes.Q.equilibrio.error_kN (peor |error|)      9.99999975e-05    0.00011           1.00e-05  2.12e-03  f32+impr+ent32+srv ok
+  m1.antes.Q.equilibrio.reaccion_kN[Fx]              0                 0                 0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.antes.Q.equilibrio.reaccion_kN[Fy]              -9.99999975e-05   -0                1.00e-04  2.60e-03  f32+impr+ent32+srv ok
+  m1.antes.Q.equilibrio.reaccion_kN[Fz]              11361.002         11361.003         1.00e-03  3.58e-03  f32+impr+ent32+srv ok
+  m1.despues.EX.equilibrio.aplicada_kN[Fx]           3633.06299        3633.063          1.00e-05  2.84e-03  f32+impr+ent32+srv ok
+  m1.despues.EX.equilibrio.aplicada_kN[Fy]           0                 0                 0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.despues.EX.equilibrio.aplicada_kN[Fz]           0                 0                 0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.despues.EX.max_desplazamiento_m                 16.6506507        16.65065          7.00e-07  1.69e-05  f32+impr+ent32+srv ok
+  m1.despues.EX.nodo.186.ux_m                        16.54456          16.54456          0.00e+00  1.69e-05  f32+impr+ent32+srv ok
+  m1.despues.EX.nodo.186.uy_m                        -0.808159995      -0.80816          5.00e-09  1.51e-05  f32+impr+ent32+srv ok
+  m1.despues.EX.nodo.186.uz_m                        -0.125139995      -0.12514          5.00e-09  1.50e-05  f32+impr+ent32+srv ok
+  m1.despues.EX.equilibrio.error_kN (peor |error|)   0.000199999995    0.0002            5.00e-12  2.11e-03  f32+impr+ent32+srv ok
+  m1.despues.EX.equilibrio.reaccion_kN[Fx]           -3633.06299       -3633.063         1.00e-05  2.84e-03  f32+impr+ent32+srv ok
+  m1.despues.EX.equilibrio.reaccion_kN[Fy]           0                 -0                0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.despues.EX.equilibrio.reaccion_kN[Fz]           0.000199999995    -0                2.00e-04  2.60e-03  f32+impr+ent32+srv ok
+  m1.despues.EY.equilibrio.aplicada_kN[Fx]           0                 0                 0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.despues.EY.equilibrio.aplicada_kN[Fy]           3633.06299        3633.063          1.00e-05  2.84e-03  f32+impr+ent32+srv ok
+  m1.despues.EY.equilibrio.aplicada_kN[Fz]           0                 0                 0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.despues.EY.max_desplazamiento_m                 15.3495604        15.34956          4.00e-07  1.59e-05  f32+impr+ent32+srv ok
+  m1.despues.EY.nodo.186.ux_m                        -1.41900999       -1.41901          1.00e-08  1.51e-05  f32+impr+ent32+srv ok
+  m1.despues.EY.nodo.186.uy_m                        6.87101018        6.87101           1.80e-07  1.55e-05  f32+impr+ent32+srv ok
+  m1.despues.EY.nodo.186.uz_m                        -0.115570001      -0.11557          1.00e-09  1.50e-05  f32+impr+ent32+srv ok
+  m1.despues.EY.equilibrio.error_kN (peor |error|)   9.99999975e-05    0.0001            2.50e-12  2.12e-03  f32+impr+ent32+srv ok
+  m1.despues.EY.equilibrio.reaccion_kN[Fx]           9.99999975e-05    0                 1.00e-04  2.60e-03  f32+impr+ent32+srv ok
+  m1.despues.EY.equilibrio.reaccion_kN[Fy]           -3633.06299       -3633.063         1.00e-05  2.84e-03  f32+impr+ent32+srv ok
+  m1.despues.EY.equilibrio.reaccion_kN[Fz]           -9.99999975e-05   0                 1.00e-04  2.60e-03  f32+impr+ent32+srv ok
+  m1.despues.G.equilibrio.aplicada_kN[Fx]            0                 0                 0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.despues.G.equilibrio.aplicada_kN[Fy]            0                 0                 0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.despues.G.equilibrio.aplicada_kN[Fz]            -34148.9766       -34148.979        2.40e-03  6.51e-03  f32+impr+ent32+srv ok
+  m1.despues.G.elem.314.My_i                         -871.713501       -871.713          5.01e-04  6.61e-04  f32+impr+ent32+srv ok
+  m1.despues.G.elem.314.My_j                         -810.304077       -810.304          7.70e-05  6.61e-04  f32+impr+ent32+srv ok
+  m1.despues.G.elem.314.N_i                          0                 0                 0.00e+00  6.00e-04  f32+impr+ent32+srv ok
+  m1.despues.G.elem.314.Vz_i                         343.324493        343.325           5.07e-04  6.31e-04  f32+impr+ent32+srv ok
+  m1.despues.G.elem.315.My_i                         762.91571         762.916           2.90e-04  6.61e-04  f32+impr+ent32+srv ok
+  m1.despues.G.elem.315.My_j                         823.529724        823.53            2.76e-04  6.61e-04  f32+impr+ent32+srv ok
+  m1.despues.G.elem.315.N_i                          0                 0                 0.00e+00  6.00e-04  f32+impr+ent32+srv ok
+  m1.despues.G.elem.315.Vz_i                         -33.4710007       -33.471           7.00e-07  6.04e-04  f32+impr+ent32+srv ok
+  m1.despues.G.elem.337.My_i                         268.932587        268.933           4.13e-04  6.31e-04  f32+impr+ent32+srv ok
+  m1.despues.G.elem.337.My_j                         -278.346985       -278.347          1.50e-05  6.31e-04  f32+impr+ent32+srv ok
+  m1.despues.G.elem.337.N_i                          0                 0                 0.00e+00  6.00e-04  f32+impr+ent32+srv ok
+  m1.despues.G.elem.337.Vz_i                         67.5786972        67.579            3.03e-04  6.08e-04  f32+impr+ent32+srv ok
+  m1.despues.G.elem.338.My_i                         286.964508        286.964           5.08e-04  6.31e-04  f32+impr+ent32+srv ok
+  m1.despues.G.elem.338.My_j                         -288.90271        -288.903          2.90e-04  6.31e-04  f32+impr+ent32+srv ok
+  m1.despues.G.elem.338.N_i                          0                 0                 0.00e+00  6.00e-04  f32+impr+ent32+srv ok
+  m1.despues.G.elem.338.Vz_i                         66.0835037        66.084            4.96e-04  6.08e-04  f32+impr+ent32+srv ok
+  m1.despues.G.max_desplazamiento_m                  21.5987507        21.59875          7.00e-07  1.69e-05  f32+impr+ent32+srv ok
+  m1.despues.G.nodo.186.ux_m                         1.16758002        1.16758           2.00e-08  1.51e-05  f32+impr+ent32+srv ok
+  m1.despues.G.nodo.186.uy_m                         0.0767399979      0.07674           2.10e-09  1.50e-05  f32+impr+ent32+srv ok
+  m1.despues.G.nodo.186.uz_m                         -21.5987507       -21.59875         7.00e-07  1.69e-05  f32+impr+ent32+srv ok
+  m1.despues.G.equilibrio.error_kN (peor |error|)    0.000208810001    0.0002            8.81e-06  2.11e-03  f32+impr+ent32+srv ok
+  m1.despues.G.equilibrio.reaccion_kN[Fx]            -0.000199999995   -0                2.00e-04  2.60e-03  f32+impr+ent32+srv ok
+  m1.despues.G.equilibrio.reaccion_kN[Fy]            0.000199999995    0                 2.00e-04  2.60e-03  f32+impr+ent32+srv ok
+  m1.despues.G.equilibrio.reaccion_kN[Fz]            34148.9766        34148.979         2.40e-03  6.51e-03  f32+impr+ent32+srv ok
+  m1.despues.Q.equilibrio.aplicada_kN[Fx]            0                 0                 0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.despues.Q.equilibrio.aplicada_kN[Fy]            0                 0                 0.00e+00  2.60e-03  f32+impr+ent32+srv ok
+  m1.despues.Q.equilibrio.aplicada_kN[Fz]            -11361.002        -11361.002        0.00e+00  4.58e-03  f32+impr+ent32+srv ok
+  m1.despues.Q.max_desplazamiento_m                  6.29423           6.29423           0.00e+00  1.55e-05  f32+impr+ent32+srv ok
+  m1.despues.Q.nodo.186.ux_m                         0.230589998       0.23059           2.00e-09  1.50e-05  f32+impr+ent32+srv ok
+  m1.despues.Q.nodo.186.uy_m                         -0.03354          -0.03354          0.00e+00  1.50e-05  f32+impr+ent32+srv ok
+  m1.despues.Q.nodo.186.uz_m                         -6.29423          -6.29423          0.00e+00  1.55e-05  f32+impr+ent32+srv ok
+  m1.despues.Q.equilibrio.error_kN (peor |error|)    0.000199999995    0.0001            1.00e-04  2.11e-03  f32+impr+ent32+srv ok
+  m1.despues.Q.equilibrio.reaccion_kN[Fx]            9.99999975e-05    0                 1.00e-04  2.60e-03  f32+impr+ent32+srv ok
+  m1.despues.Q.equilibrio.reaccion_kN[Fy]            -0.000199999995   -0                2.00e-04  2.60e-03  f32+impr+ent32+srv ok
+  m1.despues.Q.equilibrio.reaccion_kN[Fz]            11361.002         11361.002         0.00e+00  3.58e-03  f32+impr+ent32+srv ok
+  m1.antes.G.equilibrio.confiable                    True              True                                  igual      ok
+  m1.despues.G.equilibrio.confiable                  True              True                                  igual      ok
+  m1.antes.Q.equilibrio.confiable                    True              True                                  igual      ok
+  m1.despues.Q.equilibrio.confiable                  True              True                                  igual      ok
+  m1.antes.EX.equilibrio.confiable                   True              True                                  igual      ok
+  m1.despues.EX.equilibrio.confiable                 True              True                                  igual      ok
+  m1.antes.EY.equilibrio.confiable                   True              True                                  igual      ok
+  m1.despues.EY.equilibrio.confiable                 True              True                                  igual      ok
+  cabecera foto 21 fuente                            reanalisis        reanalisis                            igual      ok
+  cabecera foto 21 "caso"                            (modelo editado)  (modelo editado)                      contiene   ok
+  cabecera foto 21 "Max. componente"                 Max. componente 2 Max. componente 2                     contiene   ok
+  cabecera foto 21 "D/C"                             D/C: sin recalcul D/C: sin recalcul                     contiene   ok
+  cabecera foto 22 fuente                            reanalisis        reanalisis                            igual      ok
+  cabecera foto 22 "caso"                            (modelo editado)  (modelo editado)                      contiene   ok
+  cabecera foto 22 "Max. componente"                 Max. componente 2 Max. componente 2                     contiene   ok
+  cabecera foto 22 "D/C"                             D/C: sin recalcul D/C: sin recalcul                     contiene   ok
+  -> 146 filas, 0 FALLA
+
+======================================================================================================================
+  [3] CARGA MOVIL: Unity contra semana05/evidencia/carga_movil_lt2.json
+======================================================================================================================
+  dato                                               Unity             Python            |dif|     tol       causa      
+  movil.hecho                                        True              True                                  igual      ok
+  movil.posiciones                                   30                30                                    igual      ok
+  movil.P_kN                                         100               100               0.00e+00  7.63e-06  f32        ok
+  movil.p12.indice                                   12                12                                    igual      ok
+  movil.p12.elemento                                 205               205                                   igual      ok
+  movil.p12.nodo_max_desplazamiento                  116               116                                   igual      ok
+  movil.p12.nodo_uz_min                              116               116                                   igual      ok
+  movil.p12.indice_mostrado                          12                12                                    igual      ok
+  movil.p12.xL                                       0.5               0.5               0.00e+00  5.96e-08  f32+ref    ok
+  movil.p12.a_m                                      2.5               2.5               0.00e+00  2.38e-07  f32+ref    ok
+  movil.p12.L_m                                      5                 5                 0.00e+00  4.77e-07  f32+ref    ok
+  movil.p12.s_m                                      10                10                0.00e+00  9.54e-07  f32+ref    ok
+  movil.p12.x                                        24.8519993        24.852            7.00e-07  1.91e-06  f32+ref    ok
+  movil.p12.y                                        18.1793003        18.1793           3.00e-07  1.91e-06  f32+ref    ok
+  movil.p12.z                                        3.91000009        3.91              9.00e-08  2.38e-07  f32+ref    ok
+  movil.p12.Pz_local_kN                              -100              -100              0.00e+00  7.63e-06  f32+ref    ok
+  movil.p12.max_desplazamiento_mm                    0.490099996       0.4901            4.00e-09  2.98e-08  f32+ref    ok
+  movil.p12.uz_min_mm                                -0.489899993      -0.4899           7.00e-09  2.98e-08  f32+ref    ok
+  movil.p12.uz_bajo_carga_mm                         -0.459800005      -0.4598           5.00e-09  2.98e-08  f32+ref    ok
+  movil.p12.M_bajo_carga_kNm                         -83.5202026       -83.5202          2.60e-06  7.63e-06  f32+ref    ok
+  movil.p12.u_carga_m[ux]                            1.28800002e-05    1.288e-05         2.00e-13  9.09e-13  f32+ref    ok
+  movil.p12.u_carga_m[uy]                            -3.0999999e-07    -3.1e-07          1.00e-14  2.84e-14  f32+ref    ok
+  movil.p12.u_carga_m[uz]                            -0.000459829986   -0.00045983       1.40e-11  2.91e-11  f32+ref    ok
+  movil.p12.reparto.nodo_i                           102               102                                   igual      ok
+  movil.p12.reparto.nodo_j                           116               116                                   igual      ok
+  movil.p12.reparto.V_i_kN                           77.6016006        77.6016           6.00e-07  7.63e-06  f32+ref    ok
+  movil.p12.reparto.V_j_kN                           22.3983994        22.3984           6.00e-07  1.91e-06  f32+ref    ok
+  movil.p12.reparto.porcentaje_i                     77.5999985        77.6              1.50e-06  7.63e-06  f32+ref    ok
+  movil.p12.reparto.porcentaje_j                     22.3999996        22.4              4.00e-07  1.91e-06  f32+ref    ok
+  movil.p12.reparto.palanca_i_kN                     50                50                0.00e+00  3.81e-06  f32+ref    ok
+  movil.p12.reparto.palanca_j_kN                     50                50                0.00e+00  3.81e-06  f32+ref    ok
+  movil.p12.reparto.My_i_kNm                         -110.483803       -110.4838         3.00e-06  7.63e-06  f32+ref    ok
+  movil.p12.reparto.My_j_kNm                         -27.5240993       -27.5241          7.00e-07  1.91e-06  f32+ref    ok
+  movil.p12.reparto.momentos_sobre_L_kN              -27.6016006       -27.6016          6.00e-07  1.91e-06  f32+ref    ok
+  movil.p12.conservacion.P_kN                        100               100               0.00e+00  7.63e-06  f32+ref    ok
+  movil.p12.conservacion.suma_Rz_kN                  100               100               0.00e+00  7.63e-06  f32+ref    ok
+  movil.p12.conservacion.error_kN                    0                 0                 0.00e+00  1.40e-45  f32+ref    ok
+  movil.p12.conservacion.cota_kN                     0.00079999998     0.0008            2.00e-11  5.82e-11  f32+ref    ok
+  movil.p12.conservacion.suma_Rx_kN                  9.99999975e-05    0.0001            2.50e-12  7.28e-12  f32+ref    ok
+  movil.p12.conservacion.suma_Ry_kN                  0                 0                 0.00e+00  1.40e-45  f32+ref    ok
+  movil.p12.conservacion.cumple                      True              True                                  igual      ok
+  movil.p12 |suma Rz - P| <= cota                    0                 0                 0.00e+00  8.15e-04  cota JSON  ok
+  movil.p12.desplazamiento_nodo_uz_min.uz_m (mm)     -0.489929982      -0.4899           3.00e-05  5.01e-05  f32+impr   ok
+  movil.p12.hay_deformada                            True              True                                  igual      ok
+  cabecera foto 19 fuente                            carga_movil       carga_movil                           igual      ok
+  cabecera foto 19 "posicion"                        Carga movil · pos Carga movil · pos                     contiene   ok
+  cabecera foto 19 "x"                               x = 24.85 m       x = 24.85 m                           contiene   ok
+  cabecera foto 19 "P"                               P = 100 kN        P = 100 kN                            contiene   ok
+  cabecera foto 19 "UZ max"                          UZ max -0.490 mm  UZ max -0.490 mm                      contiene   ok
+  cabecera foto 19 "D/C"                             D/C: no se calcul D/C: no se calcul                     contiene   ok
+  movil.p25.indice                                   25                25                                    igual      ok
+  movil.p25.elemento                                 208               208                                   igual      ok
+  movil.p25.nodo_max_desplazamiento                  119               119                                   igual      ok
+  movil.p25.nodo_uz_min                              119               119                                   igual      ok
+  movil.p25.indice_mostrado                          25                25                                    igual      ok
+  movil.p25.xL                                       0.100000001       0.1               1.00e-09  7.45e-09  f32+ref    ok
+  movil.p25.a_m                                      0.522499979       0.5225            2.10e-08  5.96e-08  f32+ref    ok
+  movil.p25.L_m                                      5.2249999         5.225             1.00e-07  4.77e-07  f32+ref    ok
+  movil.p25.s_m                                      23.0224991        23.0225           9.00e-07  1.91e-06  f32+ref    ok
+  movil.p25.x                                        37.8745003        37.8745           3.00e-07  3.81e-06  f32+ref    ok
+  movil.p25.y                                        18.1793003        18.1793           3.00e-07  1.91e-06  f32+ref    ok
+  movil.p25.z                                        3.91000009        3.91              9.00e-08  2.38e-07  f32+ref    ok
+  movil.p25.Pz_local_kN                              -100              -100              0.00e+00  7.63e-06  f32+ref    ok
+  movil.p25.max_desplazamiento_mm                    0.954200029       0.9542            2.90e-08  5.96e-08  f32+ref    ok
+  movil.p25.uz_min_mm                                -0.954100013      -0.9541           1.30e-08  5.96e-08  f32+ref    ok
+  movil.p25.uz_bajo_carga_mm                         -0.963500023      -0.9635           2.30e-08  5.96e-08  f32+ref    ok
+  movil.p25.M_bajo_carga_kNm                         -127.265503       -127.2655         3.00e-06  7.63e-06  f32+ref    ok
+  movil.p25.u_carga_m[ux]                            2.23000006e-06    2.23e-06          6.00e-14  2.27e-13  f32+ref    ok
+  movil.p25.u_carga_m[uy]                            1.16399997e-05    1.164e-05         3.00e-13  9.09e-13  f32+ref    ok
+  movil.p25.u_carga_m[uz]                            -0.000963470025   -0.00096347       2.50e-11  5.82e-11  f32+ref    ok
+  movil.p25.reparto.nodo_i                           119               119                                   igual      ok
+  movil.p25.reparto.nodo_j                           122               122                                   igual      ok
+  movil.p25.reparto.V_i_kN                           52.6837006        52.6837           6.00e-07  3.81e-06  f32+ref    ok
+  movil.p25.reparto.V_j_kN                           47.3162994        47.3163           6.00e-07  3.81e-06  f32+ref    ok
+  movil.p25.reparto.porcentaje_i                     52.6800003        52.68             3.00e-07  3.81e-06  f32+ref    ok
+  movil.p25.reparto.porcentaje_j                     47.3199997        47.32             3.00e-07  3.81e-06  f32+ref    ok
+  movil.p25.reparto.palanca_i_kN                     90                90                0.00e+00  7.63e-06  f32+ref    ok
+  movil.p25.reparto.palanca_j_kN                     10                10                0.00e+00  9.54e-07  f32+ref    ok
+  movil.p25.reparto.My_i_kNm                         99.7382965        99.7383           3.50e-06  7.63e-06  f32+ref    ok
+  movil.p25.reparto.My_j_kNm                         95.2390976        95.2391           2.40e-06  7.63e-06  f32+ref    ok
+  movil.p25.reparto.momentos_sobre_L_kN              37.3162003        37.3162           3.00e-07  3.81e-06  f32+ref    ok
+  movil.p25.conservacion.P_kN                        100               100               0.00e+00  7.63e-06  f32+ref    ok
+  movil.p25.conservacion.suma_Rz_kN                  99.9999008        99.9999           8.00e-07  7.63e-06  f32+ref    ok
+  movil.p25.conservacion.error_kN                    -9.99999975e-05   -0.0001           2.50e-12  7.28e-12  f32+ref    ok
+  movil.p25.conservacion.cota_kN                     0.00079999998     0.0008            2.00e-11  5.82e-11  f32+ref    ok
+  movil.p25.conservacion.suma_Rx_kN                  -9.99999975e-05   -0.0001           2.50e-12  7.28e-12  f32+ref    ok
+  movil.p25.conservacion.suma_Ry_kN                  -9.99999975e-05   -0.0001           2.50e-12  7.28e-12  f32+ref    ok
+  movil.p25.conservacion.cumple                      True              True                                  igual      ok
+  movil.p25 |suma Rz - P| <= cota                    9.92e-05          0                 9.92e-05  8.15e-04  cota JSON  ok
+  movil.p25.desplazamiento_nodo_uz_min.uz_m (mm)     -0.954080024      -0.9541           2.00e-05  5.01e-05  f32+impr   ok
+  movil.p25.hay_deformada                            True              True                                  igual      ok
+  cabecera foto 20 fuente                            carga_movil       carga_movil                           igual      ok
+  cabecera foto 20 "posicion"                        Carga movil · pos Carga movil · pos                     contiene   ok
+  cabecera foto 20 "x"                               x = 37.87 m       x = 37.87 m                           contiene   ok
+  cabecera foto 20 "P"                               P = 100 kN        P = 100 kN                            contiene   ok
+  cabecera foto 20 "UZ max"                          UZ max -0.954 mm  UZ max -0.954 mm                      contiene   ok
+  cabecera foto 20 "D/C"                             D/C: no se calcul D/C: no se calcul                     contiene   ok
+  -> 97 filas, 0 FALLA
+
+======================================================================================================================
+  [4] PREGUNTAS DEL VISOR: lo que contesta el panel contra data/unity/lt2.json y semana04.json
+======================================================================================================================
+  dato                                               Unity             Python            |dif|     tol       causa      
+  ux.donde.seleccion                                 elemento 5        elemento 5                            igual      ok
+  ux.donde.seccion                                   P 0.70x0.70       P 0.70x0.70                           igual      ok
+  ux.donde.n1.id                                     5                 5                                     igual      ok
+  ux.donde.n1.x                                      32.3520012        32.352            1.20e-06  3.81e-06  f32        ok
+  ux.donde.n1.y                                      18.1793003        18.1793           3.00e-07  1.91e-06  f32        ok
+  ux.donde.n1.z                                      -7.96999979       -7.97             2.10e-07  4.77e-07  f32        ok
+  ux.donde.n2.id                                     21                21                                    igual      ok
+  ux.donde.n2.x                                      32.3520012        32.352            1.20e-06  3.81e-06  f32        ok
+  ux.donde.n2.y                                      18.1793003        18.1793           3.00e-07  1.91e-06  f32        ok
+  ux.donde.n2.z                                      -4.01000023       -4.01             2.30e-07  4.77e-07  f32        ok
+  ux.apoyo.nodo                                      5                 5                                     igual      ok
+  ux.apoyo.restricciones                             1,1,1,1,1,1       1,1,1,1,1,1                           igual      ok
+  ux.apoyo.fijo                                      True              True                                  igual      ok
+  ux.carga.entradas                                  1                 1                                     igual      ok
+  ux.carga.trib0.area_m2                             12.5              12.5              0.00e+00  9.54e-07  f32        ok
+  ux.carga.trib0.qG_kN_m2                            6.29969978        6.2997            2.20e-07  4.77e-07  f32        ok
+  ux.carga.trib0.carga_total_kN                      78.7465973        78.7466           2.70e-06  7.63e-06  f32        ok
+  ux.carga.trib0.w_kN_m                              15.7493229        15.749323         1.00e-07  9.54e-07  f32        ok
+  ux.carga.trib0.luz_m                               5                 5                 0.00e+00  4.77e-07  f32        ok
+  ux.carga.trib0.w_peso_propio_kN_m                  12                12                0.00e+00  9.54e-07  f32        ok
+  ux.carga.trib0.w_total_G_kN_m                      27.7493229        27.749323         1.00e-07  1.91e-06  f32        ok
+  ux.carga.distribuida.G[wx]                         0                 0                 0.00e+00  1.40e-45  f32        ok
+  ux.carga.distribuida.G[wy]                         0                 0                 0.00e+00  1.40e-45  f32        ok
+  ux.carga.distribuida.G[wz]                         -27.7493229       -27.749323        1.00e-07  1.91e-06  f32        ok
+  ux.carga.distribuida.Q[wx]                         0                 0                 0.00e+00  1.40e-45  f32        ok
+  ux.carga.distribuida.Q[wy]                         0                 0                 0.00e+00  1.40e-45  f32        ok
+  ux.carga.distribuida.Q[wz]                         -12.2583132       -12.258313        2.00e-07  9.54e-07  f32        ok
+  ux.deforma.max_desplazamiento_mm                   19.7759991        19.776            9.00e-07  1.91e-06  f32        ok
+  ux.deforma.ux_m                                    0.0181898996      0.0181899         4.00e-10  1.86e-09  f32        ok
+  ux.deforma.uy_m                                    -0.000919169979   -0.00091917       2.10e-11  5.82e-11  f32        ok
+  ux.deforma.uz_m                                    -0.00770534016    -0.00770534       1.60e-10  4.66e-10  f32        ok
+  ux.deforma.hay_deformada                           True              True                                  igual      ok
+  ux.fuerzas.estaciones                              9                 9                                     igual      ok
+  ux.fuerzas.N_i                                     0                 -0                0.00e+00  1.40e-45  f32        ok
+  ux.fuerzas.N_j                                     0                 -0                0.00e+00  1.40e-45  f32        ok
+  ux.fuerzas.Vy_i                                    0                 -0                0.00e+00  1.40e-45  f32        ok
+  ux.fuerzas.Vy_j                                    0                 -0                0.00e+00  1.40e-45  f32        ok
+  ux.fuerzas.Vz_i                                    216.137405        216.1374          5.00e-06  1.53e-05  f32        ok
+  ux.fuerzas.Vz_j                                    373.634003        373.634           3.00e-06  3.05e-05  f32        ok
+  ux.fuerzas.T_i                                     17.6595993        17.6596           7.00e-07  1.91e-06  f32        ok
+  ux.fuerzas.T_j                                     17.6595993        17.6596           7.00e-07  1.91e-06  f32        ok
+  ux.fuerzas.My_i                                    -562.781799       -562.7818         1.00e-06  6.10e-05  f32        ok
+  ux.fuerzas.My_j                                    911.646729        911.6467          2.90e-05  6.10e-05  f32        ok
+  ux.fuerzas.Mz_i                                    0                 -0                0.00e+00  1.40e-45  f32        ok
+  ux.fuerzas.Mz_j                                    0                 -0                0.00e+00  1.40e-45  f32        ok
+  ux.fuerzas.motivo_sin_diagrama                                                                             igual      ok
+  ux.capacidad.caso_con_mas_no_pasa                  1.2G+1.0Q+1.4EX   1.2G+1.0Q+1.4EX                       igual      ok
+  ux.capacidad.no_pasan                              4                 4                                     igual      ok
+  ux.capacidad.fuera_de_curva                        1                 1                                     igual      ok
+  ux.capacidad.con_fierro                            69                69                                    igual      ok
+  ux.capacidad.elem.5.P                              6301.04688        6301.0471         2.20e-04  4.88e-04  f32        ok
+  ux.capacidad.elem.5.M                              373.962097        373.9621          3.00e-06  3.05e-05  f32        ok
+  ux.capacidad.elem.5.Mn                             1748.35925        1748.3593         5.00e-05  1.22e-04  f32        ok
+  ux.capacidad.elem.5.u                              0.213892996       0.213893          4.00e-09  1.49e-08  f32        ok
+  ux.capacidad.elem.5.pasa                           True              True                                  igual      ok
+  ux.capacidad.elem.5.extremo                        i (inferior)      i (inferior)                          igual      ok
+  ux.capacidad.no_pasa.ids                           12,28,29,45       12,28,29,45                           igual      ok
+  ux.capacidad.mapa_activo                           True              True                                  igual      ok
+  -> 58 filas, 0 FALLA
+
+======================================================================================================================
+  [5] REGISTRO: fotos, log, ids de control, Excel, edificio
+======================================================================================================================
+  dato                                               Unity             Python            |dif|     tol       causa      
+  fotos                                              23                23                                    igual      ok
+  salida                                             0                 0                                     igual      ok
+  log.errores                                        0                 0                                     igual      ok
+  lineas AVISO/ERROR en registro.txt                 0                 0                                     igual      ok
+  edificio                                           lt2               lt2                                   igual      ok
+  anexo.calza                                        True              True                                  igual      ok
+  anexo.aviso                                                                                                igual      ok
+  excel.existe                                       True              True                                  igual      ok
+  superposicion.aviso                                                                                        igual      ok
+  superposicion.nombres                              E1(precalculado), E1(precalculado),                     igual      ok
+  modelo.nodos                                       232               232                                   igual      ok
+  modelo.elementos                                   378               378                                   igual      ok
+  modelo.cota_terreno                                -4.01000023       -4.01             2.30e-07  4.77e-07  f32        ok
+  servidor.responde                                  True              True                                  igual      ok
+  control.columna                                    5                 5                                     igual      ok
+  control.muro                                       9                 9                                     igual      ok
+  control.viga                                       92                92                                    igual      ok
+  control.nodo                                       207               207                                   igual      ok
+  foto.01_vista_general_realista_con_suelo.pestana   Vista             Vista                                 igual      ok
+  foto.02_vista_general_tecnica.pestana              Vista             Vista                                 igual      ok
+  foto.03_panel_vista.pestana                        Vista             Vista                                 igual      ok
+  foto.04_panel_capas.pestana                        Capas             Capas                                 igual      ok
+  foto.05_panel_caso.pestana                         Caso              Caso                                  igual      ok
+  foto.06_panel_elemento.pestana                     Elemento          Elemento                              igual      ok
+  foto.07_panel_modificar.pestana                    Modificar         Modificar                             igual      ok
+  foto.08_panel_carga_movil.pestana                  Carga movil       Carga movil                           igual      ok
+  foto.09_donde_esta_columna_5.pestana               Elemento          Elemento                              igual      ok
+  foto.10_como_esta_apoyado_nodo_5.pestana           Elemento          Elemento                              igual      ok
+  foto.11_que_lo_carga_viga_92_area_tributaria_y_w_G Elemento          Elemento                              igual      ok
+  foto.12_como_se_deforma_S3_nodo_207.pestana        Elemento          Elemento                              igual      ok
+  foto.13_que_fuerzas_tiene_viga_92_My_S3.pestana    Elemento          Elemento                              igual      ok
+  foto.14_capacidad_columna_5_PM_y_mapa_DC_1.2G+1.0Q Elemento          Elemento                              igual      ok
+  foto.14b_mapa_DC_leyenda_y_criticos_1.2G+1.0Q+1.4E Caso              Caso                                  igual      ok
+  foto.15_superposicion_E1_precalculado.pestana      Caso              Caso                                  igual      ok
+  foto.16_superposicion_E2_precalculado.pestana      Caso              Caso                                  igual      ok
+  foto.17_superposicion_E3_precalculado.pestana      Caso              Caso                                  igual      ok
+  foto.18_superposicion_E3_LIBRE_servidor.pestana    Caso              Caso                                  igual      ok
+  foto.19_carga_movil_posicion_12_viga_205.pestana   Carga movil       Carga movil                           igual      ok
+  foto.20_carga_movil_posicion_25_viga_208.pestana   Carga movil       Carga movil                           igual      ok
+  foto.21_M1_sin_columna_69_deformada_G_y_equilibrio Modificar         Modificar                             igual      ok
+  foto.22_M1_nodo_186_UZ_G.pestana                   Modificar         Modificar                             igual      ok
+  -> 41 filas, 0 FALLA
+
+======================================================================================================================
+  TODO CALZA: lo que muestra Unity es lo que calculo Python
+======================================================================================================================

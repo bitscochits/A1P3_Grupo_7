@@ -1,0 +1,97 @@
+estado,via,familia,n_comparados,peor_abs,cota_en_el_peor,cociente,fuera_de_cota,calza,donde
+E1,2,desplazamientos,1392,1.000000e-08,2.000000e-08,5.000000e-01,0,True,nodo 52 rx
+E1,3,desplazamientos,1392,1.000000e-08,2.000000e-08,5.000000e-01,0,True,nodo 52 rx
+E1,4,desplazamientos,1392,1.000000e-08,2.000000e-08,5.000000e-01,0,True,nodo 52 rx
+E1,2,max_desplazamiento_mm,1,2.228066e-06,8.464102e-05,2.632372e-02,0,True,mm
+E1,3,max_desplazamiento_mm,1,2.228066e-06,8.464102e-05,2.632372e-02,0,True,mm
+E1,4,max_desplazamiento_mm,1,2.228066e-06,8.464102e-05,2.632372e-02,0,True,mm
+E1,2,fuerzas f,4536,1.000000e-04,2.000000e-04,5.000000e-01,0,True,elemento 355 f[4]
+E1,3,fuerzas f,4536,1.000000e-04,2.000000e-04,5.000000e-01,0,True,elemento 355 f[4]
+E1,4,fuerzas f,4536,1.000000e-04,2.000000e-04,5.000000e-01,0,True,elemento 355 f[4]
+E1,2,estaciones x,2296,5.000000e-05,5.000000e-05,1.000000e+00,0,True,elemento 355 x[4]
+E1,3,estaciones x,2296,5.000000e-05,5.000000e-05,1.000000e+00,0,True,elemento 355 x[4]
+E1,4,estaciones x,2296,5.000000e-05,5.000000e-05,1.000000e+00,0,True,elemento 355 x[4]
+E1,2,estaciones N..Mz,13776,1.500000e-04,2.000000e-04,7.500000e-01,0,True,elemento 204 Vz(x=2.3438)
+E1,3,estaciones N..Mz,13776,1.500000e-04,2.000000e-04,7.500000e-01,0,True,elemento 204 Vz(x=2.3438)
+E1,4,estaciones N..Mz,13776,1.500000e-04,2.000000e-04,7.500000e-01,0,True,elemento 204 Vz(x=2.3438)
+E1,2,D/C P,69,1.000000e-04,2.000000e-04,5.000000e-01,0,True,elemento 40 P
+E1,3,D/C P,69,1.000000e-04,2.000000e-04,5.000000e-01,0,True,elemento 40 P
+E1,4,D/C P,69,1.000000e-04,2.000000e-04,5.000000e-01,0,True,elemento 40 P
+E1,2,D/C M,69,1.489956e-04,2.621320e-04,5.683990e-01,0,True,elemento 40 M
+E1,3,D/C M,69,1.489956e-04,2.621320e-04,5.683990e-01,0,True,elemento 40 M
+E1,4,D/C M,69,1.489956e-04,2.621320e-04,5.683990e-01,0,True,elemento 40 M
+E1,2,D/C M fuera de plano,69,1.000000e-04,2.000000e-04,5.000000e-01,0,True,elemento 62 M fuera
+E1,3,D/C M fuera de plano,69,1.000000e-04,2.000000e-04,5.000000e-01,0,True,elemento 62 M fuera
+E1,4,D/C M fuera de plano,69,1.000000e-04,2.000000e-04,5.000000e-01,0,True,elemento 62 M fuera
+E1,2,D/C Mn,69,4.843854e-05,6.523962e-05,7.424713e-01,0,True,elemento 7 Mn
+E1,3,D/C Mn,69,4.843854e-05,6.523962e-05,7.424713e-01,0,True,elemento 7 Mn
+E1,4,D/C Mn,69,4.843854e-05,6.523962e-05,7.424713e-01,0,True,elemento 7 Mn
+E1,2,D/C u,69,4.520280e-07,5.552653e-07,8.140758e-01,0,True,elemento 61 u
+E1,3,D/C u,69,4.520280e-07,5.552653e-07,8.140758e-01,0,True,elemento 61 u
+E1,4,D/C u,69,4.520280e-07,5.552653e-07,8.140758e-01,0,True,elemento 61 u
+E1,2,D/C = dc.revisar,345,4.992074e-07,5.000042e-07,9.984064e-01,0,True,elemento 7 u
+E1,superposicion,reacciones,126,1.000000e-04,1.500000e-04,6.666667e-01,0,True,nodo 14 mz
+E2,2,desplazamientos,1392,2.000000e-08,2.400000e-08,8.333333e-01,0,True,nodo 59 uy
+E2,3,desplazamientos,1392,2.000000e-08,2.400000e-08,8.333333e-01,0,True,nodo 59 uy
+E2,4,desplazamientos,1392,2.000000e-08,2.400000e-08,8.333333e-01,0,True,nodo 59 uy
+E2,2,max_desplazamiento_mm,1,1.773672e-05,9.156922e-05,1.936974e-01,0,True,mm
+E2,3,max_desplazamiento_mm,1,1.773672e-05,9.156922e-05,1.936974e-01,0,True,mm
+E2,4,max_desplazamiento_mm,1,1.773672e-05,9.156922e-05,1.936974e-01,0,True,mm
+E2,2,fuerzas f,4536,2.000000e-04,2.400000e-04,8.333333e-01,0,True,elemento 200 f[3]
+E2,3,fuerzas f,4536,2.000000e-04,2.400000e-04,8.333333e-01,0,True,elemento 200 f[3]
+E2,4,fuerzas f,4536,2.000000e-04,2.400000e-04,8.333333e-01,0,True,elemento 200 f[3]
+E2,2,estaciones x,2296,5.000000e-05,5.000000e-05,1.000000e+00,0,True,elemento 355 x[4]
+E2,3,estaciones x,2296,5.000000e-05,5.000000e-05,1.000000e+00,0,True,elemento 355 x[4]
+E2,4,estaciones x,2296,5.000000e-05,5.000000e-05,1.000000e+00,0,True,elemento 355 x[4]
+E2,2,estaciones N..Mz,13776,2.085000e-04,2.400000e-04,8.687500e-01,0,True,elemento 107 Vz(x=1.2500)
+E2,3,estaciones N..Mz,13776,2.085000e-04,2.400000e-04,8.687500e-01,0,True,elemento 107 Vz(x=1.2500)
+E2,4,estaciones N..Mz,13776,2.085000e-04,2.400000e-04,8.687500e-01,0,True,elemento 107 Vz(x=1.2500)
+E2,2,D/C P,69,2.000000e-04,2.400000e-04,8.333333e-01,0,True,elemento 60 P
+E2,3,D/C P,69,2.000000e-04,2.400000e-04,8.333333e-01,0,True,elemento 60 P
+E2,4,D/C P,69,2.000000e-04,2.400000e-04,8.333333e-01,0,True,elemento 60 P
+E2,2,D/C M,69,1.444003e-04,3.187006e-04,4.530908e-01,0,True,elemento 68 M
+E2,3,D/C M,69,1.444003e-04,3.187006e-04,4.530908e-01,0,True,elemento 68 M
+E2,4,D/C M,69,1.444003e-04,3.187006e-04,4.530908e-01,0,True,elemento 68 M
+E2,2,D/C M fuera de plano,69,1.000000e-04,2.400000e-04,4.166667e-01,0,True,elemento 80 M fuera
+E2,3,D/C M fuera de plano,69,1.000000e-04,2.400000e-04,4.166667e-01,0,True,elemento 80 M fuera
+E2,4,D/C M fuera de plano,69,1.000000e-04,2.400000e-04,4.166667e-01,0,True,elemento 80 M fuera
+E2,2,D/C Mn,69,2.123936e-04,2.439945e-04,8.704851e-01,0,True,elemento 60 Mn
+E2,3,D/C Mn,69,2.123936e-04,2.439945e-04,8.704851e-01,0,True,elemento 60 Mn
+E2,4,D/C Mn,69,2.123936e-04,2.439945e-04,8.704851e-01,0,True,elemento 60 Mn
+E2,2,D/C u,69,4.913632e-07,5.438645e-07,9.034662e-01,0,True,elemento 28 u
+E2,3,D/C u,69,4.913632e-07,5.438645e-07,9.034662e-01,0,True,elemento 28 u
+E2,4,D/C u,69,4.913632e-07,5.438645e-07,9.034662e-01,0,True,elemento 28 u
+E2,2,D/C = dc.revisar,345,4.964527e-07,5.000043e-07,9.928968e-01,0,True,elemento 18 u
+E2,superposicion,reacciones,126,1.600000e-04,1.900000e-04,8.421053e-01,0,True,nodo 7 fx
+E3,2,desplazamientos,1392,2.000000e-08,2.800000e-08,7.142857e-01,0,True,nodo 197 rx
+E3,3,desplazamientos,1392,2.000000e-08,2.800000e-08,7.142857e-01,0,True,nodo 197 rx
+E3,4,desplazamientos,1392,2.000000e-08,2.800000e-08,7.142857e-01,0,True,nodo 197 rx
+E3,2,max_desplazamiento_mm,1,5.754197e-05,9.849742e-05,5.841977e-01,0,True,mm
+E3,3,max_desplazamiento_mm,1,5.754197e-05,9.849742e-05,5.841977e-01,0,True,mm
+E3,4,max_desplazamiento_mm,1,5.754197e-05,9.849742e-05,5.841977e-01,0,True,mm
+E3,2,fuerzas f,4536,2.000000e-04,2.800000e-04,7.142857e-01,0,True,elemento 47 f[4]
+E3,3,fuerzas f,4536,2.000000e-04,2.800000e-04,7.142857e-01,0,True,elemento 47 f[4]
+E3,4,fuerzas f,4536,2.000000e-04,2.800000e-04,7.142857e-01,0,True,elemento 47 f[4]
+E3,2,estaciones x,2296,5.000000e-05,5.000000e-05,1.000000e+00,0,True,elemento 355 x[4]
+E3,3,estaciones x,2296,5.000000e-05,5.000000e-05,1.000000e+00,0,True,elemento 355 x[4]
+E3,4,estaciones x,2296,5.000000e-05,5.000000e-05,1.000000e+00,0,True,elemento 355 x[4]
+E3,2,estaciones N..Mz,13776,2.061325e-04,2.800000e-04,7.361875e-01,0,True,elemento 284 Vz(x=0.4438)
+E3,3,estaciones N..Mz,13776,2.061325e-04,2.800000e-04,7.361875e-01,0,True,elemento 284 Vz(x=0.4438)
+E3,4,estaciones N..Mz,13776,2.061325e-04,2.800000e-04,7.361875e-01,0,True,elemento 284 Vz(x=0.4438)
+E3,2,D/C P,69,2.000000e-04,2.800000e-04,7.142857e-01,0,True,elemento 76 P
+E3,3,D/C P,69,2.000000e-04,2.800000e-04,7.142857e-01,0,True,elemento 76 P
+E3,4,D/C P,69,2.000000e-04,2.800000e-04,7.142857e-01,0,True,elemento 76 P
+E3,2,D/C M,69,2.000000e-04,2.800000e-04,7.142857e-01,0,True,elemento 30 M
+E3,3,D/C M,69,2.000000e-04,2.800000e-04,7.142857e-01,0,True,elemento 30 M
+E3,4,D/C M,69,2.000000e-04,2.800000e-04,7.142857e-01,0,True,elemento 30 M
+E3,2,D/C M fuera de plano,69,2.000000e-04,2.800000e-04,7.142857e-01,0,True,elemento 47 M fuera
+E3,3,D/C M fuera de plano,69,2.000000e-04,2.800000e-04,7.142857e-01,0,True,elemento 47 M fuera
+E3,4,D/C M fuera de plano,69,2.000000e-04,2.800000e-04,7.142857e-01,0,True,elemento 47 M fuera
+E3,2,D/C Mn,69,3.915073e-05,5.127064e-05,7.636091e-01,0,True,elemento 4 Mn
+E3,3,D/C Mn,69,3.915073e-05,5.127064e-05,7.636091e-01,0,True,elemento 4 Mn
+E3,4,D/C Mn,69,3.915073e-05,5.127064e-05,7.636091e-01,0,True,elemento 4 Mn
+E3,2,D/C u,69,4.887049e-07,5.330237e-07,9.168540e-01,0,True,elemento 28 u
+E3,3,D/C u,69,4.887049e-07,5.330237e-07,9.168540e-01,0,True,elemento 28 u
+E3,4,D/C u,69,4.887049e-07,5.330237e-07,9.168540e-01,0,True,elemento 28 u
+E3,2,D/C = dc.revisar,345,4.953909e-07,5.000021e-07,9.907776e-01,0,True,elemento 66 u
+E3,superposicion,reacciones,126,1.400000e-04,2.300000e-04,6.086957e-01,0,True,nodo 4 mx

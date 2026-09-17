@@ -1,0 +1,71 @@
+estado,etiqueta,id,objeto_unity,magnitud,valor_unity_json,valor_explicita,donde_se_ve
+E1,estado,,,max_desplazamiento_mm,8.7856,8.7856,cabecera: Dmax
+E1,estado,,,no_pasan (de 69 con fierro),0,0,cabecera: NO PASA n/m
+E1,columna,5,Elem_5_columna,P,5409.6204,5409.6205,panel del elemento y ventana P-M
+E1,columna,5,Elem_5_columna,M,43.3801,43.3801,panel del elemento y ventana P-M
+E1,columna,5,Elem_5_columna,Mn,1754.8749,1754.8749,panel del elemento y ventana P-M
+E1,columna,5,Elem_5_columna,u,0.02472,0.02472,panel del elemento y ventana P-M
+E1,columna,5,Elem_5_columna,extremo,j (superior),j (superior),panel del elemento y ventana P-M
+E1,columna,5,Elem_5_columna,pasa,True,True,panel del elemento y mapa D/C
+E1,columna,5,Elem_5_columna,sum lambda u_caso (NO es u),0.026913,0.02472,tabla de no linealidad (no se muestra en Unity)
+E1,muro,9,Elem_9_muro,P,3591.014,3591.014,panel del elemento y ventana P-M
+E1,muro,9,Elem_9_muro,M,546.9632,546.9632,panel del elemento y ventana P-M
+E1,muro,9,Elem_9_muro,Mn,27759.1199,27759.1199,panel del elemento y ventana P-M
+E1,muro,9,Elem_9_muro,u,0.019704,0.019704,panel del elemento y ventana P-M
+E1,muro,9,Elem_9_muro,extremo,j (superior),j (superior),panel del elemento y ventana P-M
+E1,muro,9,Elem_9_muro,pasa,True,True,panel del elemento y mapa D/C
+E1,muro,9,Elem_9_muro,sum lambda u_caso (NO es u),0.021293,0.019704,tabla de no linealidad (no se muestra en Unity)
+E1,viga,92,Elem_92_viga_x,My(0),-639.5379,-639.5378,diagrama My
+E1,viga,92,Elem_92_viga_x,My(L),793.7046,793.7048,diagrama My
+E1,viga,92,Elem_92_viga_x,max|My| (x = 5.0000),793.7046,,diagrama My
+E1,nodo,207,,ux (m),0.00120689,0.00120688,deformada / panel del nodo
+E1,nodo,207,,uy (m),-3.795e-05,-3.795e-05,deformada / panel del nodo
+E1,nodo,207,,uz (m),-0.00870223,-0.00870223,deformada / panel del nodo
+E2,estado,,,max_desplazamiento_mm,11.3393,11.3393,cabecera: Dmax
+E2,estado,,,no_pasan (de 69 con fierro),0,0,cabecera: NO PASA n/m
+E2,columna,5,Elem_5_columna,P,6954.3451,6954.3452,panel del elemento y ventana P-M
+E2,columna,5,Elem_5_columna,M,56.836,56.8361,panel del elemento y ventana P-M
+E2,columna,5,Elem_5_columna,Mn,1697.7779,1697.7779,panel del elemento y ventana P-M
+E2,columna,5,Elem_5_columna,u,0.033477,0.033477,panel del elemento y ventana P-M
+E2,columna,5,Elem_5_columna,extremo,j (superior),j (superior),panel del elemento y ventana P-M
+E2,columna,5,Elem_5_columna,pasa,True,True,panel del elemento y mapa D/C
+E2,columna,5,Elem_5_columna,sum lambda u_caso (NO es u),0.035854,0.033477,tabla de no linealidad (no se muestra en Unity)
+E2,muro,9,Elem_9_muro,P,4551.8382,4551.8381,panel del elemento y ventana P-M
+E2,muro,9,Elem_9_muro,M,663.8634,663.8634,panel del elemento y ventana P-M
+E2,muro,9,Elem_9_muro,Mn,30352.9987,30352.9984,panel del elemento y ventana P-M
+E2,muro,9,Elem_9_muro,u,0.021871,0.021871,panel del elemento y ventana P-M
+E2,muro,9,Elem_9_muro,extremo,j (superior),j (superior),panel del elemento y ventana P-M
+E2,muro,9,Elem_9_muro,pasa,True,True,panel del elemento y mapa D/C
+E2,muro,9,Elem_9_muro,sum lambda u_caso (NO es u),0.025944,0.021871,tabla de no linealidad (no se muestra en Unity)
+E2,viga,92,Elem_92_viga_x,My(0),-826.2312,-826.2311,diagrama My
+E2,viga,92,Elem_92_viga_x,My(L),1022.8738,1022.8739,diagrama My
+E2,viga,92,Elem_92_viga_x,max|My| (x = 5.0000),1022.8738,,diagrama My
+E2,nodo,207,,ux (m),0.00150391,0.0015039,deformada / panel del nodo
+E2,nodo,207,,uy (m),-5.929e-05,-5.929e-05,deformada / panel del nodo
+E2,nodo,207,,uz (m),-0.01123899,-0.01123899,deformada / panel del nodo
+E3,estado,,,max_desplazamiento_mm,24.6285,24.6286,cabecera: Dmax
+E3,estado,,,no_pasan (de 69 con fierro),4,4,cabecera: NO PASA n/m
+E3,columna,5,Elem_5_columna,P,6219.2412,6219.2413,panel del elemento y ventana P-M
+E3,columna,5,Elem_5_columna,M,337.755,337.7551,panel del elemento y ventana P-M
+E3,columna,5,Elem_5_columna,Mn,1750.4023,1750.4023,panel del elemento y ventana P-M
+E3,columna,5,Elem_5_columna,u,0.192959,0.192959,panel del elemento y ventana P-M
+E3,columna,5,Elem_5_columna,extremo,i (inferior),i (inferior),panel del elemento y ventana P-M
+E3,columna,5,Elem_5_columna,pasa,True,True,panel del elemento y mapa D/C
+E3,columna,5,Elem_5_columna,sum lambda u_caso (NO es u),-0.266485,0.192959,tabla de no linealidad (no se muestra en Unity)
+E3,muro,9,Elem_9_muro,P,3285.0992,3285.0991,panel del elemento y ventana P-M
+E3,muro,9,Elem_9_muro,M,4826.6975,4826.6975,panel del elemento y ventana P-M
+E3,muro,9,Elem_9_muro,Mn,26874.1318,26874.1316,panel del elemento y ventana P-M
+E3,muro,9,Elem_9_muro,u,0.179604,0.179604,panel del elemento y ventana P-M
+E3,muro,9,Elem_9_muro,extremo,i (inferior),i (inferior),panel del elemento y ventana P-M
+E3,muro,9,Elem_9_muro,pasa,True,True,panel del elemento y mapa D/C
+E3,muro,9,Elem_9_muro,sum lambda u_caso (NO es u),-0.19726,0.179604,tabla de no linealidad (no se muestra en Unity)
+E3,viga,92,Elem_92_viga_x,My(0),-742.6361,-742.6359,diagrama My
+E3,viga,92,Elem_92_viga_x,My(L),628.8631,628.8635,diagrama My
+E3,viga,92,Elem_92_viga_x,max|My| (x = 0.0000),-742.6361,,diagrama My
+E3,nodo,207,,ux (m),-0.02245315,-0.02245317,deformada / panel del nodo
+E3,nodo,207,,uy (m),0.00121911,0.00121911,deformada / panel del nodo
+E3,nodo,207,,uz (m),-0.01004662,-0.01004663,deformada / panel del nodo
+E3,no pasa,14,Elem_14_muro,u,1.230254,1.230254,mapa D/C en rojo
+E3,no pasa,15,Elem_15_muro,u,1.461582,1.461582,mapa D/C en rojo
+E3,no pasa,16,Elem_16_muro,u,9999.0,9999.0,mapa D/C en rojo
+E3,no pasa,29,Elem_29_muro,u,1.076628,1.076628,mapa D/C en rojo

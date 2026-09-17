@@ -1,0 +1,151 @@
+edificio lt2  caso por defecto S3
+aviso del anexo: ''  calza con el modelo: True
+
+=== 01_columna_5_panel_y_PM ===
+caso S3  magnitud My  solo seleccionada True  seleccionado 5
+=========== SEMANA 4 ===========
+--- material ---
+hormigon f'c 35 MPa, Ec = 4700 sqrt(f'c)
+f'c    35.0 MPa
+E      27806 MPa    G  11586 MPa
+nu     0.20     gamma  25.0 kN/m3
+--- seccion ---
+P 0.70x0.70   b 0.70 m   h 0.70 m   L 3.960 m
+A  0.4900 m2    J  3.381e-02 m4
+Iy 2.001e-02 m4   Iz 2.001e-02 m4 (Iz = b*h^3/12)
+--- condiciones  [ux uy uz rx ry rz] ---
+nodo 5  [1 1 1 1 1 1]
+nodo 21  [0 0 0 0 0 0]  diafragma, maestro 228
+n1 5: empotrado [1 1 1 1 1 1]; n2 21: diafragma rigido, maestro 228
+--- esfuerzos, caso activo S3 ---
+1.00 G + 0.50 Q + 1.00 EX
+               extremo i     extremo j
+* N  kN        -4860.34      -4860.34
+  Vy kN           18.66         18.66
+  Vz kN           98.84         98.84
+  T  kN*m          0.32          0.32
+* My kN*m       -265.84        125.57
+* Mz kN*m         31.30        -42.60
+(ejes locales; * = los que mandan en columna)
+max |My| = 265.84 kN*m en x = 0.00 m  (2 estaciones)
+max |Mz| = 42.60 kN*m en x = 3.96 m  (2 estaciones)
+carga repartida: ninguna en este caso
+--- demanda / capacidad ---
+familia 1: P 0.70x0.70 | 0.70 x 0.70 m | 20 barras | As = 98.17 cm2 | estribo E%%C12a10 | malla -
+P 4860.3 kN   M 267.7 kN*m   extremo i (inferior)
+Mn 1757.9 kN*m   u 0.152   PASA
+--- trazabilidad ---
+OpenSees    element elasticBeamColumn 5 5 21 A=0.4900 E=2.7806e+07 G=1.1586e+07 J=3.381e-02 Iy=2.001e-02 Iz=2.001e-02 vecxz=(1,0,0)
+Unity       GameObject "Elem_5_columna"  DatoElemento.idElemento = 5  OK
+Resultados  semana04.json casos[S3].esfuerzos[id=5].f
+            lab_semana03.resolver() en memoria, mismos parametros que reports/semana03.md
+            f_i [4860.34  -18.66  -98.84  -0.32  265.84  -31.30]
+            f_j [-4860.34  18.66  98.84  0.32  125.57  -42.60]
+Seccion     "P 0.70x0.70" -> familia P-M 1 (P 0.70x0.70 | 0.70 x 0.70 m | 20 barras | As = 98.17 cm2 | estribo E%%C12a10 | malla -)
+Modelo      nodos y seccion del anexo calzan con el modelo del visor: OK
+
+
+=== 02_My_todas_piso_2 ===
+caso S3  magnitud My  solo seleccionada False  seleccionado 5
+
+=== 03_viga_198_My_etiquetas ===
+caso S3  magnitud My  solo seleccionada True  seleccionado 198
+=========== SEMANA 4 ===========
+--- material ---
+hormigon f'c 35 MPa, Ec = 4700 sqrt(f'c)
+f'c    35.0 MPa
+E      27806 MPa    G  11586 MPa
+nu     0.20     gamma  25.0 kN/m3
+--- seccion ---
+V 0.60x0.80   b 0.60 m   h 0.80 m   L 8.900 m
+A  0.4800 m2    J  3.110e-02 m4
+Iy 1.440e-02 m4   Iz 2.560e-02 m4 (Iz = b*h^3/12)
+--- condiciones  [ux uy uz rx ry rz] ---
+nodo 103  [0 0 0 0 0 0]  diafragma, maestro 230
+nodo 105  [0 0 0 0 0 0]  diafragma, maestro 230
+n1 103: diafragma rigido, maestro 230; n2 105: diafragma rigido, maestro 230
+--- esfuerzos, caso activo S3 ---
+1.00 G + 0.50 Q + 1.00 EX
+               extremo i     extremo j
+  N  kN            0.00          0.00
+* Vy kN            0.00          0.00
+* Vz kN         -173.82        182.57
+  T  kN*m         -2.63         -2.63
+* My kN*m        220.07        259.01
+* Mz kN*m          0.00          0.00
+(ejes locales; * = los que mandan en viga_y)
+max |My| = 259.01 kN*m en x = 8.90 m  (9 estaciones)
+max |Mz| = 0.00 kN*m en x = 0.00 m  (9 estaciones)
+carga repartida (beamUniform)  wx 0.000  wy 0.000  wz -40.044 kN/m
+--- demanda / capacidad ---
+(sin enfierradura: no tiene curva P-M)
+--- trazabilidad ---
+OpenSees    element elasticBeamColumn 198 103 105 A=0.4800 E=2.7806e+07 G=1.1586e+07 J=3.110e-02 Iy=2.560e-02 Iz=1.440e-02 vecxz=(0,0,1)
+Unity       GameObject "Elem_198_viga_y"  DatoElemento.idElemento = 198  OK
+Resultados  semana04.json casos[S3].esfuerzos[id=198].f
+            lab_semana03.resolver() en memoria, mismos parametros que reports/semana03.md
+            f_i [0.00  0.00  173.82  2.63  -220.07  0.00]
+            f_j [0.00  0.00  182.57  -2.63  259.01  0.00]
+Seccion     "V 0.60x0.80" (sin familia P-M)
+Modelo      nodos y seccion del anexo calzan con el modelo del visor: OK
+
+
+=== 04_N_todas ===
+caso S3  magnitud N  solo seleccionada False  seleccionado 198
+
+=== 04b_wz_todas_piso_2 ===
+caso S3  magnitud wz  solo seleccionada False  seleccionado 198
+
+=== 05_Vz_todas_piso_2 ===
+caso S3  magnitud Vz  solo seleccionada False  seleccionado 198
+
+=== 05b_capas_areas_y_cargas_G_piso_2 ===
+caso S3  magnitud Vz  solo seleccionada False  seleccionado 198
+
+=== 06_muro_9_Mz_PM_1.2G+1.0Q+1.4EY ===
+caso 1.2G+1.0Q+1.4EY  magnitud Mz  solo seleccionada True  seleccionado 9
+=========== SEMANA 4 ===========
+--- material ---
+hormigon f'c 35 MPa, Ec = 4700 sqrt(f'c)
+f'c    35.0 MPa
+E      27806 MPa    G  11586 MPa
+nu     0.20     gamma  25.0 kN/m3
+--- seccion ---
+M 0.25x7.95   b 0.25 m   h 7.95 m   L 3.960 m
+A  1.9875 m2    J  4.059e-02 m4
+Iy 1.035e-02 m4   Iz 1.047e+01 m4 (la del plano: Iz, momento Mz)
+--- condiciones  [ux uy uz rx ry rz] ---
+nodo 9  [1 1 1 1 1 1]
+nodo 25  [0 0 0 0 0 0]  diafragma, maestro 228
+n1 9: empotrado [1 1 1 1 1 1]; n2 25: diafragma rigido, maestro 228
+--- esfuerzos, caso activo 1.2G+1.0Q+1.4EY ---
+1.20 G + 1.00 Q + 1.40 EY
+               extremo i     extremo j
+* N  kN        -3517.19      -3517.19
+* Vy kN         1354.91       1354.91
+  Vz kN          -98.55        -98.55
+  T  kN*m         -5.81         -5.81
+  My kN*m        118.26       -271.99
+* Mz kN*m      14069.94       8704.50
+(ejes locales; * = los que mandan en muro)
+max |My| = 271.99 kN*m en x = 3.96 m  (2 estaciones)
+max |Mz| = 14069.94 kN*m en x = 0.00 m  (2 estaciones)
+carga repartida: ninguna en este caso
+--- demanda / capacidad ---
+familia 2: M 0.25x7.95 | 0.25 x 7.95 m | 94 barras | As = 92.05 cm2 | estribo - | malla 10a20
+P 3517.2 kN   M 14069.9 kN*m (|Mz|, en su plano)   extremo i (inferior)
+Mn 27545.5 kN*m   u 0.511   PASA
+--- trazabilidad ---
+OpenSees    element elasticBeamColumn 9 9 25 A=1.9875 E=2.7806e+07 G=1.1586e+07 J=4.059e-02 Iy=1.035e-02 Iz=1.047e+01 vecxz=(-1,0,0)
+Unity       GameObject "Elem_9_muro"  DatoElemento.idElemento = 9  OK
+Resultados  semana04.json casos[1.2G+1.0Q+1.4EY].esfuerzos[id=9].f
+            lab_semana03.resolver() en memoria, mismos parametros que reports/semana03.md
+            f_i [3517.19  -1354.91  98.55  5.81  -118.26  -14069.94]
+            f_j [-3517.19  1354.91  -98.55  -5.81  -271.99  8704.50]
+Seccion     "M 0.25x7.95" -> familia P-M 2 (M 0.25x7.95 | 0.25 x 7.95 m | 94 barras | As = 92.05 cm2 | estribo - | malla 10a20)
+Modelo      nodos y seccion del anexo calzan con el modelo del visor: OK
+
+
+=== 09_deformada_1.2G+1.0Q+1.4EY ===
+caso 1.2G+1.0Q+1.4EY  magnitud Mz  solo seleccionada True  seleccionado 9
+
