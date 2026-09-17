@@ -13,22 +13,32 @@
    5. Diafragma rigido: los nodos del piso se mueven juntos.
    6. Brazos rigidos (muro como columna ancha).
    7. Entradas invalidas rechazadas con mensaje claro.
+   8. Equilibrio por caso en la respuesta (calcular.equilibrio), con
+      diafragma: la regla por grado de libertad, no la suma entera.
+   9. Equilibrio del LT2 completo (data/unity/lt2.json): confiable en
+      los 4 casos y G = 34 148.98 kN, el numero de control.
+  10. POST /analizar: claves 'excel' y 'excel_error', nombre del libro,
+      un Excel que falla no rompe el analisis, errores 400 con JSON.
 
  Correr con:  python test_servidor.py
 ================================================================
 """
 
 import copy
-
+import json
 import os
+import shutil
 import sys
+import tempfile
 
 _RAIZ = os.path.dirname(os.path.abspath(__file__))
 for _c in ('comun', 'benchmark'):
     sys.path.insert(0, os.path.join(_RAIZ, _c))
 
-from servidor_opensees import construir_y_resolver
-import modelo_benchmark as mb
+import servidor_opensees                                   # noqa: E402
+from servidor_opensees import construir_y_resolver         # noqa: E402
+import modelo_benchmark as mb                              # noqa: E402
+import rutas                                               # noqa: E402
 
 fallos = []
 
@@ -278,6 +288,187 @@ rechaza("seccion inexistente", d, "no esta definida")
 d = base(cargas_distribuidas=CARGAS_G)
 d['elementos'][0]['vecxz'] = [0, 0, 1]
 rechaza("vecxz paralelo al eje", d, "paralelo")
+
+# ------------------------------------------------------------
+print("\n8. Equilibrio por caso en la respuesta")
+CLAVES_EQUILIBRIO = {'aplicada_kN', 'reaccion_kN', 'error_kN',
+                     'cargas_sin_convertir', 'nodos_en_diafragma', 'confiable'}
+check("cada caso trae 'equilibrio' con las claves de calcular.equilibrio",
+      all(set(c.get('equilibrio') or {}) == CLAVES_EQUILIBRIO
+          for c in multi['casos']))
+eqG = multi['casos'][0]['equilibrio']
+check("benchmark G: aplicada Fz = -179 kN y reaccion +179",
+      abs(eqG['aplicada_kN'][2] + 179.0) < 1e-3
+      and abs(eqG['reaccion_kN'][2] - 179.0) < 1e-3 and eqG['confiable'],
+      f"aplicada {eqG['aplicada_kN']}  reaccion {eqG['reaccion_kN']}")
+check("la forma plana (un caso) no cambia: sin 'equilibrio'",
+      'equilibrio' not in solos['G'] and 'casos' not in solos['G'])
+
+# Con diafragma y la carga en el MAESTRO, que es como llega el sismo.
+# nodeReaction de los nodos del piso trae la fuerza de la restriccion:
+# sumar la lista entera no da -100.
+d = base(casos_de_carga=[{"nombre": "EX", "cargas_nodales": [{"nodo": 99, "fx": 100.0}]}])
+d['nodos'].append({"id": 99, "x": 2, "y": 2, "z": 3})
+d['diafragmas'] = [{"nodo_maestro": 99, "nodos": [5, 6, 7, 8], "perpendicular": 3}]
+dia = construir_y_resolver(d)['casos'][0]
+eq = dia['equilibrio']
+ingenua = sum(x['fx'] for x in dia['reacciones'])
+# 4 apoyos x 5e-5 (el servidor redondea cada reaccion a 4 decimales).
+check("con diafragma: reaccion Fx = -100 kN por grado de libertad",
+      abs(eq['reaccion_kN'][0] + 100.0) <= 4 * 5e-5 and eq['confiable'],
+      f"reaccion {eq['reaccion_kN'][0]:.4f} kN, error {eq['error_kN'][0]:.1e}; "
+      f"la suma de TODAS las reacciones daria {ingenua:.4f}")
+check("cuenta los nodos del diafragma (4 + el maestro)",
+      eq['nodos_en_diafragma'] == 5, f"{eq['nodos_en_diafragma']}")
+
+# ------------------------------------------------------------
+print("\n9. Equilibrio del LT2 completo (data/unity/lt2.json)")
+RUTA_LT2 = rutas.unity('lt2')
+if not os.path.isfile(RUTA_LT2):
+    check("existe data/unity/lt2.json", False, RUTA_LT2)
+else:
+    with open(RUTA_LT2, encoding='utf-8') as f:
+        lt2 = json.load(f)
+    rl = construir_y_resolver(copy.deepcopy(lt2))
+    check("resuelve los 4 casos", rl['ok'] and len(rl['casos']) == 4,
+          ', '.join(c['nombre'] for c in rl['casos']))
+    for c in rl['casos']:
+        e = c.get('equilibrio') or {}
+        n_reac = len(c['reacciones'])
+        escala = max([abs(v) for v in e.get('aplicada_kN', [0.0])] + [1e-9])
+        # La cota es su causa: cada reaccion viene redondeada a 4
+        # decimales (5e-5 por fila), mas el residuo del solver, que sin
+        # redondear se midio en 1.2e-6 kN sobre 3633 kN (EX, 3e-10).
+        cota = 5e-5 * n_reac + 1e-9 * escala
+        peor = max(abs(v) for v in e.get('error_kN', [float('inf')]))
+        check(f"LT2 {c['nombre']}: equilibrio confiable y cierra",
+              e.get('confiable') is True and peor <= cota,
+              f"aplicada {e.get('aplicada_kN')}  peor error {peor:.1e} kN "
+              f"<= cota {cota:.1e} ({n_reac} reacciones)")
+    eG = rl['casos'][0]['equilibrio']
+    check("LT2 G: aplicada Fz = -34 148.98 kN (numero de control)",
+          rl['casos'][0]['nombre'] == 'G'
+          and abs(eG['aplicada_kN'][2] + 34148.98) < 0.005
+          and abs(eG['reaccion_kN'][2] - 34148.98) < 0.005,
+          f"aplicada {eG['aplicada_kN'][2]:.4f}  reaccion {eG['reaccion_kN'][2]:.4f} kN")
+    eX = next(c for c in rl['casos'] if c['nombre'] == 'EX')
+    print("         (LT2 EX: la suma de TODAS las reacciones da Fx = %.2f kN "
+          "con %.2f aplicados; por GDL, %.2f)"
+          % (sum(x['fx'] for x in eX['reacciones']),
+             eX['equilibrio']['aplicada_kN'][0], eX['equilibrio']['reaccion_kN'][0]))
+
+# ------------------------------------------------------------
+print("\n10. POST /analizar: Excel del reanalisis y errores")
+check("nombre del libro: info.edificio manda",
+      servidor_opensees.edificio_del_modelo({'info': {'edificio': 'lt2'}}, 'otro') == 'lt2')
+check("nombre del libro: info.edificio vacio -> ?edificio=",
+      servidor_opensees.edificio_del_modelo({'info': {'edificio': ''}}, 'conjunto') == 'conjunto')
+check("nombre del libro: sin nada -> 'modelo'",
+      servidor_opensees.edificio_del_modelo({}, None) == 'modelo')
+check("nombre del libro: '../x' no sale de results/excel",
+      servidor_opensees.edificio_del_modelo({'info': {'edificio': '../x'}}, '..\\y') == 'modelo')
+
+cliente = servidor_opensees.app.test_client()
+temporal = tempfile.mkdtemp(prefix='test_servidor_')
+original_ruta = rutas.excel_reanalisis
+# El libro va a una carpeta temporal: el test no deja nada en results/.
+rutas.excel_reanalisis = lambda ed: os.path.join(temporal, 'reanalisis_%s.xlsx' % ed)
+try:
+    pedido = base(casos_de_carga=[{"nombre": "G", "cargas_distribuidas": CARGAS_G},
+                                  {"nombre": "EX", "cargas_nodales": CARGAS_EX}])
+    pedido['info'] = {'edificio': 'prueba'}
+    resp = cliente.post('/analizar', json=pedido)
+    cuerpo = resp.get_json()
+    check("HTTP 200 y ok", resp.status_code == 200 and cuerpo.get('ok') is True,
+          f"HTTP {resp.status_code}")
+    check("la raiz trae 'excel' y 'excel_error'",
+          'excel' in cuerpo and 'excel_error' in cuerpo)
+    check("cada caso trae 'equilibrio' tambien por HTTP",
+          all('equilibrio' in c for c in cuerpo.get('casos', [])))
+    esperado = os.path.join(temporal, 'reanalisis_prueba.xlsx')
+    # Este pedido trae 'secciones' como DICCIONARIO (el servidor acepta
+    # las dos formas); el escritor del Excel espera la lista de Unity.
+    lista = servidor_opensees.modelo_como_lista(pedido)
+    check("secciones en diccionario -> lista para el Excel, sin tocar el pedido",
+          isinstance(lista['secciones'], list) and isinstance(pedido['secciones'], dict)
+          and sorted(s['nombre'] for s in lista['secciones']) == sorted(pedido['secciones']),
+          ', '.join(s['nombre'] for s in lista['secciones']))
+    if cuerpo.get('excel'):
+        check("el Excel existe donde dice, con el nombre del edificio",
+              os.path.isabs(cuerpo['excel']) and os.path.isfile(cuerpo['excel'])
+              and os.path.normcase(cuerpo['excel']) == os.path.normcase(esperado)
+              and cuerpo['excel_error'] is None,
+              cuerpo['excel'])
+        import excel as _excel
+        hojas = _excel.estructura(cuerpo['excel'])['hojas']
+        check("el libro trae LEEME y Resumen (semana05/CONTRATO.md, decision 6)",
+              'LEEME' in hojas and 'Resumen' in hojas, ', '.join(hojas))
+    elif 'NotImplementedError' in str(cuerpo.get('excel_error')):
+        # comun/excel.py todavia es el stub de W1: el servidor responde
+        # igual, que es justo lo que hay que comprobar aca.
+        print("  [AVISO] comun/excel.py sin implementar: excel = null, "
+              "excel_error = %r" % cuerpo['excel_error'][:90])
+        check("sin Excel: excel = null y excel_error dice por que",
+              cuerpo['excel'] is None and bool(cuerpo['excel_error']))
+    else:
+        check("el Excel del reanalisis se escribe", False,
+              f"excel_error = {cuerpo.get('excel_error')!r}")
+
+    # Un escritor que corta con SystemExit (como el codigo del laboratorio)
+    # no puede tumbar la respuesta.
+    import excel as modulo_excel
+    original_escribir = modulo_excel.escribir_libro_reanalisis
+
+    def _revienta(*_a, **_k):
+        raise SystemExit('falla simulada del Excel')
+    modulo_excel.escribir_libro_reanalisis = _revienta
+    try:
+        resp = cliente.post('/analizar', json=pedido)
+        cuerpo = resp.get_json()
+    finally:
+        modulo_excel.escribir_libro_reanalisis = original_escribir
+    check("un Excel que falla no rompe /analizar",
+          resp.status_code == 200 and cuerpo.get('ok') is True
+          and cuerpo.get('excel') is None
+          and 'SystemExit' in str(cuerpo.get('excel_error'))
+          and len(cuerpo.get('casos', [])) == 2,
+          f"HTTP {resp.status_code}, excel_error = {cuerpo.get('excel_error')!r}")
+
+    resp = cliente.post('/analizar', data='{esto no es json',
+                        content_type='application/json')
+    cuerpo = resp.get_json(silent=True) or {}
+    check("JSON roto -> HTTP 400 con cuerpo JSON",
+          resp.status_code == 400 and cuerpo.get('ok') is False and cuerpo.get('error'),
+          f"HTTP {resp.status_code}: {str(cuerpo.get('error'))[:60]}")
+
+    malo = copy.deepcopy(pedido)
+    malo['elementos'][0]['seccion'] = 'inventada'
+    resp = cliente.post('/analizar', json=malo)
+    cuerpo = resp.get_json(silent=True) or {}
+    check("seccion inexistente -> HTTP 400 con el motivo",
+          resp.status_code == 400 and 'no esta definida' in str(cuerpo.get('error')),
+          f"HTTP {resp.status_code}: {str(cuerpo.get('error'))[:60]}")
+
+    # RequestEntityTooLarge no hereda de BadRequest: un modelo mas grande
+    # que MAX_CONTENT_LENGTH salia como 500, "falla del servidor". Se
+    # achica el tope en vez de mandar 32 MB.
+    tope_original = servidor_opensees.app.config['MAX_CONTENT_LENGTH']
+    servidor_opensees.app.config['MAX_CONTENT_LENGTH'] = 100
+    try:
+        resp = cliente.post('/analizar', json=pedido)
+    finally:
+        servidor_opensees.app.config['MAX_CONTENT_LENGTH'] = tope_original
+    cuerpo = resp.get_json(silent=True) or {}
+    check("modelo sobre MAX_CONTENT_LENGTH -> HTTP 400 con cuerpo JSON",
+          resp.status_code == 400 and cuerpo.get('ok') is False
+          and 'MAX_CONTENT_LENGTH' in str(cuerpo.get('error')),
+          f"HTTP {resp.status_code}: {str(cuerpo.get('error'))[:60]}")
+    check("CORS para el build Web",
+          resp.headers.get('Access-Control-Allow-Origin') == '*'
+          or not servidor_opensees.PERMITIR_CORS)
+finally:
+    rutas.excel_reanalisis = original_ruta
+    shutil.rmtree(temporal, ignore_errors=True)
 
 # ------------------------------------------------------------
 print("\n" + "=" * 66)

@@ -50,11 +50,12 @@ Write-Host 'Dependencias       : instalando (puede tardar unos minutos) ...'
 Write-Host ''
 Write-Host 'Verificando...' -ForegroundColor Cyan
 & $py -c @"
-import openseespy.opensees as ops, ezdxf, matplotlib, jupyterlab
+import openseespy.opensees as ops, ezdxf, matplotlib, jupyterlab, openpyxl
 print('  openseespy', ops.version())
 print('  ezdxf     ', ezdxf.__version__)
 print('  matplotlib', matplotlib.__version__)
 print('  jupyterlab', jupyterlab.__version__)
+print('  openpyxl  ', openpyxl.__version__)
 "@
 
 # --- 5. Unity (no se instala con pip) ---
@@ -75,6 +76,7 @@ Write-Host ''
 Write-Host 'Listo. Para empezar:' -ForegroundColor Green
 Write-Host '  .\.venv\Scripts\python.exe comun\verificar_todo.py         la suite entera (34)'
 Write-Host '  .\.venv\Scripts\python.exe comun\lanzar_unity.py app conjunto --pantalla-completa'
+Write-Host '  .\.venv\Scripts\python.exe semana05\exportar_excel.py lt2    data\excel\lt2_resultados.xlsx'
 Write-Host ''
 Write-Host '  Guia completa, para imprimir: reports\mapa_del_repo.md'
 Write-Host ''

@@ -31,6 +31,9 @@ r"""
  MISMO calce y el MISMO corrimiento de tags que a los nodos y elementos.
  Sin eso los poligonos del LT2 quedarian a 35 m de su edificio, y cada
  uno apuntando a la viga equivocada del otro cuerpo.
+
+ La cota del terreno (info.cota_terreno, el suelo del visor) sale del
+ mismo lugar y con el mismo dz: ver cota_terreno_del_conjunto().
 ================================================================
 """
 from __future__ import annotations
@@ -168,6 +171,61 @@ def tributarias_del_conjunto():
     return salida, cuantos
 
 
+def cota_terreno_del_conjunto():
+    r"""
+    La cota del terreno del conjunto, para el suelo del visor. Devuelve
+    (cota o None, {cuerpo: cota ya calzada}).
+
+    ----------------------------------------------------------------
+    DE DONDE SALE
+    ----------------------------------------------------------------
+    De info.cota_terreno de data/unity/<cuerpo>.json, el mismo archivo
+    del que ya salen las areas tributarias. La cota es un SUPUESTO de
+    cada edificio, declarado en su perfil (la del LT2 en
+    edificios/lt2/perfiles/lt2_2024_22.json, 'terreno'): el conjunto no
+    decide nada, la copia.
+
+    Se le suma el dz del calce, igual que a las z de los nodos. Hoy solo
+    el LT2 la declara y su dz es 0 (en altura manda el LT2), asi que
+    sale igual. Pero si Ingenieria agrega la suya en su datum local
+    (0 a 19.80), sin el dz quedaria 7.97 m mas arriba.
+
+    ----------------------------------------------------------------
+    SI DOS CUERPOS NO CALZAN, NO SE ESCRIBE
+    ----------------------------------------------------------------
+    Los dos cuerpos estan en el mismo terreno, separados por una junta
+    de 5 cm: si al calzarlos declaran cotas distintas, uno de los dos
+    supuestos esta mal (o el dz). Elegir uno en silencio dibujaria un
+    suelo que contradice al otro, asi que se cae con los dos numeros.
+    """
+    with io.open(CALCE, encoding='utf-8') as f:
+        calce = json.load(f)
+
+    por_cuerpo = {}
+    for nombre, cfg in calce['edificios'].items():
+        ruta = rutas.unity(cfg.get('archivo', nombre))
+        if not os.path.isfile(ruta):
+            continue
+        with io.open(ruta, encoding='utf-8') as f:
+            z = (json.load(f).get('info') or {}).get('cota_terreno')
+        if z is None:
+            continue
+        por_cuerpo[nombre] = round(float(z) + float(cfg.get('dz', 0.0)), 4)
+
+    if not por_cuerpo:
+        return None, por_cuerpo
+    cotas = sorted(set(por_cuerpo.values()))
+    # 0.01 m: la misma tolerancia de cota del visor
+    # (AjustesVista.TOLERANCIA_COTA); las cotas traen 2 decimales.
+    if cotas[-1] - cotas[0] > 0.01:
+        raise SystemExit(
+            '  Los cuerpos declaran terrenos distintos una vez calzados: %s.\n'
+            '  Revisar el "terreno" del perfil de cada uno y el dz de %s.'
+            % (', '.join('%s %+.2f' % kv for kv in sorted(por_cuerpo.items())),
+               os.path.relpath(CALCE, rutas.RAIZ)))
+    return cotas[0], por_cuerpo
+
+
 def main(caso=CASO_POR_DEFECTO):
     modelo = contrato.cargar_modelo(NOMBRE)
 
@@ -191,6 +249,9 @@ def main(caso=CASO_POR_DEFECTO):
                  'LIBRE: ningun elemento la cruza, los dos cuerpos se '
                  'resuelven independientes.'),
     })
+    cota, cotas_por_cuerpo = cota_terreno_del_conjunto()
+    if cota is not None:
+        completo['info']['cota_terreno'] = cota
 
     eq = res.get('equilibrio', {})
     uz = min((n.get('uz', 0.0) for n in completo['nodos']), default=0.0)
@@ -215,6 +276,12 @@ def main(caso=CASO_POR_DEFECTO):
     if deducidas:
         print('  %d seccion(es) sin b/h: se dedujeron de A, Iy, Iz para '
               'poder dibujarlas' % deducidas)
+    if cota is None:
+        print('  AVISO: ningun cuerpo declara cota de terreno: el visor '
+              'pondra el suelo en el apoyo mas bajo')
+    else:
+        print('  cota del terreno %+.2f m (supuesto de: %s)'
+              % (cota, ', '.join(sorted(cotas_por_cuerpo))))
     print('  UZ maximo: %.3f mm' % (uz * 1000))
     print('  -> %s  (%.2f MB)'
           % (os.path.relpath(salida, rutas.RAIZ), os.path.getsize(salida) / 1e6))

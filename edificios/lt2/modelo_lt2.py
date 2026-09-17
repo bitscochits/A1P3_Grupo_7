@@ -1347,6 +1347,13 @@ class ModeloLT2(object):
 
         self.carga_total = 0.0
         self.area_planta = sum(self.area_piso.values()) / max(1, len(self.area_piso))
+        # La carga repartida que recibe cada barra, por origen, tal como
+        # se le pasa a eleLoad: {etag: {'peso_propio': w, 'losa': w}}.
+        # OpenSees no la devuelve, y el visor necesita explicar la w del
+        # diagrama (losa + peso propio) sin recalcularla: la lee
+        # edificios/lt2/exportar_unity.py de aca, no de otra formula.
+        self.repartidas = {}
+        self.caso_repartidas = caso
 
         # --- sismo: fuerza horizontal en el maestro de cada diafragma ---
         # Va en el MAESTRO, no en un nodo de esquina: el maestro esta en
@@ -1378,6 +1385,7 @@ class ModeloLT2(object):
             for etag, _n1, _n2, sec, L, peso, _k in self.vigas:
                 w = sec.A * self.gamma
                 ops.eleLoad('-ele', etag, '-type', '-beamUniform', 0.0, -w, 0.0)
+                self.repartidas.setdefault(etag, {})['peso_propio'] = w
                 self.carga_total += peso
 
         # losa: a cada viga le llega la carga de SU area tributaria
@@ -1400,6 +1408,7 @@ class ModeloLT2(object):
                     continue
                 w = q * A / L                     # kN/m,  w*L = q*A
                 ops.eleLoad('-ele', etag, '-type', '-beamUniform', 0.0, -w, 0.0)
+                self.repartidas.setdefault(etag, {})['losa'] = w
                 self.carga_total += q * A
 
             # La losa que se apoya directo sobre un muro llega a su

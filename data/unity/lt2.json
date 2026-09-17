@@ -3,7 +3,8 @@
   "descripcion": "Edificio LT2 - planos de calculo 2024_22",
   "unidades": "m, kN, kPa",
   "caso_precalculado": "G",
-  "nota": "Geometria extraida de los planos DXF. Ejes locales calculados en Python. Carga de losa por areas tributarias a 45 grados sobre los panos detectados."
+  "nota": "Geometria extraida de los planos DXF. Ejes locales calculados en Python. Carga de losa por areas tributarias a 45 grados sobre los panos detectados.",
+  "cota_terreno": -4.01
  },
  "material": {
   "fpc_MPa": 35.0,
@@ -21239,6 +21240,8 @@
    "qG": 6.2997,
    "carga_total": 138.2987,
    "w": 19.075688,
+   "w_peso_propio": 12.0,
+   "w_total_G": 31.075688,
    "z": -4.01,
    "vertices": [
     {
@@ -21288,6 +21291,8 @@
    "qG": 6.2997,
    "carga_total": 183.7749,
    "w": 20.648866,
+   "w_peso_propio": 12.0,
+   "w_total_G": 32.648866,
    "z": -4.01,
    "vertices": [
     {
@@ -21337,6 +21342,8 @@
    "qG": 6.2997,
    "carga_total": 149.6186,
    "w": 20.637043,
+   "w_peso_propio": 12.0,
+   "w_total_G": 32.637043,
    "z": -4.01,
    "vertices": [
     {
@@ -21386,6 +21393,8 @@
    "qG": 6.2997,
    "carga_total": 201.5913,
    "w": 22.650711,
+   "w_peso_propio": 12.0,
+   "w_total_G": 34.650711,
    "z": -4.01,
    "vertices": [
     {
@@ -21435,6 +21444,8 @@
    "qG": 6.2997,
    "carga_total": 149.6186,
    "w": 20.637043,
+   "w_peso_propio": 12.0,
+   "w_total_G": 32.637043,
    "z": -4.01,
    "vertices": [
     {
@@ -21484,6 +21495,8 @@
    "qG": 6.2997,
    "carga_total": 201.5913,
    "w": 22.650711,
+   "w_peso_propio": 12.0,
+   "w_total_G": 34.650711,
    "z": -4.01,
    "vertices": [
     {
@@ -21533,6 +21546,8 @@
    "qG": 6.2997,
    "carga_total": 151.1335,
    "w": 20.845993,
+   "w_peso_propio": 12.0,
+   "w_total_G": 32.845993,
    "z": -4.01,
    "vertices": [
     {
@@ -21582,6 +21597,8 @@
    "qG": 6.2997,
    "carga_total": 100.7957,
    "w": 11.325356,
+   "w_peso_propio": 12.0,
+   "w_total_G": 23.325356,
    "z": -4.01,
    "vertices": [
     {
@@ -21614,6 +21631,8 @@
    "qG": 6.2997,
    "carga_total": 43.3733,
    "w": 11.566208,
+   "w_peso_propio": 12.0,
+   "w_total_G": 23.566208,
    "z": -4.01,
    "vertices": [
     {
@@ -21659,6 +21678,8 @@
    "qG": 6.2997,
    "carga_total": 44.295,
    "w": 11.811992,
+   "w_peso_propio": 12.0,
+   "w_total_G": 23.811992,
    "z": -4.01,
    "vertices": [
     {
@@ -21700,6 +21721,8 @@
    "qG": 6.2997,
    "carga_total": 78.7466,
    "w": 15.749322,
+   "w_peso_propio": 12.0,
+   "w_total_G": 27.749322,
    "z": -4.01,
    "vertices": [
     {
@@ -21741,6 +21764,8 @@
    "qG": 6.2997,
    "carga_total": 78.7466,
    "w": 15.749323,
+   "w_peso_propio": 12.0,
+   "w_total_G": 27.749323,
    "z": -4.01,
    "vertices": [
     {
@@ -21782,6 +21807,8 @@
    "qG": 6.2997,
    "carga_total": 78.7466,
    "w": 15.749322,
+   "w_peso_propio": 12.0,
+   "w_total_G": 27.749322,
    "z": -4.01,
    "vertices": [
     {
@@ -21823,6 +21850,8 @@
    "qG": 6.2997,
    "carga_total": 48.9951,
    "w": 9.377047,
+   "w_peso_propio": 12.0,
+   "w_total_G": 21.377047,
    "z": -4.01,
    "vertices": [
     {
@@ -21864,6 +21893,8 @@
    "qG": 6.2997,
    "carga_total": 25.905,
    "w": 6.908003,
+   "w_peso_propio": 12.0,
+   "w_total_G": 18.908003,
    "z": -4.01,
    "vertices": [
     {
@@ -21892,6 +21923,8 @@
    "qG": 6.2997,
    "carga_total": 22.1475,
    "w": 5.905996,
+   "w_peso_propio": 12.0,
+   "w_total_G": 17.905996,
    "z": -4.01,
    "vertices": [
     {
@@ -21920,6 +21953,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": -4.01,
    "vertices": [
     {
@@ -21948,6 +21983,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": -4.01,
    "vertices": [
     {
@@ -21976,6 +22013,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": -4.01,
    "vertices": [
     {
@@ -22004,6 +22043,8 @@
    "qG": 6.2997,
    "carga_total": 42.9966,
    "w": 8.229021,
+   "w_peso_propio": 12.0,
+   "w_total_G": 20.229021,
    "z": -4.01,
    "vertices": [
     {
@@ -22032,6 +22073,8 @@
    "qG": 6.2997,
    "carga_total": 25.905,
    "w": 6.908003,
+   "w_peso_propio": 12.0,
+   "w_total_G": 18.908003,
    "z": -4.01,
    "vertices": [
     {
@@ -22060,6 +22103,8 @@
    "qG": 6.2997,
    "carga_total": 22.1475,
    "w": 5.905996,
+   "w_peso_propio": 12.0,
+   "w_total_G": 17.905996,
    "z": -4.01,
    "vertices": [
     {
@@ -22088,6 +22133,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": -4.01,
    "vertices": [
     {
@@ -22116,6 +22163,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": -4.01,
    "vertices": [
     {
@@ -22144,6 +22193,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": -4.01,
    "vertices": [
     {
@@ -22172,6 +22223,8 @@
    "qG": 6.2997,
    "carga_total": 59.8314,
    "w": 14.028467,
+   "w_peso_propio": 12.0,
+   "w_total_G": 26.028467,
    "z": -4.01,
    "vertices": [
     {
@@ -22221,6 +22274,8 @@
    "qG": 6.2997,
    "carga_total": 37.4873,
    "w": 12.558555,
+   "w_peso_propio": 12.0,
+   "w_total_G": 24.558555,
    "z": -4.01,
    "vertices": [
     {
@@ -22266,6 +22321,8 @@
    "qG": 6.2997,
    "carga_total": 74.5057,
    "w": 16.074588,
+   "w_peso_propio": 12.0,
+   "w_total_G": 28.074588,
    "z": -4.01,
    "vertices": [
     {
@@ -22315,6 +22372,8 @@
    "qG": 6.2997,
    "carga_total": 59.8314,
    "w": 14.028467,
+   "w_peso_propio": 12.0,
+   "w_total_G": 26.028467,
    "z": -4.01,
    "vertices": [
     {
@@ -22364,6 +22423,8 @@
    "qG": 6.2997,
    "carga_total": 39.6962,
    "w": 11.182019,
+   "w_peso_propio": 6.0,
+   "w_total_G": 17.182019,
    "z": -4.01,
    "vertices": [
     {
@@ -22405,6 +22466,8 @@
    "qG": 6.2997,
    "carga_total": 43.3733,
    "w": 11.566208,
+   "w_peso_propio": 6.0,
+   "w_total_G": 17.566208,
    "z": -4.01,
    "vertices": [
     {
@@ -22450,6 +22513,8 @@
    "qG": 6.2997,
    "carga_total": 39.6962,
    "w": 11.182019,
+   "w_peso_propio": 6.0,
+   "w_total_G": 17.182019,
    "z": -4.01,
    "vertices": [
     {
@@ -22491,6 +22556,8 @@
    "qG": 6.2997,
    "carga_total": 44.295,
    "w": 11.811992,
+   "w_peso_propio": 6.0,
+   "w_total_G": 17.811992,
    "z": -4.01,
    "vertices": [
     {
@@ -22532,6 +22599,8 @@
    "qG": 6.2997,
    "carga_total": 17.3601,
    "w": 7.114789,
+   "w_peso_propio": 8.0,
+   "w_total_G": 15.114789,
    "z": -4.01,
    "vertices": [
     {
@@ -22564,6 +22633,8 @@
    "qG": 6.2997,
    "carga_total": 65.3589,
    "w": 8.577284,
+   "w_peso_propio": 8.0,
+   "w_total_G": 16.577284,
    "z": -4.01,
    "vertices": [
     {
@@ -22596,6 +22667,8 @@
    "qG": 6.2997,
    "carga_total": 17.3601,
    "w": 7.114789,
+   "w_peso_propio": 8.0,
+   "w_total_G": 15.114789,
    "z": -4.01,
    "vertices": [
     {
@@ -22628,6 +22701,8 @@
    "qG": 6.2997,
    "carga_total": 67.5351,
    "w": 15.834716,
+   "w_peso_propio": 12.0,
+   "w_total_G": 27.834716,
    "z": -4.01,
    "vertices": [
     {
@@ -22677,6 +22752,8 @@
    "qG": 6.2997,
    "carga_total": 38.2181,
    "w": 12.803368,
+   "w_peso_propio": 12.0,
+   "w_total_G": 24.803368,
    "z": -4.01,
    "vertices": [
     {
@@ -22722,6 +22799,8 @@
    "qG": 6.2997,
    "carga_total": 76.2759,
    "w": 16.456513,
+   "w_peso_propio": 12.0,
+   "w_total_G": 28.456513,
    "z": -4.01,
    "vertices": [
     {
@@ -22771,6 +22850,8 @@
    "qG": 6.2997,
    "carga_total": 67.5351,
    "w": 15.834716,
+   "w_peso_propio": 12.0,
+   "w_total_G": 27.834716,
    "z": -4.01,
    "vertices": [
     {
@@ -22820,6 +22901,8 @@
    "qG": 6.2997,
    "carga_total": 138.2987,
    "w": 19.075688,
+   "w_peso_propio": 12.0,
+   "w_total_G": 31.075688,
    "z": -0.05,
    "vertices": [
     {
@@ -22869,6 +22952,8 @@
    "qG": 6.2997,
    "carga_total": 183.7749,
    "w": 20.648866,
+   "w_peso_propio": 12.0,
+   "w_total_G": 32.648866,
    "z": -0.05,
    "vertices": [
     {
@@ -22918,6 +23003,8 @@
    "qG": 6.2997,
    "carga_total": 149.6186,
    "w": 20.637043,
+   "w_peso_propio": 12.0,
+   "w_total_G": 32.637043,
    "z": -0.05,
    "vertices": [
     {
@@ -22967,6 +23054,8 @@
    "qG": 6.2997,
    "carga_total": 201.5913,
    "w": 22.650711,
+   "w_peso_propio": 12.0,
+   "w_total_G": 34.650711,
    "z": -0.05,
    "vertices": [
     {
@@ -23016,6 +23105,8 @@
    "qG": 6.2997,
    "carga_total": 149.6186,
    "w": 20.637043,
+   "w_peso_propio": 12.0,
+   "w_total_G": 32.637043,
    "z": -0.05,
    "vertices": [
     {
@@ -23065,6 +23156,8 @@
    "qG": 6.2997,
    "carga_total": 201.5913,
    "w": 22.650711,
+   "w_peso_propio": 12.0,
+   "w_total_G": 34.650711,
    "z": -0.05,
    "vertices": [
     {
@@ -23114,6 +23207,8 @@
    "qG": 6.2997,
    "carga_total": 151.1335,
    "w": 20.845993,
+   "w_peso_propio": 12.0,
+   "w_total_G": 32.845993,
    "z": -0.05,
    "vertices": [
     {
@@ -23163,6 +23258,8 @@
    "qG": 6.2997,
    "carga_total": 100.7957,
    "w": 11.325356,
+   "w_peso_propio": 12.0,
+   "w_total_G": 23.325356,
    "z": -0.05,
    "vertices": [
     {
@@ -23195,6 +23292,8 @@
    "qG": 6.2997,
    "carga_total": 43.3733,
    "w": 11.566208,
+   "w_peso_propio": 12.0,
+   "w_total_G": 23.566208,
    "z": -0.05,
    "vertices": [
     {
@@ -23240,6 +23339,8 @@
    "qG": 6.2997,
    "carga_total": 44.295,
    "w": 11.811992,
+   "w_peso_propio": 12.0,
+   "w_total_G": 23.811992,
    "z": -0.05,
    "vertices": [
     {
@@ -23281,6 +23382,8 @@
    "qG": 6.2997,
    "carga_total": 78.7466,
    "w": 15.749322,
+   "w_peso_propio": 12.0,
+   "w_total_G": 27.749322,
    "z": -0.05,
    "vertices": [
     {
@@ -23322,6 +23425,8 @@
    "qG": 6.2997,
    "carga_total": 78.7466,
    "w": 15.749323,
+   "w_peso_propio": 12.0,
+   "w_total_G": 27.749323,
    "z": -0.05,
    "vertices": [
     {
@@ -23363,6 +23468,8 @@
    "qG": 6.2997,
    "carga_total": 78.7466,
    "w": 15.749322,
+   "w_peso_propio": 12.0,
+   "w_total_G": 27.749322,
    "z": -0.05,
    "vertices": [
     {
@@ -23404,6 +23511,8 @@
    "qG": 6.2997,
    "carga_total": 48.9951,
    "w": 9.377047,
+   "w_peso_propio": 12.0,
+   "w_total_G": 21.377047,
    "z": -0.05,
    "vertices": [
     {
@@ -23445,6 +23554,8 @@
    "qG": 6.2997,
    "carga_total": 25.905,
    "w": 6.908003,
+   "w_peso_propio": 12.0,
+   "w_total_G": 18.908003,
    "z": -0.05,
    "vertices": [
     {
@@ -23473,6 +23584,8 @@
    "qG": 6.2997,
    "carga_total": 22.1475,
    "w": 5.905996,
+   "w_peso_propio": 12.0,
+   "w_total_G": 17.905996,
    "z": -0.05,
    "vertices": [
     {
@@ -23501,6 +23614,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": -0.05,
    "vertices": [
     {
@@ -23529,6 +23644,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": -0.05,
    "vertices": [
     {
@@ -23557,6 +23674,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": -0.05,
    "vertices": [
     {
@@ -23585,6 +23704,8 @@
    "qG": 6.2997,
    "carga_total": 42.9966,
    "w": 8.229021,
+   "w_peso_propio": 12.0,
+   "w_total_G": 20.229021,
    "z": -0.05,
    "vertices": [
     {
@@ -23613,6 +23734,8 @@
    "qG": 6.2997,
    "carga_total": 25.905,
    "w": 6.908003,
+   "w_peso_propio": 12.0,
+   "w_total_G": 18.908003,
    "z": -0.05,
    "vertices": [
     {
@@ -23641,6 +23764,8 @@
    "qG": 6.2997,
    "carga_total": 22.1475,
    "w": 5.905996,
+   "w_peso_propio": 12.0,
+   "w_total_G": 17.905996,
    "z": -0.05,
    "vertices": [
     {
@@ -23669,6 +23794,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": -0.05,
    "vertices": [
     {
@@ -23697,6 +23824,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": -0.05,
    "vertices": [
     {
@@ -23725,6 +23854,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": -0.05,
    "vertices": [
     {
@@ -23753,6 +23884,8 @@
    "qG": 6.2997,
    "carga_total": 59.8314,
    "w": 14.028467,
+   "w_peso_propio": 12.0,
+   "w_total_G": 26.028467,
    "z": -0.05,
    "vertices": [
     {
@@ -23802,6 +23935,8 @@
    "qG": 6.2997,
    "carga_total": 37.4873,
    "w": 12.558555,
+   "w_peso_propio": 12.0,
+   "w_total_G": 24.558555,
    "z": -0.05,
    "vertices": [
     {
@@ -23847,6 +23982,8 @@
    "qG": 6.2997,
    "carga_total": 74.5057,
    "w": 16.074588,
+   "w_peso_propio": 12.0,
+   "w_total_G": 28.074588,
    "z": -0.05,
    "vertices": [
     {
@@ -23896,6 +24033,8 @@
    "qG": 6.2997,
    "carga_total": 59.8314,
    "w": 14.028467,
+   "w_peso_propio": 12.0,
+   "w_total_G": 26.028467,
    "z": -0.05,
    "vertices": [
     {
@@ -23945,6 +24084,8 @@
    "qG": 6.2997,
    "carga_total": 39.6962,
    "w": 11.182019,
+   "w_peso_propio": 6.0,
+   "w_total_G": 17.182019,
    "z": -0.05,
    "vertices": [
     {
@@ -23986,6 +24127,8 @@
    "qG": 6.2997,
    "carga_total": 43.3733,
    "w": 11.566208,
+   "w_peso_propio": 6.0,
+   "w_total_G": 17.566208,
    "z": -0.05,
    "vertices": [
     {
@@ -24031,6 +24174,8 @@
    "qG": 6.2997,
    "carga_total": 39.6962,
    "w": 11.182019,
+   "w_peso_propio": 6.0,
+   "w_total_G": 17.182019,
    "z": -0.05,
    "vertices": [
     {
@@ -24072,6 +24217,8 @@
    "qG": 6.2997,
    "carga_total": 44.295,
    "w": 11.811992,
+   "w_peso_propio": 6.0,
+   "w_total_G": 17.811992,
    "z": -0.05,
    "vertices": [
     {
@@ -24113,6 +24260,8 @@
    "qG": 6.2997,
    "carga_total": 17.3601,
    "w": 7.114789,
+   "w_peso_propio": 8.0,
+   "w_total_G": 15.114789,
    "z": -0.05,
    "vertices": [
     {
@@ -24145,6 +24294,8 @@
    "qG": 6.2997,
    "carga_total": 65.3589,
    "w": 8.577284,
+   "w_peso_propio": 8.0,
+   "w_total_G": 16.577284,
    "z": -0.05,
    "vertices": [
     {
@@ -24177,6 +24328,8 @@
    "qG": 6.2997,
    "carga_total": 17.3601,
    "w": 7.114789,
+   "w_peso_propio": 8.0,
+   "w_total_G": 15.114789,
    "z": -0.05,
    "vertices": [
     {
@@ -24209,6 +24362,8 @@
    "qG": 6.2997,
    "carga_total": 67.5351,
    "w": 15.834716,
+   "w_peso_propio": 12.0,
+   "w_total_G": 27.834716,
    "z": -0.05,
    "vertices": [
     {
@@ -24258,6 +24413,8 @@
    "qG": 6.2997,
    "carga_total": 38.2181,
    "w": 12.803368,
+   "w_peso_propio": 12.0,
+   "w_total_G": 24.803368,
    "z": -0.05,
    "vertices": [
     {
@@ -24303,6 +24460,8 @@
    "qG": 6.2997,
    "carga_total": 76.2759,
    "w": 16.456513,
+   "w_peso_propio": 12.0,
+   "w_total_G": 28.456513,
    "z": -0.05,
    "vertices": [
     {
@@ -24352,6 +24511,8 @@
    "qG": 6.2997,
    "carga_total": 67.5351,
    "w": 15.834716,
+   "w_peso_propio": 12.0,
+   "w_total_G": 27.834716,
    "z": -0.05,
    "vertices": [
     {
@@ -24401,6 +24562,8 @@
    "qG": 6.2997,
    "carga_total": 138.2987,
    "w": 19.075688,
+   "w_peso_propio": 12.0,
+   "w_total_G": 31.075688,
    "z": 3.91,
    "vertices": [
     {
@@ -24450,6 +24613,8 @@
    "qG": 6.2997,
    "carga_total": 183.7749,
    "w": 20.648866,
+   "w_peso_propio": 12.0,
+   "w_total_G": 32.648866,
    "z": 3.91,
    "vertices": [
     {
@@ -24499,6 +24664,8 @@
    "qG": 6.2997,
    "carga_total": 149.6186,
    "w": 20.637043,
+   "w_peso_propio": 12.0,
+   "w_total_G": 32.637043,
    "z": 3.91,
    "vertices": [
     {
@@ -24548,6 +24715,8 @@
    "qG": 6.2997,
    "carga_total": 201.5913,
    "w": 22.650711,
+   "w_peso_propio": 12.0,
+   "w_total_G": 34.650711,
    "z": 3.91,
    "vertices": [
     {
@@ -24597,6 +24766,8 @@
    "qG": 6.2997,
    "carga_total": 149.6186,
    "w": 20.637043,
+   "w_peso_propio": 12.0,
+   "w_total_G": 32.637043,
    "z": 3.91,
    "vertices": [
     {
@@ -24646,6 +24817,8 @@
    "qG": 6.2997,
    "carga_total": 201.5913,
    "w": 22.650711,
+   "w_peso_propio": 12.0,
+   "w_total_G": 34.650711,
    "z": 3.91,
    "vertices": [
     {
@@ -24695,6 +24868,8 @@
    "qG": 6.2997,
    "carga_total": 151.1335,
    "w": 20.845993,
+   "w_peso_propio": 12.0,
+   "w_total_G": 32.845993,
    "z": 3.91,
    "vertices": [
     {
@@ -24744,6 +24919,8 @@
    "qG": 6.2997,
    "carga_total": 100.7957,
    "w": 11.325356,
+   "w_peso_propio": 12.0,
+   "w_total_G": 23.325356,
    "z": 3.91,
    "vertices": [
     {
@@ -24776,6 +24953,8 @@
    "qG": 6.2997,
    "carga_total": 43.3733,
    "w": 11.566208,
+   "w_peso_propio": 12.0,
+   "w_total_G": 23.566208,
    "z": 3.91,
    "vertices": [
     {
@@ -24821,6 +25000,8 @@
    "qG": 6.2997,
    "carga_total": 44.295,
    "w": 11.811992,
+   "w_peso_propio": 12.0,
+   "w_total_G": 23.811992,
    "z": 3.91,
    "vertices": [
     {
@@ -24862,6 +25043,8 @@
    "qG": 6.2997,
    "carga_total": 78.7466,
    "w": 15.749322,
+   "w_peso_propio": 12.0,
+   "w_total_G": 27.749322,
    "z": 3.91,
    "vertices": [
     {
@@ -24903,6 +25086,8 @@
    "qG": 6.2997,
    "carga_total": 78.7466,
    "w": 15.749323,
+   "w_peso_propio": 12.0,
+   "w_total_G": 27.749323,
    "z": 3.91,
    "vertices": [
     {
@@ -24944,6 +25129,8 @@
    "qG": 6.2997,
    "carga_total": 78.7466,
    "w": 15.749322,
+   "w_peso_propio": 12.0,
+   "w_total_G": 27.749322,
    "z": 3.91,
    "vertices": [
     {
@@ -24985,6 +25172,8 @@
    "qG": 6.2997,
    "carga_total": 48.9951,
    "w": 9.377047,
+   "w_peso_propio": 12.0,
+   "w_total_G": 21.377047,
    "z": 3.91,
    "vertices": [
     {
@@ -25026,6 +25215,8 @@
    "qG": 6.2997,
    "carga_total": 25.905,
    "w": 6.908003,
+   "w_peso_propio": 12.0,
+   "w_total_G": 18.908003,
    "z": 3.91,
    "vertices": [
     {
@@ -25054,6 +25245,8 @@
    "qG": 6.2997,
    "carga_total": 22.1475,
    "w": 5.905996,
+   "w_peso_propio": 12.0,
+   "w_total_G": 17.905996,
    "z": 3.91,
    "vertices": [
     {
@@ -25082,6 +25275,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": 3.91,
    "vertices": [
     {
@@ -25110,6 +25305,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": 3.91,
    "vertices": [
     {
@@ -25138,6 +25335,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": 3.91,
    "vertices": [
     {
@@ -25166,6 +25365,8 @@
    "qG": 6.2997,
    "carga_total": 42.9966,
    "w": 8.229021,
+   "w_peso_propio": 12.0,
+   "w_total_G": 20.229021,
    "z": 3.91,
    "vertices": [
     {
@@ -25194,6 +25395,8 @@
    "qG": 6.2997,
    "carga_total": 25.905,
    "w": 6.908003,
+   "w_peso_propio": 12.0,
+   "w_total_G": 18.908003,
    "z": 3.91,
    "vertices": [
     {
@@ -25222,6 +25425,8 @@
    "qG": 6.2997,
    "carga_total": 22.1475,
    "w": 5.905996,
+   "w_peso_propio": 12.0,
+   "w_total_G": 17.905996,
    "z": 3.91,
    "vertices": [
     {
@@ -25250,6 +25455,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": 3.91,
    "vertices": [
     {
@@ -25278,6 +25485,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": 3.91,
    "vertices": [
     {
@@ -25306,6 +25515,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": 3.91,
    "vertices": [
     {
@@ -25334,6 +25545,8 @@
    "qG": 6.2997,
    "carga_total": 59.8314,
    "w": 14.028467,
+   "w_peso_propio": 12.0,
+   "w_total_G": 26.028467,
    "z": 3.91,
    "vertices": [
     {
@@ -25383,6 +25596,8 @@
    "qG": 6.2997,
    "carga_total": 37.4873,
    "w": 12.558555,
+   "w_peso_propio": 12.0,
+   "w_total_G": 24.558555,
    "z": 3.91,
    "vertices": [
     {
@@ -25428,6 +25643,8 @@
    "qG": 6.2997,
    "carga_total": 74.5057,
    "w": 16.074588,
+   "w_peso_propio": 12.0,
+   "w_total_G": 28.074588,
    "z": 3.91,
    "vertices": [
     {
@@ -25477,6 +25694,8 @@
    "qG": 6.2997,
    "carga_total": 59.8314,
    "w": 14.028467,
+   "w_peso_propio": 12.0,
+   "w_total_G": 26.028467,
    "z": 3.91,
    "vertices": [
     {
@@ -25526,6 +25745,8 @@
    "qG": 6.2997,
    "carga_total": 39.6962,
    "w": 11.182019,
+   "w_peso_propio": 6.0,
+   "w_total_G": 17.182019,
    "z": 3.91,
    "vertices": [
     {
@@ -25567,6 +25788,8 @@
    "qG": 6.2997,
    "carga_total": 43.3733,
    "w": 11.566208,
+   "w_peso_propio": 6.0,
+   "w_total_G": 17.566208,
    "z": 3.91,
    "vertices": [
     {
@@ -25612,6 +25835,8 @@
    "qG": 6.2997,
    "carga_total": 39.6962,
    "w": 11.182019,
+   "w_peso_propio": 6.0,
+   "w_total_G": 17.182019,
    "z": 3.91,
    "vertices": [
     {
@@ -25653,6 +25878,8 @@
    "qG": 6.2997,
    "carga_total": 44.295,
    "w": 11.811992,
+   "w_peso_propio": 6.0,
+   "w_total_G": 17.811992,
    "z": 3.91,
    "vertices": [
     {
@@ -25694,6 +25921,8 @@
    "qG": 6.2997,
    "carga_total": 17.3601,
    "w": 7.114789,
+   "w_peso_propio": 8.0,
+   "w_total_G": 15.114789,
    "z": 3.91,
    "vertices": [
     {
@@ -25726,6 +25955,8 @@
    "qG": 6.2997,
    "carga_total": 65.3589,
    "w": 8.577284,
+   "w_peso_propio": 8.0,
+   "w_total_G": 16.577284,
    "z": 3.91,
    "vertices": [
     {
@@ -25758,6 +25989,8 @@
    "qG": 6.2997,
    "carga_total": 17.3601,
    "w": 7.114789,
+   "w_peso_propio": 8.0,
+   "w_total_G": 15.114789,
    "z": 3.91,
    "vertices": [
     {
@@ -25790,6 +26023,8 @@
    "qG": 6.2997,
    "carga_total": 67.5351,
    "w": 15.834716,
+   "w_peso_propio": 12.0,
+   "w_total_G": 27.834716,
    "z": 3.91,
    "vertices": [
     {
@@ -25839,6 +26074,8 @@
    "qG": 6.2997,
    "carga_total": 38.2181,
    "w": 12.803368,
+   "w_peso_propio": 12.0,
+   "w_total_G": 24.803368,
    "z": 3.91,
    "vertices": [
     {
@@ -25884,6 +26121,8 @@
    "qG": 6.2997,
    "carga_total": 76.2759,
    "w": 16.456513,
+   "w_peso_propio": 12.0,
+   "w_total_G": 28.456513,
    "z": 3.91,
    "vertices": [
     {
@@ -25933,6 +26172,8 @@
    "qG": 6.2997,
    "carga_total": 67.5351,
    "w": 15.834716,
+   "w_peso_propio": 12.0,
+   "w_total_G": 27.834716,
    "z": 3.91,
    "vertices": [
     {
@@ -25982,6 +26223,8 @@
    "qG": 6.2997,
    "carga_total": 138.2987,
    "w": 19.075688,
+   "w_peso_propio": 12.0,
+   "w_total_G": 31.075688,
    "z": 7.87,
    "vertices": [
     {
@@ -26031,6 +26274,8 @@
    "qG": 6.2997,
    "carga_total": 183.7749,
    "w": 20.648866,
+   "w_peso_propio": 12.0,
+   "w_total_G": 32.648866,
    "z": 7.87,
    "vertices": [
     {
@@ -26080,6 +26325,8 @@
    "qG": 6.2997,
    "carga_total": 149.6186,
    "w": 20.637043,
+   "w_peso_propio": 12.0,
+   "w_total_G": 32.637043,
    "z": 7.87,
    "vertices": [
     {
@@ -26129,6 +26376,8 @@
    "qG": 6.2997,
    "carga_total": 201.5913,
    "w": 22.650711,
+   "w_peso_propio": 12.0,
+   "w_total_G": 34.650711,
    "z": 7.87,
    "vertices": [
     {
@@ -26178,6 +26427,8 @@
    "qG": 6.2997,
    "carga_total": 149.6186,
    "w": 20.637043,
+   "w_peso_propio": 12.0,
+   "w_total_G": 32.637043,
    "z": 7.87,
    "vertices": [
     {
@@ -26227,6 +26478,8 @@
    "qG": 6.2997,
    "carga_total": 201.5913,
    "w": 22.650711,
+   "w_peso_propio": 12.0,
+   "w_total_G": 34.650711,
    "z": 7.87,
    "vertices": [
     {
@@ -26276,6 +26529,8 @@
    "qG": 6.2997,
    "carga_total": 151.1335,
    "w": 20.845993,
+   "w_peso_propio": 12.0,
+   "w_total_G": 32.845993,
    "z": 7.87,
    "vertices": [
     {
@@ -26325,6 +26580,8 @@
    "qG": 6.2997,
    "carga_total": 100.7957,
    "w": 11.325356,
+   "w_peso_propio": 12.0,
+   "w_total_G": 23.325356,
    "z": 7.87,
    "vertices": [
     {
@@ -26357,6 +26614,8 @@
    "qG": 6.2997,
    "carga_total": 43.3733,
    "w": 11.566208,
+   "w_peso_propio": 12.0,
+   "w_total_G": 23.566208,
    "z": 7.87,
    "vertices": [
     {
@@ -26402,6 +26661,8 @@
    "qG": 6.2997,
    "carga_total": 44.295,
    "w": 11.811992,
+   "w_peso_propio": 12.0,
+   "w_total_G": 23.811992,
    "z": 7.87,
    "vertices": [
     {
@@ -26443,6 +26704,8 @@
    "qG": 6.2997,
    "carga_total": 78.7466,
    "w": 15.749322,
+   "w_peso_propio": 12.0,
+   "w_total_G": 27.749322,
    "z": 7.87,
    "vertices": [
     {
@@ -26484,6 +26747,8 @@
    "qG": 6.2997,
    "carga_total": 78.7466,
    "w": 15.749323,
+   "w_peso_propio": 12.0,
+   "w_total_G": 27.749323,
    "z": 7.87,
    "vertices": [
     {
@@ -26525,6 +26790,8 @@
    "qG": 6.2997,
    "carga_total": 78.7466,
    "w": 15.749322,
+   "w_peso_propio": 12.0,
+   "w_total_G": 27.749322,
    "z": 7.87,
    "vertices": [
     {
@@ -26566,6 +26833,8 @@
    "qG": 6.2997,
    "carga_total": 48.9951,
    "w": 9.377047,
+   "w_peso_propio": 12.0,
+   "w_total_G": 21.377047,
    "z": 7.87,
    "vertices": [
     {
@@ -26607,6 +26876,8 @@
    "qG": 6.2997,
    "carga_total": 9.6379,
    "w": 3.671592,
+   "w_peso_propio": 12.0,
+   "w_total_G": 15.671592,
    "z": 7.87,
    "vertices": [
     {
@@ -26639,6 +26910,8 @@
    "qG": 6.2997,
    "carga_total": 25.905,
    "w": 6.908003,
+   "w_peso_propio": 12.0,
+   "w_total_G": 18.908003,
    "z": 7.87,
    "vertices": [
     {
@@ -26667,6 +26940,8 @@
    "qG": 6.2997,
    "carga_total": 22.1475,
    "w": 5.905996,
+   "w_peso_propio": 12.0,
+   "w_total_G": 17.905996,
    "z": 7.87,
    "vertices": [
     {
@@ -26695,6 +26970,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": 7.87,
    "vertices": [
     {
@@ -26723,6 +27000,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": 7.87,
    "vertices": [
     {
@@ -26751,6 +27030,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": 7.87,
    "vertices": [
     {
@@ -26779,6 +27060,8 @@
    "qG": 6.2997,
    "carga_total": 42.9966,
    "w": 8.229021,
+   "w_peso_propio": 12.0,
+   "w_total_G": 20.229021,
    "z": 7.87,
    "vertices": [
     {
@@ -26807,6 +27090,8 @@
    "qG": 6.2997,
    "carga_total": 17.153,
    "w": 6.534469,
+   "w_peso_propio": 12.0,
+   "w_total_G": 18.534469,
    "z": 7.87,
    "vertices": [
     {
@@ -26856,6 +27141,8 @@
    "qG": 6.2997,
    "carga_total": 22.1475,
    "w": 5.905996,
+   "w_peso_propio": 12.0,
+   "w_total_G": 17.905996,
    "z": 7.87,
    "vertices": [
     {
@@ -26884,6 +27171,8 @@
    "qG": 6.2997,
    "carga_total": 22.1475,
    "w": 5.905996,
+   "w_peso_propio": 12.0,
+   "w_total_G": 17.905996,
    "z": 7.87,
    "vertices": [
     {
@@ -26912,6 +27201,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": 7.87,
    "vertices": [
     {
@@ -26940,6 +27231,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": 7.87,
    "vertices": [
     {
@@ -26968,6 +27261,8 @@
    "qG": 6.2997,
    "carga_total": 39.3733,
    "w": 7.874661,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.874661,
    "z": 7.87,
    "vertices": [
     {
@@ -26996,6 +27291,8 @@
    "qG": 6.2997,
    "carga_total": 59.8314,
    "w": 14.028467,
+   "w_peso_propio": 12.0,
+   "w_total_G": 26.028467,
    "z": 7.87,
    "vertices": [
     {
@@ -27045,6 +27342,8 @@
    "qG": 6.2997,
    "carga_total": 37.4873,
    "w": 12.558555,
+   "w_peso_propio": 12.0,
+   "w_total_G": 24.558555,
    "z": 7.87,
    "vertices": [
     {
@@ -27090,6 +27389,8 @@
    "qG": 6.2997,
    "carga_total": 74.5057,
    "w": 16.074588,
+   "w_peso_propio": 12.0,
+   "w_total_G": 28.074588,
    "z": 7.87,
    "vertices": [
     {
@@ -27139,6 +27440,8 @@
    "qG": 6.2997,
    "carga_total": 56.0739,
    "w": 13.147453,
+   "w_peso_propio": 12.0,
+   "w_total_G": 25.147453,
    "z": 7.87,
    "vertices": [
     {
@@ -27188,6 +27491,8 @@
    "qG": 6.2997,
    "carga_total": 39.6962,
    "w": 11.182019,
+   "w_peso_propio": 6.0,
+   "w_total_G": 17.182019,
    "z": 7.87,
    "vertices": [
     {
@@ -27229,6 +27534,8 @@
    "qG": 6.2997,
    "carga_total": 43.3733,
    "w": 11.566208,
+   "w_peso_propio": 6.0,
+   "w_total_G": 17.566208,
    "z": 7.87,
    "vertices": [
     {
@@ -27274,6 +27581,8 @@
    "qG": 6.2997,
    "carga_total": 39.6962,
    "w": 11.182019,
+   "w_peso_propio": 6.0,
+   "w_total_G": 17.182019,
    "z": 7.87,
    "vertices": [
     {
@@ -27315,6 +27624,8 @@
    "qG": 6.2997,
    "carga_total": 44.295,
    "w": 11.811992,
+   "w_peso_propio": 6.0,
+   "w_total_G": 17.811992,
    "z": 7.87,
    "vertices": [
     {
@@ -27356,6 +27667,8 @@
    "qG": 6.2997,
    "carga_total": 17.3601,
    "w": 7.114789,
+   "w_peso_propio": 8.0,
+   "w_total_G": 15.114789,
    "z": 7.87,
    "vertices": [
     {
@@ -27388,6 +27701,8 @@
    "qG": 6.2997,
    "carga_total": 65.3589,
    "w": 8.577284,
+   "w_peso_propio": 8.0,
+   "w_total_G": 16.577284,
    "z": 7.87,
    "vertices": [
     {
@@ -27420,6 +27735,8 @@
    "qG": 6.2997,
    "carga_total": 17.3601,
    "w": 7.114789,
+   "w_peso_propio": 8.0,
+   "w_total_G": 15.114789,
    "z": 7.87,
    "vertices": [
     {
@@ -27452,6 +27769,8 @@
    "qG": 6.2997,
    "carga_total": 67.5351,
    "w": 15.834716,
+   "w_peso_propio": 12.0,
+   "w_total_G": 27.834716,
    "z": 7.87,
    "vertices": [
     {
@@ -27501,6 +27820,8 @@
    "qG": 6.2997,
    "carga_total": 38.2181,
    "w": 12.803368,
+   "w_peso_propio": 12.0,
+   "w_total_G": 24.803368,
    "z": 7.87,
    "vertices": [
     {
@@ -27546,6 +27867,8 @@
    "qG": 6.2997,
    "carga_total": 76.2759,
    "w": 16.456513,
+   "w_peso_propio": 12.0,
+   "w_total_G": 28.456513,
    "z": 7.87,
    "vertices": [
     {
@@ -27595,6 +27918,8 @@
    "qG": 6.2997,
    "carga_total": 67.5351,
    "w": 15.834716,
+   "w_peso_propio": 12.0,
+   "w_total_G": 27.834716,
    "z": 7.87,
    "vertices": [
     {
@@ -27644,6 +27969,8 @@
    "qG": 5.7113,
    "carga_total": 125.3815,
    "w": 17.294006,
+   "w_peso_propio": 12.0,
+   "w_total_G": 29.294006,
    "z": 11.83,
    "vertices": [
     {
@@ -27693,6 +28020,8 @@
    "qG": 5.7113,
    "carga_total": 166.6102,
    "w": 18.720248,
+   "w_peso_propio": 12.0,
+   "w_total_G": 30.720248,
    "z": 11.83,
    "vertices": [
     {
@@ -27742,6 +28071,8 @@
    "qG": 5.7113,
    "carga_total": 135.6441,
    "w": 18.709529,
+   "w_peso_propio": 12.0,
+   "w_total_G": 30.709529,
    "z": 11.83,
    "vertices": [
     {
@@ -27791,6 +28122,8 @@
    "qG": 5.7113,
    "carga_total": 182.7626,
    "w": 20.535119,
+   "w_peso_propio": 12.0,
+   "w_total_G": 32.535119,
    "z": 11.83,
    "vertices": [
     {
@@ -27840,6 +28173,8 @@
    "qG": 5.7113,
    "carga_total": 23.4855,
    "w": 6.262791,
+   "w_peso_propio": 12.0,
+   "w_total_G": 18.262791,
    "z": 11.83,
    "vertices": [
     {
@@ -27868,6 +28203,8 @@
    "qG": 5.7113,
    "carga_total": 20.0789,
    "w": 5.354372,
+   "w_peso_propio": 12.0,
+   "w_total_G": 17.354372,
    "z": 11.83,
    "vertices": [
     {
@@ -27896,6 +28233,8 @@
    "qG": 5.7113,
    "carga_total": 35.6958,
    "w": 7.139163,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.139163,
    "z": 11.83,
    "vertices": [
     {
@@ -27924,6 +28263,8 @@
    "qG": 5.7113,
    "carga_total": 35.6958,
    "w": 7.139163,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.139163,
    "z": 11.83,
    "vertices": [
     {
@@ -27952,6 +28293,8 @@
    "qG": 5.7113,
    "carga_total": 35.6958,
    "w": 7.139163,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.139163,
    "z": 11.83,
    "vertices": [
     {
@@ -27980,6 +28323,8 @@
    "qG": 5.7113,
    "carga_total": 23.4855,
    "w": 6.262791,
+   "w_peso_propio": 12.0,
+   "w_total_G": 18.262791,
    "z": 11.83,
    "vertices": [
     {
@@ -28008,6 +28353,8 @@
    "qG": 5.7113,
    "carga_total": 20.0789,
    "w": 5.354372,
+   "w_peso_propio": 12.0,
+   "w_total_G": 17.354372,
    "z": 11.83,
    "vertices": [
     {
@@ -28036,6 +28383,8 @@
    "qG": 5.7113,
    "carga_total": 35.6958,
    "w": 7.139163,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.139163,
    "z": 11.83,
    "vertices": [
     {
@@ -28064,6 +28413,8 @@
    "qG": 5.7113,
    "carga_total": 35.6958,
    "w": 7.139163,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.139163,
    "z": 11.83,
    "vertices": [
     {
@@ -28092,6 +28443,8 @@
    "qG": 5.7113,
    "carga_total": 35.6958,
    "w": 7.139163,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.139163,
    "z": 11.83,
    "vertices": [
     {
@@ -28120,6 +28473,8 @@
    "qG": 5.7113,
    "carga_total": 38.9807,
    "w": 7.460425,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.460425,
    "z": 11.83,
    "vertices": [
     {
@@ -28148,6 +28503,8 @@
    "qG": 5.7113,
    "carga_total": 135.6441,
    "w": 18.709529,
+   "w_peso_propio": 12.0,
+   "w_total_G": 30.709529,
    "z": 11.83,
    "vertices": [
     {
@@ -28197,6 +28554,8 @@
    "qG": 5.7113,
    "carga_total": 182.7626,
    "w": 20.535119,
+   "w_peso_propio": 12.0,
+   "w_total_G": 32.535119,
    "z": 11.83,
    "vertices": [
     {
@@ -28246,6 +28605,8 @@
    "qG": 5.7113,
    "carga_total": 137.0175,
    "w": 18.898963,
+   "w_peso_propio": 12.0,
+   "w_total_G": 30.898963,
    "z": 11.83,
    "vertices": [
     {
@@ -28295,6 +28656,8 @@
    "qG": 5.7113,
    "carga_total": 91.3813,
    "w": 10.26756,
+   "w_peso_propio": 12.0,
+   "w_total_G": 22.26756,
    "z": 11.83,
    "vertices": [
     {
@@ -28327,6 +28690,8 @@
    "qG": 5.7113,
    "carga_total": 39.3222,
    "w": 10.485916,
+   "w_peso_propio": 12.0,
+   "w_total_G": 22.485916,
    "z": 11.83,
    "vertices": [
     {
@@ -28372,6 +28737,8 @@
    "qG": 5.7113,
    "carga_total": 40.1578,
    "w": 10.708744,
+   "w_peso_propio": 12.0,
+   "w_total_G": 22.708744,
    "z": 11.83,
    "vertices": [
     {
@@ -28413,6 +28780,8 @@
    "qG": 5.7113,
    "carga_total": 71.3916,
    "w": 14.278325,
+   "w_peso_propio": 12.0,
+   "w_total_G": 26.278325,
    "z": 11.83,
    "vertices": [
     {
@@ -28454,6 +28823,8 @@
    "qG": 5.7113,
    "carga_total": 71.3916,
    "w": 14.278325,
+   "w_peso_propio": 12.0,
+   "w_total_G": 26.278325,
    "z": 11.83,
    "vertices": [
     {
@@ -28495,6 +28866,8 @@
    "qG": 5.7113,
    "carga_total": 71.3916,
    "w": 14.278325,
+   "w_peso_propio": 12.0,
+   "w_total_G": 26.278325,
    "z": 11.83,
    "vertices": [
     {
@@ -28536,6 +28909,8 @@
    "qG": 5.7113,
    "carga_total": 38.9807,
    "w": 7.460425,
+   "w_peso_propio": 12.0,
+   "w_total_G": 19.460425,
    "z": 11.83,
    "vertices": [
     {
@@ -28564,6 +28939,8 @@
    "qG": 5.7113,
    "carga_total": 54.2431,
    "w": 12.718199,
+   "w_peso_propio": 12.0,
+   "w_total_G": 24.718199,
    "z": 11.83,
    "vertices": [
     {
@@ -28613,6 +28990,8 @@
    "qG": 5.7113,
    "carga_total": 33.9859,
    "w": 11.385577,
+   "w_peso_propio": 12.0,
+   "w_total_G": 23.385577,
    "z": 11.83,
    "vertices": [
     {
@@ -28658,6 +29037,8 @@
    "qG": 5.7113,
    "carga_total": 67.5468,
    "w": 14.57321,
+   "w_peso_propio": 12.0,
+   "w_total_G": 26.57321,
    "z": 11.83,
    "vertices": [
     {
@@ -28707,6 +29088,8 @@
    "qG": 5.7113,
    "carga_total": 54.2431,
    "w": 12.718199,
+   "w_peso_propio": 12.0,
+   "w_total_G": 24.718199,
    "z": 11.83,
    "vertices": [
     {
@@ -28756,6 +29139,8 @@
    "qG": 5.7113,
    "carga_total": 35.9885,
    "w": 10.137611,
+   "w_peso_propio": 6.0,
+   "w_total_G": 16.137611,
    "z": 11.83,
    "vertices": [
     {
@@ -28797,6 +29182,8 @@
    "qG": 5.7113,
    "carga_total": 39.3222,
    "w": 10.485916,
+   "w_peso_propio": 6.0,
+   "w_total_G": 16.485916,
    "z": 11.83,
    "vertices": [
     {
@@ -28842,6 +29229,8 @@
    "qG": 5.7113,
    "carga_total": 35.9885,
    "w": 10.137611,
+   "w_peso_propio": 6.0,
+   "w_total_G": 16.137611,
    "z": 11.83,
    "vertices": [
     {
@@ -28883,6 +29272,8 @@
    "qG": 5.7113,
    "carga_total": 40.1578,
    "w": 10.708744,
+   "w_peso_propio": 6.0,
+   "w_total_G": 16.708744,
    "z": 11.83,
    "vertices": [
     {
@@ -28924,6 +29315,8 @@
    "qG": 5.7113,
    "carga_total": 15.7386,
    "w": 6.450263,
+   "w_peso_propio": 8.0,
+   "w_total_G": 14.450263,
    "z": 11.83,
    "vertices": [
     {
@@ -28956,6 +29349,8 @@
    "qG": 5.7113,
    "carga_total": 59.2543,
    "w": 7.776159,
+   "w_peso_propio": 8.0,
+   "w_total_G": 15.776159,
    "z": 11.83,
    "vertices": [
     {
@@ -28988,6 +29383,8 @@
    "qG": 5.7113,
    "carga_total": 14.8161,
    "w": 6.307415,
+   "w_peso_propio": 8.0,
+   "w_total_G": 14.307415,
    "z": 11.83,
    "vertices": [
     {
@@ -29020,6 +29417,8 @@
    "qG": 5.7113,
    "carga_total": 61.2272,
    "w": 14.355743,
+   "w_peso_propio": 12.0,
+   "w_total_G": 26.355743,
    "z": 11.83,
    "vertices": [
     {
@@ -29069,6 +29468,8 @@
    "qG": 5.7113,
    "carga_total": 34.6485,
    "w": 11.607525,
+   "w_peso_propio": 12.0,
+   "w_total_G": 23.607525,
    "z": 11.83,
    "vertices": [
     {
@@ -29114,6 +29515,8 @@
    "qG": 5.7113,
    "carga_total": 69.1517,
    "w": 14.919463,
+   "w_peso_propio": 12.0,
+   "w_total_G": 26.919463,
    "z": 11.83,
    "vertices": [
     {
@@ -29163,6 +29566,8 @@
    "qG": 5.7113,
    "carga_total": 61.2272,
    "w": 14.355743,
+   "w_peso_propio": 12.0,
+   "w_total_G": 26.355743,
    "z": 11.83,
    "vertices": [
     {
@@ -29212,6 +29617,8 @@
    "qG": 5.7113,
    "carga_total": 63.0473,
    "w": 23.836398,
+   "w_peso_propio": 0.9,
+   "w_total_G": 24.736398,
    "z": 11.83,
    "vertices": [
     {
@@ -29248,6 +29655,8 @@
    "qG": 5.7113,
    "carga_total": 24.0215,
    "w": 18.163743,
+   "w_peso_propio": 0.0,
+   "w_total_G": 18.163743,
    "z": 11.83,
    "vertices": [
     {

@@ -14,6 +14,11 @@ ezdxf>=1.4.0           # extraccion de muros y ejes desde los DXF
 # resolverlo en vivo. El resto del laboratorio corre sin esto.
 flask>=3.0
 
+# --- Resultados en Excel (Semana 5) ---
+# comun/excel.py escribe data/excel/<ed>_resultados.xlsx y el libro de
+# cada reanalisis. Solo valores: en Excel no se calcula nada.
+openpyxl>=3.1
+
 # --- Notebook ---
 jupyterlab>=4.0        # entorno para laboratorio.ipynb
 ipykernel>=6.0

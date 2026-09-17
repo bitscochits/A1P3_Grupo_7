@@ -63,7 +63,11 @@ SUITE = [
     ('demanda/capacidad lt2', ['semana03/demanda_capacidad.py', 'lt2', '--todas'], False),
     ('demanda/capacidad ingenieria',
                               ['semana03/demanda_capacidad.py', 'ingenieria', '--todas'], False),
-    ('anexo Unity semana 3',  ['semana03/exportar_unity.py'], False),
+    # Los exportadores de los anexos copian a StreamingAssets: van con
+    # 'lt2', el edificio de la demo (decision 1 de la Semana 5). Sin
+    # edificio exportaban ingenieria y la suite dejaba el visor con anexos
+    # de otro edificio que superposicion.json (LT2).
+    ('anexo Unity semana 3',  ['semana03/exportar_unity.py', 'lt2'], False),
     # El nodo va explicito: es el caso que cita reports/semana03.md, y
     # sin argumento el script toma el primero del edificio, que puede
     # cambiar si el modelo se rearma.
@@ -72,31 +76,50 @@ SUITE = [
     # --- semana 4: el anexo del visor, sus esfuerzos contra OpenSees,
     # su contrato con el C# y lo que Unity lee de verdad. El ultimo abre
     # el editor en batch: es lento y sale con 2 si Unity ya esta abierto.
-    ('anexo Unity semana 4',  ['semana04/exportar_unity.py'], False),
+    ('anexo Unity semana 4',  ['semana04/exportar_unity.py', 'lt2'], False),
     ('esfuerzos y signos s4', ['semana04/verificar_semana04.py'], False),
     ('esfuerzos s4 lt2',      ['semana04/verificar_semana04.py', 'lt2'], False),
     ('esfuerzos s4 conjunto', ['semana04/verificar_semana04.py', 'conjunto'], False),
     ('contrato JSON-C# s4',   ['semana04/test_contrato_semana04.py'], False),
     ('trazabilidad s4',       ['semana04/trazabilidad.py', 'ingenieria', '18'], False),
     ('JsonUtility real s4',   ['semana04/verificar_unity_semana04.py'], True),
+    # --- semana 5: superposicion con lambdas, servidor, Excel, carga movil
+    # y las modificaciones M1/M2. Ninguno escribe en data/ ni en
+    # StreamingAssets (verificar_superposicion deja su evidencia en
+    # semana05/evidencia/; los demas escriben en temporales o en results/).
+    ('superposicion s5 lt2',  ['semana05/verificar_superposicion.py', 'lt2'], False),
+    ('superposicion s5 ingenieria',
+                              ['semana05/verificar_superposicion.py', 'ingenieria'], False),
+    ('contrato JSON-C# s5',   ['semana05/test_contrato_semana05.py'], False),
+    ('excel s5',              ['semana05/test_excel.py', 'lt2', 'ingenieria', 'conjunto'], True),
+    ('carga movil s5',        ['semana05/carga_movil.py', 'lt2', '--no-escribir'], False),
+    ('M1 borrar columna 69',  ['semana05/reanalisis_demo.py', 'lt2', '--borrar-elemento', '69',
+                               '--nodo', '186', '--elemento', '337'], False),
+    ('M2 cs 0.20',            ['semana05/comparar_anexos.py', 'lt2', '--cs', '0.20'], False),
 ]
 
 
 def correr(args):
     t0 = time.time()
+    # El hijo escribe a un pipe, y en Windows un pipe sale con la pagina de
+    # codigos del sistema (cp1252), no con UTF-8: un 'φ' en un print tumbaba
+    # test_excel.py con UnicodeEncodeError y la entrada salia FALLA fuera de
+    # una terminal que ya tuviera PYTHONIOENCODING. Se lee como UTF-8 abajo,
+    # asi que el hijo tiene que escribir UTF-8 (igual que comparar_unity.py).
+    env = dict(os.environ, PYTHONIOENCODING='utf-8')
     r = subprocess.run([sys.executable] + [os.path.join(rutas.RAIZ, args[0])]
                        + args[1:], cwd=rutas.RAIZ, capture_output=True,
-                       text=True, encoding='utf-8', errors='replace')
+                       text=True, encoding='utf-8', errors='replace', env=env)
     return r.returncode == 0, time.time() - t0, (r.stdout + r.stderr)
 
 
 def _avisar_anexos():
     """Que edificio quedo en los anexos del visor.
 
-    La suite corre los exportadores SIN edificio, o sea a ingenieria: si
-    alguien estaba mirando otro edificio en Unity, se los acaba de pisar
-    y el visor apagaria los diagramas. Mejor decirlo que dejarlo en
-    silencio.
+    La suite corre los exportadores de los anexos con 'lt2' (el edificio
+    de la demo) y copian a StreamingAssets: si alguien estaba mirando
+    otro edificio en Unity, se los acaba de pisar y el visor apagaria los
+    diagramas. Mejor decirlo que dejarlo en silencio.
     """
     import json
     raiz = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -119,7 +142,6 @@ def main(argv):
         solo = [a.lower() for a in argv[argv.index('--solo') + 1:]
                 if not a.startswith('--')]
 
-    _avisar_anexos()
     print('=' * 70)
     print('  SUITE COMPLETA   (%s)' % rutas.RAIZ)
     print('=' * 70)
@@ -137,6 +159,8 @@ def main(argv):
             fallaron.append((etiqueta, args, salida))
 
     print('=' * 70)
+    # Despues de correr, no antes: es lo que la suite DEJO.
+    _avisar_anexos()
     if fallaron:
         print('  FALLARON %d de %d' % (len(fallaron), n))
         for etiqueta, args, salida in fallaron:

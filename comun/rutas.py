@@ -98,6 +98,25 @@ REPORTS = os.path.join(RAIZ, 'reports')
 UNITY_PROYECTO = os.path.join(RAIZ, 'unity')
 STREAMING = os.path.join(UNITY_PROYECTO, 'Assets', 'StreamingAssets')
 
+# --- Excel (Semana 5) ---
+# Dos lugares a proposito. data/excel/ va a git: es el libro del
+# edificio con los parametros por defecto, el que se entrega y el que
+# el lanzador copia a StreamingAssets/resultados.xlsx. results/excel/
+# esta en .gitignore: ahi escribe el servidor el libro de cada
+# reanalisis, que cambia con cada edicion en Unity.
+EXCEL = os.path.join(RAIZ, 'data', 'excel')
+EXCEL_REANALISIS = os.path.join(RAIZ, 'results', 'excel')
+
+
+def excel_resultados(nombre: str) -> str:
+    """data/excel/<nombre>_resultados.xlsx -- el libro versionado del edificio."""
+    return os.path.join(EXCEL, nombre + '_resultados.xlsx')
+
+
+def excel_reanalisis(nombre: str) -> str:
+    """results/excel/reanalisis_<nombre>.xlsx -- el del ultimo reanalisis."""
+    return os.path.join(EXCEL_REANALISIS, 'reanalisis_%s.xlsx' % nombre)
+
 
 def edificio(nombre: str) -> str:
     """La carpeta de codigo de un edificio: 'lt2', 'ingenieria', 'conjunto'."""
@@ -153,8 +172,8 @@ def entrar(archivo: str, *extra: str) -> None:
 
 
 if __name__ == '__main__':
-    print('RAIZ       ', RAIZ)
+    print('%-16s %s' % ('RAIZ', RAIZ))
     for n in ('GEOMETRIA', 'MODELO', 'RESULTADOS', 'UNITY', 'COMUN',
-              'EDIFICIOS', 'BENCHMARK', 'STREAMING'):
+              'EDIFICIOS', 'BENCHMARK', 'STREAMING', 'EXCEL', 'EXCEL_REANALISIS'):
         v = globals()[n]
-        print('%-11s %s   %s' % (n, v, '' if os.path.isdir(v) else '(no existe aun)'))
+        print('%-16s %s   %s' % (n, v, '' if os.path.isdir(v) else '(no existe aun)'))

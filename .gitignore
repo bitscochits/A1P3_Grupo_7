@@ -71,3 +71,7 @@ planos_edificio_ing.rar
 unity/.vscode/
 unity/*.slnx
 ErrorReports/
+
+# Excel deja "~$<nombre>.xlsx" al lado del libro abierto (data/excel/ y
+# StreamingAssets/resultados.xlsx): es un candado temporal, no un dato.
+~$*.xlsx

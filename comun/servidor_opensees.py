@@ -17,8 +17,13 @@ Como correrlo:
   -> queda escuchando en http://localhost:5000
 
 Endpoints:
-  POST /analizar   -> recibe modelo, devuelve resultados
+  POST /analizar   -> recibe modelo, devuelve resultados, el equilibrio
+                      de cada caso y la ruta del Excel del reanalisis
   GET  /ping       -> chequear que el servidor vive
+
+En la Semana 5 el servidor de la demo es semana05/servidor_s5.py: importa
+'app' de este archivo (los dos endpoints de arriba) y le agrega /combinar
+y /estados, en el mismo puerto 5000.
 
 Unidades esperadas: m, kN, kPa (consistentes)
 
@@ -40,12 +45,17 @@ QUE NO SOPORTA (todavia)
 """
 
 from flask import Flask, request, jsonify
+from werkzeug.exceptions import BadRequest, HTTPException, RequestEntityTooLarge as Pesado
 import argparse
 import openseespy.opensees as ops
 import math
 import os
+import re
+import sys
 import threading
 import traceback
+
+_AQUI = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
@@ -64,6 +74,20 @@ MOSTRAR_TRACEBACK = os.environ.get('OPENSEES_DEBUG', '') == '1'
 # /analizar simultaneos se pisarian entre si (uno hace wipe mientras el
 # otro construye). Este lock serializa el acceso al motor.
 _lock_opensees = threading.Lock()
+
+# Dos /analizar seguidos escriben el MISMO libro (results/excel/
+# reanalisis_<ed>.xlsx). Escribirlo fuera del lock de OpenSees deja que
+# el motor atienda al siguiente mientras tanto, pero dos escrituras a la
+# vez sobre el mismo archivo en Windows fallan al reemplazarlo.
+_lock_excel = threading.Lock()
+
+# Access-Control-Allow-Origin: * en todas las respuestas, para que el
+# build Web de Unity (que corre en el navegador, en otro origen) pueda
+# leerlas. Lo que se abre: una pagina cualquiera abierta en el navegador
+# de este equipo puede LEER la respuesta, que trae la ruta absoluta del
+# Excel (con el nombre de usuario). Mandar el POST ya podia sin esto.
+# OPENSEES_CORS=0 lo apaga.
+PERMITIR_CORS = os.environ.get('OPENSEES_CORS', '1') != '0'
 
 
 # ============================================================
@@ -155,10 +179,24 @@ _lock_opensees = threading.Lock()
 #   "ok": true, "error": "", "avisos": [],
 #   "casos": [
 #       {"nombre":"G","max_desplazamiento":...,"desplazamientos":[...],
-#        "reacciones":[...],"fuerzas_elementos":[...]},
+#        "reacciones":[...],"fuerzas_elementos":[...],
+#        "equilibrio": {"aplicada_kN":[3], "reaccion_kN":[3],
+#                       "error_kN":[3], "cargas_sin_convertir":0,
+#                       "nodos_en_diafragma":216, "confiable":true}},
 #       {"nombre":"EX", ...}
 #   ]
 # }
+# "equilibrio" es calcular.equilibrio() tal cual: separa las reacciones
+# POR GRADO DE LIBERTAD. Sumar la lista "reacciones" entera dobla el
+# corte basal (los nodos de diafragma traen la fuerza de la restriccion,
+# que es interna). Solo viene en la forma multi-caso; la plana no cambia.
+#
+# /analizar agrega en la raiz (no construir_y_resolver):
+#   "excel":       ruta ABSOLUTA de results/excel/reanalisis_<ed>.xlsx, o null
+#   "excel_error": por que no hay Excel, o null
+#
+# "max_desplazamiento" es la mayor COMPONENTE |ux|, |uy| o |uz| de algun
+# nodo (el anexo de Semana 4 usa la norma).
 #
 # Unidades de salida: m (desplazamientos), kN y kN*m (esfuerzos).
 
@@ -537,6 +575,26 @@ def extraer_resultados(data, nodos_restringidos):
     return res
 
 
+def equilibrio_del_caso(data, caso, r, avisos):
+    """
+    calcular.equilibrio(data, caso, r) tal cual, o None con un aviso si
+    revienta: un chequeo que falla no puede tumbar un analisis que si se
+    resolvio.
+
+    El import va ACA ADENTRO porque calcular.py importa este archivo
+    (import servidor_opensees as motor): arriba del todo seria un ciclo.
+    """
+    if _AQUI not in sys.path:
+        sys.path.insert(0, _AQUI)
+    try:
+        import calcular
+        return calcular.equilibrio(data, caso, r)
+    except Exception as e:
+        avisos.append("No se pudo calcular el equilibrio de '%s': %s"
+                      % (caso.get('nombre', '?'), e))
+        return None
+
+
 def construir_y_resolver(data):
     """
     Construye el modelo UNA vez y resuelve todos los casos de carga
@@ -591,6 +649,13 @@ def construir_y_resolver(data):
     salida = {'ok': todo_ok, 'error': '', 'avisos': avisos}
 
     if multi:
+        # El equilibrio de cada caso, con la regla por grado de libertad
+        # de calcular.equilibrio. Antes Unity sumaba la lista de
+        # reacciones entera y en el LT2 EX le daba Fx = -7266.13 kN con
+        # 3633.06 aplicados: parecia un modelo roto y era la suma mal
+        # hecha. Asi hay una sola definicion y Unity solo la muestra.
+        for caso, r in zip(casos, resultados_casos):
+            r['equilibrio'] = equilibrio_del_caso(data, caso, r, avisos)
         salida['casos'] = resultados_casos
     else:
         # Forma plana original, para no romper el cliente existente.
@@ -615,21 +680,144 @@ def ping():
     return jsonify({'estado': 'vivo', 'motor': 'OpenSees'})
 
 
+@app.after_request
+def _cabeceras_cors(respuesta):
+    """Ver PERMITIR_CORS. Content-Type en Allow-Headers porque un POST
+    con application/json hace que el navegador pregunte antes (OPTIONS)."""
+    if PERMITIR_CORS:
+        respuesta.headers['Access-Control-Allow-Origin'] = '*'
+        respuesta.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+        respuesta.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return respuesta
+
+
+def edificio_del_modelo(data, del_pedido=None):
+    """
+    El nombre que lleva el libro: info.edificio si viene no vacio; si no,
+    el parametro ?edificio= del pedido; si no, 'modelo'.
+
+    Va a un nombre de archivo, asi que solo se aceptan letras, digitos,
+    '_' y '-'. Un "../../algo" venido por la red escribiria fuera de
+    results/excel/; en vez de limpiarlo a medias se descarta entero.
+    JsonUtility manda info.edificio = "" cuando el JSON no lo traia.
+    """
+    info = data.get('info') if isinstance(data, dict) else None
+    for candidato in ((info or {}).get('edificio') if isinstance(info, dict) else None,
+                      del_pedido):
+        if isinstance(candidato, str) and re.fullmatch(r'[A-Za-z0-9_-]{1,40}',
+                                                        candidato.strip()):
+            return candidato.strip()
+    return 'modelo'
+
+
+def modelo_como_lista(data):
+    """
+    El modelo con 'secciones' en la forma de LISTA, la que manda Unity y
+    la que declara el contrato del Excel (semana05/CONTRATO.md, seccion
+    c). El servidor acepta tambien el diccionario (normalizar_secciones),
+    y un modelo que se resolvio no puede quedarse sin libro por eso: con
+    el diccionario el escritor fallaba con "'str' object has no attribute
+    'get'" (test_servidor.py, bloque 10). Copia superficial: 'data' no se
+    toca.
+    """
+    secciones = data.get('secciones')
+    if not isinstance(secciones, dict):
+        return data
+    copia = dict(data)
+    copia['secciones'] = [dict(s, nombre=nombre) for nombre, s in secciones.items()]
+    return copia
+
+
+def escribir_excel(data, resultados, edificio):
+    """
+    (ruta, None) si escribio results/excel/reanalisis_<edificio>.xlsx, o
+    (None, motivo) si no.
+
+    Atrapa BaseException y no solo Exception: el escritor carga codigo
+    del laboratorio que corta con SystemExit, y un SystemExit dentro de
+    un hilo de Flask mataria la peticion sin respuesta. Un Excel que no
+    se pudo escribir NUNCA rompe /analizar: el analisis ya esta hecho y
+    Unity lo necesita igual.
+    """
+    try:
+        if _AQUI not in sys.path:
+            sys.path.insert(0, _AQUI)
+        import rutas
+        import excel                     # comun/excel.py (paquete P1)
+        with _lock_excel:
+            ruta = excel.escribir_libro_reanalisis(
+                modelo_como_lista(data), resultados, rutas.excel_reanalisis(edificio))
+        return os.path.abspath(str(ruta)), None
+    except BaseException as e:           # noqa: B902 -- ver docstring
+        if isinstance(e, KeyboardInterrupt):
+            raise
+        traceback.print_exc()
+        return None, '%s: %s' % (type(e).__name__, e)
+
+
 @app.route('/analizar', methods=['POST'])
 def analizar():
-    """Recibe el modelo de Unity, lo resuelve, devuelve resultados."""
+    """
+    Recibe el modelo de Unity, lo resuelve, devuelve resultados, y deja
+    el Excel del reanalisis en results/excel/.
+
+    Errores: HTTP 400 si el pedido es invalido (JSON roto, falta una
+    clave, una seccion inexistente: lo que se arregla cambiando el
+    modelo) y 500 si es una falla nuestra. Siempre con cuerpo JSON
+    {"ok": false, "error": ...}: Unity lo lee tambien en ProtocolError.
+    """
     try:
         data = request.get_json(force=True)
+        if not isinstance(data, dict):
+            raise ValueError('el cuerpo tiene que ser un objeto JSON con el modelo')
         with _lock_opensees:
             resultados = construir_y_resolver(data)
-        return jsonify(resultados)
+    except (BadRequest, Pesado, ValueError, KeyError, TypeError) as e:
+        return _respuesta_de_error(e, 400)
     except Exception as e:
-        # El detalle completo siempre queda en la consola del servidor.
-        traceback.print_exc()
-        salida = {'ok': False, 'error': str(e), 'avisos': []}
-        if MOSTRAR_TRACEBACK:
-            salida['traceback'] = traceback.format_exc()
-        return jsonify(salida), 400
+        return _respuesta_de_error(e, 500)
+
+    edificio = edificio_del_modelo(data, request.args.get('edificio'))
+    resultados['excel'], resultados['excel_error'] = escribir_excel(
+        data, resultados, edificio)
+    return jsonify(resultados)
+
+
+def _respuesta_de_error(e, codigo):
+    # El detalle completo siempre queda en la consola del servidor.
+    traceback.print_exc()
+    texto = str(e)
+    if isinstance(e, KeyError):
+        texto = 'falta la clave %s en el modelo' % texto
+    elif isinstance(e, BadRequest):
+        texto = 'el cuerpo no es JSON valido: %s' % (e.description or texto)
+    elif isinstance(e, Pesado):
+        # RequestEntityTooLarge NO hereda de BadRequest: sin esto, un
+        # modelo por sobre MAX_CONTENT_LENGTH salia como HTTP 500 ("falla
+        # nuestra") cuando es el pedido el que hay que achicar.
+        texto = ('el modelo pesa mas de %.3g MB (MAX_CONTENT_LENGTH)'
+                 % (app.config['MAX_CONTENT_LENGTH'] / (1024 * 1024)))
+    salida = {'ok': False, 'error': texto, 'avisos': [],
+              'excel': None, 'excel_error': 'no se resolvio el modelo'}
+    if MOSTRAR_TRACEBACK:
+        salida['traceback'] = traceback.format_exc()
+    return jsonify(salida), codigo
+
+
+@app.errorhandler(HTTPException)
+def _error_http_en_json(e):
+    """
+    Los errores que Flask arma solo, sin pasar por una ruta: 404 (ruta mal
+    escrita) y 405 (un GET a /analizar o /combinar). Sin esto salen como
+    pagina HTML, y el contrato (semana05/CONTRATO.md, seccion 3) dice que TODA
+    respuesta es JSON: Unity lee el cuerpo tambien en ProtocolError y con
+    HTML mostraria "JSON ilegible" en vez del motivo. Las redirecciones
+    del enrutador (RequestRedirect, codigo 3xx) se dejan pasar tal cual.
+    """
+    if e.code is None or e.code < 400:
+        return e
+    return jsonify({'ok': False,
+                    'error': '%d %s: %s' % (e.code, e.name, e.description)}), e.code
 
 
 if __name__ == '__main__':
@@ -645,8 +833,10 @@ if __name__ == '__main__':
     # maquina, asi que no hace falta mas.
     # Antes era '0.0.0.0' (todas las interfaces): conectado al WiFi de
     # la universidad, cualquiera en esa red podia mandarle peticiones.
-    # No podria robar nada -el servidor no ejecuta codigo ni toca
-    # archivos- pero si tumbarlo con un modelo enorme.
+    # No podria robar nada -el servidor no ejecuta codigo, y el unico
+    # archivo que escribe es results/excel/reanalisis_<ed>.xlsx, con un
+    # nombre que edificio_del_modelo limpia- pero si tumbarlo con un
+    # modelo enorme.
     host = '0.0.0.0' if args.lan else '127.0.0.1'
 
     print("=" * 58)
@@ -660,7 +850,8 @@ if __name__ == '__main__':
     else:
         print("  Solo accesible desde este equipo.")
         print("  Para conectar desde el celular (AR): --lan")
-    print("  POST /analizar  -> enviar modelo, recibir deformaciones")
+    print("  POST /analizar  -> enviar modelo, recibir deformaciones,")
+    print("                     equilibrio por caso y results/excel/reanalisis_<ed>.xlsx")
     print("  GET  /ping      -> chequear conexion")
     print("=" * 58)
     app.run(host=host, port=args.puerto, debug=False)

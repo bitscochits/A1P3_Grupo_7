@@ -194,6 +194,48 @@
       }
     ]
   },
+  "terreno": {
+    "z": -4.01,
+    "provisorio": true,
+    "_que_es": [
+      "La cota del terreno natural alrededor del edificio. SOLO PARA DIBUJAR:",
+      "es donde el visor de Unity pone el suelo (info.cota_terreno de",
+      "data/unity/lt2.json y data/unity/conjunto.json). Ningun calculo la usa:",
+      "el suelo no se modela (ver sismo._no_modelado), asi que cambiarla mueve",
+      "el dibujo y no cambia ni un numero."
+    ],
+    "_por_que": [
+      "NINGUNA LAMINA QUE TENEMOS ROTULA EL TERRENO (N.T.N.): es un supuesto.",
+      "Se eligio -4.01 mirando los apoyos y los pisos del modelo:",
+      "",
+      "  -7.97  piso del subterraneo. Ahi estan los 16 empotramientos del LT2",
+      "         [1 1 1 1 1 1] (45 en el conjunto). Con el suelo aca, el",
+      "         subterraneo se veria como un piso sobre tierra, y la descripcion",
+      "         del perfil dice '1 subterraneo + 4 pisos'.",
+      "  -4.01  cielo 1 subterraneo = piso del piso 1. Es la cota mas baja que",
+      "         deja todo el subterraneo bajo tierra y todo el piso 1 arriba.",
+      "  -0.05  cielo piso 1. Con el suelo aca quedaria enterrado el piso 1",
+      "         entero. El +-0.00 no existe en el modelo.",
+      "",
+      "Lo que la confirma es el cuerpo vecino, al otro lado de una junta de 5 cm:",
+      "en data/unity/conjunto.json hay 39 apoyos en terreno [0 0 1 1 1 0]",
+      "(no auxiliares) y estan TODOS en -4.01. El modelo de Ingenieria los pone",
+      "porque 'al oriente del eje H el terreno esta en -4.01, que es la cota",
+      "del nivel 1' (edificios/ingenieria/benchmark_3d.py:1031), y la planta de",
+      "fundaciones de ese cuerpo rotula dos N.R.: -7.97 y -4.01",
+      "(benchmark_3d.py:280). Con cualquier otra cota esos apoyos se dibujarian",
+      "flotando o enterrados.",
+      "",
+      "LO QUE NO CALZA, y por eso es provisorio: la rampa de acceso al",
+      "subterraneo (fuera de la ventana, ver ventana._que_deja_afuera) rotula",
+      "cotas hasta -2.81, 1.20 m sobre -4.01. O sea que la calle en la entrada de la",
+      "rampa puede estar mas arriba y el terreno tener pendiente. El visor usa",
+      "un plano horizontal: es una simplificacion de dibujo.",
+      "",
+      "PENDIENTE: reemplazarla por el N.T.N. del plano de arquitectura o de",
+      "topografia cuando aparezca, y borrar 'provisorio'."
+    ]
+  },
   "_junta_de_dilatacion": "La lamina 700 (plano de cargas) rotula 'JUNTA DE DILATACION 10 cm' siete veces, y las laminas 101 y 700 hablan de 'ETAPA ANTERIOR' y '2a ETAPA'. O sea que este cuerpo esta separado del vecino por una junta: al unir dos modelos NO deben compartir nodos.",
   "elevaciones": [
     "2024_22-300",

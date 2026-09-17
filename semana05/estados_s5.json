@@ -1,0 +1,68 @@
+{
+  "_que_es": [
+    "LOS ESTADOS DE SUPERPOSICION DE LA SEMANA 5 Y LOS RANGOS DE LOS SLIDERS.",
+    "",
+    "Una sola copia. Lo leen semana05/superposicion.py (los precalcula en",
+    "data/unity/superposicion_<ed>.json), semana05/servidor_s5.py (GET",
+    "/estados) y semana05/verificar_superposicion.py (los compara contra una",
+    "corrida explicita de OpenSees). Cambiar un lambda aca cambia los tres.",
+    "",
+    "Las claves que empiezan con '_' son explicacion: el servidor no las",
+    "manda a Unity."
+  ],
+  "estados": [
+    {
+      "nombre": "E1",
+      "descripcion": "1.0G + 1.0Q",
+      "lambdas": {"G": 1.0, "Q": 1.0, "EX": 0.0, "EY": 0.0},
+      "_por_que": "Servicio: la carga de un dia cualquiera, sin mayorar. No esta entre las combinaciones de semana03/parametros.json, asi que es un estado que el anexo de la Semana 4 no traia: prueba que la combinacion sale de Python en el momento y no de un boton precalculado."
+    },
+    {
+      "nombre": "E2",
+      "descripcion": "1.2G + 1.6Q",
+      "lambdas": {"G": 1.2, "Q": 1.6, "EX": 0.0, "EY": 0.0},
+      "_por_que": "Gravedad mayorada (ACI 318 / NCh3171), la misma '1.2G+1.6Q' de semana03/parametros.json. Como ya es un caso del anexo de la Semana 4, sirve de control cruzado: el estado libre tiene que salir identico al precalculado del anexo."
+    },
+    {
+      "nombre": "E3",
+      "descripcion": "1.2G + 1.0Q - 1.4EX",
+      "lambdas": {"G": 1.2, "Q": 1.0, "EX": -1.4, "EY": 0.0},
+      "_por_que": "Sismo hacia -X: un lambda NEGATIVO, que ninguna combinacion declarada tiene (la de parametros.json es +1.4EX). Invierte el signo del sismo y con eso cambia que extremo manda y que muros fallan; en el LT2 junta en un mismo estado elementos que pasan, que no pasan y uno fuera de su curva P-M (los numeros los imprime semana05/verificar_superposicion.py lt2)."
+    }
+  ],
+  "rangos": {
+    "G": {"min": 0.0, "max": 1.6, "paso": 0.05},
+    "Q": {"min": 0.0, "max": 1.6, "paso": 0.05},
+    "EX": {"min": -1.4, "max": 1.4, "paso": 0.05},
+    "EY": {"min": -1.4, "max": 1.4, "paso": 0.05},
+    "_por_que": [
+      "Son los rangos de los SLIDERS de Unity, no una validacion: POST /combinar",
+      "acepta cualquier lambda finito.",
+      "G y Q de 0 a 1.6 cubren desde 'sin la carga' hasta el mayor factor de",
+      "carga de NCh3171 (1.6Q). EX y EY de -1.4 a 1.4 porque el sismo actua en",
+      "los dos sentidos y NCh3171 lo mayora por 1.4. Paso 0.05: dos decimales,",
+      "los mismos con que la descripcion escribe cada factor."
+    ]
+  },
+  "control": {
+    "_que_es": [
+      "Los elementos que la integracion compara contra lo que muestra Unity en",
+      "E1..E3. Se eligen por REGLA, no a mano, y verificar_superposicion.py",
+      "rehace la regla: si el modelo cambia y la regla da otro id, lo dice",
+      "en vez de comparar contra un elemento que ya no es el representativo.",
+      "Los valores de cada estado quedan en semana05/evidencia/superposicion_<ed>.json y,",
+      "como tabla para comparar con la pantalla de Unity (valor del JSON que lee Unity al",
+      "lado de la corrida explicita de OpenSees), en superposicion_<ed>_control.csv."
+    ],
+    "reglas": {
+      "columna": "info.columna_demo del anexo de Semana 4: la columna con fierro de mayor axial en G",
+      "muro": "info.muro_demo del anexo de Semana 4: el muro con fierro mas largo (h de su seccion)",
+      "viga": "la barra de tipo viga* con mayor |My| en alguna estacion bajo E1",
+      "nodo": "el nodo con mayor desplazamiento (norma de ux, uy, uz) bajo E1"
+    },
+    "esperados": {
+      "lt2": {"columna": 5, "muro": 9, "viga": 92, "nodo": 207},
+      "ingenieria": {"columna": 18, "muro": 537, "viga": 138, "nodo": 599}
+    }
+  }
+}

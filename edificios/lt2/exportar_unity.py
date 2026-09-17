@@ -61,6 +61,44 @@ import modelo_lt2 as M                   # noqa: E402
 
 _RAIZ = rutas.RAIZ
 SALIDA = rutas.unity('lt2')
+PERFIL = os.path.join(rutas.edificio('lt2'), 'perfiles', 'lt2_2024_22.json')
+
+
+# ============================================================
+def cota_terreno(ruta=PERFIL):
+    r"""
+    La cota z (m, OpenSees) del terreno donde el visor dibuja el suelo.
+
+    ----------------------------------------------------------------
+    POR QUE SALE DEL PERFIL Y NO DE LOS NODOS
+    ----------------------------------------------------------------
+    Ninguna lamina rotula el terreno, asi que es un SUPUESTO, y los
+    supuestos viven en el perfil con su justificacion al lado (CLAUDE.md,
+    seccion 5). Deducirla aca -- "la cota del segundo nivel", "la del apoyo
+    mas bajo" -- la esconderia en el codigo: nadie la veria como
+    supuesta ni la podria cambiar sin leer Python.
+
+    Tampoco se deja que Unity la adivine: cada JSON usa su propio datum
+    (Ingenieria va de 0 a 19.80, el LT2 de -7.97 a 11.83), y una cota
+    fija en la escena quedaria bien para uno y mal para el otro.
+
+    ----------------------------------------------------------------
+    POR QUE NO VA EN construir()
+    ----------------------------------------------------------------
+    construir() alimenta tambien a armar.py, y su 'info' termina en
+    data/modelo/lt2.json, el contrato del solver. El terreno es dibujo:
+    va solo al JSON del visor.
+
+    Devuelve None si el perfil no la declara: sin cota, el JSON sale sin
+    la clave, el C# deja su centinela (-9999) y AmbienteVisor.cs pone el
+    suelo en el apoyo mas bajo con un aviso en la consola (respaldo de
+    dibujo, no un dato).
+    """
+    with open(ruta, encoding='utf-8') as f:
+        terreno = json.load(f).get('terreno') or {}
+    if terreno.get('z') is None:
+        return None
+    return round(float(terreno['z']), 4)
 
 
 # ============================================================
@@ -598,6 +636,34 @@ def construir():
     # toma un trapecio de un pano (4 vertices) y un triangulo del otro
     # (3): 7 vertices y tamanos [4, 3]. Dividir 7 entre 2 mezclaria los
     # vertices de los dos y dibujaria lineas que no existen.
+    #
+    # Y "QUE LO CARGA" COMPLETO. La 'w' de una entrada es SOLO la losa; el
+    # diagrama wz de G muestra ademas el peso propio de la viga, y sin el
+    # dato el panel no podia explicar la diferencia (viga 92: w 15.749
+    # contra wz -27.749 kN/m). Cada viga y brazo lleva tambien
+    #   w_peso_propio  lo que el modelo le aplica por su peso (A*gamma)
+    #   w_total_G      la w repartida que recibe OpenSees en G
+    # leidos de m.repartidas, que es lo que modelo_lt2.aplicar_cargas('G')
+    # le paso a eleLoad por origen: aca no se vuelve a calcular nada.
+    # Van en la ENTRADA y no en el elemento: son vista (no entran a
+    # data/modelo/lt2.json), el LT2 tiene una entrada por barra, y junto a
+    # 'w' dejan w + w_peso_propio = w_total_G en un mismo objeto, que Unity
+    # muestra sin sumar. Los muros no las llevan: su losa y su peso propio
+    # llegan como cargas NODALES, no como w.
+    if getattr(m, 'caso_repartidas', None) != 'G':
+        raise RuntimeError('El modelo no tiene aplicadas las cargas de G: no hay '
+                           'de donde leer el peso propio de cada barra.')
+
+    def en_G(tag, w_losa):
+        rep = m.repartidas.get(tag, {})
+        if abs(rep.get('losa', 0.0) - w_losa) > 1e-9:
+            raise RuntimeError(
+                'La losa de la barra %d que se exporta (%.6f kN/m) no es la que '
+                'le aplico el modelo (%.6f kN/m).' % (tag, w_losa, rep.get('losa', 0.0)))
+        pp = rep.get('peso_propio', 0.0)
+        return {'w_peso_propio': round(pp, 6),
+                'w_total_G': round(pp + rep.get('losa', 0.0), 6)}
+
     tributarias = []
     for tag, n1, n2, _sec, L, _peso, k in m.vigas:
         par = (min(n1, n2), max(n1, n2))
@@ -622,6 +688,7 @@ def construir():
             'qG': round(q, 4),
             'carga_total': round(q * A, 4),
             'w': round(q * A / L, 6),
+            **en_G(tag, q * A / L),
             'z': round(z, 4),
             'vertices': vertices, 'tamanos': tamanos,
             'n_poligonos': len(tamanos),
@@ -652,6 +719,7 @@ def construir():
             'qG': round(q, 4),
             'carga_total': round(q * A, 4),
             'w': round(q * A / L, 6),
+            **en_G(tag, q * A / L),
             'z': round(z, 4),
             'vertices': vertices, 'tamanos': tamanos,
             'n_poligonos': len(tamanos),
@@ -704,6 +772,27 @@ def construir():
     # ---------- Casos de carga ----------
     casos = construir_casos(m, r)
 
+    # La w_total_G de cada entrada tiene que ser la carga repartida de G
+    # que viaja en casos_de_carga (la que manda /analizar), y cada barra
+    # cargada en el modelo tiene que viajar con la suya. Antes solo se
+    # contrastaba el TOTAL del caso. Cota: un escalon del redondeo a 6
+    # decimales (las dos salen del mismo numero, redondeado igual).
+    wz_G = {int(q['elemento']): -q['wz'] for c in casos if c['nombre'] == 'G'
+            for q in c['cargas_distribuidas']}
+    peor = 0.0
+    for t in tributarias:
+        if 'w_total_G' in t:
+            peor = max(peor, abs(wz_G.get(t['elemento'], 0.0) - t['w_total_G']))
+    for tag, rep in m.repartidas.items():
+        peor = max(peor, abs(wz_G.get(tag, 0.0) - round(sum(rep.values()), 6)))
+    print('  w de G por barra: %d barras, losa + peso propio = wz exportado '
+          '(peor diferencia %.1e kN/m)' % (len(m.repartidas), peor))
+    if peor > 1e-6 or len(wz_G) != len(m.repartidas):
+        raise RuntimeError(
+            'La carga repartida de G exportada no es la que aplico el modelo '
+            'barra por barra (peor %.3e kN/m; %d barras en el JSON, %d en el '
+            'modelo).' % (peor, len(wz_G), len(m.repartidas)))
+
     modelo = {
         'info': {
             'descripcion': 'Edificio LT2 - planos de calculo 2024_22',
@@ -754,6 +843,16 @@ def construir():
 def main(salida=None):
     salida = salida or SALIDA
     modelo = construir()
+
+    # El suelo del visor: supuesto del perfil, solo en el JSON de Unity
+    # (ver cota_terreno()).
+    cota = cota_terreno()
+    if cota is None:
+        print('  AVISO: el perfil no declara "terreno": el visor pondra el '
+              'suelo en el apoyo mas bajo')
+    else:
+        modelo['info']['cota_terreno'] = cota
+        print('  cota del terreno (supuesto del perfil): %+.2f m' % cota)
 
     os.makedirs(os.path.dirname(salida), exist_ok=True)
     with open(salida, 'w', encoding='utf-8') as f:
