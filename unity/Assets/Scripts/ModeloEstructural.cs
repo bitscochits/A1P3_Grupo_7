@@ -148,6 +148,15 @@ public class Elemento
     // todos los muros girados 90 grados.
     public float[] dir_largo;
 
+    // Area tributaria TOTAL de la viga (m2) y su carga de gravedad
+    // (kN/m), calculadas en Python. Las traen Ingenieria y el conjunto;
+    // el LT2 no las exporta por elemento (quedan en 0) y su area esta
+    // en areas_tributarias. Para leerla, ModeloEstructural
+    // .AreaTributariaTotal(id), que elige la fuente. Un campo por linea:
+    // comun/test_contrato_unity.py los lee como texto.
+    public float area_tributaria;
+    public float w_gravedad;
+
     public bool EsMuro { get { return tipo == "muro"; } }
 
     // "brazo" (LT2) y "brazo_rigido" (Ingenieria) son lo mismo. Los
@@ -182,7 +191,15 @@ public class AreaTributaria
     public float luz;              // m
     public float qG;               // kN/m2
     public float carga_total;      // kN   = qG * area
-    public float w;                // kN/m = carga_total / luz
+    public float w;                // kN/m = carga_total / luz (SOLO la losa)
+    // "Que lo carga" completo, de Python (edificios/lt2/exportar_unity.py,
+    // leido de lo que el modelo le aplico a eleLoad): el peso propio lineal
+    // de la barra y la w total que recibe OpenSees en G (= wz del diagrama
+    // de G). w + w_peso_propio = w_total_G lo comprueba test_contrato_unity;
+    // Unity no suma. En 0 si el edificio no los exporta (Ingenieria) o si
+    // la barra es un muro (su losa y su peso van como cargas nodales).
+    public float w_peso_propio;    // kN/m
+    public float w_total_G;        // kN/m
     public float z;                // cota del piso
     // Los poligonos vienen CONCATENADOS (JsonUtility no lee listas de
     // listas) y 'tamanos' dice cuantos vertices tiene cada uno.
@@ -270,6 +287,17 @@ public class InfoModelo
     public string unidades;
     public string caso_precalculado;
     public string nota;
+
+    // "lt2", "ingenieria" o "conjunto". Lo usa el servidor para nombrar
+    // el Excel del reanalisis (results/excel/reanalisis_<edificio>.xlsx).
+    // Vacio si el exportador no lo escribe (hoy ninguno lo hace).
+    public string edificio;
+
+    // Cota z (OpenSees, m) del terreno donde apoya el edificio: un
+    // SUPUESTO declarado en el perfil del edificio, no leido del plano.
+    // -9999 = el JSON no la trae (JsonUtility deja el valor por defecto
+    // cuando falta la clave): sin cota, no se dibuja suelo.
+    public float cota_terreno = -9999f;
 }
 
 // Contenedor: representa modelo_unity.json completo.
@@ -293,6 +321,11 @@ public class ModeloEstructural
 
     /// Area tributaria de una viga. null si esa viga no carga losa
     /// (una columna, por ejemplo).
+    ///
+    /// OJO: devuelve UNA entrada. En el LT2 cada viga tiene una sola; en
+    /// Ingenieria y el conjunto una viga puede tener varias (un trapecio
+    /// de cada pano) y esta devuelve la ultima. Se conserva por
+    /// compatibilidad; lo nuevo usa TributariasDe y AreaTributariaTotal.
     public AreaTributaria TributariaDe(int elementTag)
     {
         if (_tribPorElemento == null)
@@ -304,6 +337,69 @@ public class ModeloEstructural
         }
         AreaTributaria r;
         return _tribPorElemento.TryGetValue(elementTag, out r) ? r : null;
+    }
+
+    [System.NonSerialized]
+    private Dictionary<int, List<AreaTributaria>> _tribsPorElemento;
+
+    private static readonly List<AreaTributaria> SIN_TRIBUTARIAS = new List<AreaTributaria>();
+
+    /// TODAS las entradas de area tributaria de una viga, en el orden
+    /// del JSON. Lista vacia (nunca null) si no carga losa. No
+    /// modificar la lista devuelta: es la del indice.
+    public List<AreaTributaria> TributariasDe(int elementTag)
+    {
+        if (_tribsPorElemento == null)
+        {
+            _tribsPorElemento = new Dictionary<int, List<AreaTributaria>>();
+            if (areas_tributarias != null)
+                foreach (AreaTributaria a in areas_tributarias)
+                {
+                    List<AreaTributaria> l;
+                    if (!_tribsPorElemento.TryGetValue(a.elemento, out l))
+                        _tribsPorElemento[a.elemento] = l = new List<AreaTributaria>();
+                    l.Add(a);
+                }
+        }
+        List<AreaTributaria> r;
+        return _tribsPorElemento.TryGetValue(elementTag, out r) ? r : SIN_TRIBUTARIAS;
+    }
+
+    /// Area tributaria total de una viga, en m2. Si el elemento trae
+    /// 'area_tributaria' (> 0), es ese numero, calculado en Python. Si
+    /// no (el LT2), la suma de sus entradas de areas_tributarias.
+    /// comun/test_contrato_unity.py comprueba que las dos fuentes
+    /// coinciden donde existen ambas, asi que no es una segunda
+    /// definicion: es leer la que haya.
+    public float AreaTributariaTotal(int elementTag)
+    {
+        Elemento e = ElementoPorId(elementTag);
+        if (e != null && e.area_tributaria > 0f) return e.area_tributaria;
+        float suma = 0f;
+        foreach (AreaTributaria a in TributariasDe(elementTag)) suma += a.area;
+        return suma;
+    }
+
+    // --- Indice de elementos por elementTag ---
+    [System.NonSerialized]
+    private Dictionary<int, Elemento> _porElemento;
+    [System.NonSerialized]
+    private int _elementosAlIndexar = -1;
+
+    /// Busca un elemento por id. null si no existe. El indice se rehace
+    /// solo si cambia la cantidad de elementos; quien los edite sin
+    /// cambiar la cantidad llama a InvalidarIndice().
+    public Elemento ElementoPorId(int id)
+    {
+        if (elementos == null) return null;
+        if (_porElemento == null || _elementosAlIndexar != elementos.Count)
+        {
+            _porElemento = new Dictionary<int, Elemento>();
+            foreach (Elemento e in elementos) _porElemento[e.id] = e;
+            _elementosAlIndexar = elementos.Count;
+        }
+        Elemento r;
+        return _porElemento.TryGetValue(id, out r) ? r : null;
     }
 
     // --- Indices para buscar rapido (no se serializan) ---
@@ -323,8 +419,16 @@ public class ModeloEstructural
         return _porId.TryGetValue(id, out r) ? r : null;
     }
 
-    /// Hay que llamarlo si se agregan o quitan nodos.
-    public void InvalidarIndice() { _porId = null; _porSeccion = null; }
+    /// Hay que llamarlo si se agregan o quitan nodos, elementos,
+    /// secciones o areas tributarias.
+    public void InvalidarIndice()
+    {
+        _porId = null;
+        _porSeccion = null;
+        _porElemento = null;
+        _tribPorElemento = null;
+        _tribsPorElemento = null;
+    }
 
     [System.NonSerialized]
     private Dictionary<string, Seccion> _porSeccion;
@@ -389,6 +493,32 @@ public class FuerzaElemento
     public float My_j { get { return f != null && f.Length > 10 ? f[10] : 0f; } }
 }
 
+// El equilibrio global de un caso, calculado en Python por
+// comun/calcular.equilibrio() y devuelto por el servidor. Las mismas
+// claves que ese dict. Un campo por linea y sin metodos.
+//
+// POR QUE NO SE SUMA EN C#: nodeReaction en un nodo de diafragma trae
+// la fuerza interna de la restriccion. Sumar la lista de reacciones
+// dobla el corte basal (CLAUDE.md, seccion 4, "Reacciones"); la
+// separacion por grado de libertad vive en Python y aca solo se lee.
+//
+// OJO JsonUtility: si la respuesta no trae 'equilibrio', el campo puede
+// quedar null o como un EquilibrioCaso vacio (arreglos null o de largo
+// 0), segun como lo construya el serializador. "Vino" se pregunta asi,
+// que cubre los dos:
+//   c.equilibrio != null && c.equilibrio.aplicada_kN != null
+//       && c.equilibrio.aplicada_kN.Length == 3
+[System.Serializable]
+public class EquilibrioCaso
+{
+    public float[] aplicada_kN;        // [Fx, Fy, Fz] cargas aplicadas
+    public float[] reaccion_kN;        // [Fx, Fy, Fz] reacciones que cuentan
+    public float[] error_kN;           // aplicada + reaccion, por eje
+    public int cargas_sin_convertir;   // cargas que no se pudieron sumar
+    public int nodos_en_diafragma;
+    public bool confiable;             // cargas_sin_convertir == 0
+}
+
 // Un caso de carga resuelto (G, Q, EX, EY...).
 [System.Serializable]
 public class CasoResultado
@@ -399,6 +529,7 @@ public class CasoResultado
     public List<DespNodo> desplazamientos;
     public List<ReacNodo> reacciones;
     public List<FuerzaElemento> fuerzas_elementos;
+    public EquilibrioCaso equilibrio;
 }
 
 [System.Serializable]
@@ -421,6 +552,15 @@ public class RespuestaServidor
     // --- Forma MULTI-CASO: cuando se manda "casos_de_carga" ---
     // Si viene con contenido, manda esta y se ignora la plana.
     public List<CasoResultado> casos;
+
+    // --- Libro Excel del reanalisis ---
+    // Ruta ABSOLUTA del .xlsx que el servidor escribio con comun/excel.py
+    // despues de resolver (results/excel/reanalisis_<ed>.xlsx), o vacio
+    // si no lo escribio; en ese caso excel_error dice por que. Un null
+    // del JSON puede llegar como null o como "": preguntar con
+    // string.IsNullOrEmpty.
+    public string excel;
+    public string excel_error;
 
     /// Normaliza ambas formas a una lista de casos.
     public List<CasoResultado> ComoCasos()

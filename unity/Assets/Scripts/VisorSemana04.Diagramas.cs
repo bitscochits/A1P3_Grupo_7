@@ -38,6 +38,10 @@ public partial class VisorSemana04
     /// de Redibujar(): sin esto, el visor se queda mudo.
     public string MotivoSinDiagrama { get; private set; } = "";
 
+    /// true si hay algun diagrama dibujado en la escena. Lo mira
+    /// AmbienteVisor para esconder las losas de dibujo, que lo taparian.
+    public bool HayDiagramaDibujado { get { return creados.Count > 0; } }
+
     /// Un aviso para LEER el diagrama que si se dibujo. Hoy uno solo: en
     /// un muro, la cinta del eje de su plano queda dentro de la placa.
     public string AvisoDeLectura { get; private set; } = "";
@@ -63,10 +67,16 @@ public partial class VisorSemana04
         string modelo = (visor == null || visor.Modelo == null
                          || visor.Modelo.elementos == null)
             ? "-" : visor.Modelo.elementos.Count.ToString(CultureInfo.InvariantCulture);
-        return $"{casoActivo}|{magnitud}|{mostrarDiagramas}|{soloSeleccionado}|{modelo}|"
+        // versionCasos: con el MISMO nombre de caso (LIBRE, reemplazado por
+        // otra respuesta de /combinar) los numeros son otros, y sin esto el
+        // diagrama viejo quedaba en pantalla. La cota visible es el filtro
+        // de piso comun de AjustesVista (semana05/CONTRATO.md, 2.1).
+        string cota = AjustesVista.HayFiltroDePiso
+            ? AjustesVista.cotaVisible.ToString("0.000", CultureInfo.InvariantCulture) : "todas";
+        return $"{casoActivo}|{versionCasos}|{magnitud}|{mostrarDiagramas}|{soloSeleccionado}|{modelo}|"
              + $"{multiplicadorEscala.ToString(CultureInfo.InvariantCulture)}|"
              + $"{largoDiagramaMaximo.ToString(CultureInfo.InvariantCulture)}|"
-             + $"{Seleccionado}|{piso}|{capas}|{AnexoCalzaConElModelo}";
+             + $"{Seleccionado}|{piso}|{cota}|{capas}|{AnexoCalzaConElModelo}|{AnexoDesactualizado}";
     }
 
     public void Redibujar()
@@ -83,6 +93,15 @@ public partial class VisorSemana04
         // Un anexo de otro edificio tiene los mismos ids en otras barras:
         // dibujarlo pondria esfuerzos de una barra sobre otra.
         if (!mostrarDiagramas) return;          // el toggle se ve apagado
+        // Con el modelo editado pasa lo mismo que con otro edificio: los
+        // esfuerzos son de otra geometria (una columna borrada cambia los
+        // de todo su entorno).
+        if (AnexoDesactualizado)
+        {
+            MotivoSinDiagrama = "el modelo se edito: los esfuerzos son del modelo ORIGINAL "
+                              + "(recalcula y re-exporta)";
+            return;
+        }
         if (!AnexoCalzaConElModelo)
         {
             MotivoSinDiagrama = "el anexo es de otro edificio: mira el AVISO de arriba";
@@ -158,6 +177,11 @@ public partial class VisorSemana04
         var contorno = new Lineas();
         foreach (Elemento e in barras)
             AgregarDiagrama(e, EsfuerzosDe(e.id), EscalaDe(e), positivo, negativo, contorno);
+        // Con perfiles (vista realista) la barra es una caja de b x h y el
+        // diagrama, que nace en el eje, quedaba adentro: se dibujan delgadas
+        // mientras tienen diagrama. Los muros no (su placa ya existia).
+        visor.FijarBarrasDelgadas(barras.FindAll(x => !EsMuro(x)).ConvertAll(x => x.id));
+        barrasAdelgazadas = true;
 
         Crear(positivo.Construir("Diagrama_" + magnitud + "_positivo"), colorPositivo);
         Crear(negativo.Construir("Diagrama_" + magnitud + "_negativo"), colorNegativo);
@@ -187,8 +211,13 @@ public partial class VisorSemana04
         return mayor > 1e-9f ? largoDiagramaMaximo * multiplicadorEscala / mayor : 0f;
     }
 
+    // true si este script pidio barras delgadas al visor y no las devolvio.
+    private bool barrasAdelgazadas = false;
+
     void Limpiar()
     {
+        if (barrasAdelgazadas && visor != null) visor.FijarBarrasDelgadas(null);
+        barrasAdelgazadas = false;
         foreach (GameObject g in creados)
         {
             if (g == null) continue;
@@ -214,15 +243,16 @@ public partial class VisorSemana04
                 continue;
             }
             // Visibles = las que el visor dibujo, que respeta sus capas, y
-            // que pasan el filtro de piso de VisorQA.
+            // que pasan el filtro de piso. El filtro es la regla comun de
+            // AjustesVista (la cota MENOR de la barra); el de VisorQA se
+            // sigue mirando mientras su panel use soloNivel. Si los dos
+            // existen, dicen lo mismo; si uno no esta puesto, no filtra.
             if (visor.ObjetoDeElemento(e.id) == null) continue;
-            if (qa != null)
-            {
-                Nodo a = visor.Modelo.NodoPorId(e.n1);
-                Nodo b = visor.Modelo.NodoPorId(e.n2);
-                if (a == null || b == null) continue;
-                if (!qa.NivelVisible(Mathf.Min(a.z, b.z))) continue;
-            }
+            Nodo a = visor.Modelo.NodoPorId(e.n1);
+            Nodo b = visor.Modelo.NodoPorId(e.n2);
+            if (a == null || b == null) continue;
+            if (!AjustesVista.ElementoEnCotaVisible(a.z, b.z)) continue;
+            if (qa != null && !qa.NivelVisible(Mathf.Min(a.z, b.z))) continue;
             lista.Add(e);
         }
         return lista;

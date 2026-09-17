@@ -3,12 +3,16 @@
   VisorSemana04.Panel.cs   (parte de VisorSemana04)
 ================================================================
   El texto que se suma al panel de VisorQA al seleccionar una barra, y
-  los controles de la seccion "Semana 4" de ese panel.
+  los controles de la pestana "Caso" de ese panel.
 
   El texto contesta lo que pide la semana para la barra seleccionada:
   ID, nodos, seccion, material, ejes locales (esos ya los escribe
   VisorQA), restricciones, N, Vy, Vz, T, My, Mz del caso activo,
   demanda-capacidad y la cadena de trazabilidad.
+
+  EL TEXTO NO SE TOCA: DescribirElemento va a registro.txt de las
+  capturas y se cruza con semana04/trazabilidad.py. La Semana 5 cambio
+  solo los CONTROLES.
 
   FORMATO INVARIANTE: en un Windows en espanol, 0.5 saldria "0,5" y
   los numeros no se podrian comparar a simple vista con los que
@@ -18,6 +22,19 @@
   de VisorQA. Hacerlo dentro de OnGUI cambia la cantidad de controles
   entre el evento de Layout y el de Repaint, y IMGUI lo reclama. Por eso
   los botones anotan la accion y se ejecuta en LateUpdate.
+
+  CONTROLES (Semana 5): la misma informacion de antes, en grillas y
+  secciones plegables con los estilos escalados de PanelUI.
+    - Caso activo: casos base en grilla de 4, combinaciones de 2 (el
+      activo lleva "> "), y los controles de superposicion de
+      VisorSemana04.Superposicion.cs (Hook_DibujarSuperposicion). Los
+      casos tipo "superposicion" (E1..E3, LIBRE) los dibuja ese hook.
+    - Diagramas: magnitudes en grilla de 4 x 2, alcance, escala, leyenda.
+    - Curva P-M: el toggle de la ventana flotante (PM.cs).
+    - Mapa demanda / capacidad (Mapa.cs).
+    - Botones de demo.
+  Los textos de los botones son los que citan los guiones de la demo
+  ("Diagramas de esfuerzos", "todas las visibles", "Columna demo").
 ================================================================
 */
 
@@ -33,10 +50,15 @@ public partial class VisorSemana04
 
     void LateUpdate()
     {
-        if (accionPendiente == null) return;
-        System.Action a = accionPendiente;
-        accionPendiente = null;
-        a();
+        if (accionPendiente != null)
+        {
+            System.Action a = accionPendiente;
+            accionPendiente = null;
+            a();
+        }
+        // Despues de las acciones: si una cambio el caso activo, el mapa
+        // D/C se repinta en este mismo frame.
+        Mapa_Actualizar();
     }
 
     static string F(float v, string formato)
@@ -221,90 +243,266 @@ public partial class VisorSemana04
     }
 
     // ============================================================
-    // CONTROLES (dentro del scroll de VisorQA)
+    // CONTROLES (pestana Caso de VisorQA, dentro de su scroll)
     // ============================================================
+
+    // Lo que decide QUE controles hay se congela en el evento Layout y
+    // vale para el resto de los eventos del frame. Si un control
+    // apareciera entre el Layout y el Repaint (o el click), IMGUI tira
+    // "Getting control N's position in a group with only N controls".
+    // Por la misma razon los botones y toggles que agregan o quitan
+    // controles cambian el estado con Diferir, no en el acto.
+    private string Pnl_avisoEnLayout = "";
+    private bool Pnl_hayAnexoEnLayout = false;
+    private bool Pnl_diagramasEnLayout = false;
+    private string Pnl_motivoSinDiagramaEnLayout = "";
+    private string Pnl_avisoDeLecturaEnLayout = "";
+    private bool Pnl_pedirClickEnLayout = false;
+
     public void DibujarControles()
     {
-        GUILayout.Space(6);
-        GUILayout.Label("--- Semana 4 ---");
-        if (!string.IsNullOrEmpty(Aviso)) GUILayout.Label("AVISO: " + Aviso);
-        if (Anexo == null) return;
+        // Idempotente: VisorQA ya lo llama al empezar su OnGUI. Si el que
+        // llama no lo hizo, los estilos existen igual.
+        PanelUI.Preparar();
 
-        CasoS4 activo = CasoActivo();
-        GUILayout.Label("Caso activo: " + casoActivo
-                        + (activo != null ? "  =  " + activo.descripcion : ""));
-
-        GUILayout.BeginHorizontal();
-        foreach (CasoS4 c in Anexo.casos)
-            if (c.tipo != "combinacion") BotonCaso(c);
-        GUILayout.EndHorizontal();
-
-        int n = 0;
-        foreach (CasoS4 c in Anexo.casos)
+        if (Event.current.type == EventType.Layout)
         {
-            if (c.tipo != "combinacion") continue;
-            if (n % 2 == 0) GUILayout.BeginHorizontal();
-            BotonCaso(c);
-            if (n % 2 == 1) GUILayout.EndHorizontal();
-            n++;
-        }
-        if (n % 2 == 1) GUILayout.EndHorizontal();
-
-        bool diag = GUILayout.Toggle(mostrarDiagramas, "Diagramas de esfuerzos");
-        if (diag != mostrarDiagramas) { mostrarDiagramas = diag; necesitaRedibujar = true; }
-        if (mostrarDiagramas)
-        {
-            GUILayout.BeginHorizontal();
-            foreach (string m in MAGNITUDES)
-            {
-                string elegida = m;
-                if (GUILayout.Button((m == magnitud ? "> " : "") + m))
-                {
-                    magnitud = elegida;
-                    necesitaRedibujar = true;
-                }
-            }
-            GUILayout.EndHorizontal();
-
-            GUILayout.BeginHorizontal();
-            if (GUILayout.Button((soloSeleccionado ? "> " : "") + "la seleccionada"))
-            { soloSeleccionado = true; necesitaRedibujar = true; }
-            if (GUILayout.Button((!soloSeleccionado ? "> " : "") + "todas las visibles"))
-            { soloSeleccionado = false; necesitaRedibujar = true; }
-            GUILayout.EndHorizontal();
-
-            GUILayout.Label($"escala del diagrama x{F(multiplicadorEscala, "0.0")} (solo grafica)");
-            float esc = GUILayout.HorizontalSlider(multiplicadorEscala, 0.1f, 5f);
-            if (!Mathf.Approximately(esc, multiplicadorEscala))
-            { multiplicadorEscala = esc; necesitaRedibujar = true; }
-
-            GUILayout.Label(LeyendaDiagrama());
-            // Por que no se ve nada: el visor no se queda mudo.
-            if (!string.IsNullOrEmpty(MotivoSinDiagrama))
-                GUILayout.Label("sin diagrama: " + MotivoSinDiagrama);
-            else if (soloSeleccionado && Seleccionado < 0)
-                GUILayout.Label("(click en una barra para ver su diagrama)");
-            // Y esto se dibujo, pero cuesta verlo.
-            if (!string.IsNullOrEmpty(AvisoDeLectura))
-                GUILayout.Label("ojo: " + AvisoDeLectura);
+            Pnl_avisoEnLayout = Aviso ?? "";
+            Pnl_hayAnexoEnLayout = Anexo != null;
+            Pnl_diagramasEnLayout = mostrarDiagramas;
+            Pnl_motivoSinDiagramaEnLayout = MotivoSinDiagrama ?? "";
+            Pnl_avisoDeLecturaEnLayout = AvisoDeLectura ?? "";
+            Pnl_pedirClickEnLayout = soloSeleccionado && Seleccionado < 0;
         }
 
-        bool pm = GUILayout.Toggle(mostrarPM, "Curva P-M de la seleccionada (ventana)");
-        if (pm != mostrarPM) { mostrarPM = pm; texturaPMFirma = null; }
+        if (Pnl_avisoEnLayout.Length > 0) GUILayout.Label("AVISO: " + Pnl_avisoEnLayout, PanelUI.Aviso);
+        if (!Pnl_hayAnexoEnLayout || Anexo == null) return;
 
+        // ---------- caso activo ----------
+        if (PanelUI.Plegable("s4.casos", "Casos del anexo (Semana 4)", true))
+        {
+            CasoS4 activo = CasoActivo();
+            GUILayout.Label("Caso activo: " + casoActivo
+                            + (activo != null ? "  =  " + activo.descripcion : ""), PanelUI.Texto);
+            if (Event.current.type == EventType.Layout) Pnl_ArmarGrillasDeCasos();
+            Pnl_GrillaDeCasos("casos base", Pnl_nombresBase, Pnl_textosBase, 4);
+            Pnl_GrillaDeCasos("combinaciones", Pnl_nombresComb, Pnl_textosComb, 2);
+        }
+
+        // Sliders de lambda, E1..E3 y "Combinar en Python" (U3). Una vez.
+        Hook_DibujarSuperposicion();
+
+        // ---------- diagramas ----------
+        if (PanelUI.Plegable("s4.diagramas", "Diagramas", true))
+        {
+            bool diag = Pnl_Toggle(Pnl_diagramasEnLayout, "Diagramas de esfuerzos");
+            if (diag != Pnl_diagramasEnLayout)
+                Diferir(() => { mostrarDiagramas = diag; necesitaRedibujar = true; });
+            if (Pnl_diagramasEnLayout) Pnl_ControlesDeDiagrama();
+        }
+
+        // ---------- curva P-M ----------
+        if (PanelUI.Plegable("s4.pm", "Curva P-M", false))
+        {
+            // No agrega ni quita controles del panel: la ventana se decide
+            // en su propio OnGUI (PM.cs).
+            bool pm = Pnl_Toggle(mostrarPM, "Curva P-M de la seleccionada (ventana)");
+            if (pm != mostrarPM) { mostrarPM = pm; texturaPMFirma = null; }
+            GUILayout.Label("La pestana Elemento la dibuja dentro del panel; mientras se ve ahi, "
+                            + "la ventana flotante se oculta. La ventana sirve para seguir el punto "
+                            + "de demanda mientras se cambia de caso.", PanelUI.Tenue);
+            GUILayout.Label(Pnl_ResumenFamilias(), PanelUI.Tenue);
+        }
+
+        // ---------- mapa demanda / capacidad ----------
+        Mapa_DibujarControles();
+
+        // ---------- demo ----------
         int col = Anexo.info != null ? Anexo.info.columna_demo : -1;
         int mur = Anexo.info != null ? Anexo.info.muro_demo : -1;
-        GUILayout.BeginHorizontal();
-        if (col >= 0 && GUILayout.Button($"Columna demo ({col})")) Diferir(() => IrA(col));
-        if (mur >= 0 && GUILayout.Button($"Muro demo ({mur})")) Diferir(() => IrA(mur));
-        GUILayout.EndHorizontal();
+        if (col >= 0 || mur >= 0)
+        {
+            GUILayout.Space(PanelUI.Px(6f));
+            GUILayout.BeginHorizontal();
+            if (col >= 0 && GUILayout.Button($"Columna demo ({col})", PanelUI.Boton)) Diferir(() => IrA(col));
+            if (mur >= 0 && GUILayout.Button($"Muro demo ({mur})", PanelUI.Boton)) Diferir(() => IrA(mur));
+            GUILayout.EndHorizontal();
+        }
     }
 
-    void BotonCaso(CasoS4 c)
+    void Pnl_ControlesDeDiagrama()
     {
-        string nombre = c.nombre;
-        if (GUILayout.Button((nombre == casoActivo ? "> " : "") + nombre))
+        // magnitudes: 8 en una grilla de 4 x 2
+        int actual = System.Array.IndexOf(MAGNITUDES, magnitud);
+        int elegida = GUILayout.SelectionGrid(actual, Pnl_TextosMagnitud(), 4, PanelUI.Boton);
+        if (elegida != actual && elegida >= 0 && elegida < MAGNITUDES.Length)
+        {
+            string m = MAGNITUDES[elegida];
+            Diferir(() => { magnitud = m; necesitaRedibujar = true; });
+        }
+
+        int alcance = soloSeleccionado ? 0 : 1;
+        int nuevo = GUILayout.SelectionGrid(alcance, soloSeleccionado ? Pnl_ALCANCE_SOLA : Pnl_ALCANCE_TODAS,
+                                            2, PanelUI.Boton);
+        if (nuevo != alcance)
+        {
+            bool sola = nuevo == 0;
+            Diferir(() => { soloSeleccionado = sola; necesitaRedibujar = true; });
+        }
+
+        // El slider cambia en el acto: solo mueve un numero y un texto, no
+        // agrega controles, y diferirlo lo haria saltar al arrastrar.
+        GUILayout.Label($"escala del diagrama x{F(multiplicadorEscala, "0.0")} (solo grafica)", PanelUI.Texto);
+        float esc = GUILayout.HorizontalSlider(multiplicadorEscala, 0.1f, 5f);
+        if (!Mathf.Approximately(esc, multiplicadorEscala))
+        { multiplicadorEscala = esc; necesitaRedibujar = true; }
+
+        GUILayout.Label(LeyendaDiagrama(), PanelUI.Tenue);
+        // Por que no se ve nada: el visor no se queda mudo.
+        if (Pnl_motivoSinDiagramaEnLayout.Length > 0)
+            GUILayout.Label("sin diagrama: " + Pnl_motivoSinDiagramaEnLayout, PanelUI.Aviso);
+        else if (Pnl_pedirClickEnLayout)
+            GUILayout.Label("(click en una barra para ver su diagrama)", PanelUI.Tenue);
+        // Y esto se dibujo, pero cuesta verlo.
+        if (Pnl_avisoDeLecturaEnLayout.Length > 0)
+            GUILayout.Label("ojo: " + Pnl_avisoDeLecturaEnLayout, PanelUI.Aviso);
+    }
+
+    // ------------------------------------------------------------
+    // Grillas de casos. Los textos se arman solo cuando cambia el caso
+    // activo o la lista de casos, y solo en el Layout: OnGUI llega varias
+    // veces por frame y la grilla tiene que tener los mismos botones en
+    // todos sus eventos.
+    // ------------------------------------------------------------
+    private readonly System.Collections.Generic.List<string> Pnl_nombresBase =
+        new System.Collections.Generic.List<string>();
+    private readonly System.Collections.Generic.List<string> Pnl_nombresComb =
+        new System.Collections.Generic.List<string>();
+    private string[] Pnl_textosBase = new string[0];
+    private string[] Pnl_textosComb = new string[0];
+    private string Pnl_casoGrillas = null;
+    private int Pnl_versionGrillas = -1;
+    private int Pnl_cuantosGrillas = -1;
+    private AnexoSemana04 Pnl_anexoGrillas = null;
+
+    private string[] Pnl_textosMagnitud = null;
+    private string Pnl_magnitudTextos = null;
+
+    static readonly string[] Pnl_ALCANCE_SOLA = { "> la seleccionada", "todas las visibles" };
+    static readonly string[] Pnl_ALCANCE_TODAS = { "la seleccionada", "> todas las visibles" };
+
+    void Pnl_ArmarGrillasDeCasos()
+    {
+        int cuantos = Anexo.casos != null ? Anexo.casos.Count : 0;
+        if (casoActivo == Pnl_casoGrillas && versionCasos == Pnl_versionGrillas
+            && cuantos == Pnl_cuantosGrillas && Anexo == Pnl_anexoGrillas)
+            return;
+        Pnl_casoGrillas = casoActivo;
+        Pnl_versionGrillas = versionCasos;
+        Pnl_cuantosGrillas = cuantos;
+        Pnl_anexoGrillas = Anexo;
+
+        Pnl_nombresBase.Clear();
+        Pnl_nombresComb.Clear();
+        if (Anexo.casos != null)
+            foreach (CasoS4 c in Anexo.casos)
+            {
+                if (c == null || string.IsNullOrEmpty(c.nombre)) continue;
+                // Las superposiciones (E1..E3, LIBRE) van con sus sliders,
+                // en el hook de U3. Cualquier otro tipo, con los base.
+                if (c.tipo == TIPO_SUPERPOSICION) continue;
+                if (c.tipo == "combinacion") Pnl_nombresComb.Add(c.nombre);
+                else Pnl_nombresBase.Add(c.nombre);
+            }
+        Pnl_textosBase = Pnl_ConMarca(Pnl_nombresBase);
+        Pnl_textosComb = Pnl_ConMarca(Pnl_nombresComb);
+    }
+
+    string[] Pnl_ConMarca(System.Collections.Generic.List<string> nombres)
+    {
+        var textos = new string[nombres.Count];
+        for (int i = 0; i < nombres.Count; i++)
+            textos[i] = (nombres[i] == casoActivo ? "> " : "") + nombres[i];
+        return textos;
+    }
+
+    /// Una grilla de botones de caso. El activo lleva "> " y el color de
+    /// acento (el estado "on" de PanelUI.Boton); si el activo no esta en
+    /// esta grilla (E1..E3, LIBRE), ninguno queda marcado.
+    void Pnl_GrillaDeCasos(string titulo, System.Collections.Generic.List<string> nombres,
+                           string[] textos, int columnas)
+    {
+        if (nombres.Count == 0 || textos.Length != nombres.Count) return;
+        GUILayout.Label(titulo, PanelUI.Tenue);
+        int actual = nombres.IndexOf(Pnl_casoGrillas);
+        int elegido = GUILayout.SelectionGrid(actual, textos, Mathf.Min(columnas, textos.Length),
+                                              PanelUI.Boton);
+        if (elegido != actual && elegido >= 0 && elegido < nombres.Count)
+        {
+            string nombre = nombres[elegido];
             Diferir(() => ElegirCaso(nombre));
+        }
+    }
+
+    string[] Pnl_TextosMagnitud()
+    {
+        if (Pnl_textosMagnitud != null && magnitud == Pnl_magnitudTextos) return Pnl_textosMagnitud;
+        Pnl_magnitudTextos = magnitud;
+        Pnl_textosMagnitud = new string[MAGNITUDES.Length];
+        for (int i = 0; i < MAGNITUDES.Length; i++)
+            Pnl_textosMagnitud[i] = (MAGNITUDES[i] == magnitud ? "> " : "") + MAGNITUDES[i];
+        return Pnl_textosMagnitud;
+    }
+
+    private AnexoSemana04 Pnl_anexoFamilias = null;
+    private string Pnl_textoFamilias = "";
+
+    /// Cuantas barras tienen curva P-M: lo que el JSON trae, contado. Una
+    /// vez por anexo, no en cada evento de OnGUI.
+    string Pnl_ResumenFamilias()
+    {
+        if (Anexo == Pnl_anexoFamilias) return Pnl_textoFamilias;
+        Pnl_anexoFamilias = Anexo;
+        int conFamilia = 0, total = 0;
+        if (Anexo != null && Anexo.elementos != null)
+            foreach (ElementoS4 e in Anexo.elementos)
+            {
+                total++;
+                if (PM_FamiliaDe(e) != null) conFamilia++;
+            }
+        int familias = Anexo != null && Anexo.familias != null ? Anexo.familias.Count : 0;
+        Pnl_textoFamilias = $"{conFamilia} de {total} barras con fierro, {familias} curvas P-M "
+                          + "distintas en el anexo";
+        return Pnl_textoFamilias;
+    }
+
+    // ------------------------------------------------------------
+    // Toggle con la letra escalada. PanelUI no trae uno: se copia el del
+    // skin y se le pone la fuente de PanelUI.Texto. Se rehace cuando
+    // PanelUI rehace sus estilos (cambio de escala): ahi Texto es otro
+    // objeto.
+    // ------------------------------------------------------------
+    private GUIStyle Pnl_estiloToggle = null;
+    private GUIStyle Pnl_textoDelToggle = null;
+
+    bool Pnl_Toggle(bool valor, string texto)
+    {
+        GUIStyle baseTexto = PanelUI.Texto;
+        if (baseTexto != null && (Pnl_estiloToggle == null || Pnl_textoDelToggle != baseTexto))
+        {
+            Pnl_estiloToggle = new GUIStyle(PanelUI.Casilla ?? GUI.skin.toggle);   // casilla escalada
+            Pnl_estiloToggle.fontSize = baseTexto.fontSize;
+            Pnl_estiloToggle.wordWrap = false;
+            Color c = PanelUI.ColorTexto;
+            Pnl_estiloToggle.normal.textColor = c;
+            Pnl_estiloToggle.hover.textColor = c;
+            Pnl_estiloToggle.active.textColor = c;
+            Pnl_estiloToggle.onNormal.textColor = c;
+            Pnl_estiloToggle.onHover.textColor = c;
+            Pnl_estiloToggle.onActive.textColor = c;
+            Pnl_textoDelToggle = baseTexto;
+        }
+        return GUILayout.Toggle(valor, texto, Pnl_estiloToggle ?? GUI.skin.toggle);
     }
 
     string LeyendaDiagrama()
@@ -332,12 +530,32 @@ public partial class VisorSemana04
         return $"{magnitud} dibujado {lado}\nazul = {magnitud} > 0, rojo = {magnitud} < 0{escala}";
     }
 
-    /// Selecciona la barra (en VisorQA, para que su panel la describa) y
-    /// centra la camara en ella.
+    /// Selecciona la barra y le pide a la camara que la encuadre. Lo usan
+    /// los botones de demo y la lista de criticos del mapa D/C.
+    ///
+    /// La seleccion va por VisorQA (la describe en la pestana Elemento y
+    /// avisa SeleccionCambio, la unica fuente de seleccion). La camara va
+    /// por EventosVisor.PedirCentrar con el centro en coordenadas Unity y
+    /// donde la barra esta DIBUJADA ahora (con la deformada, si esta
+    /// puesta). Sin VisorQA en la escena, se selecciona aca y la camara
+    /// se mueve igual.
     void IrA(int id)
     {
         if (qa != null) qa.SeleccionarElemento(id);
         else Seleccionar(id);
-        EnfocarElemento(id);
+
+        if (visor == null || visor.Modelo == null) return;
+        Elemento e = visor.Modelo.ElementoPorId(id);
+        if (e == null) return;
+        Nodo a = visor.Modelo.NodoPorId(e.n1);
+        Nodo b = visor.Modelo.NodoPorId(e.n2);
+        if (a == null || b == null) return;
+
+        Vector3 pa = visor.PosicionActual(a), pb = visor.PosicionActual(b);
+        // Lo que hay que encuadrar: la barra, o el ancho del muro si es mas
+        // largo que alto; nunca menos de 3 m (igual que "Centrar" de VisorQA).
+        ElementoS4 s = ElementoPorId(id);
+        float tamano = Mathf.Max(Vector3.Distance(pa, pb), s != null ? Mathf.Max(s.b, s.h) : 0f, 3f);
+        EventosVisor.AvisarPedirCentrar((pa + pb) * 0.5f, tamano);
     }
 }

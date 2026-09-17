@@ -21,7 +21,14 @@
   Toca dos campos privados por reflexion -- el scroll del panel de
   VisorQA y el angulo de la camara -- solo para que la captura muestre
   la parte del panel que importa desde un angulo que se lea. No cambia
-  nada del calculo.
+  nada del calculo. Si un campo cambio de nombre o de tipo, la foto sale
+  igual pero registro.txt dice "AVISO reflexion": antes callaba y la
+  captura mostraba otra parte del panel sin que nadie lo notara.
+
+  Desde la Semana 5 el panel va en pestanas: antes de cada foto se fija
+  la que tiene lo que la foto muestra (Elemento para una barra con su
+  P-M, Caso para los diagramas y la deformada, Capas para las capas QA).
+  Con la pestana equivocada el scroll no apunta a nada.
 ================================================================
 */
 
@@ -35,6 +42,12 @@ public class CapturaSemana04 : MonoBehaviour
 {
     private string carpeta;
     private readonly StringBuilder registro = new StringBuilder();
+
+    // La pestana que se fijo para la foto que viene; Foto comprueba que
+    // siga siendo esa al disparar.
+    private VisorQA qa;
+    private string pestanaEsperada;
+    private float scrollEsperado;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void Arrancar()
@@ -54,8 +67,20 @@ public class CapturaSemana04 : MonoBehaviour
         Directory.CreateDirectory(carpeta);
         // Los visores cargan en su Start y esperan un frame: margen amplio.
         yield return new WaitForSeconds(5f);
+        // Desde la Semana 5 la carga es asincrona (LectorStreaming): los 5 s
+        // son un margen, no una garantia. Ademas se espera a que el modelo y
+        // el anexo esten leidos, con tope de 30 s para que un archivo que
+        // falta no cuelgue la captura (el chequeo de abajo escribe ERROR.txt).
+        float tope = Time.realtimeSinceStartup + 30f;
+        yield return new WaitUntil(() =>
+        {
+            VisorEstructura v = FindAnyObjectByType<VisorEstructura>();
+            VisorSemana04 s = FindAnyObjectByType<VisorSemana04>();
+            return Time.realtimeSinceStartup > tope
+                || (v != null && v.Listo && s != null && s.Anexo != null);
+        });
 
-        VisorQA qa = FindAnyObjectByType<VisorQA>();
+        qa = FindAnyObjectByType<VisorQA>();
         VisorSemana04 s4 = FindAnyObjectByType<VisorSemana04>();
         CamaraOrbital cam = FindAnyObjectByType<CamaraOrbital>();
         if (qa == null || s4 == null || cam == null || s4.Anexo == null)
@@ -83,21 +108,25 @@ public class CapturaSemana04 : MonoBehaviour
         s4.multiplicadorEscala = 1f;
 
         // 1. La columna demo: panel con material, esfuerzos, trazabilidad y P-M.
+        //    Pestana Elemento al fondo: las ultimas secciones del inspector y
+        //    la curva P-M dentro del panel (antes: el final del scroll unico).
         s4.ElegirCaso(info.caso_por_defecto);
         s4.magnitud = "My";
         s4.soloSeleccionado = true;
         qa.SeleccionarElemento(col);
         s4.EnfocarElemento(col);
-        Scroll(qa, 100000f);
+        Pestana(VisorQA.PESTANA_ELEMENTO, 100000f);
         yield return Foto("01_columna_" + col + "_panel_y_PM", s4, col);
 
         // 2. Momento My de las vigas de un piso: el lado traccionado a la vista.
+        //    ElegirPiso y no soloNivel a mano: copia la cota a AjustesVista en
+        //    el acto, y el visor filtra el piso antes de la foto.
         s4.soloSeleccionado = false;
         s4.magnitud = "My";
-        qa.soloNivel = 2;
+        qa.ElegirPiso(2);
         s4.Redibujar();
         EncuadrarNivel(qa, cam);
-        Scroll(qa, 0f);
+        Pestana(VisorQA.PESTANA_CASO, 0f);
         yield return Foto("02_My_todas_piso_2", s4, -1);
 
         // 3. Una viga cargada con su parabola y sus etiquetas.
@@ -105,10 +134,11 @@ public class CapturaSemana04 : MonoBehaviour
         if (viga >= 0)
         {
             s4.soloSeleccionado = true;
-            qa.soloNivel = -1;
+            qa.ElegirPiso(-1);
             qa.SeleccionarElemento(viga);
             s4.EnfocarElemento(viga);
             Angulo(cam, 12f, 20f);
+            Pestana(VisorQA.PESTANA_CASO, 0f);
             yield return Foto("03_viga_" + viga + "_My_etiquetas", s4, viga);
             Angulo(cam, 28f, 35f);
         }
@@ -116,31 +146,36 @@ public class CapturaSemana04 : MonoBehaviour
         // 4. Axial N en todo el edificio: traccion y compresion por color.
         s4.soloSeleccionado = false;
         s4.magnitud = "N";
-        qa.soloNivel = -1;
+        qa.ElegirPiso(-1);
         s4.Redibujar();
         cam.EncuadrarTodo();
+        Pestana(VisorQA.PESTANA_CASO, 0f);
         yield return Foto("04_N_todas", s4, -1);
 
         // 4b. La carga repartida del mismo piso: la causa del diagrama.
         s4.magnitud = "wz";
-        qa.soloNivel = 2;
+        qa.ElegirPiso(2);
         s4.Redibujar();
         EncuadrarNivel(qa, cam);
+        Pestana(VisorQA.PESTANA_CASO, 0f);
         yield return Foto("04b_wz_todas_piso_2", s4, -1);
 
         // 5. Corte Vz de un piso.
         s4.magnitud = "Vz";
-        qa.soloNivel = 2;
+        qa.ElegirPiso(2);
         s4.Redibujar();
         EncuadrarNivel(qa, cam);
+        Pestana(VisorQA.PESTANA_CASO, 0f);
         yield return Foto("05_Vz_todas_piso_2", s4, -1);
 
         // 5b. Capas: areas tributarias y cargas G del mismo piso, sin diagramas.
+        //     Pestana Capas: la leyenda de apoyos y el conteo de areas.
         s4.mostrarDiagramas = false;
         s4.mostrarPM = false;
         s4.Redibujar();
         qa.verAreasTributarias = true;
         Refrescar(qa);
+        Pestana(VisorQA.PESTANA_CAPAS, 0f);
         if (s3 != null)
         {
             s3.mostrarCargas = true;
@@ -163,20 +198,22 @@ public class CapturaSemana04 : MonoBehaviour
         // 6. El muro demo con su P-M, en la combinacion con sismo en Y.
         s4.soloSeleccionado = true;
         s4.magnitud = EnSuPlano(s4, mur);
-        qa.soloNivel = -1;
+        qa.ElegirPiso(-1);
         s4.ElegirCaso("1.2G+1.0Q+1.4EY");
         qa.SeleccionarElemento(mur);
         s4.EnfocarElemento(mur);
-        Scroll(qa, 100000f);
+        Pestana(VisorQA.PESTANA_ELEMENTO, 100000f);
         yield return Foto("06_muro_" + mur + "_" + s4.magnitud + "_PM_1.2G+1.0Q+1.4EY", s4, mur);
 
         // 7 y 8. Los dos casos que no pasan, si existen en este edificio.
+        //     Como la 6: pestana Elemento al fondo, con su P-M.
         if (s4.ElementoPorId(80) != null && info.edificio == "ingenieria")
         {
             s4.magnitud = "My";
             s4.ElegirCaso(info.caso_por_defecto);
             qa.SeleccionarElemento(80);
             s4.EnfocarElemento(80);
+            Pestana(VisorQA.PESTANA_ELEMENTO, 100000f);
             yield return Foto("07_columna_80_no_pasa", s4, 80);
         }
         if (s4.ElementoPorId(427) != null && info.edificio == "ingenieria")
@@ -185,6 +222,7 @@ public class CapturaSemana04 : MonoBehaviour
             s4.ElegirCaso("1.2G+1.0Q+1.4EX");
             qa.SeleccionarElemento(427);
             s4.EnfocarElemento(427);
+            Pestana(VisorQA.PESTANA_ELEMENTO, 100000f);
             yield return Foto("08_muro_427_fuera_de_curva", s4, 427);
         }
         if (s4.ElementoPorId(508) != null && info.edificio == "ingenieria")
@@ -194,6 +232,7 @@ public class CapturaSemana04 : MonoBehaviour
             s4.ElegirCaso("1.2G+1.0Q+1.4EY");
             qa.SeleccionarElemento(508);
             s4.EnfocarElemento(508);
+            Pestana(VisorQA.PESTANA_ELEMENTO, 100000f);
             yield return Foto("08b_muro_508_no_pasa_1.2G+1.0Q+1.4EY", s4, 508);
         }
 
@@ -204,7 +243,7 @@ public class CapturaSemana04 : MonoBehaviour
         s4.AplicarDeformadaDelCaso();
         s4.Redibujar();
         cam.EncuadrarTodo();
-        Scroll(qa, 0f);
+        Pestana(VisorQA.PESTANA_CASO, 0f);
         yield return Foto("09_deformada_1.2G+1.0Q+1.4EY", s4, -1);
 
         File.WriteAllText(Path.Combine(carpeta, "registro.txt"), registro.ToString());
@@ -214,6 +253,15 @@ public class CapturaSemana04 : MonoBehaviour
 
     IEnumerator Foto(string nombre, VisorSemana04 s4, int id)
     {
+        // El scroll se vuelve a fijar un frame despues de Pestana(). VisorQA
+        // arma el inspector de la seleccion nueva en su Update, que corre
+        // DESPUES de esta corrutina: en el OnGUI de ese mismo frame el panel
+        // todavia tiene los bloques de antes y el ScrollView recorta el
+        // scroll a lo que cabe. En la foto 01 no habia seleccion previa, el
+        // contenido era corto y el scroll quedaba en 0: la foto "panel y P-M"
+        // salia sin la P-M ni la trazabilidad (medido en la integracion S5).
+        yield return null;
+        if (qa != null) Scroll(qa, scrollEsperado);
         // Que se rehagan mallas, texturas y el OnGUI con el estado nuevo.
         yield return new WaitForSeconds(1.5f);
         string ruta = Path.Combine(carpeta, nombre + ".png");
@@ -222,6 +270,12 @@ public class CapturaSemana04 : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         registro.AppendLine("=== " + nombre + " ===");
+        // Solo si algo cambio la pestana entre Pestana() y la foto (un
+        // click, un panel incrustable): en el caso normal registro.txt queda
+        // linea por linea igual al de la Semana 4.
+        if (qa != null && !string.IsNullOrEmpty(pestanaEsperada) && qa.Pestana != pestanaEsperada)
+            registro.AppendLine("AVISO pestana: se fijo '" + pestanaEsperada + "' y la foto salio con '"
+                                + qa.Pestana + "'");
         registro.AppendLine($"caso {s4.casoActivo}  magnitud {s4.magnitud}  "
                             + $"solo seleccionada {s4.soloSeleccionado}  seleccionado {s4.Seleccionado}");
         if (id >= 0) registro.AppendLine(s4.DescribirElemento(id));
@@ -274,25 +328,72 @@ public class CapturaSemana04 : MonoBehaviour
         return e != null && e.momento_en_el_plano == "My" ? "My" : "Mz";
     }
 
+    /// Fija la pestana del panel y despues su scroll. En ese orden:
+    /// ElegirPestana vuelve el scroll arriba, asi que al reves el scroll se
+    /// perderia.
+    void Pestana(string titulo, float scrollY)
+    {
+        // En el inspector la trazabilidad viene plegada; la foto de la
+        // Semana 4 la mostraba al fondo del panel, junto a la P-M. La
+        // captura cierra la app al terminar: no deja el plegable cambiado.
+        if (titulo == VisorQA.PESTANA_ELEMENTO) PanelUI.FijarPlegable("qa.s4.trazabilidad", true);
+        qa.ElegirPestana(titulo);
+        pestanaEsperada = titulo;
+        scrollEsperado = scrollY;
+        Scroll(qa, scrollY);
+    }
+
     /// Pide a VisorQA que rehaga sus capas en el proximo frame.
-    static void Refrescar(VisorQA qa)
+    void Refrescar(VisorQA qa)
     {
         FieldInfo f = typeof(VisorQA).GetField("refrescar", BindingFlags.NonPublic | BindingFlags.Instance);
-        if (f != null) f.SetValue(qa, true);
+        Fijar(f, qa, true, "VisorQA.refrescar (bool)");
     }
 
-    static void Scroll(VisorQA qa, float y)
+    void Scroll(VisorQA qa, float y)
     {
         FieldInfo f = typeof(VisorQA).GetField("scroll", BindingFlags.NonPublic | BindingFlags.Instance);
-        if (f != null) f.SetValue(qa, new Vector2(0f, y));
+        Fijar(f, qa, new Vector2(0f, y), "VisorQA.scroll (Vector2)");
     }
 
-    static void Angulo(CamaraOrbital cam, float pitch, float yaw)
+    void Angulo(CamaraOrbital cam, float pitch, float yaw)
     {
         const BindingFlags B = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance;
         FieldInfo fp = typeof(CamaraOrbital).GetField("pitch", B);
         FieldInfo fy = typeof(CamaraOrbital).GetField("yaw", B);
-        if (fp != null) fp.SetValue(cam, pitch);
-        if (fy != null) fy.SetValue(cam, yaw);
+        Fijar(fp, cam, pitch, "CamaraOrbital.pitch (float)");
+        Fijar(fy, cam, yaw, "CamaraOrbital.yaw (float)");
+    }
+
+    /// Asigna un campo leido por reflexion. Si no existe o cambio de tipo
+    /// lo deja escrito en registro.txt (y en el log) en vez de callar: la
+    /// foto saldria desde otro angulo u otra parte del panel y nadie lo
+    /// sabria.
+    void Fijar(FieldInfo f, object objeto, object valor, string campo)
+    {
+        if (f == null)
+        {
+            Avisar("AVISO reflexion: no existe el campo " + campo);
+            return;
+        }
+        if (!f.FieldType.IsInstanceOfType(valor))
+        {
+            Avisar("AVISO reflexion: " + campo + " ahora es " + f.FieldType.Name);
+            return;
+        }
+        try
+        {
+            f.SetValue(objeto, valor);
+        }
+        catch (System.Exception ex)
+        {
+            Avisar("AVISO reflexion: no pude asignar " + campo + ": " + ex.Message);
+        }
+    }
+
+    void Avisar(string texto)
+    {
+        registro.AppendLine(texto);
+        Debug.LogWarning("CapturaSemana04: " + texto);
     }
 }

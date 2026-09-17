@@ -13,17 +13,37 @@
 
   ----------------------------------------------------------------
   COMO USARLO
-  1. Copia modelo_unity.json a Assets/StreamingAssets/
-     (generalo con: python generar_json_unity.py)
+  1. El JSON sale del pipeline y lo copia el lanzador:
+       python edificios/<ed>/exportar_unity.py     -> data/unity/<ed>.json
+       python comun/lanzar_unity.py sincronizar <ed>
+     que lo deja en Assets/StreamingAssets/ con el nombre que dice la
+     ESCENA en 'nombreArchivo' (modelo_unity_edificio.json).
   2. Crea un GameObject vacio, llamalo "Visor".
   3. Arrastra este script encima.
   4. Play. Deberias ver el marco en 3D.
 
   Para ver la deformada de otros casos (Q, EX, EY) necesitas el
-  servidor corriendo y el script AnalizadorEstructural.
+  servidor corriendo (python semana05/servidor_s5.py) y el script
+  AnalizadorEstructural.
+
+  ----------------------------------------------------------------
+  CARGA ASINCRONA (Semana 5)
+  El JSON se lee con LectorStreaming (UnityWebRequest), porque en
+  Android y en Web StreamingAssets no es una carpeta y File.Exists da
+  false aunque el archivo este. Eso hace que el modelo llegue UNO O
+  MAS frames despues de Start: quien lo necesita no espera "un frame",
+  espera a Listo o escucha EventosVisor.ModeloCargado.
+
+  FILTRO DE PISO
+  Redibujar respeta AjustesVista.cotaVisible (la regla de la cota
+  menor, AjustesVista.ElementoEnCotaVisible). Lo de otros pisos no
+  entra a ObjetosDeElementos: se dibuja, si fantasmaFueraDelPiso, como
+  una linea gris sin collider, para que el piso se lea dentro del
+  edificio sin que un click lo atraviese ni el mapa D/C lo pinte.
   ----------------------------------------------------------------
 */
 
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -32,7 +52,9 @@ using UnityEngine.Rendering;
 public class VisorEstructura : MonoBehaviour
 {
     [Header("Archivo")]
-    public string nombreArchivo = "modelo_unity.json";
+    [Tooltip("Lo pisa la escena (modelo_unity_edificio.json), y el lanzador "
+           + "copia el modelo con el nombre que lee de la escena.")]
+    public string nombreArchivo = "modelo_unity_edificio.json";
 
     [Header("Apariencia")]
     public float radioNodo = 0.15f;
@@ -51,11 +73,21 @@ public class VisorEstructura : MonoBehaviour
     public Color colorDeformada = Color.yellow;
 
     [Header("Apoyos")]
-    [Tooltip("Dibuja los nodos apoyados como cubos, al estilo SAP2000, "
-           + "en vez de esferas.")]
+    [Tooltip("NO SE USA: los cubos de apoyo los dibuja la capa 'Apoyos' de "
+           + "VisorQA. Queda porque la escena lo serializa.")]
     public bool apoyosComoCubos = true;
-    [Tooltip("Lado del cubo de apoyo, en metros.")]
+    [Tooltip("NO SE USA (ver apoyosComoCubos).")]
     public float ladoCuboApoyo = 0.45f;
+
+    [Header("Filtro de piso")]
+    [Tooltip("Con un piso elegido (AjustesVista.cotaVisible), el resto del "
+           + "edificio se dibuja como lineas grises sin collider: se ve "
+           + "DONDE esta el piso sin que tape ni se pueda seleccionar.")]
+    public bool fantasmaFueraDelPiso = true;
+    public Color colorFantasma = new Color(0.62f, 0.64f, 0.68f);
+    [Tooltip("Vista realista con deformada: color de las lineas de la posicion "
+           + "sin deformar (las barras conservan el hormigon).")]
+    public Color colorPosicionOriginal = new Color(0.16f, 0.20f, 0.27f);
 
     [Header("Deformada")]
     public bool mostrarDeformada = false;
@@ -107,37 +139,147 @@ public class VisorEstructura : MonoBehaviour
         GameObject g;
         return objetoDeElemento.TryGetValue(id, out g) ? g : null;
     }
+
+    // --- API de la Semana 5 (semana05/CONTRATO.md) ---
+
+    /// true despues de la primera carga y el primer dibujo. Para quien
+    /// llega tarde a EventosVisor.ModeloCargado: WaitUntil(() => visor.Listo).
+    public bool Listo { get; private set; }
+
+    /// Todos los GameObject de barra dibujados, por elementTag. Los
+    /// renderers que pinta AmbienteVisor y el mapa D/C. Solo lectura, y
+    /// no llamar a Redibujar() mientras se recorre: lo vacia.
+    public IReadOnlyDictionary<int, GameObject> ObjetosDeElementos { get { return objetoDeElemento; } }
+
+    /// Todos los GameObject de nodo dibujados, por nodeTag. Mismas reglas.
+    public IReadOnlyDictionary<int, GameObject> ObjetosDeNodos { get { return objetoDeNodo; } }
+
+    /// Donde esta dibujado un nodo AHORA, con la deformada si esta puesta
+    /// (coordenadas Unity). Para que lo que se dibuja encima (armadura,
+    /// flecha de la carga movil) siga a la estructura.
+    public Vector3 PosicionActual(Nodo n) { return PosicionDe(n); }
+
     private Dictionary<Color, Material> materiales = new Dictionary<Color, Material>();
     private bool necesitaRedibujar = false;
 
-    // ============================================================
-    void Start()
+    // La cota con que se hizo el ultimo Redibujar (NaN = todos los pisos).
+    // VistaCambio avisa tambien por 'suelo' y 'losas', que no cambian la
+    // geometria: solo se redibuja si la cota o la vista es otra.
+    private float cotaDibujada = float.NaN;
+
+    // La vista con que se hizo el ultimo Redibujar. La realista dibuja las
+    // secciones reales (DibujaPerfiles), asi que cambiar de vista SI cambia
+    // la geometria y pide redibujar.
+    private bool realistaDibujado = false;
+
+    // Mallas propias de los muros inclinados de la deformada: una por muro,
+    // se destruyen en cada Redibujar (si no, quedan huerfanas).
+    private readonly List<Mesh> mallasPropias = new List<Mesh>();
+
+    /// true si las barras se dibujan con su seccion b x h: en la vista
+    /// realista siempre (un edificio de tubos de 5 cm parecia un andamio);
+    /// en la tecnica, si se pide con verPerfiles (como hasta la Semana 4).
+    public bool DibujaPerfiles { get { return verPerfiles || AjustesVista.realista; } }
+
+    // Barras con perfil que se dibujan DELGADAS mientras tienen un diagrama
+    // encima: el diagrama nace en el eje y, dentro de una caja de 0.60 x
+    // 0.80, solo asomaban los picos. Lo pide VisorSemana04.Diagramas.
+    private readonly HashSet<int> barrasDelgadas = new HashSet<int>();
+    private readonly Dictionary<int, Vector3> escalaDePerfil = new Dictionary<int, Vector3>();
+
+    /// Las barras (por elementTag) que se dibujan delgadas, como en la vista
+    /// tecnica; null o vacio = todas con su seccion. Solo cambia la escala
+    /// de las cajas ya dibujadas (no redibuja ni avisa eventos) y se
+    /// recuerda para el proximo Redibujar.
+    public void FijarBarrasDelgadas(IEnumerable<int> ids)
     {
-        if (CargarJSON())
+        barrasDelgadas.Clear();
+        if (ids != null) foreach (int id in ids) barrasDelgadas.Add(id);
+        foreach (KeyValuePair<int, Vector3> kv in escalaDePerfil)
         {
-            UsarDeformadaPrecalculada();
-            Redibujar();
+            GameObject go;
+            if (!objetoDeElemento.TryGetValue(kv.Key, out go) || go == null) continue;
+            go.transform.localScale = EscalaPerfil(kv.Key, kv.Value);
         }
+    }
+
+    Vector3 EscalaPerfil(int id, Vector3 real)
+    {
+        return barrasDelgadas.Contains(id) ? new Vector3(grosorBarra, grosorBarra, real.z) : real;
+    }
+
+    // ============================================================
+    void OnEnable()
+    {
+        EventosVisor.VistaCambio += AlCambiarVista;
+    }
+
+    void OnDisable()
+    {
+        EventosVisor.VistaCambio -= AlCambiarVista;
+    }
+
+    /// Corrutina: el JSON llega por UnityWebRequest, uno o mas frames
+    /// despues. Listo y ModeloCargado van DESPUES del primer Redibujar,
+    /// para que quien los escuche ya encuentre los GameObject.
+    IEnumerator Start()
+    {
+        bool cargado = false;
+        yield return CargarJSONAsincrono(ok => cargado = ok);
+        if (!cargado) yield break;
+
+        UsarDeformadaPrecalculada();
+        Redibujar();
+        Listo = true;
+        EventosVisor.AvisarModeloCargado();
     }
 
     // ============================================================
     // CARGAR EL JSON
     // ============================================================
+
+    /// Lee StreamingAssets/nombreArchivo con LectorStreaming y deja el
+    /// resultado en Modelo. Funciona en Windows, Android y Web.
+    IEnumerator CargarJSONAsincrono(System.Action<bool> fin)
+    {
+        string texto = null, error = null;
+        yield return LectorStreaming.Leer(nombreArchivo, t => texto = t, e => error = e);
+
+        if (texto == null)
+        {
+            Debug.LogError("No encontre el modelo: " + error);
+            Debug.LogError(ComoGenerarlo());
+            fin(false);
+            yield break;
+        }
+        fin(Interpretar(texto));
+    }
+
+    /// Version SINCRONA, solo donde StreamingAssets es una carpeta
+    /// (Windows y el editor). Queda por compatibilidad: el arranque usa
+    /// la asincrona, que tambien sirve en Android y Web.
     public bool CargarJSON()
     {
         string ruta = Path.Combine(Application.streamingAssetsPath, nombreArchivo);
 
-        if (!File.Exists(ruta))
+        if (ruta.Contains("://") || !File.Exists(ruta))
         {
             Debug.LogError("No encontre el archivo: " + ruta);
-            Debug.LogError("Generalo con 'python generar_json_unity.py' y "
-                           + "copialo a Assets/StreamingAssets/");
+            Debug.LogError(ComoGenerarlo());
             return false;
         }
+        return Interpretar(File.ReadAllText(ruta));
+    }
 
+    /// Una sola interpretacion del texto para las dos lecturas. El log
+    /// "Modelo cargado: N nodos, M elementos" se busca en el logcat del
+    /// movil (semana05/CONTRATO.md): no cambiarle la forma.
+    bool Interpretar(string texto)
+    {
+        ModeloEstructural leido;
         try
         {
-            Modelo = JsonUtility.FromJson<ModeloEstructural>(File.ReadAllText(ruta));
+            leido = JsonUtility.FromJson<ModeloEstructural>(texto);
         }
         catch (System.Exception ex)
         {
@@ -145,18 +287,27 @@ public class VisorEstructura : MonoBehaviour
             return false;
         }
 
-        if (Modelo == null || Modelo.nodos == null || Modelo.nodos.Count == 0)
+        if (leido == null || leido.nodos == null || leido.nodos.Count == 0)
         {
             Debug.LogError("El JSON no trae nodos. Revisa que sea el formato "
-                           + "que genera generar_json_unity.py");
+                           + "que escribe edificios/<ed>/exportar_unity.py");
             return false;
         }
 
+        Modelo = leido;
         Modelo.InvalidarIndice();
         Debug.Log($"Modelo cargado: {Modelo.nodos.Count} nodos, "
-                  + $"{Modelo.elementos.Count} elementos, "
+                  + $"{(Modelo.elementos != null ? Modelo.elementos.Count : 0)} elementos, "
                   + $"{(Modelo.casos_de_carga != null ? Modelo.casos_de_carga.Count : 0)} casos.");
         return true;
+    }
+
+    string ComoGenerarlo()
+    {
+        return "Generalo con 'python edificios/<ed>/exportar_unity.py' y copialo "
+               + "con 'python comun/lanzar_unity.py sincronizar <ed>' a "
+               + "Assets/StreamingAssets/" + nombreArchivo
+               + " (el nombre lo manda la escena).";
     }
 
     // ============================================================
@@ -239,6 +390,21 @@ public class VisorEstructura : MonoBehaviour
         objetosCreados.Clear();
         objetoDeNodo.Clear();
         objetoDeElemento.Clear();
+        foreach (Mesh malla in mallasPropias) if (malla != null) Destroy(malla);
+        mallasPropias.Clear();
+        escalaDePerfil.Clear();
+
+        // Se lee UNA vez: si alguien cambia la cota a mitad del dibujo,
+        // el piso queda entero y VistaCambio pide el siguiente.
+        cotaDibujada = AjustesVista.cotaVisible;
+        realistaDibujado = AjustesVista.realista;
+        bool perfiles = verPerfiles || realistaDibujado;
+        Transform fantasmas = null;
+        // Con la deformada en la vista realista las barras conservan el
+        // hormigon (no se pintan de amarillo sobre el pasto): la posicion
+        // ORIGINAL se marca con lineas finas oscuras, sin collider.
+        Transform original = null;
+        bool marcarOriginal = mostrarDeformada && realistaDibujado;
 
         // --- Nodos ---
         if (verNodos)
@@ -246,6 +412,7 @@ public class VisorEstructura : MonoBehaviour
             foreach (Nodo n in Modelo.nodos)
             {
                 if (n.auxiliar && !verNodosAuxiliares) continue;
+                if (!AjustesVista.EnCotaVisible(n.z)) continue;
 
                 GameObject esfera = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                 esfera.name = (n.auxiliar ? "NodoAux_" : "Nodo_") + n.id;
@@ -253,10 +420,15 @@ public class VisorEstructura : MonoBehaviour
 
                 // Los auxiliares van mas chicos y en gris: estan para
                 // que se vea la curva de la viga, no para leerlos.
+                bool apoyado = n.fijo || TieneAlgunaRestriccion(n);
                 float r = n.auxiliar ? radioNodoAuxiliar : radioNodo;
+                // En la realista un nudo sin apoyo queda dentro de la columna
+                // de 0.70 m: una esfera de 30 cm en cada nudo se veia como las
+                // juntas de un andamio. Se achica (sigue existiendo para el click
+                // y para quien busque ObjetosDeNodos); los apoyos quedan igual.
+                if (realistaDibujado && !apoyado && !n.auxiliar) r = radioNodoAuxiliar;
                 esfera.transform.localScale = Vector3.one * r * 2f;
 
-                bool apoyado = n.fijo || TieneAlgunaRestriccion(n);
                 Pintar(esfera, n.auxiliar ? colorNodoAuxiliar
                              : (apoyado ? colorApoyo : colorColumna));
 
@@ -267,7 +439,7 @@ public class VisorEstructura : MonoBehaviour
         }
 
         // --- Elementos ---
-        if (Modelo.elementos == null) return;
+        if (Modelo.elementos == null) { EventosVisor.AvisarRedibujado(); return; }
         foreach (Elemento e in Modelo.elementos)
         {
             if (!CapaVisible(e.tipo)) continue;
@@ -278,6 +450,20 @@ public class VisorEstructura : MonoBehaviour
             {
                 Debug.LogError($"Elemento {e.id} referencia un nodo inexistente "
                                + $"(n1={e.n1}, n2={e.n2}). Se omite.");
+                continue;
+            }
+
+            if (!AjustesVista.ElementoEnCotaVisible(a.z, b.z))
+            {
+                if (fantasmaFueraDelPiso)
+                {
+                    if (fantasmas == null)
+                    {
+                        fantasmas = new GameObject("FueraDelPiso").transform;
+                        objetosCreados.Add(fantasmas.gameObject);
+                    }
+                    CrearFantasma(PosicionDe(a), PosicionDe(b), e, fantasmas);
+                }
                 continue;
             }
 
@@ -300,12 +486,19 @@ public class VisorEstructura : MonoBehaviour
                 barra = CrearCilindro(PosicionDe(a), PosicionDe(b),
                                       grosorBarra * 0.6f);
             }
-            else if (verPerfiles)
+            else if (perfiles)
             {
                 Seccion sec = Modelo.SeccionPorNombre(e.seccion);
-                barra = (sec != null && sec.TienePerfil)
-                    ? CrearPerfil(PosicionDe(a), PosicionDe(b), e, sec)
-                    : CrearCilindro(PosicionDe(a), PosicionDe(b), grosorBarra);
+                if (sec != null && sec.TienePerfil)
+                {
+                    barra = CrearPerfil(PosicionDe(a), PosicionDe(b), e, sec);
+                    escalaDePerfil[e.id] = barra.transform.localScale;
+                    barra.transform.localScale = EscalaPerfil(e.id, barra.transform.localScale);
+                }
+                else
+                {
+                    barra = CrearCilindro(PosicionDe(a), PosicionDe(b), grosorBarra);
+                }
             }
             else
             {
@@ -316,7 +509,75 @@ public class VisorEstructura : MonoBehaviour
             barra.AddComponent<DatoElemento>().idElemento = e.id;
             objetoDeElemento[e.id] = barra;
             objetosCreados.Add(barra);
+
+            if (marcarOriginal && !e.EsBrazo)
+            {
+                if (original == null)
+                {
+                    original = new GameObject("PosicionOriginal").transform;
+                    objetosCreados.Add(original.gameObject);
+                }
+                CrearLineaOriginal(Ejes.PosicionDe(a), Ejes.PosicionDe(b), e, original);
+            }
         }
+
+        // Los renderers de antes ya no existen: quien pinta encima
+        // (ambiente, mapa D/C) vuelve a pintar. Avisa Redibujado y
+        // despues MaterialesCambiados, en ese orden.
+        EventosVisor.AvisarRedibujado();
+    }
+
+    /// Una barra de otro piso: linea gris, SIN collider (un click pasa al
+    /// piso visible), sin DatoElemento y fuera de ObjetosDeElementos (ni
+    /// AmbienteVisor ni el mapa D/C la pintan), sin sombra. El nombre no
+    /// empieza con "Elem_": no es el objeto_unity de nadie.
+    void CrearFantasma(Vector3 desde, Vector3 hasta, Elemento e, Transform padre)
+    {
+        GameObject linea = CrearCilindro(desde, hasta, grosorBarra * 0.6f);
+        Collider col = linea.GetComponent<Collider>();
+        if (col != null) DestroyImmediate(col);   // en este mismo frame ya no se puede clickear
+        linea.name = "Fantasma_" + e.id;
+        linea.transform.SetParent(padre, true);
+        Pintar(linea, colorFantasma);
+        Renderer r = linea.GetComponent<Renderer>();
+        r.shadowCastingMode = ShadowCastingMode.Off;
+        r.receiveShadows = false;
+    }
+
+    /// La posicion SIN deformar de una barra, con la deformada puesta en la
+    /// vista realista: linea fina oscura, sin collider, sin sombra y fuera
+    /// de ObjetosDeElementos (nadie la pinta ni la selecciona). Mismo
+    /// trato que CrearFantasma, otro color y otro nombre.
+    void CrearLineaOriginal(Vector3 desde, Vector3 hasta, Elemento e, Transform padre)
+    {
+        GameObject linea = CrearCilindro(desde, hasta, grosorBarra);
+        Collider col = linea.GetComponent<Collider>();
+        if (col != null) DestroyImmediate(col);
+        linea.name = "Original_" + e.id;
+        linea.transform.SetParent(padre, true);
+        Pintar(linea, colorPosicionOriginal);
+        Renderer r = linea.GetComponent<Renderer>();
+        r.shadowCastingMode = ShadowCastingMode.Off;
+        r.receiveShadows = false;
+    }
+
+    /// Llega de EventosVisor.VistaCambio. No redibuja aca: el aviso sale
+    /// casi siempre de un OnGUI (el panel), y Redibujar destruye y crea
+    /// cientos de objetos y avisa otros eventos. Se deja para Update.
+    void AlCambiarVista()
+    {
+        if (Modelo == null) return;
+        if (!MismaCota(AjustesVista.cotaVisible, cotaDibujada)) necesitaRedibujar = true;
+        // Realista <-> tecnica cambia las secciones (DibujaPerfiles) y el
+        // tamano de los nudos: es geometria, se redibuja.
+        if (AjustesVista.realista != realistaDibujado) necesitaRedibujar = true;
+    }
+
+    static bool MismaCota(float a, float b)
+    {
+        bool nanA = float.IsNaN(a), nanB = float.IsNaN(b);
+        if (nanA || nanB) return nanA && nanB;
+        return Mathf.Abs(a - b) < 1e-5f;
     }
 
     bool TieneAlgunaRestriccion(Nodo n)
@@ -470,7 +731,65 @@ public class VisorEstructura : MonoBehaviour
         caja.transform.localScale = new Vector3(
             Mathf.Max(largoMuro, 0.05f), alto, Mathf.Max(espesorMuro, 0.05f));
 
+        if (mostrarDeformada) InclinarPlaca(caja, desde, hasta);
         return caja;
+    }
+
+    /// Con la deformada, la placa vertical en el punto medio dejaba el pie y
+    /// la cabeza lejos de sus nodos: cada tramo de muro se corria
+    /// (u_cabeza - u_pie)/2 respecto del de abajo y el muro se veia partido
+    /// en escalera. Aca la caja se CIZALLA: la cara inferior queda centrada
+    /// en 'desde' y la superior en 'hasta', asi dos tramos seguidos comparten
+    /// arista. Es solo dibujo con las posiciones que ya dio PosicionActual;
+    /// no se interpola nada. La malla sigue siendo un "Cube" de 24 vertices
+    /// con la escala real (AmbienteVisor la texturiza por su lossyScale).
+    void InclinarPlaca(GameObject caja, Vector3 desde, Vector3 hasta)
+    {
+        Transform t = caja.transform;
+        Vector3 local = Quaternion.Inverse(t.rotation) * (hasta - desde);
+        Vector3 escala = t.localScale;
+        // Menos de 1 mm de corrimiento en planta: la caja de siempre.
+        if (Mathf.Abs(local.x) < 1e-3f && Mathf.Abs(local.z) < 1e-3f) return;
+
+        escala.y = Mathf.Max(Mathf.Abs(local.y), 0.01f);
+        t.localScale = escala;
+        float signo = local.y >= 0f ? 1f : -1f;
+        // Un vertice a altura v.y (-0.5 o 0.5) se corre v.y * delta / escala.
+        float kx = signo * local.x / escala.x, kz = signo * local.z / escala.z;
+
+        Vector3[] normales = { Vector3.right, Vector3.left, Vector3.up, Vector3.down, Vector3.forward, Vector3.back };
+        var vertices = new List<Vector3>(24);
+        var uvs = new List<Vector2>(24);
+        var triangulos = new List<int>(36);
+        foreach (Vector3 n in normales)
+        {
+            Vector3 u = Mathf.Abs(n.y) > 0.5f ? Vector3.right : Vector3.up;
+            Vector3 v = Vector3.Cross(n, u);
+            Vector3 c = n * 0.5f;
+            Vector3[] p = { c - u * 0.5f - v * 0.5f, c - u * 0.5f + v * 0.5f,
+                            c + u * 0.5f + v * 0.5f, c + u * 0.5f - v * 0.5f };
+            int i0 = vertices.Count;
+            Vector2[] uv = { new Vector2(0f, 0f), new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(1f, 0f) };
+            for (int k = 0; k < 4; k++)
+            {
+                Vector3 q = p[k];
+                vertices.Add(new Vector3(q.x + q.y * kx, q.y, q.z + q.y * kz));
+                uvs.Add(uv[k]);
+            }
+            // La cara mira hacia n antes de cizallar: se elige el orden de los
+            // triangulos con el producto cruz, sin suponer la mano de u y v.
+            bool derecho = Vector3.Dot(Vector3.Cross(p[1] - p[0], p[2] - p[0]), n) > 0f;
+            if (derecho) triangulos.AddRange(new[] { i0, i0 + 1, i0 + 2, i0, i0 + 2, i0 + 3 });
+            else triangulos.AddRange(new[] { i0, i0 + 2, i0 + 1, i0, i0 + 3, i0 + 2 });
+        }
+        Mesh malla = new Mesh { name = "Cube cizallado" };
+        malla.SetVertices(vertices);
+        malla.SetUVs(0, uvs);
+        malla.SetTriangles(triangulos, 0);
+        malla.RecalculateNormals();
+        malla.RecalculateBounds();
+        caja.GetComponent<MeshFilter>().sharedMesh = malla;
+        mallasPropias.Add(malla);
     }
 
     // Unity no tiene "linea gruesa 3D": se usa un cilindro estirado.
