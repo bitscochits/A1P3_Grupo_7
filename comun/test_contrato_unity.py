@@ -231,23 +231,142 @@ if 'cota_terreno' in datos['info']:
           "info.cota_terreno (%s m) esta donde arranca la estructura" % _cota,
           "%d apoyo(s) y %d columna(s) arrancan en z = %+.2f m"
           % (_n_ap, _cols, _z0))
-    # LO QUE NO QUEDA APOYADO EN ESE PLANO. El suelo del visor es UN
-    # plano horizontal, asi que tener la cota en el arranque NO
-    # garantiza que todos los apoyos caigan sobre el: los 39 "apoyo en
-    # terreno" [0 0 1 1 1 0] de Ingenieria estan 3.96 m mas arriba,
-    # porque su planta de fundaciones rotula dos N.R. (-7.97 y -4.01:
-    # fundacion escalonada, benchmark_3d.py:280). Se dice aca para que
-    # el OK de arriba no se lea como "todos los apoyos estan en el
-    # suelo". Es PEND y no FALLA: el dato esta bien, falta el suelo en
-    # dos cotas en unity/ (AmbienteVisor).
-    _arriba = [z for z in _zs if z - _z0 > 0.01]
-    if _arriba:
-        print("  [PEND] %d de %d apoyo(s) quedan SOBRE el suelo dibujado "
-              "(a %s m de la cota): el terreno real esta escalonado y el "
-              "visor dibuja un plano"
-              % (len(_arriba), len(_zs),
-                 ', '.join('%.2f' % a for a in
-                           sorted({round(z - _z0, 2) for z in _arriba}))))
+    # LOS NIVELES DEL TERRENO (info.terrenos, semana05/CONTRATO.md). Tener
+    # la cota en el arranque NO garantiza que todos los apoyos caigan
+    # sobre el suelo: los 39 "apoyo en terreno" [0 0 1 1 1 0] de
+    # Ingenieria estan 3.96 m mas arriba, porque su planta de fundaciones
+    # rotula dos N.R. (-7.97 y -4.01: fundacion escalonada,
+    # benchmark_3d.py:280). Desde el 18-09 el terreno viaja en NIVELES: la
+    # base (esta cota, el mas bajo, sin region: todo el plano) y cada
+    # TERRAZA con su region en planta. La trampa era un suelo plano sobre
+    # un terreno escalonado (CLAUDE.md seccion 6): el guardia es que CADA
+    # apoyo no auxiliar quede SOBRE un nivel, o sea que su z sea la de un
+    # nivel cuya region lo contiene (0.01 m), y se cuenta por nivel.
+    _terr = datos['info'].get('terrenos')
+    if _terr is None:
+        _arriba = [z for z in _zs if z - _z0 > 0.01]
+        if _arriba:
+            print("  [PEND] %d de %d apoyo(s) quedan SOBRE el suelo dibujado "
+                  "(a %s m de la cota) y el JSON no trae info.terrenos: el "
+                  "visor dibuja un solo plano"
+                  % (len(_arriba), len(_zs),
+                     ', '.join('%.2f' % a for a in
+                               sorted({round(z - _z0, 2) for z in _arriba}))))
+    else:
+        comparar('NivelTerreno', claves(_terr))
+        _vt = [v for t in _terr for v in (t.get('vertices') or [])]
+        if _vt:
+            comparar('VerticePlanta', claves(_vt))
+        _bases = [t for t in _terr if not t.get('vertices')]
+        _terrazas = [t for t in _terr if t.get('vertices')]
+        check(len(_bases) == 1 and abs(_bases[0]['z'] - _cota) <= 0.01
+              and all(t['z'] > _cota + 0.01 and len(t['vertices']) >= 3
+                      for t in _terrazas),
+              "info.terrenos: UNA base sin region en info.cota_terreno y "
+              "cada terraza mas arriba, con su poligono",
+              "; ".join('%s %+.2f m (%s)' % (t['nombre'], t['z'],
+                                              '%d vertices' % len(t['vertices'])
+                                              if t.get('vertices') else 'todo el plano')
+                        for t in _terr))
+
+        def _en_poligono(x, y, poli, tol=1e-6):
+            """Dentro o sobre el borde (a menos de tol)."""
+            dentro = False
+            for k in range(len(poli)):
+                (ax, ay), (bx, by) = poli[k - 1], poli[k]
+                lx, ly = bx - ax, by - ay
+                if (abs(lx * (y - ay) - ly * (x - ax))
+                        <= tol * max((lx * lx + ly * ly) ** 0.5, 1.0)
+                        and min(ax, bx) - tol <= x <= max(ax, bx) + tol
+                        and min(ay, by) - tol <= y <= max(ay, by) + tol):
+                    return True
+                if (ay > y) != (by > y) and x < ax + (y - ay) * lx / ly:
+                    dentro = not dentro
+            return dentro
+
+        _polis = [(t, [(float(v['x']), float(v['y'])) for v in t['vertices']])
+                  for t in _terrazas]
+        _por_nivel = {}                # (z, nombre) -> [apoyos, bajo terraza]
+        _flotan, _enterrados = [], []
+        for n in datos['nodos']:
+            if not _es_apoyo(n):
+                continue
+            contienen = [_bases[0]] + [t for t, p in _polis
+                                       if _en_poligono(n['x'], n['y'], p)]
+            sobre = [t for t in contienen if abs(n['z'] - t['z']) <= 0.01]
+            if not sobre:
+                (_flotan if n['z'] > max(t['z'] for t in contienen)
+                 else _enterrados).append('%s (%.2f, %.2f, %+.2f)'
+                                          % (n['id'], n['x'], n['y'], n['z']))
+                continue
+            nivel = max(sobre, key=lambda t: t['z'])
+            cuenta = _por_nivel.setdefault((nivel['z'], nivel['nombre']), [0, 0])
+            cuenta[0] += 1
+            # Sobre la base pero dentro de la huella de una terraza: la
+            # cara de la terraza lo taparia, y el visor se la recorta
+            # alrededor (HuecoDelSuelo.CalcularTerraza).
+            if any(t['z'] > nivel['z'] + 0.01 for t in contienen):
+                cuenta[1] += 1
+        check(not _flotan and not _enterrados,
+              "cada apoyo no auxiliar queda SOBRE un nivel del terreno (su z "
+              "= la del nivel cuya region lo contiene, 0.01 m)",
+              "; ".join('%d en %+.2f (%s)' % (c[0], z, nom)
+                        for (z, nom), c in sorted(_por_nivel.items()))
+              + ("; FLOTANDO: %s" % _flotan[:6] if _flotan else "")
+              + ("; ENTERRADOS: %s" % _enterrados[:6] if _enterrados else ""))
+        for (z, nom), c in sorted(_por_nivel.items()):
+            if c[1]:
+                print("  [--  ] %d de los %d apoyos de %s (%+.2f m) caen bajo la "
+                      "huella de una terraza: bajan a la base, y el visor les "
+                      "recorta la terraza alrededor para que se vean"
+                      % (c[1], c[0], nom, z))
+
+        # Los apoyos de una terraza que estan SOBRE estructura que baja
+        # (a menos de HuecoDelSuelo.HOLGURA_TERRAZA de su eje en planta):
+        # el visor los deja sobre el muro o la columna, sin tierra
+        # alrededor, para no tapar lo de abajo. Se informa con la misma
+        # geometria que ReunirGeometria (AmbienteVisor.cs) y la constante
+        # del C#, leida de la fuente: una sola definicion.
+        _src_av = open(os.path.join(os.path.dirname(CS), 'AmbienteVisor.cs'),
+                       encoding='utf-8').read()
+        _m = re.search(r'const\s+double\s+HOLGURA_TERRAZA\s*=\s*([0-9.]+)', _src_av)
+        check(_m is not None or not _terrazas,
+              "AmbienteVisor.cs dibuja las terrazas (HuecoDelSuelo.HOLGURA_TERRAZA)")
+        if _m and _terrazas:
+            _holg = float(_m.group(1))
+            _pn = {n['id']: n for n in datos['nodos']}
+
+            def _dist_seg(x, y, s):
+                ax, ay, bx, by = s
+                lx, ly = bx - ax, by - ay
+                l2 = lx * lx + ly * ly
+                u = 0.0 if l2 < 1e-12 else max(0.0, min(1.0, ((x - ax) * lx + (y - ay) * ly) / l2))
+                return ((x - ax - u * lx) ** 2 + (y - ay - u * ly) ** 2) ** 0.5
+
+            for t, p in _polis:
+                lim = t['z'] - 0.01
+                segs = [(q['x'], q['y'], q['x'], q['y'])
+                        for q in datos['nodos'] if q['z'] < lim]
+                for e in datos['elementos']:
+                    a, b = _pn.get(e['n1']), _pn.get(e['n2'])
+                    if a is None or b is None or min(a['z'], b['z']) >= lim:
+                        continue
+                    dl = e.get('dir_largo') or []
+                    if e.get('tipo') == 'muro' and len(dl) >= 2 and e.get('largo', 0) > 0.01:
+                        h = 0.5 * e['largo'] / max((dl[0] ** 2 + dl[1] ** 2) ** 0.5, 1e-9)
+                        cx, cy = 0.5 * (a['x'] + b['x']), 0.5 * (a['y'] + b['y'])
+                        segs.append((cx - dl[0] * h, cy - dl[1] * h, cx + dl[0] * h, cy + dl[1] * h))
+                    else:
+                        segs.append((a['x'], a['y'], b['x'], b['y']))
+                suyos = [n for n in datos['nodos'] if _es_apoyo(n)
+                         and abs(n['z'] - t['z']) <= 0.01 and _en_poligono(n['x'], n['y'], p)]
+                sobre_est = [n['id'] for n in suyos
+                             if segs and min(_dist_seg(n['x'], n['y'], s) for s in segs) < _holg]
+                print("  [--  ] %s: %d de sus %d apoyos estan sobre estructura que "
+                      "baja a la base (a menos de %.2f m, HOLGURA_TERRAZA): el visor "
+                      "los deja sobre ella; los otros %d, sobre la tierra de la terraza"
+                      % (t['nombre'], len(sobre_est), len(suyos), _holg,
+                         len(suyos) - len(sobre_est)))
     # Nada bajo la cota = el suelo no tapa nada y HuecoDelSuelo.Calcular()
     # entra por su rama sin estampas (un cuadro de suelo, sin paredes ni
     # fondo). Si algun dia hay estructura mas abajo, el hueco la destapa:
@@ -522,7 +641,7 @@ if not datos['areas_tributarias']:
 #    del mismo pano -- el total con Lx, Ly del pano
 #    (benchmark_3d.tributarias) y cada entrada con la formula del
 #    cordon sobre su poligono -- redondeadas cada una a 4 decimales
-#    (edificios/ingenieria/export_unity.py:188 y :457). Pueden caer a
+#    (edificios/ingenieria/export_unity.py:219 y :488). Pueden caer a
 #    los dos lados del redondeo: la viga 128 da 8.3971 contra 8.3972,
 #    una unidad, que es justo la cota con n = 1.
 #  - la coma flotante de esas cuentas antes de redondear: la formula

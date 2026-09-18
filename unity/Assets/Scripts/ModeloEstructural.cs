@@ -293,11 +293,11 @@ public class InfoModelo
     // Vacio si el exportador no lo escribe (hoy ninguno lo hace).
     public string edificio;
 
-    // Cota z (OpenSees, m) del terreno donde apoya el edificio: un
-    // SUPUESTO declarado en el perfil del edificio, no leido del plano.
-    // -9999 = el JSON no la trae (JsonUtility deja el valor por defecto
-    // cuando falta la clave): sin cota, no se dibuja suelo.
+    // Cota z (OpenSees, m) del nivel de terreno MAS BAJO, del perfil del
+    // edificio; -9999 = el JSON no la trae. 'terrenos': cada nivel con su
+    // region en planta (NivelTerreno, al final); vacio = solo este plano.
     public float cota_terreno = -9999f;
+    public List<NivelTerreno> terrenos;
 }
 
 // Contenedor: representa modelo_unity.json completo.
@@ -620,3 +620,23 @@ public static class Ejes
 // ================================================================
 public class DatoNodo : UnityEngine.MonoBehaviour { public int idNodo; }
 public class DatoElemento : UnityEngine.MonoBehaviour { public int idElemento; }
+
+
+// ================================================================
+// PARTE 5: EL TERRENO EN NIVELES (info.terrenos)
+//   Va al final del archivo para no correr las lineas que citan los
+//   documentos (CLAUDE.md, seccion 6).
+//
+//   Un nivel del terreno: la BASE (vertices vacio: todo el plano, en
+//   info.cota_terreno) o una TERRAZA, un nivel mas alto con su region
+//   en planta (x, y OpenSees, sentido antihorario). Lo arma Python
+//   desde el perfil de cada edificio; AmbienteVisor.Terrazas.cs lo
+//   dibuja. Contrato: semana05/CONTRATO.md.
+// ================================================================
+[System.Serializable]
+public class NivelTerreno
+{
+    public string nombre;
+    public float z;
+    public List<VerticePlanta> vertices;
+}

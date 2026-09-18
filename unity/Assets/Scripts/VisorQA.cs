@@ -2025,7 +2025,7 @@ public class VisorQA : MonoBehaviour
                 Diferir(() => { AjustesVista.suelo = suelo; EventosVisor.AvisarVistaCambio(); });
             InfoModelo info = visor.Modelo.info;
             GUILayout.Label(info != null && info.cota_terreno > -9000f
-                ? $"Terreno en la cota {Cota(info.cota_terreno)} m: donde arranca la estructura, declarado en el perfil del edificio."
+                ? $"Terreno en la cota {Cota(info.cota_terreno)} m: donde arranca la estructura, declarado en el perfil del edificio.{TextoTerrazas(info)}"
                 : "Este JSON no trae cota de terreno: el suelo va en el apoyo mas bajo (respaldo de dibujo, ver consola).",
                 PanelUI.Tenue);
         }
@@ -2730,6 +2730,22 @@ public class VisorQA : MonoBehaviour
     {
         escalaDelAnexoPuesta = true;
         visor.factorEscala = escala;
+    }
+
+    /// Lo que se agrega a la linea del terreno en la pestana Vista: las
+    /// TERRAZAS de info.terrenos (el terreno en niveles, que dibuja
+    /// AmbienteVisor.Terrazas.cs). Vacio si el JSON no trae ninguna. Va al
+    /// final de la clase: los documentos citan lineas de arriba.
+    static string TextoTerrazas(InfoModelo info)
+    {
+        if (info == null || info.terrenos == null) return "";
+        List<string> partes = new List<string>();
+        foreach (NivelTerreno t in info.terrenos)
+            if (t != null && t.vertices != null && t.vertices.Count >= 3
+                && t.z > info.cota_terreno + AjustesVista.TOLERANCIA_COTA)
+                partes.Add($"{Cota(t.z)} m ({t.nombre})");
+        return partes.Count == 0 ? ""
+            : " Terraza en " + string.Join(", ", partes) + ": ahi el terreno sube, bajo los apoyos de esa cota.";
     }
 }
 

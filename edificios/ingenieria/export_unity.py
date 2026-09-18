@@ -64,7 +64,7 @@ def cota_terreno(ruta=PERFIL):
     consola: declararla no mueve el suelo, lo vuelve un dato.
 
     En el conjunto se le suma el dz del calce (-7.97) y calza con la
-    cota del LT2 (ver cota_terreno_del_conjunto()).
+    base del LT2 (ver terrenos_del_conjunto()).
 
     Devuelve None si el perfil no existe o no la declara: entonces el
     JSON sale sin la clave y el visor vuelve al respaldo.
@@ -564,9 +564,9 @@ def construir_json(desplazamientos=None):
          "cargas_distribuidas": [], "cargas_nodales": sismo("fy")},
     ]
 
-    # El suelo del visor. Va en info y no en el contrato del solver: es
-    # dibujo (ver cota_terreno()). Sin la clave, AmbienteVisor.cs lo pone
-    # en el apoyo mas bajo con un aviso.
+    # El suelo del visor NO va aca: construir_json() tambien alimenta
+    # armar.py (data/modelo/, el contrato del solver) y el terreno es
+    # dibujo. Lo agrega export_model(), el camino del visor (terrenos()).
     info = {
         "descripcion": "Edificio de Ingenieria UAndes - modelo global v2",
         "unidades": "m, kN, kPa",
@@ -575,9 +575,9 @@ def construir_json(desplazamientos=None):
                  f"{len(diafragmas)} diafragmas. Area de piso "
                  f"{max(A_por_nivel.values()):.1f} m2."),
     }
-    cota = cota_terreno()
-    if cota is not None:
-        info["cota_terreno"] = cota
+    # Sin info.cota_terreno ni info.terrenos (ver arriba). Hasta el 18-09
+    # la cota se ponia aca, y correr armar.py la habria llevado a
+    # data/modelo/ingenieria.json; el LT2 ya la dejaba fuera de construir().
 
     return {
         "info": info,
@@ -612,6 +612,15 @@ def export_model(X_axes=None, Y_axes=None, heights=None,
             desp = json.load(f).get('G', {}).get('displacements')
 
     modelo = construir_json(desplazamientos=desp)
+    # El suelo del visor, solo en el JSON de Unity: la cota (el nivel mas
+    # bajo) y los niveles con la terraza (ver cota_terreno() y terrenos()).
+    # Sin la cota, AmbienteVisor.cs pone el suelo en el apoyo mas bajo.
+    import benchmark_3d as ed          # ya cargado cuando el nos llama
+    cota = cota_terreno()
+    if cota is not None:
+        modelo['info']['cota_terreno'] = cota
+        modelo['info']['terrenos'] = terrenos(cota, modelo['nodos'],
+                                              modelo['elementos'], ed)
     if label:
         modelo['info']['descripcion'] = label
     if extra:
@@ -731,6 +740,246 @@ def escribir(modelo):
         print(f"    avisos: {len(r['avisos'])}")
     print("  -> OK, round-trip por el servidor calza con lo aplicado.")
     return modelo
+
+
+# ============================================================
+# EL TERRENO EN DOS NIVELES (info.terrenos)
+# ============================================================
+# Va al final del archivo a proposito: los documentos citan lineas de
+# arriba (CLAUDE.md, seccion 6, "Los documentos citan archivo:linea").
+#
+# 0.01 m = AjustesVista.TOLERANCIA_COTA, la del visor: las z del modelo y
+# las del perfil traen 2 decimales.
+TOL_COTA = 0.01
+
+
+def terrenos(cota, nodos, elementos, ed, ruta=PERFIL):
+    r"""
+    Los niveles del terreno que dibuja el visor, para info.terrenos: una
+    lista de {nombre, z, vertices} en el datum LOCAL de este cuerpo.
+
+      - El primero es la BASE: z = cota (info.cota_terreno, el nivel mas
+        bajo) y sin vertices, porque el plano base no tiene borde: llega
+        al horizonte, como siempre.
+      - Despues, una entrada por poligono de cada TERRAZA que declare el
+        perfil en 'terreno.terrazas', con su region en planta (x, y del
+        modelo, 4 decimales, sentido antihorario).
+
+    ----------------------------------------------------------------
+    POR QUE LA REGION SE ARMA ACA, Y NO EN EL PERFIL NI EN UNITY
+    ----------------------------------------------------------------
+    El perfil declara QUE nivel hay (su z) y CON QUE CRITERIO se ubica
+    ('zona'); la region sale del mismo modelo que crea los apoyos. Un
+    rectangulo escrito a mano en el perfil seria una segunda definicion
+    de algo que benchmark_3d.py ya decide --donde el nivel 1 se apoya en
+    el terreno-- y se desfasaria en silencio el dia que cambie el modelo
+    (CLAUDE.md 7.4). Y Unity no calcula: dibuja la region que le llega.
+
+      apoyos    'los del modelo en esta z': los apoyos no auxiliares con
+                z = la de la terraza (TOL_COTA). Hoy son los 39 que crea
+                build_model(): 31 'apoyos_oriente' de la grilla y los
+                arranques de los 8 muros del oriente. De un arranque de
+                muro cuenta el muro entero (su huella es el largo, no el
+                nodo del centro).
+      caja      la caja de esas huellas, mas 'margen_m' por lado.
+      fuera_de  'subterraneo' = benchmark_3d.sobre_subterraneo(): a la
+                caja se le quita lo que tiene el 1er subterraneo debajo.
+                Es LA funcion con que build_model() decide que un nudo del
+                nivel 1 apoya en el terreno; se la llama (sus bordes se
+                ubican por biseccion en _region_sin()) en vez de copiar
+                sus numeros.
+
+    ----------------------------------------------------------------
+    LO QUE COMPRUEBA (si falla, no escribe)
+    ----------------------------------------------------------------
+      - que haya apoyos en la z declarada: si el modelo moviera el nivel,
+        la terraza quedaria flotando;
+      - que TODOS queden dentro de la region.
+    E informa cuantos apoyos de la BASE caen dentro de la region: estan
+    fuera del subterraneo pero bajan a la base (el recinto de muros del
+    suroeste, las columnas del eje F), y el visor les recorta la terraza
+    alrededor (HuecoDelSuelo.CalcularTerraza, AmbienteVisor.cs) para que
+    no queden enterrados.
+    """
+    with open(ruta, encoding='utf-8') as f:
+        terreno = json.load(f).get('terreno') or {}
+    salida = [{"nombre": "base", "z": cota, "vertices": []}]
+    criterios = {'subterraneo': ed.sobre_subterraneo}
+    por_id = {n['id']: n for n in nodos}
+
+    def es_apoyo(n):
+        return (not n.get('auxiliar')
+                and (n.get('fijo') or any(n.get('restricciones') or [])))
+
+    print(f"  terreno    : base {cota:+.2f} m (del perfil)")
+    for t in terreno.get('terrazas') or []:
+        z = round(float(t['z']), 4)
+        zona = t.get('zona') or {}
+        excluido = criterios.get(zona.get('fuera_de'))
+        if zona.get('apoyos') != 'los del modelo en esta z' or excluido is None:
+            raise SystemExit(
+                f"  *** terreno.terrazas '{t.get('nombre')}': la zona "
+                f"{zona} no se sabe armar. Hoy: apoyos = 'los del modelo "
+                f"en esta z' y fuera_de = {sorted(criterios)}.")
+        suyos = [n for n in nodos
+                 if es_apoyo(n) and abs(n['z'] - z) <= TOL_COTA]
+        if not suyos:
+            raise SystemExit(
+                f"  *** terreno.terrazas '{t['nombre']}': ningun apoyo del "
+                f"modelo esta en z = {z:+.2f}; la terraza quedaria flotando.")
+
+        # La huella de cada apoyo: su punto y, si arranca un muro, el muro.
+        huella = [(n['x'], n['y']) for n in suyos]
+        ids = {n['id'] for n in suyos}
+        for e in elementos:
+            if e.get('tipo') != 'muro' or not e.get('dir_largo'):
+                continue
+            a, b = por_id[e['n1']], por_id[e['n2']]
+            pie = a if a['z'] <= b['z'] else b
+            if pie['id'] not in ids:
+                continue
+            h = 0.5 * float(e['largo'])
+            ux, uy = float(e['dir_largo'][0]), float(e['dir_largo'][1])
+            huella += [(pie['x'] - ux * h, pie['y'] - uy * h),
+                       (pie['x'] + ux * h, pie['y'] + uy * h)]
+        m = float(zona['margen_m'])
+        caja = (min(p[0] for p in huella) - m, min(p[1] for p in huella) - m,
+                max(p[0] for p in huella) + m, max(p[1] for p in huella) + m)
+        polis = _region_sin(caja, excluido)
+
+        fuera = [n['id'] for n in suyos
+                 if not any(_en_poligono(n['x'], n['y'], p) for p in polis)]
+        if fuera:
+            raise SystemExit(
+                f"  *** terreno.terrazas '{t['nombre']}': {len(fuera)} apoyos "
+                f"en z = {z:+.2f} quedan FUERA de su region: {fuera[:8]}")
+        bajo = [n['id'] for n in nodos
+                if es_apoyo(n) and n['z'] < z - TOL_COTA
+                and any(_en_poligono(n['x'], n['y'], p) for p in polis)]
+        for p in polis:
+            salida.append({"nombre": t['nombre'], "z": z,
+                           "vertices": [{"x": x, "y": y} for x, y in p]})
+        print(f"  terreno    : {t['nombre']} {z:+.2f} m, "
+              f"{len(polis)} poligono(s) de "
+              f"{', '.join(str(len(p)) for p in polis)} vertices; "
+              f"{len(suyos)} apoyos en su z, todos dentro; {len(bajo)} "
+              f"apoyo(s) de la base bajo su huella (el visor los recorta)")
+    return salida
+
+
+def _region_sin(caja, excluido, paso=0.10):
+    r"""
+    Los poligonos rectilineos de la parte de 'caja' = (x0, y0, x1, y1)
+    donde excluido(x, y) es False, cada uno como lista de (x, y) en
+    sentido antihorario, empezando por el vertice de abajo a la
+    izquierda. Si la region tuviera un AGUJERO, o dos piezas que se tocan
+    en un vertice, aborta: el contrato del visor no los lleva.
+
+    El criterio es una FUNCION, no una lista de rectangulos. Sus bordes se
+    buscan barriendo la caja cada 'paso' metros, en filas y en columnas, y
+    cada cambio se afina por BISECCION (60 pasos: el borde queda donde lo
+    pone la funcion, 17.97 y no 17.95 o 18.00 por la red; se redondea a
+    4 decimales, como las coordenadas del JSON). Con esos bordes la caja
+    se parte en celdas, cada celda se clasifica por su centro, y el
+    contorno de las llenas es el poligono. Un rasgo mas angosto que
+    'paso' se perderia: el subterraneo no tiene ninguno (su pieza mas
+    angosta mide 9.5 m).
+    """
+    import math
+    x0, y0, x1, y1 = caja
+    nx = max(1, int(math.ceil((x1 - x0) / paso)))
+    ny = max(1, int(math.ceil((y1 - y0) / paso)))
+    xs = [x0 + (x1 - x0) * k / nx for k in range(nx + 1)]
+    ys = [y0 + (y1 - y0) * k / ny for k in range(ny + 1)]
+
+    def biseca(f, a, b):
+        fa = f(a)
+        for _ in range(60):
+            c = 0.5 * (a + b)
+            if f(c) == fa:
+                a = c
+            else:
+                b = c
+        return 0.5 * (a + b)
+
+    # Filas y columnas de barrido corridas un 37 % del paso: una fila
+    # justo sobre un borde lo veria de los dos lados.
+    qx, qy = {x0, x1}, {y0, y1}
+    for k in range(ny):
+        y = y0 + (k + 0.37) * (y1 - y0) / ny
+        f = (lambda yy: lambda x: bool(excluido(x, yy)))(y)
+        for a, b in zip(xs, xs[1:]):
+            if f(a) != f(b):
+                qx.add(round(biseca(f, a, b), 4))
+    for k in range(nx):
+        x = x0 + (k + 0.37) * (x1 - x0) / nx
+        f = (lambda xx: lambda y: bool(excluido(xx, y)))(x)
+        for a, b in zip(ys, ys[1:]):
+            if f(a) != f(b):
+                qy.add(round(biseca(f, a, b), 4))
+    bx = sorted(v for v in qx if x0 <= v <= x1)
+    by = sorted(v for v in qy if y0 <= v <= y1)
+    nbx, nby = len(bx) - 1, len(by) - 1
+    lleno = [[not excluido(0.5 * (bx[i] + bx[i + 1]), 0.5 * (by[j] + by[j + 1]))
+              for j in range(nby)] for i in range(nbx)]
+
+    def hay(i, j):
+        return 0 <= i < nbx and 0 <= j < nby and lleno[i][j]
+
+    # Las aristas del borde, en sentido antihorario alrededor de lo lleno:
+    # cada lado de una celda llena cuyo vecino no lo esta.
+    sig = {}
+    for i in range(nbx):
+        for j in range(nby):
+            if not lleno[i][j]:
+                continue
+            for a, b, vecino in (((i, j), (i + 1, j), (i, j - 1)),
+                                 ((i + 1, j), (i + 1, j + 1), (i + 1, j)),
+                                 ((i + 1, j + 1), (i, j + 1), (i, j + 1)),
+                                 ((i, j + 1), (i, j), (i - 1, j))):
+                if hay(*vecino):
+                    continue
+                if a in sig:
+                    raise SystemExit('  *** la region del terreno se toca '
+                                     'consigo misma en (%.4f, %.4f)'
+                                     % (bx[a[0]], by[a[1]]))
+                sig[a] = b
+    lazos = []
+    while sig:
+        ini = next(iter(sig))
+        lazo, p = [ini], sig.pop(ini)
+        while p != ini:
+            lazo.append(p)
+            p = sig.pop(p)
+        pts = [(bx[i], by[j]) for i, j in lazo]
+        # Fuera los vertices intermedios de un lado recto.
+        pts = [pts[k] for k in range(len(pts))
+               if not (pts[k - 1][0] == pts[k][0] == pts[(k + 1) % len(pts)][0]
+                       or pts[k - 1][1] == pts[k][1] == pts[(k + 1) % len(pts)][1])]
+        area = sum(pts[k - 1][0] * pts[k][1] - pts[k][0] * pts[k - 1][1]
+                   for k in range(len(pts))) / 2.0
+        if area <= 0:
+            raise SystemExit('  *** la region del terreno tiene un agujero: '
+                             'el contrato del visor no lo lleva')
+        k0 = min(range(len(pts)), key=lambda k: (pts[k][1], pts[k][0]))
+        lazos.append([(round(x, 4), round(y, 4)) for x, y in pts[k0:] + pts[:k0]])
+    return lazos
+
+
+def _en_poligono(x, y, poli, tol=1e-6):
+    """Si (x, y) esta dentro de 'poli' o sobre su borde (a menos de tol)."""
+    dentro = False
+    for k in range(len(poli)):
+        (ax, ay), (bx, by) = poli[k - 1], poli[k]
+        lx, ly = bx - ax, by - ay
+        largo = (lx * lx + ly * ly) ** 0.5
+        if (abs(lx * (y - ay) - ly * (x - ax)) <= tol * max(largo, 1.0)
+                and min(ax, bx) - tol <= x <= max(ax, bx) + tol
+                and min(ay, by) - tol <= y <= max(ay, by) + tol):
+            return True
+        if (ay > y) != (by > y) and x < ax + (y - ay) * lx / ly:
+            dentro = not dentro
+    return dentro
 
 
 if __name__ == '__main__':

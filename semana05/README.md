@@ -62,7 +62,8 @@ Fuera de la carpeta, lo que la semana agregó o cambió:
 | `comun/lanzar_unity.py` | Modos nuevos `sincronizar <ed>` (copia modelo, anexos, superposición, carga móvil y Excel a las dos StreamingAssets), `web`, `android` (sale con 1 si falta el módulo, sin abrir Unity) y `servidor` (levanta `servidor_s5.py`). |
 | `comun/verificar_todo.py` | Pasa de 34 a 41 entradas. Los exportadores de los anexos corren con `lt2` y la suite avisa qué edificio dejó. |
 | `edificios/lt2/perfiles/lt2_2024_22.json` | `terreno.z = -7.97` (donde arrancan las columnas: sus 16 apoyos), con su `_por_que`. Viaja en `info.cota_terreno` de `data/unity/lt2.json`. El informe entregado dice `-4.01`, `provisorio`: era el valor de la entrega, cambiado después (18-09). |
-| `edificios/ingenieria/perfiles/ingenieria_2017_67.json` | Nuevo (18-09): `terreno.z = 0.0`, el arranque de este cuerpo (29 apoyos, 10 columnas), que con el `dz` del calce es el mismo `-7.97`. Antes no declaraba cota y el visor caía a su respaldo, que daba el mismo número. |
+| `edificios/ingenieria/perfiles/ingenieria_2017_67.json` | Nuevo (18-09): `terreno.z = 0.0`, el arranque de este cuerpo (29 apoyos, 10 columnas), que con el `dz` del calce es el mismo `-7.97`. Antes no declaraba cota y el visor caía a su respaldo, que daba el mismo número. Y `terreno.terrazas`: la **terraza oriente** en `z = 3.96` (−4.01 calzada), el segundo N.R. de su planta de fundaciones, con la zona declarada como criterio (los apoyos de esa z, `margen_m = 0.35`, menos el subterráneo de `benchmark_3d.sobre_subterraneo`). |
+| `edificios/*/export*_unity.py` · `edificios/conjunto/exportar_unity.py` | Desde el 18-09 escriben `info.terrenos` (el terreno en niveles, `CONTRATO.md` §11) además de `cota_terreno`: el LT2 su base; Ingeniería la base y la terraza, con la región armada en `terrenos()`; el conjunto las junta calzadas (`terrenos_del_conjunto()`), y ya no aborta porque los cuerpos tengan niveles distintos. |
 
 ### En Unity (`unity/Assets/`)
 
@@ -74,6 +75,7 @@ Fuera de la carpeta, lo que la semana agregó o cambió:
 | `Scripts/LectorStreaming.cs` | Lee StreamingAssets con `UnityWebRequest` (sirve en Windows, Android y Web) y abre el Excel de resultados con el programa del sistema. |
 | `Scripts/VisorQA.cs` | El panel: cabecera fija, botón "Abrir Excel de resultados", pestañas Vista \| Capas \| Caso \| Elemento \| Modificar \| Carga movil, inspector de elemento y de nodo, "Ir a ID", filtro de piso y apoyos por tipo. |
 | `Scripts/AmbienteVisor.cs` | Vista realista o técnica: suelo en `cota_terreno` con el hueco de la excavación, cielo, luz y texturas procedurales. Sigue el protocolo de materiales (`CONTRATO.md` §8). |
+| `Scripts/AmbienteVisor.Terrazas.cs` | Nuevo (18-09): cada nivel de `info.terrenos` sobre la base es una **terraza** de pasto con muros de tierra hasta la base, sin collider, recortada alrededor de lo que baja (`HuecoDelSuelo.CalcularTerraza`). |
 | `Scripts/AmbienteVisor.Losas.cs` | Losas **de dibujo** en la realista, sacadas de los 243 polígonos de `areas_tributarias`. Sin collider y fuera de `ObjetosDeElementos`. |
 | `Scripts/VisorEstructura.cs` | Carga asíncrona, secciones b×h en la realista, fantasma de lo que queda fuera del piso filtrado y muros cizallados en la deformada. |
 | `Scripts/VisorSemana04.Superposicion.cs` | E1..E3 precalculados y el caso LIBRE pedido a `POST /combinar` con cuatro sliders. |
@@ -151,10 +153,26 @@ el caso LIBRE y el reanálisis de la M1.
   ningún número. Durante la entrega decía `-4.01`, `provisorio` (así
   quedó en `reports/semana05.md`), y por eso el visor dibujaba una
   excavación para ver los apoyos; con la cota en el arranque ya no hay
-  nada bajo el suelo y no se cava. Lo que sigue **pendiente**: el terreno
-  real tiene dos N.R. (−7.97 y −4.01, fundación escalonada), así que los
-  39 apoyos en terreno de Ingeniería quedan dibujados 3.96 m sobre el
-  suelo; el visor usa un plano horizontal.
+  nada bajo el suelo y no se cava.
+- **El terreno en dos niveles (18-09).** El terreno real no es un plano:
+  la planta de fundaciones de Ingeniería rotula dos N.R. (−7.97 y −4.01,
+  fundación escalonada), y sus 39 apoyos en terreno `[0 0 1 1 1 0]` están
+  en −4.01. Con un solo plano en −7.97 se dibujaban 3.96 m en el aire. Ahora
+  el suelo viaja en niveles (`info.terrenos`, `CONTRATO.md` §11): la base
+  en `cota_terreno` (−7.97, el nivel más bajo, como antes) y una
+  **terraza** en −4.01 (3.96 del datum de Ingeniería). Su región no se
+  dibujó a ojo: sale de la misma definición con que `benchmark_3d.py`
+  crea esos apoyos (el nivel 1 apoya en el terreno donde no tiene el
+  subterráneo debajo, `sobre_subterraneo()`), recortada a la caja de los
+  39 apoyos más 0.35 m. Resultado, medido con
+  `comun/test_contrato_unity.py`: LT2 16 apoyos en −7.97; Ingeniería 29 en
+  0.00 y 39 en 3.96; conjunto 45 en −7.97 y 39 en −4.01; ninguno flotando
+  ni enterrado. El visor recorta la terraza alrededor de lo que baja a la
+  base (11 apoyos de la base caen bajo su huella: el recinto de muros del
+  suroeste, las columnas del eje F y dos del eje 1), así que ese recinto
+  se ve como un pozo y sus 6 apoyos de −4.01 quedan encima de los muros; los
+  otros 33 quedan sobre el pasto de la terraza. **Solo dibuja**: los
+  anexos, el D/C y el Excel no cambian.
 - **Excel versionado y abrible desde Unity.** `data/excel/` va a git y
   el libro es determinista: con los mismos datos salen los mismos bytes.
   `lanzar_unity.py sincronizar lt2` lo copia a

@@ -259,12 +259,39 @@ Antes: `semana04/capturas/04_N_edificio.jpg` y
 
 | | Semana 4 | Semana 5 (Realista) |
 | --- | --- | --- |
-| Suelo | No había: el "piso" era el hemisferio inferior gris del cielo | Pasto procedural hasta el horizonte, a la cota donde arranca la estructura (−7.97 en el LT2 y en el conjunto; 0.00 en el datum de Ingeniería). Sin collider. Con la cota en −4.01 de la entrega el visor cavaba la excavación del subterráneo (paredes de tierra y fondo en −7.97); con la cota en el arranque no hay nada bajo el suelo y no se cava, pero el hueco sigue en el código y se enciende con el dato |
+| Suelo | No había: el "piso" era el hemisferio inferior gris del cielo | Pasto procedural hasta el horizonte, a la cota donde arranca la estructura (−7.97 en el LT2 y en el conjunto; 0.00 en el datum de Ingeniería). Sin collider. Con la cota en −4.01 de la entrega el visor cavaba la excavación del subterráneo (paredes de tierra y fondo en −7.97); con la cota en el arranque no hay nada bajo el suelo y no se cava, pero el hueco sigue en el código y se enciende con el dato. Desde el 18-09 el suelo tiene **dos niveles** donde el terreno los tiene: la terraza de Ingeniería en −4.01 (3.96 de su datum), pasto con muros de tierra hasta la base, bajo sus 39 apoyos en terreno, que antes quedaban 3.96 m en el aire (ver abajo) |
 | Estructura | Barras como tubos finos, esferas azules en los nudos, columnas negras (jaula de enfierradura en todas) y muros lila | Columnas y vigas con su sección b×h y textura de hormigón (la columna en salmón desde el 18-09), muros con encofrado y nudos auxiliares chicos |
 | Losas | No había | Una losa de dibujo por paño, desde los polígonos de `areas_tributarias` (243 entradas, 5 cotas) |
 | Luz | La de la escena | Sol reorientado solo en la realista y luz ambiente neutra, para que las caras que ve la cámara no queden azuladas |
 | Deformada | Muros y líneas en amarillo, columnas negras por la jaula (foto 10 de la S4) | Hormigón con la posición original en líneas oscuras. Los muros son cajas cizalladas que siguen a sus nodos |
 | Técnica | La única vista | Se conserva igual con "Tecnica" (foto 02). El `registro.txt` de la S4 sale idéntico byte a byte |
+
+**El suelo en dos niveles (18-09).** Un suelo plano sobre un terreno
+escalonado dejaba un dibujo que miente: en Ingeniería y en el conjunto,
+los 39 apoyos en terreno `[0 0 1 1 1 0]` del nivel 1 (la planta de
+fundaciones rotula dos N.R., −7.97 y −4.01) flotaban 3.96 m sobre el
+pasto, y la pregunta "¿cómo está apoyado?" se contestaba con un apoyo en
+el aire. Ahora cada nivel elevado de `info.terrenos` es una **terraza**:
+pasto a su cota, muros de tierra verticales hasta la base (la misma
+textura de la excavación), sin collider. Se lee así en las fotos 01 y 02
+de Ingeniería y del conjunto:
+
+- el escalón se ve como un muro de tierra de 3.96 m a lo largo de la
+  fachada sur, desde el eje F hacia el oriente, con los apoyos naranjos de
+  −4.01 en su borde y los verdes de la base al pie;
+- lo que baja a la base dentro de la huella de la terraza no queda
+  enterrado: el recinto de muros del suroeste se ve como un pozo (sus 6
+  apoyos de −4.01 quedan encima de los muros) y las columnas del eje F y
+  del eje 1 tienen su hueco alrededor;
+- en la técnica la terraza es una plataforma del color del suelo con su
+  canto más oscuro, y los apoyos naranjos se leen sobre ella;
+- los otros 33 apoyos de −4.01 quedan sobre el pasto de la terraza (foto
+  10 de Ingeniería: el nodo 158, con el pasto a la vista por el pozo de
+  las losas).
+
+La terraza queda a la cota de los apoyos (el eje de las vigas del nivel
+1), como la base: la mitad inferior de esas vigas entra en el pasto, igual
+que una viga de fundación.
 
 **Veredicto:** el edificio ya se lee como edificio (foto 01). Queda:
 

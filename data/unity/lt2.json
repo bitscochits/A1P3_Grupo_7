@@ -4,7 +4,14 @@
   "unidades": "m, kN, kPa",
   "caso_precalculado": "G",
   "nota": "Geometria extraida de los planos DXF. Ejes locales calculados en Python. Carga de losa por areas tributarias a 45 grados sobre los panos detectados.",
-  "cota_terreno": -7.97
+  "cota_terreno": -7.97,
+  "terrenos": [
+   {
+    "nombre": "base",
+    "z": -7.97,
+    "vertices": []
+   }
+  ]
  },
  "material": {
   "fpc_MPa": 35.0,

@@ -5,6 +5,51 @@
     "caso_precalculado": "G",
     "nota": "326 nodos, 559 elementos, 5 diafragmas. Area de piso 1127.2 m2.",
     "cota_terreno": 0.0,
+    "terrenos": [
+      {
+        "nombre": "base",
+        "z": 0.0,
+        "vertices": []
+      },
+      {
+        "nombre": "terraza oriente (N.R. -4.01)",
+        "z": 3.96,
+        "vertices": [
+          {
+            "x": 7.67,
+            "y": 47.35
+          },
+          {
+            "x": 53.77,
+            "y": 47.35
+          },
+          {
+            "x": 53.77,
+            "y": 73.1
+          },
+          {
+            "x": 29.72,
+            "y": 73.1
+          },
+          {
+            "x": 29.72,
+            "y": 64.45
+          },
+          {
+            "x": 17.97,
+            "y": 64.45
+          },
+          {
+            "x": 17.97,
+            "y": 54.9
+          },
+          {
+            "x": 7.67,
+            "y": 54.9
+          }
+        ]
+      }
+    ],
     "extra": {
       "n_columns": "82",
       "n_xbeams": "165",

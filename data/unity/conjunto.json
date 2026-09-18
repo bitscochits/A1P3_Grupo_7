@@ -8,7 +8,52 @@
   ],
   "caso_precalculado": "G",
   "nota": "Los dos cuerpos del edificio, calzados por edificios/conjunto/calce.json. La junta de dilatacion es LIBRE: ningun elemento la cruza, los dos cuerpos se resuelven independientes.",
-  "cota_terreno": -7.97
+  "cota_terreno": -7.97,
+  "terrenos": [
+   {
+    "nombre": "base",
+    "z": -7.97,
+    "vertices": []
+   },
+   {
+    "nombre": "ingenieria: terraza oriente (N.R. -4.01)",
+    "z": -4.01,
+    "vertices": [
+     {
+      "x": 7.67,
+      "y": 47.35
+     },
+     {
+      "x": 53.77,
+      "y": 47.35
+     },
+     {
+      "x": 53.77,
+      "y": 73.1
+     },
+     {
+      "x": 29.72,
+      "y": 73.1
+     },
+     {
+      "x": 29.72,
+      "y": 64.45
+     },
+     {
+      "x": 17.97,
+      "y": 64.45
+     },
+     {
+      "x": 17.97,
+      "y": 54.9
+     },
+     {
+      "x": 7.67,
+      "y": 54.9
+     }
+    ]
+   }
+  ]
  },
  "material": {
   "fpc_MPa": 28.0,

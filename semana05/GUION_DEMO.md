@@ -435,9 +435,13 @@ comandos `adb` para completarla.
   decía −4.01 (`provisorio`), para leer ese piso como subterráneo: si lo
   fuera, al modelo le faltaría el empotramiento lateral del terreno ahí
   (su deriva en EX, 0.00048, es menor que la de los pisos de arriba,
-  0.00107). Pendiente: el terreno tiene dos N.R. (−7.97 y −4.01), y el
-  visor dibuja un solo plano, así que los 39 apoyos en terreno de
-  Ingeniería quedan 3.96 m sobre el suelo.
+  0.00107). Y el terreno tiene **dos niveles**: la planta de fundaciones
+  de Ingeniería rotula dos N.R. (−7.97 y −4.01), así que desde el 18-09
+  el visor dibuja una terraza en −4.01 bajo sus 39 apoyos en terreno
+  (antes quedaban 3.96 m en el aire). Su región sale de la misma
+  definición con que el modelo crea esos apoyos, no de un rectángulo a
+  ojo, y `comun/test_contrato_unity.py` comprueba que cada apoyo quede
+  sobre un nivel (`semana05/CONTRATO.md` §11).
 - **¿Por qué la hoja Reacciones no se suma entera?** Porque un nodo de
   diafragma reacciona también a su restricción. Sumarlo todo dobla el
   corte basal.

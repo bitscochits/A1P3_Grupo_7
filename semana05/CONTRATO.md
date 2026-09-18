@@ -106,7 +106,7 @@ las conserva al pasar `Start` a corrutina.
 | miembro | valor por defecto | qué es |
 | --- | --- | --- |
 | `bool realista` | `true` | vista realista (texturas) o técnica (colores por tipo). Decisión 7 |
-| `bool suelo` | `true` | dibujar el suelo en `info.cota_terreno` |
+| `bool suelo` | `true` | dibujar el suelo en `info.cota_terreno` y las terrazas de `info.terrenos` (§11) |
 | `float cotaVisible` | `float.NaN` | filtro de piso: NaN = todos; si no, la cota z OpenSees del piso |
 | `const float TOLERANCIA_COTA` | `0.01f` | la de `VisorQA.CotasDelModelo` |
 | `bool HayFiltroDePiso` | | `!float.IsNaN(cotaVisible)` |
@@ -195,7 +195,8 @@ Miembros privados nuevos en los partial con prefijo de su archivo: `Sup_`
 | --- | --- |
 | `Elemento.area_tributaria`, `Elemento.w_gravedad` (float) | los traen Ingeniería y conjunto; en el LT2 quedan en 0 (no los exporta por elemento). Viajan de vuelta al servidor con `ToJson` |
 | `InfoModelo.edificio` (string) | `"lt2"`, `"ingenieria"`, `"conjunto"`; hoy ningún JSON lo trae (vacío) |
-| `InfoModelo.cota_terreno = -9999f` | cota z OpenSees del terreno; `< -9000` = no viene: `AmbienteVisor` pone el suelo en el apoyo más bajo con `LogWarning` (ajuste del coordinador a la decisión 7; ver §10) |
+| `InfoModelo.cota_terreno = -9999f` | cota z OpenSees del terreno; `< -9000` = no viene: `AmbienteVisor` pone el suelo en el apoyo más bajo con `LogWarning` (ajuste del coordinador a la decisión 7; ver §10). Desde el 18-09 es el nivel **más bajo** de `terrenos` |
+| `InfoModelo.terrenos` (`List<NivelTerreno>`), clase `NivelTerreno` `{string nombre; float z; List<VerticePlanta> vertices}` (18-09) | el terreno en niveles: la base (sin vértices, todo el plano) y cada terraza con su región en planta. Ausente o vacía = solo el plano de `cota_terreno`. Formato y reglas en §11 |
 | clase `EquilibrioCaso` | `float[] aplicada_kN`, `float[] reaccion_kN`, `float[] error_kN`, `int cargas_sin_convertir`, `int nodos_en_diafragma`, `bool confiable`: las claves de `comun/calcular.equilibrio` |
 | `CasoResultado.equilibrio` | `EquilibrioCaso`. "Vino" se pregunta: `c.equilibrio != null && c.equilibrio.aplicada_kN != null && c.equilibrio.aplicada_kN.Length == 3` |
 | `RespuestaServidor.excel`, `RespuestaServidor.excel_error` (string) | §3. Preguntar con `string.IsNullOrEmpty` |
@@ -265,7 +266,9 @@ seleccionado y las teclas (solo si `GUIUtility.keyboardControl == 0`).
 
 **`AmbienteVisor` (U4)** — se crea solo con
 `[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]`; no
-expone API: todo por eventos y `AjustesVista`. Suelo **sin collider**.
+expone API: todo por eventos y `AjustesVista`. Suelo **sin collider**, y las
+terrazas de `info.terrenos` también (`AmbienteVisor.Terrazas.cs`, hijas del
+suelo; §11).
 
 **`VisorCargaMovil` (P4)** — se crea solo igual que `AmbienteVisor`;
 implementa `IPanelIncrustable` con `TituloPestana = "Carga movil"`. Lee
@@ -450,7 +453,7 @@ equilibrio con `calcular.equilibrio` por caso y combinación. Nunca lee
 original. En el `modelo` que manda Unity, un 0 o un vacío puede ser "no vino":
 en el LT2 `elementos[].area_tributaria` y `w_gravedad` llegan en `0` (el área
 está en `areas_tributarias`), `info.edificio` en `""`, `info.cota_terreno` en
-`-9999`, y `secciones[].E`/`G` en `0` = usa el material del modelo (el
+`-9999`, `info.terrenos` en `[]` (si el JSON no los traía), y `secciones[].E`/`G` en `0` = usa el material del modelo (el
 servidor ya los trata así: `servidor_opensees.normalizar_secciones`). El libro
 no los escribe como dato (nada de "área tributaria 0 m²").
 
@@ -677,3 +680,65 @@ largo_m, z, eje, coord, divisiones, descripcion, _por_que}`; `info` trae
 `escala_deformada` y `verificaciones` (`List<VerificacionMovil>`); arriba va
 `_P_kN_por_que`. Las clases están en `VisorCargaMovil.cs` y
 `semana05/carga_movil.py` [j] las compara con el JSON.
+
+---
+
+## 11. El terreno en niveles: `info.terrenos` (18-09)
+
+El suelo era **un plano** en `info.cota_terreno`, y el terreno no lo es: la
+planta de fundaciones de Ingeniería rotula dos N.R. (−7.97 y −4.01), y sus 39
+apoyos en terreno `[0 0 1 1 1 0]` están en −4.01 (z 3.96 de su datum). Con un
+plano en −7.97 se dibujaban 3.96 m en el aire. Desde el 18-09 el terreno
+viaja en niveles.
+
+**JSON** (`info` de `data/unity/<ed>.json`, además de `cota_terreno`, que
+queda como el nivel **más bajo** para todo lo que ya la lee):
+
+```json
+"cota_terreno": 0.0,
+"terrenos": [
+  {"nombre": "base", "z": 0.0, "vertices": []},
+  {"nombre": "terraza oriente (N.R. -4.01)", "z": 3.96,
+   "vertices": [{"x": 7.67, "y": 47.35}, {"x": 53.77, "y": 47.35}, "..."]}
+]
+```
+
+| campo | qué es |
+| --- | --- |
+| `nombre` | para el panel y el log. En el conjunto lleva delante el cuerpo (`"ingenieria: terraza oriente (N.R. -4.01)"`) |
+| `z` | cota z OpenSees del nivel, en el datum del JSON (el conjunto ya le sumó el `dz` del calce) |
+| `vertices` | `List<VerticePlanta>`: la región en planta (x, y OpenSees), un polígono simple en sentido antihorario, sin agujeros. **Vacío = la base**: el plano hasta el horizonte |
+
+Reglas:
+
+- Hay **una** base (vértices vacíos) y su `z` es `cota_terreno`. Cada
+  terraza está más arriba y trae 3 vértices o más. Varias entradas con la
+  misma `z` son una sola terraza (la unión de sus polígonos).
+- La región **no se escribe a mano**: la arma el exportador de cada edificio
+  desde su perfil (`terreno.terrazas`), con la misma definición con que su
+  modelo crea los apoyos. Ingeniería: `edificios/ingenieria/export_unity.py`,
+  `terrenos()` (la caja de sus apoyos en esa z más `margen_m`, menos lo que
+  `benchmark_3d.sobre_subterraneo()` dice que tiene el subterráneo debajo).
+  El LT2 emite solo su base. El conjunto (`terrenos_del_conjunto()`) gira y
+  traslada cada región con el calce de su cuerpo (`armar._mover`, el de los
+  nodos), junta las bases y, si dos bases calzadas difirieran más de 0.01 m,
+  deja la más baja como base y la otra como terraza sobre la planta de su
+  cuerpo, y lo dice. Ya **no** aborta porque los cuerpos tengan niveles
+  distintos.
+- `AmbienteVisor` dibuja la base como antes (plano, con su hueco si algo
+  queda bajo la cota) y cada terraza en `AmbienteVisor.Terrazas.cs`: pasto a
+  su `z`, muros de tierra de una cara hasta la base en todos sus bordes, sin
+  collider, hija del objeto `Suelo` (se prende con `AjustesVista.suelo` y
+  lleva sus materiales). Lo que queda bajo la cara de la terraza se le
+  recorta alrededor con `HuecoDelSuelo.CalcularTerraza` (a
+  `HOLGURA_TERRAZA` = 0.35 m siempre; a `MARGEN` = 1 m salvo donde un apoyo
+  de la terraza está más cerca; y lo rellenado del cierre). Sin
+  `info.terrenos`, o con solo la base, el visor hace lo de siempre.
+- Guardia: `comun/test_contrato_unity.py` [2] exige que **cada apoyo no
+  auxiliar quede sobre un nivel** (su z = la del nivel cuya región lo
+  contiene, 0.01 m) y cuenta por nivel: LT2 16 en −7.97; Ingeniería 29 en
+  0.00 y 39 en 3.96; conjunto 45 en −7.97 y 39 en −4.01. Informa además los
+  apoyos de la base que caen bajo la huella de la terraza (11: el visor los
+  destapa) y los de la terraza que están sobre estructura que baja (6, los
+  del recinto de muros del suroeste: se ven encima de los muros).
+- Solo dibuja: ningún cálculo lee `terrenos` (efecto en el D/C: cero).

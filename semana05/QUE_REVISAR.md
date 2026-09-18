@@ -108,8 +108,9 @@ anexo **exacto** (S3 11, 1.4G 3, 1.2G+1.6Q 4, 1.2G+1.0Q+1.4EX 21,
 8. **Lo del suelo: HECHO el 18-09** (ítem 11). El suelo va donde arrancan
    las columnas: el LT2 declara −7.97 y el perfil nuevo de Ingeniería su
    0.00 local, que calzado es la misma cota, así que el conjunto no se cae.
-   Queda abierto que los 39 apoyos de Ingeniería en −4.01 se dibujan 3.96 m
-   sobre el suelo (el terreno real es escalonado). Efecto en el D/C: cero,
+   Lo que quedaba abierto, los 39 apoyos de Ingeniería en −4.01 dibujados
+   3.96 m sobre el suelo, también se hizo el 18-09: el terreno va en dos
+   niveles (una terraza en −4.01, ítem 11). Efecto en el D/C: cero,
    medido.
 
 ---
@@ -954,6 +955,20 @@ cambia los `Mn` publicados de los muros.
 > sola no cambió nada: ya dibujaba el suelo en 0.00 por el respaldo.
 > `reports/semana05.md` (entregado) sigue diciendo −4.01, `provisorio`.
 
+> **Y LO DE ABAJO TAMBIÉN (18-09, más tarde): la salida 3.** El terreno
+> viaja en niveles (`info.terrenos`, `semana05/CONTRATO.md` §11): la base en
+> −7.97 y una **terraza** en −4.01 (3.96 del datum de Ingeniería) bajo sus
+> 39 apoyos en terreno. La región sale de la misma definición con que
+> `benchmark_3d.py` crea esos apoyos (`sobre_subterraneo()`, recortada a la
+> caja de los 39 más 0.35 m), el visor la dibuja como pasto con muros de
+> tierra (`AmbienteVisor.Terrazas.cs`) y recorta alrededor de lo que baja a
+> la base. `comun/test_contrato_unity.py` cuenta los apoyos por nivel: LT2
+> 16 en −7.97; Ingeniería 29 en 0.00 y 39 en 3.96; conjunto 45 en −7.97 y
+> 39 en −4.01; ninguno flotando ni enterrado. El exportador del conjunto ya
+> no aborta por niveles distintos (`terrenos_del_conjunto()`, que reemplazó
+> a `cota_terreno_del_conjunto()`); la cita `:262-267` de abajo es del
+> código de antes.
+
 > *Revisión adversarial del 18-09: lo que sigue hasta "Costo" es el
 > análisis **anterior** al cambio y queda como registro de por qué se
 > decidió. Comprobado hoy: `lt2_2024_22.json:197-199` dice `z: -7.97`,
@@ -986,8 +1001,8 @@ argumentaba contra tu premisa:
 
 **El problema de fondo.** Lo que pediste son **dos cotas distintas para dos
 cuerpos separados por una junta de 5 cm**, y el visor dibuja **un solo plano
-horizontal**. `edificios/conjunto/exportar_unity.py:262-267` está escrito para
-**abortar** si los dos cuerpos declaran terrenos que difieren más de 0.01 m:
+horizontal**. `edificios/conjunto/exportar_unity.py:262-267` (en el commit
+`66e4698`; hoy ya no existe) estaba escrito para **abortar** si los dos cuerpos declaran terrenos que difieren más de 0.01 m:
 *"si al calzarlos declaran cotas distintas, uno de los dos supuestos está
 mal"*. Antes del cambio solo el LT2 declaraba, así que el conjunto copiaba su −4.01. Si se
 pone −7.97 en el LT2 y nada en Ingeniería, el conjunto dibujará el suelo en
@@ -1202,9 +1217,9 @@ corte ni vigas. Es un indicador de dónde mirar, y así lo declara
 
 1. **La cota del terreno**: **HECHO el 18-09** (ítem 11). El suelo quedó
    en −7.97 en el LT2 y en el conjunto, y en el 0.00 local de Ingeniería,
-   que calzado es la misma cota. Queda abierto el dibujo de los 39 apoyos
-   de Ingeniería en −4.01 (terreno escalonado, el visor dibuja un plano).
-   Efecto en el D/C: cero, medido.
+   que calzado es la misma cota. El dibujo de los 39 apoyos de Ingeniería
+   en −4.01 se resolvió después, el mismo 18-09: terreno en dos niveles, con
+   una terraza en −4.01 (ítem 11). Efecto en el D/C: cero, medido.
 2. **Las columnas en color salmón** (con las losas tal cual están):
    **HECHO el 18-09**, en `unity/Assets/Scripts/AmbienteVisor.cs`, un solo
    color: `C_COLUMNA` pasó de `(0.74, 0.73, 0.70)` a `(0.87, 0.69, 0.63)`,

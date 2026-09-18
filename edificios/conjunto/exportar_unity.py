@@ -32,8 +32,9 @@ r"""
  Sin eso los poligonos del LT2 quedarian a 35 m de su edificio, y cada
  uno apuntando a la viga equivocada del otro cuerpo.
 
- La cota del terreno (info.cota_terreno, el suelo del visor) sale del
- mismo lugar y con el mismo dz: ver cota_terreno_del_conjunto().
+ El terreno (info.cota_terreno e info.terrenos, el suelo del visor en
+ niveles) sale del mismo lugar y con el mismo calce: ver
+ terrenos_del_conjunto().
 ================================================================
 """
 from __future__ import annotations
@@ -213,59 +214,105 @@ def tributarias_del_conjunto():
     return salida, cuantos
 
 
-def cota_terreno_del_conjunto():
+def terrenos_del_conjunto():
     r"""
-    La cota del terreno del conjunto, para el suelo del visor. Devuelve
-    (cota o None, {cuerpo: cota ya calzada}).
+    El terreno del conjunto, para el suelo del visor. Devuelve
+    (cota o None, {cuerpo: su base ya calzada}, terrenos): 'cota' es el
+    nivel MAS BAJO (info.cota_terreno, el plano base) y 'terrenos' la
+    lista de niveles de info.terrenos (semana05/CONTRATO.md): la base,
+    sin vertices, y cada terraza con su region en planta.
 
     ----------------------------------------------------------------
     DE DONDE SALE
     ----------------------------------------------------------------
-    De info.cota_terreno de data/unity/<cuerpo>.json, el mismo archivo
-    del que ya salen las areas tributarias. La cota la declara cada
-    cuerpo en su perfil ('terreno' de lt2_2024_22.json y de
-    ingenieria_2017_67.json), donde arranca su estructura: el conjunto
-    no decide nada, la copia.
-
-    Se le suma el dz del calce, igual que a las z de los nodos. El dz
-    del LT2 es 0 (en altura manda el LT2) y el de Ingenieria -7.97, asi
-    que su 0.00 local cae justo en el -7.97 del LT2: los dos dicen lo
-    mismo y sin el dz quedaria 7.97 m mas arriba.
+    De info.terrenos de data/unity/<cuerpo>.json, el mismo archivo del
+    que ya salen las areas tributarias. Cada cuerpo arma sus niveles
+    desde su perfil ('terreno' de lt2_2024_22.json y de
+    ingenieria_2017_67.json): el conjunto no decide nada, los copia y los
+    CALZA. Un cuerpo que solo trae info.cota_terreno (un JSON de antes)
+    cuenta como una base sin terrazas.
 
     ----------------------------------------------------------------
-    SI DOS CUERPOS NO CALZAN, NO SE ESCRIBE
+    EL CALCE, EL MISMO DE LOS NODOS
     ----------------------------------------------------------------
-    Los dos cuerpos estan en el mismo terreno, separados por una junta
-    de 5 cm: si al calzarlos declaran cotas distintas, uno de los dos
-    supuestos esta mal (o el dz). Elegir uno en silencio dibujaria un
-    suelo que contradice al otro, asi que se cae con los dos numeros.
+    A cada z se le suma el dz del calce, y cada vertice de una region se
+    gira y se traslada con armar._mover(), la misma funcion con que
+    armar.py mueve los nodos (gira alrededor del origen y despues
+    traslada). Hoy ningun cuerpo gira (giro_grados = 0 en calce.json),
+    pero si uno girara, su terraza giraria con el. El dz del LT2 es 0 y
+    el de Ingenieria -7.97: su base 0.00 cae en el -7.97 del LT2 y su
+    terraza 3.96 en -4.01.
+
+    ----------------------------------------------------------------
+    NIVELES DISTINTOS YA NO SON UN ERROR; DOS BASES SE RESUELVEN
+    ----------------------------------------------------------------
+    Hasta el 18-09 esta funcion (entonces cota_terreno_del_conjunto) se
+    caia si los cuerpos declaraban cotas distintas: con un solo plano,
+    dos cotas eran una contradiccion. Con el terreno en niveles no lo
+    son: las terrazas de cada cuerpo se juntan en la lista, cada una con
+    el nombre de su cuerpo delante. Lo unico que tiene que ser UNO es la
+    base (el plano que llega al horizonte): si las bases calzadas
+    difieren mas de 0.01 m, la mas baja es la del conjunto y la otra
+    pasa a ser una terraza sobre la planta de su cuerpo (la caja de sus
+    nodos, calzada), y se dice. Hoy las dos dan -7.97 y no pasa.
     """
     with io.open(CALCE, encoding='utf-8') as f:
         calce = json.load(f)
 
-    por_cuerpo = {}
+    cuerpos = {}
     for nombre, cfg in calce['edificios'].items():
         ruta = rutas.unity(cfg.get('archivo', nombre))
         if not os.path.isfile(ruta):
             continue
         with io.open(ruta, encoding='utf-8') as f:
-            z = (json.load(f).get('info') or {}).get('cota_terreno')
-        if z is None:
-            continue
-        por_cuerpo[nombre] = round(float(z) + float(cfg.get('dz', 0.0)), 4)
+            vista = json.load(f)
+        info = vista.get('info') or {}
+        propios = info.get('terrenos')
+        if propios is None:
+            if info.get('cota_terreno') is None:
+                continue
+            propios = [{'nombre': 'base', 'z': info['cota_terreno'],
+                        'vertices': []}]
+        dx, dy, dz = (float(cfg.get(k, 0.0)) for k in ('dx', 'dy', 'dz'))
+        g = math.radians(float(cfg.get('giro_grados', 0.0)))
+        cos_g, sin_g = math.cos(g), math.sin(g)
 
-    if not por_cuerpo:
-        return None, por_cuerpo
-    cotas = sorted(set(por_cuerpo.values()))
-    # 0.01 m: la misma tolerancia de cota del visor
-    # (AjustesVista.TOLERANCIA_COTA); las cotas traen 2 decimales.
-    if cotas[-1] - cotas[0] > 0.01:
-        raise SystemExit(
-            '  Los cuerpos declaran terrenos distintos una vez calzados: %s.\n'
-            '  Revisar el "terreno" del perfil de cada uno y el dz de %s.'
-            % (', '.join('%s %+.2f' % kv for kv in sorted(por_cuerpo.items())),
-               os.path.relpath(CALCE, rutas.RAIZ)))
-    return cotas[0], por_cuerpo
+        def mover(x, y):
+            x, y = armar._mover(float(x), float(y), dx, dy, cos_g, sin_g)
+            return {'x': round(x, 4), 'y': round(y, 4)}
+
+        niveles = [{'nombre': t['nombre'],
+                    'z': round(float(t['z']) + dz, 4),
+                    'vertices': [mover(v['x'], v['y'])
+                                 for v in t.get('vertices') or []]}
+                   for t in propios]
+        bases = [t['z'] for t in niveles if not t['vertices']]
+        if not bases:
+            raise SystemExit('  %s: info.terrenos no trae la base (un nivel '
+                             'sin vertices)' % nombre)
+        xs = [float(n['x']) for n in vista['nodos']]
+        ys = [float(n['y']) for n in vista['nodos']]
+        planta = [mover(x, y) for x, y in ((min(xs), min(ys)), (max(xs), min(ys)),
+                                           (max(xs), max(ys)), (min(xs), max(ys)))]
+        cuerpos[nombre] = (min(bases), niveles, planta)
+
+    if not cuerpos:
+        return None, {}, None
+    bases = {nombre: c[0] for nombre, c in cuerpos.items()}
+    cota = min(bases.values())
+    terrenos = [{'nombre': 'base', 'z': cota, 'vertices': []}]
+    for nombre, (base, niveles, planta) in sorted(cuerpos.items()):
+        # 0.01 m: la misma tolerancia de cota del visor
+        # (AjustesVista.TOLERANCIA_COTA); las cotas traen 2 decimales.
+        if base - cota > 0.01:
+            print('  AVISO: la base de %s (%+.2f m) queda %.2f m sobre la del '
+                  'conjunto (%+.2f m): se dibuja como terraza sobre la planta '
+                  'de %s' % (nombre, base, base - cota, cota, nombre))
+            terrenos.append({'nombre': '%s: base propia' % nombre, 'z': base,
+                             'vertices': planta})
+        terrenos += [dict(t, nombre='%s: %s' % (nombre, t['nombre']))
+                     for t in niveles if t['vertices']]
+    return cota, bases, terrenos
 
 
 def main(caso=CASO_POR_DEFECTO):
@@ -291,9 +338,9 @@ def main(caso=CASO_POR_DEFECTO):
                  'LIBRE: ningun elemento la cruza, los dos cuerpos se '
                  'resuelven independientes.'),
     })
-    cota, cotas_por_cuerpo = cota_terreno_del_conjunto()
+    cota, cotas_por_cuerpo, terrenos = terrenos_del_conjunto()
     if cota is not None:
-        completo['info']['cota_terreno'] = cota
+        completo['info']['cota_terreno'], completo['info']['terrenos'] = cota, terrenos
 
     eq = res.get('equilibrio', {})
     uz = min((n.get('uz', 0.0) for n in completo['nodos']), default=0.0)
@@ -325,9 +372,12 @@ def main(caso=CASO_POR_DEFECTO):
         print('  AVISO: ningun cuerpo declara cota de terreno: el visor '
               'pondra el suelo en el apoyo mas bajo')
     else:
-        print('  cota del terreno %+.2f m (declarada, ya calzada, por: %s)'
+        print('  base del terreno %+.2f m (declarada, ya calzada, por: %s)'
               % (cota, ', '.join('%s %+.2f' % kv
                                  for kv in sorted(cotas_por_cuerpo.items()))))
+        for t in terrenos[1:]:
+            print('  terraza "%s" en %+.2f m (%d vertices, ya calzados)'
+                  % (t['nombre'], t['z'], len(t['vertices'])))
     print('  UZ maximo: %.3f mm' % (uz * 1000))
     print('  -> %s  (%.2f MB)'
           % (os.path.relpath(salida, rutas.RAIZ), os.path.getsize(salida) / 1e6))

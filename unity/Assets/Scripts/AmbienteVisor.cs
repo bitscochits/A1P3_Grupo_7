@@ -45,13 +45,13 @@
     hueco lleva paredes de tierra y un fondo, de una sola cara: desde
     afuera se ve la pared del frente del hoyo (detras del edificio) y la
     de adelante no tapa nada; desde abajo el suelo desaparece.
-    Con la cota en el arranque NO HAY NADA bajo ella, asi que hoy los
-    tres modelos salen sin hueco: HuecoDelSuelo.Calcular() sin estampas
-    devuelve un solo cuadro de suelo y ConstruirMalla no hace paredes ni
-    fondo (yF == yS). El hueco no se borro a proposito: es el camino que
-    hace falta el dia que un cuerpo tenga un subterraneo bajo la cota o
-    que se dibuje la fundacion escalonada de Ingenieria (dos N.R., -7.97
-    y -4.01), y se enciende solo con el dato.
+    Con la cota en el arranque NO HAY NADA bajo ella, asi que hoy la
+    BASE sale sin hueco en los tres modelos (un solo cuadro de suelo).
+  - TERRAZAS (AmbienteVisor.Terrazas.cs): cada nivel de info.terrenos
+    sobre la base es una losa de pasto a su z con muros de tierra hasta
+    la base; lo que baja bajo su cara se le recorta con la misma
+    geometria del hueco (HuecoDelSuelo.CalcularTerraza). Hoy: la de
+    Ingenieria, 3.96 local = -4.01 en el conjunto (segundo N.R.).
 
   ----------------------------------------------------------------
   QUE NO HACE, A PROPOSITO
@@ -296,8 +296,8 @@ public partial class AmbienteVisor : MonoBehaviour
     {
         aplicadoMapa = MapaDCActivo();
         if (suelo == null) return;
-        MeshRenderer mr = suelo.GetComponent<MeshRenderer>();
-        if (mr != null)
+        // El suelo y sus hijos, las terrazas (AmbienteVisor.Terrazas.cs), con los mismos materiales.
+        foreach (MeshRenderer mr in suelo.GetComponentsInChildren<MeshRenderer>(true))
             mr.sharedMaterials = AjustesVista.realista && !aplicadoMapa ? MaterialesSueloRealista() : MaterialesSueloTecnico();
     }
 
@@ -313,7 +313,7 @@ public partial class AmbienteVisor : MonoBehaviour
             MeshFilter mf = suelo.GetComponent<MeshFilter>();
             if (mf != null && mf.sharedMesh != null) Destroy(mf.sharedMesh);
         }
-        BorrarLosas();
+        BorrarLosas(); BorrarTerrazas();     // y la malla de las terrazas (AmbienteVisor.Terrazas.cs)
     }
 
     // ============================================================
@@ -352,7 +352,7 @@ public partial class AmbienteVisor : MonoBehaviour
     /// mapa D/C y la vista realista dependen de el).
     void ActualizarSueloSinCortar()
     {
-        try { ActualizarSuelo(); }
+        try { ActualizarSuelo(); ActualizarTerrazas(); }     // las terrazas: AmbienteVisor.Terrazas.cs
         catch (Exception ex) { Debug.LogException(ex); }
     }
 
@@ -1263,14 +1263,14 @@ public partial class AmbienteVisor : MonoBehaviour
 /// DONDE va el hueco del suelo: geometria pura en planta (x, y OpenSees,
 /// metros), sin tipos de Unity, para poder probarla fuera del editor.
 ///
-/// HOY NO SE USA, Y ESTA BIEN: desde la Semana 5 la cota va donde
-/// arranca la estructura, asi que no hay nada bajo ella y Calcular()
-/// devuelve por su primera rama un solo cuadro de suelo (sin hueco, sin
-/// paredes, sin fondo). Se conserva porque el dato puede volver a pedir
-/// un hueco: un cuerpo con subterraneo bajo la cota, o la fundacion
-/// escalonada de Ingenieria (dos N.R., -7.97 y -4.01). Todos los numeros
-/// de abajo son de cuando el LT2 declaraba -4.01, y siguen siendo la
-/// medida con la que se eligieron las constantes.
+/// EN LA BASE HOY NO SE USA: la cota va donde arranca la estructura, no
+/// hay nada bajo ella y Calcular() devuelve por su primera rama un solo
+/// cuadro de suelo. LO USAN LAS TERRAZAS (desde el 18-09):
+/// CalcularTerraza(), al final, recorta la de Ingenieria (3.96 local =
+/// -4.01, el segundo N.R.) alrededor de lo que baja a la base, con estas
+/// mismas estampas, cierre, techo y apoyos. Todos los numeros de abajo
+/// son de cuando el LT2 declaraba -4.01 (el mismo nivel que la terraza),
+/// y siguen siendo la medida con la que se eligieron las constantes.
 ///
 /// EL PROBLEMA
 /// Bajo la cota hay pocos puntos sueltos: en el LT2, 16 apoyos y 8 muros
@@ -1540,6 +1540,157 @@ public static class HuecoDelSuelo
             visto[k] = true;
             pila.Push(k);
         }
+    }
+
+    // ------------------------------------------------------------
+    // LA TERRAZA (la dibuja AmbienteVisor.Terrazas.cs). Va al final de
+    // la clase a proposito: los documentos citan lineas (CLAUDE.md 6).
+    // ------------------------------------------------------------
+
+    /// 0.35 m del eje en planta de lo que baja a la base. Ahi la terraza
+    /// se recorta SIEMPRE, para que la pieza no quede enterrada (media
+    /// columna de 0.50 son 0.25 m; medio muro de 0.30, 0.15). Y un apoyo de
+    /// la terraza a menos de esto de una estampa esta SOBRE esa pieza, no
+    /// sobre tierra: no reclama tierra alrededor. Medido en Ingenieria: los
+    /// 6 apoyos del recinto de muros del suroeste estan a 0.00-0.25 m del
+    /// eje de un muro que baja a la base (encima de el); el que sigue,
+    /// (23.02, 64.10), a 0.60 m del muro y = 64.70, y ese queda en tierra.
+    public const double HOLGURA_TERRAZA = 0.35;
+
+    /// La terraza de un nivel sobre la red: 'suelo' = la muestra cae en la
+    /// region (algun poligono de 'region', x, y OpenSees) y ahi no se
+    /// recorta. Con las mismas entradas que Calcular() --estampas: lo que
+    /// queda bajo la cara de la terraza; techo: lo que esta en su cara;
+    /// apoyos: los apoyos en su cara-- se recorta:
+    ///   - a HOLGURA_TERRAZA de una estampa, siempre;
+    ///   - a MARGEN de una estampa, salvo donde un apoyo de la terraza esta
+    ///     mas cerca que la estampa (ese punto es del apoyo, que queda con
+    ///     tierra debajo);
+    ///   - lo rellenado del cierre, igual que en Calcular(): un recinto de
+    ///     muros que baja a la base se ve entero, como un pozo.
+    /// Dos diferencias con Calcular(), por lo mismo: el apoyo que no cuenta
+    /// es el que esta SOBRE la estructura (HOLGURA_TERRAZA, medido exacto
+    /// sobre el segmento y no sobre la red), no el que esta a menos de
+    /// APOYO_SOBRE_MURO (1.5 m); y el anillo de MARGEN cede al apoyo mas
+    /// cercano. Con las reglas de Calcular(), el apoyo (23.02, 64.10) de
+    /// Ingenieria quedaba colgando sobre el hueco a 0.45 m de la cara de un
+    /// muro, y la esquina entre los muros x = 18.22 e y = 64.70 se cavaba.
+    public static Resultado CalcularTerraza(List<List<double[]>> region, List<double[]> estampas,
+                                            List<double[]> techo, List<double[]> apoyos, double celda)
+    {
+        Resultado r = new Resultado { celda = celda };
+        estampas = estampas ?? new List<double[]>();
+        techo = techo ?? new List<double[]>();
+        apoyos = apoyos ?? new List<double[]>();
+
+        // La red: la region con dos celdas de holgura (su borde queda
+        // adentro de la red y lleva pared), y lo demas con la del cierre.
+        double x0 = double.MaxValue, y0 = double.MaxValue, x1 = double.MinValue, y1 = double.MinValue;
+        foreach (List<double[]> poli in region)
+            foreach (double[] p in poli)
+            {
+                x0 = Math.Min(x0, p[0] - 2.0 * celda); x1 = Math.Max(x1, p[0] + 2.0 * celda);
+                y0 = Math.Min(y0, p[1] - 2.0 * celda); y1 = Math.Max(y1, p[1] + 2.0 * celda);
+            }
+        if (x0 > x1)
+        {
+            r.nx = 1; r.ny = 1; r.suelo = new bool[4];
+            return r;
+        }
+        Extender(estampas, R_CIERRE + MARGEN + 3.0, ref x0, ref y0, ref x1, ref y1);
+        Extender(techo, R_TECHO + MARGEN + 3.0, ref x0, ref y0, ref x1, ref y1);
+        r.x0 = x0; r.y0 = y0;
+        r.nx = (int)Math.Ceiling((x1 - x0) / celda);
+        r.ny = (int)Math.Ceiling((y1 - y0) / celda);
+        int w = r.nx + 1, h = r.ny + 1;
+        r.suelo = new bool[w * h];
+
+        double[] dEstampa = null, dFuera = null, dFueraTecho = null, dApoyo = null;
+        if (estampas.Count > 0)
+        {
+            dEstampa = Distancias(Estampar(estampas, r, w, h), w, h, celda);
+            dFuera = DistanciaAFueraDelCierre(dEstampa, R_CIERRE, w, h, celda);
+            if (techo.Count > 0)
+                dFueraTecho = DistanciaAFueraDelCierre(
+                    Distancias(Estampar(techo, r, w, h), w, h, celda), R_TECHO, w, h, celda);
+        }
+
+        bool[] marcaApoyo = new bool[w * h];
+        foreach (double[] p in apoyos)
+        {
+            if (!EnRegion(p[0], p[1], region)) continue;         // de otra terraza
+            if (DistanciaASegmentos(p[0], p[1], estampas) < HOLGURA_TERRAZA)
+            {
+                r.apoyosSobreSubterraneo++;                     // sobre la estructura
+                continue;
+            }
+            int i = (int)Math.Round((p[0] - r.x0) / celda);
+            int j = (int)Math.Round((p[1] - r.y0) / celda);
+            if (i < 0 || i >= w || j < 0 || j >= h) continue;
+            marcaApoyo[j * w + i] = true;
+            r.apoyosUsados++;                                   // sobre tierra
+        }
+        if (r.apoyosUsados > 0) dApoyo = Distancias(marcaApoyo, w, h, celda);
+
+        int huecos = 0;
+        for (int j = 0; j < h; j++)
+        {
+            for (int i = 0; i < w; i++)
+            {
+                if (!EnRegion(r.x0 + i * celda, r.y0 + j * celda, region)) continue;
+                int k = j * w + i;
+                bool hueco = false;
+                if (dEstampa != null)
+                {
+                    double dA = dApoyo != null ? dApoyo[k] : double.MaxValue;
+                    bool rellenado = dFuera[k] > R_CIERRE - MARGEN
+                                     && (dFueraTecho == null || dFueraTecho[k] > R_TECHO - MARGEN)
+                                     && dA >= dEstampa[k] + VENTAJA_TERRENO;
+                    hueco = dEstampa[k] <= HOLGURA_TERRAZA
+                            || (dEstampa[k] <= MARGEN && dEstampa[k] < dA)
+                            || rellenado;
+                }
+                r.suelo[k] = !hueco;
+                if (hueco) huecos++;
+            }
+        }
+        r.areaHueco = huecos * celda * celda;
+        return r;
+    }
+
+    /// Si (x, y) cae en algun poligono (borde incluido, a 1e-6 m).
+    public static bool EnRegion(double x, double y, List<List<double[]>> region)
+    {
+        foreach (List<double[]> poli in region)
+        {
+            bool dentro = false;
+            for (int k = 0, n = poli.Count; k < n; k++)
+            {
+                double[] a = poli[(k + n - 1) % n], b = poli[k];
+                double lx = b[0] - a[0], ly = b[1] - a[1];
+                if (Math.Abs(lx * (y - a[1]) - ly * (x - a[0])) <= 1e-6 * Math.Max(Math.Sqrt(lx * lx + ly * ly), 1.0)
+                    && x >= Math.Min(a[0], b[0]) - 1e-6 && x <= Math.Max(a[0], b[0]) + 1e-6
+                    && y >= Math.Min(a[1], b[1]) - 1e-6 && y <= Math.Max(a[1], b[1]) + 1e-6)
+                    return true;
+                if ((a[1] > y) != (b[1] > y) && x < a[0] + (y - a[1]) * lx / ly) dentro = !dentro;
+            }
+            if (dentro) return true;
+        }
+        return false;
+    }
+
+    /// Distancia (m) de (x, y) al segmento {x1, y1, x2, y2} mas cercano.
+    static double DistanciaASegmentos(double x, double y, List<double[]> segs)
+    {
+        double mejor = double.MaxValue;
+        foreach (double[] s in segs)
+        {
+            double lx = s[2] - s[0], ly = s[3] - s[1], l2 = lx * lx + ly * ly;
+            double u = l2 < 1e-12 ? 0.0 : Math.Max(0.0, Math.Min(1.0, ((x - s[0]) * lx + (y - s[1]) * ly) / l2));
+            double dx = x - s[0] - u * lx, dy = y - s[1] - u * ly;
+            mejor = Math.Min(mejor, Math.Sqrt(dx * dx + dy * dy));
+        }
+        return mejor;
     }
 
     // ---- FIN GEOMETRIA PURA ----

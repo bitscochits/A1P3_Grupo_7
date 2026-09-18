@@ -851,7 +851,7 @@ def main(salida=None):
         print('  AVISO: el perfil no declara "terreno": el visor pondra el '
               'suelo en el apoyo mas bajo')
     else:
-        modelo['info']['cota_terreno'] = cota
+        modelo['info']['cota_terreno'], modelo['info']['terrenos'] = cota, terrenos(cota)
         _ap = [n['z'] for n in modelo['nodos']
                if not n.get('auxiliar')
                and (n.get('fijo') or any(n.get('restricciones') or []))]
@@ -870,6 +870,36 @@ def main(salida=None):
     print('  UZ maximo: %.3f mm' % res['uz_max_mm'])
     print('  %s  (%.1f MB)' % (salida, os.path.getsize(salida) / 1e6))
     return 0
+
+
+# ============================================================
+# Va al final del archivo a proposito: los documentos citan lineas de
+# arriba (CLAUDE.md, seccion 6, "Los documentos citan archivo:linea").
+def terrenos(cota, ruta=PERFIL):
+    r"""
+    Los niveles del terreno para info.terrenos (el contrato esta en
+    semana05/CONTRATO.md): una lista de {nombre, z, vertices}.
+
+    El LT2 tiene UN nivel: la base, en la cota del perfil (-7.97, donde
+    arrancan sus 16 apoyos), sin vertices porque el plano base no tiene
+    borde. Se emite igual que en los otros dos JSON para que el visor y
+    el conjunto lean todos los edificios del mismo modo.
+
+    El terreno escalonado es del cuerpo vecino: Ingenieria declara una
+    terraza en 'terreno.terrazas' de su perfil y la arma su exportador
+    (edificios/ingenieria/export_unity.py, terrenos()), con la misma
+    definicion con que su modelo crea los apoyos. Este perfil declara
+    'terrazas': []. Si algun dia trae una, se cae aca en vez de ignorarla
+    en silencio: el LT2 todavia no sabe de donde sacaria su region.
+    """
+    with open(ruta, encoding='utf-8') as f:
+        terrazas = (json.load(f).get('terreno') or {}).get('terrazas') or []
+    if terrazas:
+        raise SystemExit(
+            '  *** el perfil del LT2 declara %d terraza(s) y este exportador '
+            'no sabe armar su region (ver terrenos())' % len(terrazas))
+    print('  terreno: un solo nivel, la base en %+.2f m' % cota)
+    return [{'nombre': 'base', 'z': cota, 'vertices': []}]
 
 
 if __name__ == '__main__':
