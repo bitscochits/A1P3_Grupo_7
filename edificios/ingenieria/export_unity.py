@@ -45,6 +45,37 @@ import contrato
 import rutas                             # noqa: E402
 
 RAIZ = rutas.RAIZ
+PERFIL = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                      'perfiles', 'ingenieria_2017_67.json')
+
+
+def cota_terreno(ruta=PERFIL):
+    r"""
+    La cota z (m, OpenSees, DATUM LOCAL de este cuerpo) donde el visor
+    dibuja el suelo. Sale del perfil, igual que en el LT2
+    (edificios/lt2/exportar_unity.py:cota_terreno): es un dato del
+    proyecto y no se deduce aca, para que se pueda cambiar sin leer
+    Python.
+
+    Este cuerpo arranca en 0.00 (sus 29 apoyos mas bajos, de los que
+    salen 10 columnas) y el perfil declara justo esa cota. Antes no la
+    declaraba y AmbienteVisor.cs caia a su respaldo de dibujo -- el
+    apoyo mas bajo -- que daba el mismo numero con un aviso en la
+    consola: declararla no mueve el suelo, lo vuelve un dato.
+
+    En el conjunto se le suma el dz del calce (-7.97) y calza con la
+    cota del LT2 (ver cota_terreno_del_conjunto()).
+
+    Devuelve None si el perfil no existe o no la declara: entonces el
+    JSON sale sin la clave y el visor vuelve al respaldo.
+    """
+    if not os.path.isfile(ruta):
+        return None
+    with open(ruta, encoding='utf-8') as f:
+        terreno = json.load(f).get('terreno') or {}
+    if terreno.get('z') is None:
+        return None
+    return round(float(terreno['z']), 4)
 
 
 def construir_json(desplazamientos=None):
@@ -533,15 +564,23 @@ def construir_json(desplazamientos=None):
          "cargas_distribuidas": [], "cargas_nodales": sismo("fy")},
     ]
 
+    # El suelo del visor. Va en info y no en el contrato del solver: es
+    # dibujo (ver cota_terreno()). Sin la clave, AmbienteVisor.cs lo pone
+    # en el apoyo mas bajo con un aviso.
+    info = {
+        "descripcion": "Edificio de Ingenieria UAndes - modelo global v2",
+        "unidades": "m, kN, kPa",
+        "caso_precalculado": "G",
+        "nota": (f"{len(nodos)} nodos, {len(elementos)} elementos, "
+                 f"{len(diafragmas)} diafragmas. Area de piso "
+                 f"{max(A_por_nivel.values()):.1f} m2."),
+    }
+    cota = cota_terreno()
+    if cota is not None:
+        info["cota_terreno"] = cota
+
     return {
-        "info": {
-            "descripcion": "Edificio de Ingenieria UAndes - modelo global v2",
-            "unidades": "m, kN, kPa",
-            "caso_precalculado": "G",
-            "nota": (f"{len(nodos)} nodos, {len(elementos)} elementos, "
-                     f"{len(diafragmas)} diafragmas. Area de piso "
-                     f"{max(A_por_nivel.values()):.1f} m2."),
-        },
+        "info": info,
         "material": {"fpc_MPa": ed.fpc, "poisson": 0.2, "gamma": ed.gamma},
         "secciones": secciones,
         "nodos": nodos,
@@ -605,6 +644,19 @@ def escribir(modelo):
     print(f"  poligonos  : {len(modelo['areas_tributarias'])}")
     print(f"  muros      : {sum(1 for e in modelo['elementos'] if e['tipo']=='muro')}")
     print(f"  casos      : {[c['nombre'] for c in modelo['casos_de_carga']]}")
+
+    # El suelo del visor: se imprime para que la cota se vea en la
+    # corrida y no solo dentro del JSON (ver cota_terreno()).
+    _cota = (modelo.get('info') or {}).get('cota_terreno')
+    if _cota is None:
+        print("  AVISO: el perfil no declara 'terreno': el visor pondra "
+              "el suelo en el apoyo mas bajo")
+    else:
+        _apoyos = [n['z'] for n in modelo['nodos']
+                   if not n.get('auxiliar')
+                   and (n.get('fijo') or any(n.get('restricciones') or []))]
+        print(f"  terreno    : {_cota:+.2f} m (del perfil; apoyo mas bajo "
+              f"{min(_apoyos):+.2f} m)")
 
     # El JSON tiene que ser enviable al servidor TAL CUAL. Se verifica
     # aca para no descubrirlo recien dentro de Unity.

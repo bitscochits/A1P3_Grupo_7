@@ -207,14 +207,55 @@ check(any(n['fijo'] for n in datos['nodos']),
 check(len(datos['diafragmas']) > 0, "hay diafragmas exportados")
 check(len(datos['areas_tributarias']) > 0, "hay areas tributarias exportadas")
 
-# El suelo del visor (AmbienteVisor) va en info.cota_terreno. Si la clave
-# falta, JsonUtility deja -9999 sin avisar y el visor pone el suelo en el
-# apoyo mas bajo: un subterraneo quedaria sobre el terreno. No todo
-# edificio la declara (su perfil decide), asi que su ausencia se dice.
+# El suelo del visor (AmbienteVisor) va en info.cota_terreno, y el suelo
+# va DONDE ARRANCA LA ESTRUCTURA: la z de los apoyos mas bajos, de donde
+# salen las primeras columnas. No se compara con un numero fijo (cada
+# cuerpo tiene su datum), sino con lo que dicen los nodos del JSON.
 if 'cota_terreno' in datos['info']:
     _cota = datos['info']['cota_terreno']
-    check(isinstance(_cota, (int, float)) and _cota > -9000,
-          "info.cota_terreno es una cota real (%s m): ahi va el suelo" % _cota)
+    _es_apoyo = (lambda n: not n.get('auxiliar')
+                 and (n.get('fijo') or any(n.get('restricciones') or [])))
+    _zs = [n['z'] for n in datos['nodos'] if _es_apoyo(n)]
+    _z0 = min(_zs) if _zs else min(n['z'] for n in datos['nodos'])
+    _n_ap = sum(1 for z in _zs if abs(z - _z0) <= 0.01)
+    # Cuantas columnas arrancan ahi, que es como se mira en la foto.
+    _porz = {n['id']: n['z'] for n in datos['nodos']}
+    _cols = sum(1 for e in datos['elementos']
+                if e.get('tipo') == 'columna'
+                and abs(min(_porz.get(e['n1'], 1e9),
+                            _porz.get(e['n2'], 1e9)) - _z0) <= 0.01)
+    # 0.01 m = AjustesVista.TOLERANCIA_COTA, la del visor; las cotas de
+    # los perfiles y las z de los nodos traen 2 decimales.
+    check(isinstance(_cota, (int, float)) and _cota > -9000
+          and abs(_cota - _z0) <= 0.01,
+          "info.cota_terreno (%s m) esta donde arranca la estructura" % _cota,
+          "%d apoyo(s) y %d columna(s) arrancan en z = %+.2f m"
+          % (_n_ap, _cols, _z0))
+    # LO QUE NO QUEDA APOYADO EN ESE PLANO. El suelo del visor es UN
+    # plano horizontal, asi que tener la cota en el arranque NO
+    # garantiza que todos los apoyos caigan sobre el: los 39 "apoyo en
+    # terreno" [0 0 1 1 1 0] de Ingenieria estan 3.96 m mas arriba,
+    # porque su planta de fundaciones rotula dos N.R. (-7.97 y -4.01:
+    # fundacion escalonada, benchmark_3d.py:280). Se dice aca para que
+    # el OK de arriba no se lea como "todos los apoyos estan en el
+    # suelo". Es PEND y no FALLA: el dato esta bien, falta el suelo en
+    # dos cotas en unity/ (AmbienteVisor).
+    _arriba = [z for z in _zs if z - _z0 > 0.01]
+    if _arriba:
+        print("  [PEND] %d de %d apoyo(s) quedan SOBRE el suelo dibujado "
+              "(a %s m de la cota): el terreno real esta escalonado y el "
+              "visor dibuja un plano"
+              % (len(_arriba), len(_zs),
+                 ', '.join('%.2f' % a for a in
+                           sorted({round(z - _z0, 2) for z in _arriba}))))
+    # Nada bajo la cota = el suelo no tapa nada y HuecoDelSuelo.Calcular()
+    # entra por su rama sin estampas (un cuadro de suelo, sin paredes ni
+    # fondo). Si algun dia hay estructura mas abajo, el hueco la destapa:
+    # por eso se informa y no se exige.
+    _bajo = sum(1 for n in datos['nodos'] if n['z'] < _cota - 0.01)
+    print("  [--  ] %d nodo(s) bajo la cota: %s"
+          % (_bajo, "el suelo no tapa nada y el visor no cava" if not _bajo
+             else "AmbienteVisor cava el hueco para que se vean"))
 else:
     print("  [--  ] info.cota_terreno no viene: el visor pone el suelo en "
           "el apoyo mas bajo, con aviso en la consola")

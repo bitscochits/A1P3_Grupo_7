@@ -27,21 +27,31 @@
   ----------------------------------------------------------------
   EL SUELO
   ----------------------------------------------------------------
-  - Va en info.cota_terreno, que es un SUPUESTO declarado en el perfil
-    del edificio (edificios/lt2/perfiles/lt2_2024_22.json, 'terreno')
-    y viaja en el JSON. Unity no la adivina: cada JSON tiene su datum.
-  - Sin cota (-9999, p. ej. Ingenieria, que no la declara): el suelo va
-    en el apoyo mas bajo, con un aviso en la consola. Es un respaldo de
-    dibujo, no un dato.
+  - Va en info.cota_terreno, declarada en el perfil del edificio
+    (edificios/lt2/perfiles/lt2_2024_22.json y
+    edificios/ingenieria/perfiles/ingenieria_2017_67.json, 'terreno') y
+    viaja en el JSON. Unity no la adivina: cada JSON tiene su datum.
+  - Desde la Semana 5 los dos cuerpos la ponen DONDE ARRANCA LA
+    ESTRUCTURA: el LT2 en -7.97 (16 apoyos, 8 columnas y 8 muros) e
+    Ingenieria en su 0.00 local (29 apoyos, 10 columnas), que con el dz
+    del calce es el mismo -7.97. Antes el LT2 declaraba -4.01.
+  - Sin cota (-9999): el suelo va en el apoyo mas bajo, con un aviso en
+    la consola. Es un respaldo de dibujo, no un dato.
   - SIN collider: VisorQA y EditorEstructura seleccionan con un
     Physics.Raycast que se queda con el PRIMER collider. Un suelo con
     collider se comeria el click a todo lo que esta bajo la cota.
-  - Con HUECO donde hay estructura bajo la cota (el subterraneo): si no,
-    un plano opaco en -4.01 taparia los apoyos de -7.97, que es justo lo
-    que responde "como esta apoyado". El hueco lleva paredes de tierra y
-    un fondo, de una sola cara: desde afuera se ve la pared del frente
-    del hoyo (detras del edificio) y la de adelante no tapa nada; desde
-    abajo el suelo desaparece.
+  - Con HUECO donde hay estructura bajo la cota: un plano opaco taparia
+    los apoyos, que es justo lo que responde "como esta apoyado". El
+    hueco lleva paredes de tierra y un fondo, de una sola cara: desde
+    afuera se ve la pared del frente del hoyo (detras del edificio) y la
+    de adelante no tapa nada; desde abajo el suelo desaparece.
+    Con la cota en el arranque NO HAY NADA bajo ella, asi que hoy los
+    tres modelos salen sin hueco: HuecoDelSuelo.Calcular() sin estampas
+    devuelve un solo cuadro de suelo y ConstruirMalla no hace paredes ni
+    fondo (yF == yS). El hueco no se borro a proposito: es el camino que
+    hace falta el dia que un cuerpo tenga un subterraneo bajo la cota o
+    que se dibuje la fundacion escalonada de Ingenieria (dos N.R., -7.97
+    y -4.01), y se enciende solo con el dato.
 
   ----------------------------------------------------------------
   QUE NO HACE, A PROPOSITO
@@ -113,7 +123,18 @@ public partial class AmbienteVisor : MonoBehaviour
     // Colores (sRGB). Los de hormigon quedan claros: el hormigon a la
     // vista refleja bastante, y las barras finas se leen mejor claras
     // sobre el pasto.
-    static readonly Color C_COLUMNA = new Color(0.74f, 0.73f, 0.70f);
+    //
+    // La COLUMNA va con un tono salmon suave (pedido de la Semana 5): se
+    // distingue de la viga y del muro, que siguen en gris hormigon, sin
+    // dejar de leerse como hormigon. Sale de C_VIGA subiendo el rojo y
+    // bajando el azul, con la misma luminancia (0.72 contra 0.73 de
+    // antes: la pieza no se aclara ni se oscurece, solo se entibia) y con
+    // saturacion 0.28, la mitad del salmon de libro (#FA8072, 0.54). La
+    // textura de hormigon la multiplica, asi que en pantalla llega mas
+    // apagado todavia. Las LOSAS no se tocan: su color es C_LOSA, en
+    // AmbienteVisor.Losas.cs. La vista tecnica no cambia: ahi cada
+    // renderer vuelve a su material registrado.
+    static readonly Color C_COLUMNA = new Color(0.87f, 0.69f, 0.63f);
     static readonly Color C_VIGA = new Color(0.70f, 0.69f, 0.66f);
     static readonly Color C_MURO = new Color(0.78f, 0.77f, 0.73f);
     static readonly Color C_NODO = new Color(0.58f, 0.58f, 0.56f);
@@ -1241,6 +1262,15 @@ public partial class AmbienteVisor : MonoBehaviour
 /// <summary>
 /// DONDE va el hueco del suelo: geometria pura en planta (x, y OpenSees,
 /// metros), sin tipos de Unity, para poder probarla fuera del editor.
+///
+/// HOY NO SE USA, Y ESTA BIEN: desde la Semana 5 la cota va donde
+/// arranca la estructura, asi que no hay nada bajo ella y Calcular()
+/// devuelve por su primera rama un solo cuadro de suelo (sin hueco, sin
+/// paredes, sin fondo). Se conserva porque el dato puede volver a pedir
+/// un hueco: un cuerpo con subterraneo bajo la cota, o la fundacion
+/// escalonada de Ingenieria (dos N.R., -7.97 y -4.01). Todos los numeros
+/// de abajo son de cuando el LT2 declaraba -4.01, y siguen siendo la
+/// medida con la que se eligieron las constantes.
 ///
 /// EL PROBLEMA
 /// Bajo la cota hay pocos puntos sueltos: en el LT2, 16 apoyos y 8 muros

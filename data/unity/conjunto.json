@@ -8,7 +8,7 @@
   ],
   "caso_precalculado": "G",
   "nota": "Los dos cuerpos del edificio, calzados por edificios/conjunto/calce.json. La junta de dilatacion es LIBRE: ningun elemento la cruza, los dos cuerpos se resuelven independientes.",
-  "cota_terreno": -4.01
+  "cota_terreno": -7.97
  },
  "material": {
   "fpc_MPa": 28.0,

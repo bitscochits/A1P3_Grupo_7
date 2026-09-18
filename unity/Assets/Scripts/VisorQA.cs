@@ -2004,7 +2004,7 @@ public class VisorQA : MonoBehaviour
             GUILayout.EndHorizontal();
             GUILayout.Label(AjustesVista.realista
                 ? "Realista: columnas y vigas con su seccion b x h, losas por piso, hormigon y acero con "
-                  + "textura. Los diagramas y el mapa D/C se leen igual."
+                  + "textura (la columna en salmon). Los diagramas y el mapa D/C se leen igual."
                 : "Tecnica: un color por tipo (columna azul, viga naranja, muro gris, acero rojo).",
                 PanelUI.Tenue);
 
@@ -2025,7 +2025,7 @@ public class VisorQA : MonoBehaviour
                 Diferir(() => { AjustesVista.suelo = suelo; EventosVisor.AvisarVistaCambio(); });
             InfoModelo info = visor.Modelo.info;
             GUILayout.Label(info != null && info.cota_terreno > -9000f
-                ? $"Terreno en la cota {Cota(info.cota_terreno)} m (supuesto declarado en el perfil del edificio)."
+                ? $"Terreno en la cota {Cota(info.cota_terreno)} m: donde arranca la estructura, declarado en el perfil del edificio."
                 : "Este JSON no trae cota de terreno: el suelo va en el apoyo mas bajo (respaldo de dibujo, ver consola).",
                 PanelUI.Tenue);
         }

@@ -74,16 +74,17 @@ después "Realista".
 **Qué se ve** (fotos 01 y 02): cabecera `LT2 232 nodos, 378 elementos`,
 `Caso activo S3 1.00 G + 0.50 Q + 1.00 EX`, `Desp. max 19.78 mm` y
 `NO PASA 2/69` en rojo. El edificio aparece con losas por piso, columnas y
-vigas con su sección, y el pasto a la cota −4.01 con la excavación del
-subterráneo. La técnica es la vista de trabajo de siempre.
+vigas con su sección (la columna en salmón), y el pasto a la cota −7.97,
+al pie de las columnas. La técnica es la vista de trabajo de siempre, con
+la columna azul.
 
 **Qué decir:**
 
 > "Es el LT2 desde sus planos: 232 nodos y 378 elementos. Lo que se ve
 > arriba es el caso activo, que manda sobre todo el panel. El suelo está a
-> −4.01, que es un supuesto declarado en el perfil del edificio, y solo
-> dibuja. Las losas también son dibujo: son los polígonos de área
-> tributaria que ya usa la carga."
+> −7.97, que es donde arrancan las columnas: ahí están los 16 apoyos. Va
+> declarado en el perfil del edificio y solo dibuja. Las losas también son
+> dibujo: son los polígonos de área tributaria que ya usa la carga."
 
 ### 1b. ¿Dónde está? (1 min)
 
@@ -427,9 +428,16 @@ comandos `adb` para completarla.
   exacto) y `comparar_unity.py` lo cruza con Python: 486 filas, 0 FALLA.
   Cada tolerancia es la suma de causas medidas (float32, impresión y el
   redondeo del servidor).
-- **¿Por qué −4.01 para el terreno?** Ninguna lámina lo rotula. Es la
-  cota más baja que deja el subterráneo bajo tierra y el piso 1 arriba.
-  Es `provisorio` en el perfil y solo mueve el dibujo.
+- **¿Por qué −7.97 para el terreno?** Ninguna lámina rotula el N.T.N., así
+  que no se supone: se mide en el modelo. En −7.97 están los 16 apoyos del
+  LT2 y de ahí arrancan 8 columnas y 8 muros; bajo esa cota no hay ni un
+  nodo. Va declarado en el perfil y solo mueve el dibujo. En la entrega
+  decía −4.01 (`provisorio`), para leer ese piso como subterráneo: si lo
+  fuera, al modelo le faltaría el empotramiento lateral del terreno ahí
+  (su deriva en EX, 0.00048, es menor que la de los pisos de arriba,
+  0.00107). Pendiente: el terreno tiene dos N.R. (−7.97 y −4.01), y el
+  visor dibuja un solo plano, así que los 39 apoyos en terreno de
+  Ingeniería quedan 3.96 m sobre el suelo.
 - **¿Por qué la hoja Reacciones no se suma entera?** Porque un nodo de
   diafragma reacciona también a su restricción. Sumarlo todo dobla el
   corte basal.

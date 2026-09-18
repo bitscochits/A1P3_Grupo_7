@@ -1,0 +1,52 @@
+{
+  "_que_es": [
+    "SUPUESTOS DE DIBUJO DEL EDIFICIO DE INGENIERIA (cuerpo antiguo, planos",
+    "2017_67). Lo que el plano no dice y el codigo no debe esconder vive aca,",
+    "con su justificacion al lado (CLAUDE.md, seccion 5).",
+    "",
+    "El fierro de los muros de este cuerpo va en perfiles/muros_2017_67.json.",
+    "Este archivo es para lo demas; hoy solo la cota del terreno."
+  ],
+  "unidades": "m, kN, kPa (z de OpenSees, datum LOCAL de este cuerpo)",
+  "terreno": {
+    "z": 0.0,
+    "provisorio": false,
+    "origen": "el arranque de la estructura en el propio modelo: los 29 apoyos mas bajos estan en z = 0.00 y de ahi arrancan 10 columnas.",
+    "_que_es": [
+      "La cota donde el visor de Unity dibuja el suelo (info.cota_terreno de",
+      "data/unity/ingenieria.json, y con el dz del calce la de",
+      "data/unity/conjunto.json). SOLO PARA DIBUJAR: ningun calculo la lee.",
+      "",
+      "Va en el DATUM LOCAL de este cuerpo, que parte en 0.00 y llega a 19.80.",
+      "El calce le suma dz = -7.97 (edificios/conjunto/calce.json), asi que en",
+      "el marco del conjunto esta cota cae en -7.97, la misma que declara el",
+      "LT2: los dos cuerpos dicen lo mismo y cota_terreno_del_conjunto() no",
+      "tiene que elegir."
+    ],
+    "_por_que": [
+      "EL SUELO VA DONDE ARRANCA LA ESTRUCTURA, igual que en el LT2.",
+      "",
+      "  0.00   los 29 apoyos mas bajos del cuerpo ([1 1 1 1 1 1] en la",
+      "         fundacion profunda) y el arranque de 10 columnas. Es la z mas",
+      "         baja de los 326 nodos: bajo esta cota no hay nada.",
+      "  3.96   los otros 39 apoyos, 'apoyo en terreno' [0 0 1 1 1 0], que el",
+      "         modelo pone porque 'al oriente del eje H el terreno esta en",
+      "         -4.01, que es la cota del nivel 1' (benchmark_3d.py:1031).",
+      "",
+      "Hasta el 18-09 este cuerpo NO declaraba cota: AmbienteVisor.cs caia a su",
+      "respaldo de dibujo (el apoyo mas bajo) y daba justo 0.00, con un aviso",
+      "en la consola. Se declara para que sea un dato y no un respaldo, y",
+      "porque el conjunto la necesita declarada en los dos cuerpos.",
+      "MEDIDO: declararla no mueve el suelo ni un milimetro (0.00 = apoyo mas",
+      "bajo); lo unico que cambia es que desaparece el aviso y que",
+      "data/unity/ingenieria.json trae la clave info.cota_terreno.",
+      "",
+      "LO QUE NO CALZA, y queda PENDIENTE: la planta de fundaciones de este",
+      "cuerpo rotula DOS N.R., -7.97 y -4.01 (benchmark_3d.py:280), o sea una",
+      "fundacion escalonada. Con el suelo en 0.00 (= -7.97 del conjunto) los 39",
+      "apoyos en terreno de 3.96 (= -4.01) quedan 3.96 m SOBRE el suelo",
+      "dibujado. El visor usa UN plano horizontal: dibujar las dos cotas es",
+      "trabajo nuevo en unity/."
+    ]
+  }
+}

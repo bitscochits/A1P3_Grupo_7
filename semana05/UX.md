@@ -259,8 +259,8 @@ Antes: `semana04/capturas/04_N_edificio.jpg` y
 
 | | Semana 4 | Semana 5 (Realista) |
 | --- | --- | --- |
-| Suelo | No había: el "piso" era el hemisferio inferior gris del cielo | Pasto procedural hasta el horizonte, a la cota −4.01 (supuesto provisorio), con la excavación del subterráneo, paredes de tierra y fondo en −7.97. Sin collider |
-| Estructura | Barras como tubos finos, esferas azules en los nudos, columnas negras (jaula de enfierradura en todas) y muros lila | Columnas y vigas con su sección b×h y textura de hormigón, muros con encofrado y nudos auxiliares chicos |
+| Suelo | No había: el "piso" era el hemisferio inferior gris del cielo | Pasto procedural hasta el horizonte, a la cota donde arranca la estructura (−7.97 en el LT2 y en el conjunto; 0.00 en el datum de Ingeniería). Sin collider. Con la cota en −4.01 de la entrega el visor cavaba la excavación del subterráneo (paredes de tierra y fondo en −7.97); con la cota en el arranque no hay nada bajo el suelo y no se cava, pero el hueco sigue en el código y se enciende con el dato |
+| Estructura | Barras como tubos finos, esferas azules en los nudos, columnas negras (jaula de enfierradura en todas) y muros lila | Columnas y vigas con su sección b×h y textura de hormigón (la columna en salmón desde el 18-09), muros con encofrado y nudos auxiliares chicos |
 | Losas | No había | Una losa de dibujo por paño, desde los polígonos de `areas_tributarias` (243 entradas, 5 cotas) |
 | Luz | La de la escena | Sol reorientado solo en la realista y luz ambiente neutra, para que las caras que ve la cámara no queden azuladas |
 | Deformada | Muros y líneas en amarillo, columnas negras por la jaula (foto 10 de la S4) | Hormigón con la posición original en líneas oscuras. Los muros son cajas cizalladas que siguen a sus nodos |

@@ -61,7 +61,8 @@ Fuera de la carpeta, lo que la semana agregó o cambió:
 | `comun/servidor_opensees.py` | `/analizar` devuelve el equilibrio de `calcular.equilibrio` y la ruta del Excel del reanálisis, con CORS para el build Web. |
 | `comun/lanzar_unity.py` | Modos nuevos `sincronizar <ed>` (copia modelo, anexos, superposición, carga móvil y Excel a las dos StreamingAssets), `web`, `android` (sale con 1 si falta el módulo, sin abrir Unity) y `servidor` (levanta `servidor_s5.py`). |
 | `comun/verificar_todo.py` | Pasa de 34 a 41 entradas. Los exportadores de los anexos corren con `lt2` y la suite avisa qué edificio dejó. |
-| `edificios/lt2/perfiles/lt2_2024_22.json` | `cota_terreno = -4.01`, `provisorio`, con su `_por_que`. Viaja en `info.cota_terreno` de `data/unity/lt2.json`. |
+| `edificios/lt2/perfiles/lt2_2024_22.json` | `terreno.z = -7.97` (donde arrancan las columnas: sus 16 apoyos), con su `_por_que`. Viaja en `info.cota_terreno` de `data/unity/lt2.json`. El informe entregado dice `-4.01`, `provisorio`: era el valor de la entrega, cambiado después (18-09). |
+| `edificios/ingenieria/perfiles/ingenieria_2017_67.json` | Nuevo (18-09): `terreno.z = 0.0`, el arranque de este cuerpo (29 apoyos, 10 columnas), que con el `dz` del calce es el mismo `-7.97`. Antes no declaraba cota y el visor caía a su respaldo, que daba el mismo número. |
 
 ### En Unity (`unity/Assets/`)
 
@@ -141,12 +142,19 @@ el caso LIBRE y el reanálisis de la M1.
   el anexo sobre el modelo editado
   exigiría llevar la edición a `data/modelo/` y reexportar
   ([`MODIFICACIONES.md`](MODIFICACIONES.md), limitación 1).
-- **Cota del terreno −4.01, provisoria.** Ninguna lámina rotula el
-  terreno. −4.01 es la cota más baja que deja todo el subterráneo bajo
-  tierra (los 16 empotramientos del LT2 están en −7.97) y todo el piso 1
-  arriba. Está en el perfil como `provisorio` con su `_por_que`. **Solo
-  dibuja**: ningún cálculo la usa, así que cambiarla mueve el suelo y no
-  cambia ningún número.
+- **Cota del terreno: el suelo va donde arranca la estructura.** Desde el
+  18-09 el LT2 declara `-7.97` (sus 16 apoyos, de los que salen 8
+  columnas y 8 muros) e Ingeniería su `0.00` local (29 apoyos, 10
+  columnas), que con el `dz` del calce es el mismo `-7.97`. Ninguna
+  lámina rotula el N.T.N.: la cota se mide en el modelo. **Solo dibuja**:
+  ningún cálculo la usa, así que cambiarla mueve el suelo y no cambia
+  ningún número. Durante la entrega decía `-4.01`, `provisorio` (así
+  quedó en `reports/semana05.md`), y por eso el visor dibujaba una
+  excavación para ver los apoyos; con la cota en el arranque ya no hay
+  nada bajo el suelo y no se cava. Lo que sigue **pendiente**: el terreno
+  real tiene dos N.R. (−7.97 y −4.01, fundación escalonada), así que los
+  39 apoyos en terreno de Ingeniería quedan dibujados 3.96 m sobre el
+  suelo; el visor usa un plano horizontal.
 - **Excel versionado y abrible desde Unity.** `data/excel/` va a git y
   el libro es determinista: con los mismos datos salen los mismos bytes.
   `lanzar_unity.py sincronizar lt2` lo copia a

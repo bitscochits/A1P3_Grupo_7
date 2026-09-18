@@ -4,6 +4,7 @@
     "unidades": "m, kN, kPa",
     "caso_precalculado": "G",
     "nota": "326 nodos, 559 elementos, 5 diafragmas. Area de piso 1127.2 m2.",
+    "cota_terreno": 0.0,
     "extra": {
       "n_columns": "82",
       "n_xbeams": "165",

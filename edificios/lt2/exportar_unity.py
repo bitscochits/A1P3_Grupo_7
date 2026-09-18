@@ -72,11 +72,11 @@ def cota_terreno(ruta=PERFIL):
     ----------------------------------------------------------------
     POR QUE SALE DEL PERFIL Y NO DE LOS NODOS
     ----------------------------------------------------------------
-    Ninguna lamina rotula el terreno, asi que es un SUPUESTO, y los
-    supuestos viven en el perfil con su justificacion al lado (CLAUDE.md,
-    seccion 5). Deducirla aca -- "la cota del segundo nivel", "la del apoyo
-    mas bajo" -- la esconderia en el codigo: nadie la veria como
-    supuesta ni la podria cambiar sin leer Python.
+    Ninguna lamina rotula el terreno, asi que la cota es un dato del
+    proyecto y vive en el perfil con su justificacion al lado (CLAUDE.md,
+    seccion 5). Desde la Semana 5 el perfil la pone donde ARRANCA la
+    estructura (-7.97: 16 apoyos, 8 columnas y 8 muros). Deducirla aca la
+    esconderia: nadie la veria ni la podria cambiar sin leer Python.
 
     Tampoco se deja que Unity la adivine: cada JSON usa su propio datum
     (Ingenieria va de 0 a 19.80, el LT2 de -7.97 a 11.83), y una cota
@@ -844,7 +844,7 @@ def main(salida=None):
     salida = salida or SALIDA
     modelo = construir()
 
-    # El suelo del visor: supuesto del perfil, solo en el JSON de Unity
+    # El suelo del visor: dato del perfil, solo en el JSON de Unity
     # (ver cota_terreno()).
     cota = cota_terreno()
     if cota is None:
@@ -852,7 +852,12 @@ def main(salida=None):
               'suelo en el apoyo mas bajo')
     else:
         modelo['info']['cota_terreno'] = cota
-        print('  cota del terreno (supuesto del perfil): %+.2f m' % cota)
+        _ap = [n['z'] for n in modelo['nodos']
+               if not n.get('auxiliar')
+               and (n.get('fijo') or any(n.get('restricciones') or []))]
+        print('  cota del terreno (del perfil): %+.2f m; apoyo mas bajo '
+              '%+.2f m (%d apoyos ahi)'
+              % (cota, min(_ap), sum(1 for z in _ap if abs(z - min(_ap)) <= 0.01)))
 
     os.makedirs(os.path.dirname(salida), exist_ok=True)
     with open(salida, 'w', encoding='utf-8') as f:

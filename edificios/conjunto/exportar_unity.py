@@ -222,15 +222,15 @@ def cota_terreno_del_conjunto():
     DE DONDE SALE
     ----------------------------------------------------------------
     De info.cota_terreno de data/unity/<cuerpo>.json, el mismo archivo
-    del que ya salen las areas tributarias. La cota es un SUPUESTO de
-    cada edificio, declarado en su perfil (la del LT2 en
-    edificios/lt2/perfiles/lt2_2024_22.json, 'terreno'): el conjunto no
-    decide nada, la copia.
+    del que ya salen las areas tributarias. La cota la declara cada
+    cuerpo en su perfil ('terreno' de lt2_2024_22.json y de
+    ingenieria_2017_67.json), donde arranca su estructura: el conjunto
+    no decide nada, la copia.
 
-    Se le suma el dz del calce, igual que a las z de los nodos. Hoy solo
-    el LT2 la declara y su dz es 0 (en altura manda el LT2), asi que
-    sale igual. Pero si Ingenieria agrega la suya en su datum local
-    (0 a 19.80), sin el dz quedaria 7.97 m mas arriba.
+    Se le suma el dz del calce, igual que a las z de los nodos. El dz
+    del LT2 es 0 (en altura manda el LT2) y el de Ingenieria -7.97, asi
+    que su 0.00 local cae justo en el -7.97 del LT2: los dos dicen lo
+    mismo y sin el dz quedaria 7.97 m mas arriba.
 
     ----------------------------------------------------------------
     SI DOS CUERPOS NO CALZAN, NO SE ESCRIBE
@@ -325,8 +325,9 @@ def main(caso=CASO_POR_DEFECTO):
         print('  AVISO: ningun cuerpo declara cota de terreno: el visor '
               'pondra el suelo en el apoyo mas bajo')
     else:
-        print('  cota del terreno %+.2f m (supuesto de: %s)'
-              % (cota, ', '.join(sorted(cotas_por_cuerpo))))
+        print('  cota del terreno %+.2f m (declarada, ya calzada, por: %s)'
+              % (cota, ', '.join('%s %+.2f' % kv
+                                 for kv in sorted(cotas_por_cuerpo.items()))))
     print('  UZ maximo: %.3f mm' % (uz * 1000))
     print('  -> %s  (%.2f MB)'
           % (os.path.relpath(salida, rutas.RAIZ), os.path.getsize(salida) / 1e6))
