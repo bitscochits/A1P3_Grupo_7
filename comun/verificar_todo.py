@@ -96,6 +96,17 @@ SUITE = [
     ('M1 borrar columna 69',  ['semana05/reanalisis_demo.py', 'lt2', '--borrar-elemento', '69',
                                '--nodo', '186', '--elemento', '337'], False),
     ('M2 cs 0.20',            ['semana05/comparar_anexos.py', 'lt2', '--cs', '0.20'], False),
+    # LAB de la semana 5: los sliders que Unity combina al instante dan
+    # lo mismo que Python (10 juegos de lambda, incluidos negativos).
+    ('sliders instantaneos',  ['semana05_lab/verificar_instantanea.py', 'lt2'], False),
+    # Las otras dos modificaciones de la lista del LAB, que la pestana
+    # Modificar ya permite: cambiar una seccion y soltar un apoyo. Las
+    # dos cambian K, asi que el equilibrio tiene que seguir cerrando.
+    ('M3 seccion de una viga', ['semana05/reanalisis_demo.py', 'lt2',
+                                '--seccion', '337', 'V 0.30x0.80', '--nodo', '186'], False),
+    ('M4 soltar un apoyo',    ['semana05/reanalisis_demo.py', 'lt2',
+                               '--apoyo', '2', '1', '1', '1', '0', '0', '0',
+                               '--nodo', '186'], False),
 ]
 
 

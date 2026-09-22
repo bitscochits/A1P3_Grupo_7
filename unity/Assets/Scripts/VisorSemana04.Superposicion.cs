@@ -701,9 +701,10 @@ public partial class VisorSemana04
             Sup_estadosEnLayout = Sup_estados.Count;
         }
 
-        GUILayout.Label("Unity no suma casos: cada numero lo calcula Python. E1..E3 vienen "
-                        + "precalculados (sin servidor); LIBRE lo combina el servidor con los "
-                        + "factores de los sliders.", tenue);
+        GUILayout.Label("E1..E3 vienen precalculados por Python (sin servidor) y LIBRE lo combina "
+                        + "el servidor con los factores de los sliders: son la REFERENCIA. Mas "
+                        + "abajo, los sliders instantaneos escalan y suman en Unity los mismos "
+                        + "casos base ya resueltos, y se contrastan contra Python.", tenue);
         if (Sup_hayDesactualizadoEnLayout)
             GUILayout.Label("AVISO: el modelo se edito (" + MotivoDesactualizado + "). Estos "
                             + "resultados son del modelo ORIGINAL: el servidor combina el edificio "
@@ -815,6 +816,12 @@ public partial class VisorSemana04
                                            || Sup_textoCombinar.StartsWith("No ")
                                            || Sup_textoCombinar.StartsWith("Python no")
                                            ? aviso : tenue);
+
+        // Los sliders que responden en el momento y sin servidor
+        // (VisorSemana05.Instantanea.cs). Van al final para que se lean
+        // despues de E1..E3 y de LIBRE, que son la referencia de Python.
+        GUILayout.Space(PanelUI.Px(6f));
+        Ins_DibujarControles();
     }
 
     /// Boton E1..E3: el precalculado si esta; si no, con servidor. Los
