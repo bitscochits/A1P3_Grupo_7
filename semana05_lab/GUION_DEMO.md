@@ -244,4 +244,4 @@ dueña); el trabajo no está hecho.
 | moví el slider y no pasa nada | es el slider equivocado (`lambda G = …` es el de LIBRE, que espera al servidor) | usar los de abajo, `G`, `Q`, `EX`, `EY` |
 | LIBRE dice que no hay servidor | falta `servidor_s5.py` | los sliders instantáneos **sí** funcionan sin él |
 | la cabecera dice "modelo editado" | quedó una M1 o M3 de una prueba anterior | reabrir la app (el anexo es del modelo original) |
-| el panel dice "el anexo es de otro modelo" | se sincronizó otro edificio | `python comun\lanzar_unity.py sincronizar lt2` y reabrir |
+| el panel dice "el anexo es de otro modelo", o `sincronizar` avisa "OJO: semana04.json no se copio (es de 'conjunto')" | los anexos en `data/unity/` son de otro edificio | `python comun\lanzar_unity.py preparar lt2` (reexporta y copia) y reabrir |
