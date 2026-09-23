@@ -1,6 +1,6 @@
 ======================================================================================================================
   UNITY CONTRA PYTHON   registro semana05\capturas\registro.txt
-  edificio lt2; 1053 datos; equipo 13th Gen Intel(R) Core(TM) i7-13620H (16 hilos) | Windows 11  (10.0.26200) | NVIDIA GeForce RTX 4060 Laptop GPU (Direct3D 12 [level 12.2]) | RAM 32471 MB | pantalla 1600x900 a 120 dpi
+  edificio lt2; 1435 datos; equipo Intel(R) Core(TM) i7-1065G7 CPU @ 1.30GHz (8 hilos) | Windows 11  (10.0.22631) | NVIDIA GeForce GTX 1050 with Max-Q Design (Direct3D 11.0 [level 11.1]) | RAM 16161 MB | pantalla 1600x900 a 120 dpi
   tolerancia por fila = suma de sus causas (f32, ref, impr, ent32): ver el encabezado del script
 ======================================================================================================================
 
@@ -154,7 +154,7 @@
   sup.libre.E3.equilibrio.error_kN[Fz]               -0.000299359992   -0.00029936       8.00e-12  2.91e-11  f32        ok
   -> 144 filas, 0 FALLA
 
-  referencia: python C:\Users\Administrador\OneDrive\Escritorio\UANDES\202602\Metodos computacionales\P1\A1P1.0_Grupo_7\semana05\reanalisis_demo.py lt2 --borrar-elemento 69 --nodo 186 --elemento 337 --float32  (rc 0, TODO OK; 120 numeros leidos de su salida)
+  referencia: python C:\Proyectos\SAP3000 v1.0\semana05\reanalisis_demo.py lt2 --borrar-elemento 69 --nodo 186 --elemento 337 --float32  (rc 0, TODO OK; 120 numeros leidos de su salida)
   entrada32 medida contra la misma demo sin --float32 (rc 0)
   srv: 21 nodos con restriccion -> una suma de reacciones puede moverse 2.1e-03 kN
 
@@ -481,7 +481,7 @@
   [5] REGISTRO: fotos, log, ids de control, Excel, edificio
 ======================================================================================================================
   dato                                               Unity             Python            |dif|     tol       causa      
-  fotos                                              23                23                                    igual      ok
+  fotos                                              25                25                                    igual      ok
   salida                                             0                 0                                     igual      ok
   log.errores                                        0                 0                                     igual      ok
   lineas AVISO/ERROR en registro.txt                 0                 0                                     igual      ok
@@ -493,7 +493,7 @@
   superposicion.nombres                              E1(precalculado), E1(precalculado),                     igual      ok
   modelo.nodos                                       232               232                                   igual      ok
   modelo.elementos                                   378               378                                   igual      ok
-  modelo.cota_terreno                                -4.01000023       -4.01             2.30e-07  4.77e-07  f32        ok
+  modelo.cota_terreno                                -7.96999979       -7.97             2.10e-07  4.77e-07  f32        ok
   servidor.responde                                  True              True                                  igual      ok
   control.columna                                    5                 5                                     igual      ok
   control.muro                                       9                 9                                     igual      ok
@@ -518,11 +518,13 @@
   foto.16_superposicion_E2_precalculado.pestana      Caso              Caso                                  igual      ok
   foto.17_superposicion_E3_precalculado.pestana      Caso              Caso                                  igual      ok
   foto.18_superposicion_E3_LIBRE_servidor.pestana    Caso              Caso                                  igual      ok
+  foto.18b_superposicion_instantanea_E3_en_Unity.pes Caso              Caso                                  igual      ok
+  foto.18c_capacidad_columna_5_PM_con_sliders_instan Elemento          Elemento                              igual      ok
   foto.19_carga_movil_posicion_12_viga_205.pestana   Carga movil       Carga movil                           igual      ok
   foto.20_carga_movil_posicion_25_viga_208.pestana   Carga movil       Carga movil                           igual      ok
   foto.21_M1_sin_columna_69_deformada_G_y_equilibrio Modificar         Modificar                             igual      ok
   foto.22_M1_nodo_186_UZ_G.pestana                   Modificar         Modificar                             igual      ok
-  -> 41 filas, 0 FALLA
+  -> 43 filas, 0 FALLA
 
 ======================================================================================================================
   TODO CALZA: lo que muestra Unity es lo que calculo Python

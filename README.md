@@ -199,7 +199,7 @@ Todo lo de la entrega está en la carpeta; **para la demo, empezar por
 | `reanalisis_demo.py` · `comparar_anexos.py` | M1 (borrar la columna 69) y M2 (`--cs 0.20`) sin Unity y sin escribir en `data/`. |
 | `compilar_unity.py` · `comparar_unity.py` | Compila los C# sin abrir Unity; cruza el registro de `CapturaSemana05` con Python (486 filas, 0 FALLA). |
 | `README.md` · `GUION_DEMO.md` · `COMANDOS.md` · `UX.md` · `MOVIL.md` · `MODIFICACIONES.md` · `CARGA_MOVIL.md` · `APP_AUTONOMA.md` · `CONTRATO.md` | Mapa de la entrega, guion, chuleta, las seis preguntas del visor, preparación móvil, M1/M2, carga móvil, evaluación de app autónoma y contrato entre piezas. |
-| `capturas/` · `evidencia/` | 23 fotos y `registro.txt` de la app; salidas de verificación. |
+| `capturas/` · `evidencia/` | 25 fotos y `registro.txt` de la app; salidas de verificación. |
 | `reports/semana05.md` | El informe de la entrega. |
 
 ### `semana05_lab/` — el LAB de la Semana 5 (10 pts)

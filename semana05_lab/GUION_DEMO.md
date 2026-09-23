@@ -140,13 +140,20 @@ El enunciado pide **al menos dos** de las seis. Hay **cuatro**, dos en
 vivo y dos por comando. Cada una viene con la pregunta *¿esto necesita
 reanálisis?*, que es lo que el criterio 5 premia.
 
-**M3 — sección, en vivo:** pestaña **Modificar** → seleccionar la viga
-**337** (o `Ir a ID` 337) → *Cambiar sección* → `V 0.30x0.80` →
-*"Recalcular en el servidor (Enter)"*.
+**M3 — sección, en vivo:** pestaña **Elemento** → `Ir a ID` 337 →
+*Elemento* (la viga queda seleccionada) → pestaña **Modificar** →
+*Cambiar sección* → `V 0.30x0.80` → *"Recalcular en el servidor
+(Enter)"* → de vuelta en **Elemento**, `Ir a ID` 186 → *Nodo*.
 
 **Qué se ve:** la cabecera avisa que el modelo se editó; el servidor
 devuelve los cuatro casos del modelo nuevo con la tabla de equilibrio;
 el `UZ` del nodo 186 pasa de −3.6452 a −3.6092 mm.
+
+> Este camino desde la app se ejerció **por script** (`reanalisis_demo.py
+> --seccion`, en la suite), no en una captura: **ensáyalo una vez** antes.
+> Si algo se traba, la M1 de abajo está fotografiada (21–22) y la M3 sale
+> igual por comando: `python semana05\reanalisis_demo.py lt2 --seccion 337
+> "V 0.30x0.80" --nodo 186`.
 
 > "Cambió `K`: hay que reanalizar. Y ojo: la carga aplicada **no**
 > cambió aunque la viga sea la mitad, porque el peso propio viene sumado

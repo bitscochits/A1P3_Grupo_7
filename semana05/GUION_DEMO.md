@@ -7,7 +7,7 @@ entre comillas son los de la app, que no lleva tildes.
 
 Los números vienen de la captura automática del 17-09
 (`semana05/capturas/registro.txt`, comparada con Python en
-`evidencia/unity_vs_python.txt`: 486 filas, 0 FALLA) y de los scripts que
+`evidencia/unity_vs_python.txt`: 488 filas, 0 FALLA) y de los scripts que
 se nombran al lado. Las fotos de [`capturas/`](capturas/) muestran lo que
 se debería ver en cada paso.
 
@@ -425,7 +425,7 @@ comandos `adb` para completarla.
   móvil, ni el equilibrio se calculan en C#.
 - **¿Cómo saben que lo que muestra Unity es lo que calculó Python?**
   `CapturaSemana05` escribe lo que Unity tiene en memoria (float32
-  exacto) y `comparar_unity.py` lo cruza con Python: 486 filas, 0 FALLA.
+  exacto) y `comparar_unity.py` lo cruza con Python: 488 filas, 0 FALLA.
   Cada tolerancia es la suma de causas medidas (float32, impresión y el
   redondeo del servidor).
 - **¿Por qué −7.97 para el terreno?** Ninguna lámina rotula el N.T.N., así

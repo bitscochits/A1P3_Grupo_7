@@ -134,7 +134,7 @@ Si se va a usar LIBRE, hay que reiniciar el servidor con el mismo dato:
 ```
 
 El `--seco` imprime el md5 de origen de cada archivo. Los de la entrega
-(17-09) son: `semana04.json` 7ad6a421…, `semana03.json` e48189e8… y
+(22-09) son: `semana04.json` 95fffa81…, `semana03.json` e48189e8… y
 `superposicion.json` 48153dfd…. Si alguno no coincide, `git diff --stat
 data/unity` dice cuál cambió. Después, `sincronizar lt2` sin `--seco` y
 servidor sin `--cs`.

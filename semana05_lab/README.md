@@ -35,7 +35,7 @@ Y en Unity:
 | --- | :---: | --- | --- |
 | **Interactividad** | 2 | Navegar (arrastrar, rueda, `F`, `C`). Seleccionar barra o nodo → pestaña **Elemento**. Capas en **Capas** (apoyos por tipo, ejes locales, áreas tributarias, diafragmas). Combinación en **Caso**. Respuesta combinada: deformada + diagramas. Demanda-capacidad: curva P-M y *Mapa demanda / capacidad*. | `semana05/comparar_unity.py` (43 filas de pestañas y cabeceras, 0 falla) · `semana05/UX.md` · fotos 01–14b |
 | **Modificación del modelo** | 2 | **Cuatro** de las seis de la lista. **M1** *activar/desactivar elemento*: pestaña **Modificar** → borrar la barra 69 → *Recalcular*. **M3** *sección*: la viga 337 pasa a `V 0.30x0.80`, en la misma pestaña. **M4** *apoyo*: el nodo 2 pasa de empotrado a rótula. **M2** *intensidad de carga*: `--cs 0.20`, que además es el ejemplo de lo que **no** necesita reanálisis. | `semana05/reanalisis_demo.py` (M1, M3, M4 reproducibles y en la suite) · `comparar_anexos.py` · `semana05/MODIFICACIONES.md` · fotos 21–22 |
-| **Superposición en Unity** | 2 | **Caso → Superposicion (Semana 5)**, bloque *Superposicion INSTANTANEA en Unity*: los sliders `G`, `Q`, `EX`, `EY` actualizan deformada, esfuerzos y P-M **al instante**: entre **0.8 y 4.2 ms** medidos en la app, sin servidor. E1–E3 precalculados y LIBRE por servidor quedan como referencia; los botones `E1`/`E2`/`E3` ponen los mismos factores para comparar a la vista. | `verificar_instantanea.py lt2 --registro semana05/capturas/registro.txt` · `semana05/verificar_superposicion.py` (4 vías) · fotos 17 y 18b (el mismo E3 por dos caminos) |
+| **Superposición en Unity** | 2 | **Caso → Superposicion (Semana 5)**, bloque *Superposicion INSTANTANEA en Unity*: los sliders `G`, `Q`, `EX`, `EY` actualizan deformada, esfuerzos y P-M **al instante**: entre **0.9 y 3.6 ms** medidos en la app, sin servidor. E1–E3 precalculados y LIBRE por servidor quedan como referencia; los botones `E1`/`E2`/`E3` ponen los mismos factores para comparar a la vista. | `verificar_instantanea.py lt2 --registro semana05/capturas/registro.txt` · `semana05/verificar_superposicion.py` (4 vías) · fotos 17 y 18b (el mismo E3 por dos caminos) |
 | **Demanda-capacidad dinámica** | 2 | El punto (P, M) se mueve con los sliders, y con él `Mn`, `u` y el `pasa / no pasa`. El mapa D/C repinta el edificio y actualiza el conteo. | `verificar_instantanea.py --registro`: `P`, `M`, `Mn`, el extremo que manda, `pasa` y los conteos de la cabecera coinciden con Python en lo que la app escribió · foto 18c (el punto en tracción con λG < 0) |
 | **Defensa / criterios de reanálisis** | 2 | La tabla de [`CRITERIOS_REANALISIS.md`](CRITERIOS_REANALISIS.md), con sus números; y en la app el aviso de anexo desactualizado tras editar, también junto a los sliders. | Cada fila contrastada con el motor: `Cs` ×2 → `EX` ×2 a un paso de redondeo; `E` uniforme ×2 → `Δf = 0.0 kN` |
 | *SQ4 (recomendado)* | — | Carga móvil: pestaña **Carga movil**, 30 posiciones sobre el eje de vigas 203–208, con reparto y conservación. **No** está asociada al movimiento del usuario (ver abajo). | `semana05/CARGA_MOVIL.md` · fotos 19–20 |
@@ -57,7 +57,7 @@ funciona.
 
 `VisorSemana05.Instantanea.cs` agrega el caso **INSTANT**, que combina en
 Unity los mismos casos base que ya trae `semana04.json` y responde en
-**0.8 a 4.2 ms** en el LT2 (378 barras, 232 nodos; medido en la app,
+**0.9 a 3.6 ms** en el LT2 (378 barras, 232 nodos; medido en la app,
 `registro.txt` → `ins.*.ms`).
 
 **Por qué esto no rompe la regla de oro.** Unity no resuelve `K·u = F`:

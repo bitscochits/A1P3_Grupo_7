@@ -405,7 +405,7 @@ modelo y el conteo debe cerrar con los rótulos del plano"*. Uno malo:
 | M2: Cs 0.10 → 0.20 | G y Q idénticos; EX nuevo = 2·EX base (error/cota ≤ 0.72); muro 9 en EY u 0.635 → 1.479 | `semana05/comparar_anexos.py lt2 --cs 0.20` |
 | Carga móvil: ΣRz = P | peor 2.0e-04 ≤ 8.0e-04 kN en las 30 posiciones; Betti 3.5e-19 m | `semana05/carga_movil.py lt2` |
 | Excel = Python | 47 OK en el LT2; la suma filtrada de Reacciones = `calcular.equilibrio` | `semana05/test_excel.py` |
-| Unity muestra lo que calculó Python (Semana 5) | 486 filas, 0 FALLA (fuera de la suite: necesita el exe y el servidor) | `semana05/comparar_unity.py semana05/capturas/registro.txt` |
+| Unity muestra lo que calculó Python (Semana 5) | 488 filas, 0 FALLA (fuera de la suite: necesita el exe y el servidor) | `semana05/comparar_unity.py semana05/capturas/registro.txt` |
 
 Todo junto: `python comun/verificar_todo.py`.
 
@@ -439,7 +439,7 @@ Todo junto: `python comun/verificar_todo.py`.
   (`16 · 2^-24 · Σ|λ·v|`). (6) Ocho datos imprecisos en los documentos
   (decenas de segundos que eran 2 s; 9 estaciones "en G y Q" que en Q son
   204 barras; la aritmética del error de interpolación; "< 1 ms" sin medir:
-  son 0.8–4.2 ms).
+  son 0.9–3.6 ms).
 - **Qué se verificó:** `verificar_instantanea.py lt2 --registro` cruza los
   números que Unity escribió al mover los sliders con Python (4 juegos de λ,
   cotas derivadas del redondeo y del float32) y la réplica en 10 juegos;
