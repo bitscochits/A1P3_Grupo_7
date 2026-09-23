@@ -120,7 +120,13 @@ def obtener_base(edificio):
         if b is not None:
             return b, False
         with LOCK_OPENSEES:
-            b = sp.base(edificio, ARGV_PARAMETROS)
+            # silenciar=False: AvisosDeOpenSees redirige el DESCRIPTOR 2
+            # (os.dup2) para contar los 'analyze failed'. En un hilo del
+            # servidor, con Flask escribiendo su log en ese descriptor desde
+            # otro hilo, la consola de Windows invalida el handle y la base
+            # falla con 'WinError 6 Controlador no valido'. Los avisos se ven
+            # en esta consola: son los esperados de capacidad.interaccion.
+            b = sp.base(edificio, ARGV_PARAMETROS, silenciar=False)
         _bases[edificio] = b
         print('  [base] %s armada en %.1f s (%d nodos, %d elementos)%s'
               % (edificio, b['segundos'], len(b['ids_nodos']), len(b['largos']),
@@ -198,7 +204,10 @@ def main(argv=None):
                     help='escuchar en toda la red local (celular). No en una red publica.')
     ap.add_argument('--puerto', type=int, default=PUERTO)
     ap.add_argument('--sin-precalentar', action='store_true',
-                    help='no armar la base del LT2 al arrancar')
+                    help='no armar la base al arrancar')
+    ap.add_argument('--edificio', default=EDIFICIO_DEMO,
+                    help='la base que se precalienta al arrancar (lt2, conjunto...); '
+                         'las demas se arman en la primera peticion')
     args, resto = ap.parse_known_args(argv)
 
     # Lo que no es de este servidor son flags de parametros.py. Se validan
@@ -228,7 +237,7 @@ def main(argv=None):
     print('=' * 64)
 
     if not args.sin_precalentar:
-        threading.Thread(target=_precalentar, args=(EDIFICIO_DEMO,), daemon=True).start()
+        threading.Thread(target=_precalentar, args=(edificio_valido(args.edificio),), daemon=True).start()
     app.run(host=host, port=args.puerto, debug=False, threaded=True)
     return 0
 
