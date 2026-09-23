@@ -22,7 +22,7 @@ abierto.
 .\.venv\Scripts\python.exe comun\verificar_todo.py
 ```
 
-Tiene que terminar en `41 de 41 EN OK`. El 17-09 tardó entre 131 s y 8 min con Unity
+Tiene que terminar en `44 de 44 EN OK`. El 17-09 tardó entre 131 s y 8 min con Unity
 cerrado. La entrada más lenta es `excel s5` (57.8 s) y la única que abre
 Unity es `JsonUtility real s4` (12.4 s). Sin las entradas lentas:
 

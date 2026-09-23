@@ -28,7 +28,7 @@ Unity y la app cerrados. En una terminal, desde la carpeta del repo:
 .\.venv\Scripts\python.exe comun\verificar_todo.py
 ```
 
-Tiene que terminar en `41 de 41 EN OK` (entre 2 y 8 min el 17-09). Si algo falla,
+Tiene que terminar en `44 de 44 EN OK` (entre 2 y 8 min el 17-09). Si algo falla,
 **no improvises**: la salida dice qué script falló y por qué.
 
 ```powershell

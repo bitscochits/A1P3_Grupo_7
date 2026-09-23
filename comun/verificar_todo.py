@@ -98,7 +98,8 @@ SUITE = [
     ('M2 cs 0.20',            ['semana05/comparar_anexos.py', 'lt2', '--cs', '0.20'], False),
     # LAB de la semana 5: los sliders que Unity combina al instante dan
     # lo mismo que Python (10 juegos de lambda, incluidos negativos).
-    ('sliders instantaneos',  ['semana05_lab/verificar_instantanea.py', 'lt2'], False),
+    ('sliders instantaneos',  ['semana05_lab/verificar_instantanea.py', 'lt2',
+                               '--registro', 'semana05/capturas/registro.txt'], False),
     # Las otras dos modificaciones de la lista del LAB, que la pestana
     # Modificar ya permite: cambiar una seccion y soltar un apoyo. Las
     # dos cambian K, asi que el equilibrio tiene que seguir cerrando.

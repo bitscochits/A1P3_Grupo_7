@@ -15,7 +15,7 @@ r"""
    python semana05/reanalisis_demo.py lt2 --borrar-elemento 69 --nodo 186 \
           --url http://localhost:5000/analizar
    python semana05/reanalisis_demo.py lt2 --seccion 337 "V 0.30x0.80" --nodo 186
-   python semana05/reanalisis_demo.py lt2 --apoyo 2 0 0 1 0 0 0 --nodo 186
+   python semana05/reanalisis_demo.py lt2 --apoyo 2 1 1 1 0 0 0 --nodo 186
    python semana05/reanalisis_demo.py lt2 --desde "<modelo_editado.json>" --nodo 186
 
    --float32   manda los numeros como los manda Unity: JsonUtility lee y

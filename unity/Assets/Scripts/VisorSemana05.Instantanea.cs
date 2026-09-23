@@ -8,9 +8,11 @@
   actualicen INSTANTANEAMENTE la deformada, los resultados y el punto
   de demanda P-M. El caso LIBRE de VisorSemana04.Superposicion.cs pide
   la combinacion a Python (POST /combinar): es la referencia, pero
-  necesita el servidor y su primera peticion tarda decenas de segundos.
-  Este archivo agrega el caso INSTANT, que combina en el momento y sin
-  servidor, y se puede comparar con el de Python apretando un boton.
+  necesita el servidor, espera 0.6 s tras el ultimo movimiento del
+  slider y suma la ida y vuelta. Este archivo agrega el caso INSTANT,
+  que combina en el momento y sin servidor; sus botones E1..E3 ponen
+  los mismos factores que los estados precalculados por Python, para
+  compararlos a la vista.
 
   ----------------------------------------------------------------
   POR QUE ESTO NO ROMPE LA REGLA DE ORO
@@ -28,8 +30,8 @@
      semana05/verificar_superposicion.py por cuatro vias).
 
   2. RETABULAR antes de sumar.  Los casos base no vienen en las mismas
-     estaciones: una viga con carga repartida trae 9 puntos en G y Q, y
-     solo 2 en EX y EY (220 de las 378 barras del LT2). No se pueden
+     estaciones: una viga con carga repartida trae 9 puntos en G (220
+     de las 378 barras del LT2) y en Q (204), y solo 2 en EX y EY. No se pueden
      sumar indice a indice. Se lleva cada caso a la malla mas fina
      interpolando LINEALMENTE, y eso es exacto, no aproximado: sin carga
      repartida (w = 0) el axial y los cortes son constantes y los
@@ -45,10 +47,13 @@
      anexo.  Son comparaciones e interpolaciones sobre datos de Python:
      ninguna propiedad de la seccion se calcula aca.
 
-  Y no se cree por argumento: se comprueba.  El boton "Comparar con
-  Python" pide el mismo juego de lambdas a POST /combinar y muestra la
-  peor diferencia; semana05_lab/verificar_instantanea.py lo hace fuera
-  de Unity sobre muchos juegos de lambdas.
+  Y no se cree por argumento: se comprueba.  CapturaSemana05 mueve
+  estos sliders en la app real y deja en registro.txt los numeros que
+  Unity calculo (DATO ins.*, float de 32 bits en G9);
+  semana05_lab/verificar_instantanea.py --registro los compara contra
+  Python, y sin --registro repite el algoritmo en Python sobre mas
+  juegos de lambdas. La aritmetica es float32 (JsonUtility, Mathf) y la
+  cota del verificador la incluye.
 
   ----------------------------------------------------------------
   CUANDO ESTO YA NO VALE
@@ -103,8 +108,10 @@ public partial class VisorSemana04
     /// Cuanto tardo la ultima combinacion, en milisegundos.
     private float Ins_msUltima;
 
-    /// Lo que dijo la ultima comparacion contra Python.
-    private string Ins_comparacion = "";
+    /// Cuantas veces se combino desde que se abrio la app. La captura
+    /// lo usa para comprobar que el SEGUNDO movimiento del slider
+    /// tambien reemplaza el caso (el error que tuvo tipo = "combinacion").
+    private int Ins_version;
 
     /// El orden de las magnitudes dentro de Ins_Barra.mag.
     private static readonly string[] Ins_MAG = { "N", "Vy", "Vz", "T", "My", "Mz" };
@@ -233,9 +240,10 @@ public partial class VisorSemana04
     /// semana04/verificar_semana04.py, bloque [1] --, asi que el punto i
     /// de una malla de n puntos esta en la fraccion i/(n-1) de la barra,
     /// exactamente. Usar la x del anexo mete su redondeo a 4 decimales
-    /// (2.5e-5 m) multiplicado por la pendiente del momento: en una viga
-    /// con 47 kN m/m eso son 2.3e-3 kN m, cuarenta veces el redondeo de
-    /// las fuerzas. Por indice, ese error no existe.
+    /// (hasta 5e-5 m) multiplicado por la pendiente del momento, que es
+    /// el corte: en la viga 337 bajo G el corte llega a 272 kN, asi que
+    /// el error llega a 1.4e-2 kN m (se midieron 1.1e-2), doscientas
+    /// veces el redondeo de las fuerzas. Por indice, ese error no existe.
     private static float[] Ins_ALaMalla(float[] valor, int nOrigen, int nDestino)
     {
         var salida = new float[nDestino];
@@ -277,7 +285,12 @@ public partial class VisorSemana04
         var caso = new CasoS4
         {
             nombre = CASO_INSTANT,
-            tipo = "combinacion",
+            // TIPO_SUPERPOSICION, no "combinacion": Hook_RegistrarCasoExterno
+            // solo REEMPLAZA un caso que ya exista si es de este tipo. Con
+            // "combinacion" el primer movimiento del slider registraba INSTANT
+            // y todos los siguientes eran rechazados: la deformada, los
+            // diagramas y la P-M quedaban congelados en el primer lambda.
+            tipo = TIPO_SUPERPOSICION,
             descripcion = Ins_Descripcion(lam),
             factores = new[] { lam[0], lam[1], lam[2], lam[3] },
             desplazamientos = new List<DespNodo>(Ins_nodos.Count),
@@ -340,6 +353,14 @@ public partial class VisorSemana04
         }
 
         Ins_msUltima = (Time.realtimeSinceStartup - t0) * 1000f;
+        Ins_version++;
+        // Sin esto OrigenDe() diria "combinado en Python por
+        // semana04/exportar_unity.py", que es falso para este caso.
+        Sup_origenes[CASO_INSTANT] = "combinado en Unity (VisorSemana05.Instantanea.cs): escala y suma "
+                                   + "los casos base G, Q, EX y EY de " + nombreArchivo + " y rehace la "
+                                   + "demanda con la regla de Python; no resuelve nada. Comprobado contra "
+                                   + "Python por semana05_lab/verificar_instantanea.py. Factores: "
+                                   + Sup_TextoFactores(caso.factores) + ".";
         RegistrarCasoExterno(caso);
         return caso;
     }
@@ -449,12 +470,20 @@ public partial class VisorSemana04
     {
         if (!Ins_listo && Anexo != null) Ins_Preparar();
 
-        GUILayout.Label("--- Superposicion instantanea (Semana 5) ---");
+        GUILayout.Label("--- Superposicion INSTANTANEA en Unity (Semana 5) ---");
+        PanelUI.Marcar("ins.sliders");   // para que la captura lleve el scroll hasta aca
         if (!Ins_listo)
         {
             GUILayout.Label("no disponible: " + Ins_aviso);
             return;
         }
+        // La superposicion vale mientras K no cambie. Si el modelo se edito,
+        // estos sliders siguen sumando los casos base del modelo ORIGINAL:
+        // el mismo aviso que E1..E3 y LIBRE, decidido en Layout como ellos.
+        if (Sup_hayDesactualizadoEnLayout)
+            GUILayout.Label("AVISO: el modelo se edito (" + MotivoDesactualizado + "). Estos sliders "
+                            + "suman los casos base del modelo ORIGINAL; para esta geometria hay que "
+                            + "reanalizar (pestana Modificar).", PanelUI.Aviso ?? GUI.skin.label);
 
         bool cambio = false;
         for (int c = 0; c < Ins_BASE.Length; c++)
@@ -470,22 +499,30 @@ public partial class VisorSemana04
             if (!Mathf.Approximately(v, Ins_lambda[c])) { Ins_lambda[c] = v; cambio = true; }
         }
 
+        // Los mismos factores que E1..E3 precalculados por Python: apretar
+        // uno y despues el E de arriba muestra el mismo caso por dos caminos.
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("1.0 G + 1.0 Q")) { Ins_Fijar(1f, 1f, 0f, 0f); cambio = true; }
-        if (GUILayout.Button("1.2 G + 1.6 Q")) { Ins_Fijar(1.2f, 1.6f, 0f, 0f); cambio = true; }
+        if (GUILayout.Button("E1  1.0G+1.0Q")) { Ins_Fijar(1f, 1f, 0f, 0f); cambio = true; }
+        if (GUILayout.Button("E2  1.2G+1.6Q")) { Ins_Fijar(1.2f, 1.6f, 0f, 0f); cambio = true; }
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("1.2G+1.0Q+1.4EX")) { Ins_Fijar(1.2f, 1f, 1.4f, 0f); cambio = true; }
+        if (GUILayout.Button("E3  1.2G+1.0Q-1.4EX")) { Ins_Fijar(1.2f, 1f, -1.4f, 0f); cambio = true; }
         if (GUILayout.Button("todo en cero")) { Ins_Fijar(0f, 0f, 0f, 0f); cambio = true; }
         GUILayout.EndHorizontal();
 
-        if (cambio) Ins_Aplicar();
+        // Diferido a LateUpdate, como todo lo que cambia el estado desde el
+        // panel (VisorSemana04.Panel.Diferir): combinar y redibujar a mitad
+        // de un evento de OnGUI cambia la cantidad de controles y salta
+        // "Getting control N's position..." (CLAUDE.md, trampa IMGUI).
+        if (cambio) Diferir(Ins_Aplicar);
 
         GUILayout.Label($"{Ins_Descripcion(Ins_lambda)}");
-        if (Ins_msUltima > 0f)
-            GUILayout.Label($"combinado en Unity en {Ins_msUltima.ToString("0.0", CultureInfo.InvariantCulture)} ms "
-                            + $"({Ins_barras.Count} barras, {Ins_nodos.Count} nodos)");
-        if (!string.IsNullOrEmpty(Ins_comparacion)) GUILayout.Label(Ins_comparacion);
+        // Siempre una linea, con o sin combinacion previa: asi la cantidad
+        // de controles no depende de si ya se combino.
+        GUILayout.Label(Ins_version == 0
+            ? "todavia no se combino: mueve un slider o aprieta un boton"
+            : $"combinado en Unity en {Ins_msUltima.ToString("0.00", CultureInfo.InvariantCulture)} ms "
+              + $"({Ins_barras.Count} barras, {Ins_nodos.Count} nodos; combinacion n. {Ins_version})");
     }
 
     private void Ins_Fijar(float g, float q, float ex, float ey)
@@ -507,6 +544,6 @@ public partial class VisorSemana04
     /// Milisegundos de la ultima combinacion.
     public float Ins_MsUltima { get { return Ins_msUltima; } }
 
-    /// Deja escrito el resultado de la ultima comparacion contra Python.
-    public void Ins_AnotarComparacion(string texto) { Ins_comparacion = texto ?? ""; }
+    /// Cuantas veces se combino. Sube en cada Ins_Combinar.
+    public int Ins_Version { get { return Ins_version; } }
 }

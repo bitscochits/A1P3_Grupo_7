@@ -265,6 +265,7 @@ public class CapturaSemana05 : MonoBehaviour
         yield return PestanasDelPanel(info);
         yield return Preguntas(info);
         yield return Superposicion(info);
+        yield return SuperposicionInstantanea(info);
         yield return CargaMovil();
         yield return M1(ed);
 
@@ -1498,5 +1499,98 @@ public class CapturaSemana05 : MonoBehaviour
         {
             Debug.LogWarning("CapturaSemana05: no pude escribir registro.txt: " + ex.Message);
         }
+    }
+
+    // ------------------------------------------------------------
+    // D2. SUPERPOSICION INSTANTANEA (LAB de la Semana 5): Unity combina
+    // ------------------------------------------------------------
+    /// Mueve los sliders instantaneos DE VERDAD -- Ins_Lambdas + Ins_Aplicar,
+    /// desde esta corrutina (contexto Update, no OnGUI) -- con cuatro juegos
+    /// de lambdas, y deja lo que Unity CALCULO: la version (tiene que subir
+    /// en cada juego; con tipo = "combinacion" subia una sola vez y todo
+    /// quedaba congelado), los milisegundos, y el mismo bloque Estado(...)
+    /// de los precalculados. semana05_lab/verificar_instantanea.py
+    /// --registro cruza esos numeros -- float de 32 bits, los que Unity
+    /// dibuja -- con superposicion.caso_combinado() de Python.
+    IEnumerator SuperposicionInstantanea(InfoSemana04 info)
+    {
+        Seccion("D2. SUPERPOSICION INSTANTANEA (Unity combina los casos base)");
+        int col = info.columna_demo, mur = info.muro_demo;
+        int viga = VigaControl(), nodo = NodoControl();
+        int[] elementos = { col, mur, viga };
+
+        float[][] juegos = {
+            new[] { 1f, 1f, 0f, 0f },              // E1
+            new[] { 1.2f, 1.6f, 0f, 0f },          // E2
+            new[] { 1.2f, 1f, -1.4f, 0f },         // E3
+            new[] { -0.5f, 0.35f, 1.05f, -0.7f },  // feo a proposito: negativos
+        };
+        string[] nombres = { "E1", "E2", "E3", "feo" };
+
+        qa.LimpiarSeleccion();
+        s4.mostrarDiagramas = false;
+        s4.MostrarMapaDC(true);
+        Modo(ModoDeformada.CasoActivo);
+        Dato("ins.version_antes", s4.Ins_Version);
+        for (int k = 0; k < juegos.Length; k++)
+        {
+            float[] lam = s4.Ins_Lambdas;
+            for (int c = 0; c < 4; c++) lam[c] = juegos[k][c];
+            s4.Ins_Aplicar();
+            yield return null;   // el redibujo del caso va en LateUpdate
+            string p = "ins." + nombres[k];
+            Dato(p + ".lambdas", juegos[k]);
+            Dato(p + ".version", s4.Ins_Version);
+            Dato(p + ".ms", s4.Ins_MsUltima);
+            Dato(p + ".caso_activo", s4.casoActivo);
+            Dato(p + ".mapa_pintadas", s4.MapaDCPintadas);
+            Estado(p, s4.CasoActivo(), null, elementos, nodo);
+            Escribir();
+        }
+        Dato("ins.version_despues", s4.Ins_Version);
+        Dato("ins.combinaciones_pedidas", juegos.Length);
+
+        // 18b. E3 por el camino de Unity, con el panel en los sliders y el
+        //      mapa D/C: la misma foto que la 17 (E3 precalculado por Python).
+        {
+            float[] lam = s4.Ins_Lambdas;
+            for (int c = 0; c < 4; c++) lam[c] = juegos[2][c];
+            s4.Ins_Aplicar();
+            yield return null;
+        }
+        EncuadreGeneral();
+        PlegarPestanaCaso();
+        PanelUI.FijarPlegable("sup.superposicion", true);
+        Pestana(VisorQA.PESTANA_CASO);
+        yield return ScrollA("ins.sliders", 30f);
+        yield return Foto("18b_superposicion_instantanea_E3_en_Unity");
+        Dato("ins.foto_E3.version", s4.Ins_Version);
+        Dato("ins.foto_E3.ms", s4.Ins_MsUltima);
+
+        // 18c. El juego feo con la columna demo seleccionada y su P-M: el
+        //      punto de demanda que se movio con los sliders.
+        {
+            float[] lam = s4.Ins_Lambdas;
+            for (int c = 0; c < 4; c++) lam[c] = juegos[3][c];
+            s4.Ins_Aplicar();
+            yield return null;
+        }
+        qa.SeleccionarElemento(col);
+        PlegarInspectorElemento();
+        PanelUI.FijarPlegable("qa.s4.demanda / capacidad", true);
+        PanelUI.FijarPlegable("qa.elem.pm", true);
+        EncuadreGeneral();
+        Pestana(VisorQA.PESTANA_ELEMENTO);
+        yield return ScrollA("qa.s4.demanda / capacidad", 6f);
+        yield return Foto("18c_capacidad_columna_" + col + "_PM_con_sliders_instantaneos_feo", "Demanda");
+        Dato("ins.foto_feo.version", s4.Ins_Version);
+        CasoS4 cf = s4.CasoActivo();
+        if (cf != null) Demanda("ins.foto_feo.elem." + col, s4.DemandaDe(col, cf.nombre));
+
+        s4.MostrarMapaDC(false);
+        qa.LimpiarSeleccion();
+        Modo(ModoDeformada.Sin);
+        if (!string.IsNullOrEmpty(info.caso_por_defecto)) s4.ElegirCaso(info.caso_por_defecto);
+        Escribir();
     }
 }

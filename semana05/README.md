@@ -114,7 +114,7 @@ Todo desde la carpeta del repo, con el Python del proyecto. El detalle y
 el orden completo están en [`COMANDOS.md`](COMANDOS.md).
 
 ```powershell
-.\.venv\Scripts\python.exe comun\verificar_todo.py         # 41 de 41 EN OK, 2 a 8 min (17-09, Unity cerrado)
+.\.venv\Scripts\python.exe comun\verificar_todo.py         # 44 de 44 EN OK, 2 a 8 min (17-09, Unity cerrado)
 .\.venv\Scripts\python.exe comun\lanzar_unity.py sincronizar lt2
 .\.venv\Scripts\python.exe semana05\servidor_s5.py         # terminal aparte, se deja abierta
 .\.venv\Scripts\python.exe comun\lanzar_unity.py app lt2   # la app de Windows
