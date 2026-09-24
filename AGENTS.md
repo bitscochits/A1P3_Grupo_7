@@ -439,7 +439,7 @@ Todo junto: `python comun/verificar_todo.py`.
   (`16 · 2^-24 · Σ|λ·v|`). (6) Ocho datos imprecisos en los documentos
   (decenas de segundos que eran 2 s; 9 estaciones "en G y Q" que en Q son
   204 barras; la aritmética del error de interpolación; "< 1 ms" sin medir:
-  son 0.9–3.6 ms).
+  son 0.9–4.4 ms).
 - **Qué se verificó:** `verificar_instantanea.py lt2 --registro` cruza los
   números que Unity escribió al mover los sliders con Python (4 juegos de λ,
   cotas derivadas del redondeo y del float32) y la réplica en 10 juegos;

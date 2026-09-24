@@ -98,7 +98,7 @@ fierro obliga a las dos cosas: reanalizar *y* recalcular su curva.
 
 **a) Mover un slider no es modificar el modelo.** Es elegir otra
 combinación de casos que OpenSees ya resolvió. Por eso los sliders de
-`VisorSemana05.Instantanea.cs` responden en **0.9 a 3.6 ms** (medidos en
+`VisorSemana05.Instantanea.cs` responden en **0.9 a 4.4 ms** (medidos en
 la app: `semana05/capturas/registro.txt`, `ins.*.ms`) y funcionan sin
 servidor: solo escalan y suman. Y por eso están *verificados* contra
 Python en vez de dados por buenos (`verificar_instantanea.py`).

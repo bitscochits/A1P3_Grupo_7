@@ -123,7 +123,7 @@ las inercias, y viaja en el JSON. **Muro demo (9)** lo muestra.
 
 **Si preguntan por el `NO PASA 4/69`:** los cuatro son **muros** (14, 15,
 16 y 29 en E3; el 16 con `u = 9999`, que quiere decir que `P` cayó fuera
-del rango de su curva). Las **40 columnas del LT2 pasan en los 9 casos**.
+del rango de su curva). Las **40 columnas del LT2 pasan en los 15 casos**.
 La armadura de esos muros no está completa en los planos que tenemos —o
 viene en texto y cortes que el extractor no lee—, así que su `Mn` sale
 con menos fierro del que probablemente hay. Está registrado en
