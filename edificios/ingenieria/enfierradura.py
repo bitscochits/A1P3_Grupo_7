@@ -64,13 +64,36 @@ r"""
 from __future__ import annotations
 
 import copy
+import json
+import os
 
-# Detalle tipico de pilar, lamina 2017_67-000.
-DIAMETRO_LONGITUDINAL_MM = 16.0        # unico dato supuesto
-BARRAS_POR_CARA = 5                    # -> 16 perimetrales
-DIAMETRO_ESTRIBO_MM = 10.0
-SEPARACION_ESTRIBO_CM = 10.0
-RECUBRIMIENTO_M = 0.05
+# -----------------------------------------------------------------
+# EL DETALLE TIPICO DE PILAR, lamina 2017_67-000
+# -----------------------------------------------------------------
+# Hasta el 23-09 estos cinco numeros eran constantes aca. Ahora viven
+# en perfiles/ingenieria_2017_67.json, en secciones.columna.fierro,
+# cada uno con su origen (si se midio del plano) o su marca de
+# supuesto (si no), igual que las dimensiones y que el fierro de los
+# muros (perfiles/muros_2017_67.json). Se LEEN de ahi: una sola
+# definicion (CLAUDE.md 7.4), y se pueden cambiar sin tocar Python.
+#
+# EL DIAMETRO LONGITUDINAL ES EL UNICO SUPUESTO, y el 23-09 paso de
+# Ø16 a Ø22. No para que pase: el Ø16 se habia elegido creyendo que el
+# pilar era de 0.50 x 0.50 (rho = 1.29 %), y al leer del plano que es
+# de 0.70 x 0.70 esa misma barra da rho = 0.66 %, POR DEBAJO del
+# minimo de ACI 318-08 10.9.1 (1 %), o sea una columna que la norma no
+# admite. Ø22 es el MENOR diametro que la cumple (rho = 1.24 %). El
+# porque completo, con la sensibilidad medida, esta en el perfil.
+_PERFIL = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                       'perfiles', 'ingenieria_2017_67.json')
+with open(_PERFIL, encoding='utf-8') as _f:
+    _FIERRO = json.load(_f)['secciones']['columna']['fierro']
+
+DIAMETRO_LONGITUDINAL_MM = float(_FIERRO['diametro_longitudinal_mm'])
+BARRAS_POR_CARA = int(_FIERRO['barras_por_cara'])
+DIAMETRO_ESTRIBO_MM = float(_FIERRO['estribo']['diametro_mm'])
+SEPARACION_ESTRIBO_CM = float(_FIERRO['estribo']['separacion_cm'])
+RECUBRIMIENTO_M = float(_FIERRO['recubrimiento_m'])
 
 
 def detalle_tipico():
@@ -110,7 +133,10 @@ def detalle_tipico():
             'diametro_mm': DIAMETRO_LONGITUDINAL_MM,
             'distribucion': 'perimetral',
             'origen': ('numero y disposicion medidos de la lamina '
-                       '2017_67-000; diametro SUPUESTO'),
+                       '2017_67-000; diametro SUPUESTO: el menor que '
+                       'cumple la cuantia minima de ACI 318-08 10.9.1 '
+                       '(rho = 1.24 % en la seccion 0.70x0.70 de la '
+                       'lamina 2017_67-103)'),
         },
         'recubrimiento_m': RECUBRIMIENTO_M,
         'acero': {

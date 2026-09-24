@@ -529,4 +529,39 @@ public static class PanelUI
         GUILayout.Label(valor, Texto ?? GUI.skin.label);
         GUILayout.EndHorizontal();
     }
+
+    /// <summary>
+    /// De que NUCLEO es esta pata, cuando lo es.
+    ///
+    /// Lo calcula Python (comun/nucleos.py) y viaja en la fila de
+    /// demanda; aca solo se redacta. NO cambia el veredicto: un muro
+    /// que es pata de un nucleo se sigue revisando contra SU curva,
+    /// que es como revisan los "piers" los programas comerciales y lo
+    /// que corresponde, porque el ala traccionada tiene que llevar su
+    /// traccion con su propio fierro.
+    ///
+    /// Lo que dice es de DONDE viene el axial que lo saca de la curva.
+    /// Un nucleo resiste el volcamiento como un PAR de axiales entre
+    /// sus patas: si el grupo entero esta comprimido, la traccion de
+    /// esta pata es ese par interno y no una carga que el grupo tenga
+    /// que tomar. Medido en el conjunto: de las 119 filas que no
+    /// pasan, 92 son patas de un grupo COMPRIMIDO, 11 de un grupo
+    /// traccionado dentro de su As*fy y NINGUNA de un grupo
+    /// sobrepasado.
+    /// </summary>
+    public static string TextoNucleo(DemandaS4 d)
+    {
+        if (d == null || d.nucleo_patas <= 0) return "";
+        string donde = $"Pata de un nucleo de {d.nucleo_patas} muros: el grupo ";
+        float traccion = -d.nucleo_P;
+        if (d.nucleo_estado == "comprimido")
+            return donde + $"esta COMPRIMIDO ({d.nucleo_P:0} kN), asi que la traccion de "
+                 + "esta pata es el par interno del nucleo, no carga del grupo.";
+        if (d.nucleo_estado == "traccion_dentro")
+            return donde + $"tracciona {traccion:0} kN, DENTRO de lo que toma su propio "
+                 + $"fierro ({d.nucleo_Asfy:0} kN).";
+        return donde + $"tracciona {traccion:0} kN, POR SOBRE lo que toma su fierro "
+             + $"({d.nucleo_Asfy:0} kN): esta si es del grupo.";
+    }
+
 }

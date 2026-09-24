@@ -401,15 +401,38 @@ nNodesPerFloor = nX * nY
 # =============================================================================
 # MATERIAL AND SECTION DATA
 # =============================================================================
-fpc = 28.0
+# -----------------------------------------------------------------
+# DE DONDE SALEN ESTAS DIMENSIONES  (CLAUDE.md seccion 5)
+# -----------------------------------------------------------------
+# Hasta el 23-09 eran constantes peladas aca:
+#
+#     col_b, col_h = 0.50, 0.50
+#
+# sin origen y sin marca de supuesto. Ni el pilar, ni las vigas, ni la
+# losa, ni el f'c eran trazables al plano, y nadie lo veia porque un
+# numero suelto en el codigo no se parece a un supuesto. El pilar
+# ademas estaba MAL: la lamina 2017_67-103 dibuja 18 pilares por piso,
+# todos P. 70x70. Con 0.50 este cuerpo salia 38 % mas flexible en Y y
+# le fallaban 126 filas de columna en vez de 56.
+#
+# Ahora viven en perfiles/ingenieria_2017_67.json, cada una con su
+# 'origen' (si se leyo del plano) o su '_supuesto' (si no), y se LEEN
+# de ahi: una sola definicion (CLAUDE.md 7.4). Si falta una, el
+# KeyError dice cual; no hay default, que es lo que escondio el 0.50.
+_PERFIL = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                       'perfiles', 'ingenieria_2017_67.json')
+with open(_PERFIL, encoding='utf-8') as _f:
+    _SEC = json.load(_f)['secciones']
+
+fpc = float(_SEC['hormigon']['fpc_MPa'])
 Ec = 4700.0 * math.sqrt(fpc) * 1000.0  # Convert MPa -> kPa for m/kN units
 Gc = Ec / (2.0 * (1.0 + 0.2))
 
-col_b, col_h = 0.50, 0.50
-beamX_b, beamX_h = 0.30, 0.60
-beamY_b, beamY_h = 0.30, 0.80
-slab_t = 0.25
-gamma = 25.0
+col_b, col_h = float(_SEC['columna']['b']), float(_SEC['columna']['h'])
+beamX_b, beamX_h = float(_SEC['viga_x']['b']), float(_SEC['viga_x']['h'])
+beamY_b, beamY_h = float(_SEC['viga_y']['b']), float(_SEC['viga_y']['h'])
+slab_t = float(_SEC['losa']['espesor_m'])
+gamma = float(_SEC['hormigon']['peso_especifico_kNm3'])
 
 A_col = col_b * col_h
 Iy_col = col_b * col_h**3 / 12.0

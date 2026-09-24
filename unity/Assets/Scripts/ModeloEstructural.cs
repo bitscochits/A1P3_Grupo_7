@@ -107,9 +107,9 @@ public class Nodo
     // Vacio o ausente -> manda 'fijo'. Una rotula es [1,1,1,0,0,0].
     public int[] restricciones;
 
-    // Deformada precalculada del caso G, para dibujar sin servidor.
-    // NO son parte de la definicion del modelo; el servidor los ignora.
-    public float ux, uy, uz;
+    // Deformada precalculada del caso G, para dibujar sin servidor: las
+    // traslaciones y los GIROS, que curvan la barra (VisorEstructura.CurvaDe).
+    public float ux, uy, uz, rx, ry, rz;
 }
 
 [System.Serializable]

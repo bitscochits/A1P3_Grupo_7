@@ -1,5 +1,265 @@
 # Qué revisar para que los NO PASA tengan sentido
 
+> ## 24-09, EN CURSO: la losa colaborante (viga T)
+>
+> Pedro pregunto que se podria "inventar" para que Ingenieria dejara de
+> deformarse raro, y de la lista eligio lo unico que **no inventa ninguna
+> dimension**: que la viga trabaje con su ala de losa (ACI 318-08 8.12.2).
+> Hoy los dos modelos cargan la losa SOBRE la viga pero no dejan que la
+> losa la AYUDE: cada viga entra a OpenSees como un rectangulo bw x h.
+>
+> **La regla ya esta escrita y verificada**: `comun/losa_colaborante.py`, en
+> la suite. Usa el espesor de losa que cada edificio ya declara y los tres
+> topes de ACI (`L/4`, `8 hf` por lado, y el ancho tributario, que es la
+> media distancia al alma vecina y hace que una viga de borde se acote sola).
+> Medido sobre las vigas reales:
+>
+> | | vigas | Iz mediana | rango | que tope manda |
+> | --- | --- | --- | --- | --- |
+> | LT2 | 219 | **x1.39** | x1.00 a x1.88 | `L/4` en las 219 |
+> | Ingenieria | 301 | **x1.81** | x1.32 a x2.30 | `L/4` en 261, tributario en 40 |
+>
+> El ala ayuda casi el doble a Ingenieria, que es lo que corresponde: un alma
+> de 0.30 gana mas ala que una de 0.60. O sea que cierra parte de la
+> diferencia entre los dos cuerpos **sin tocar una sola dimension**.
+>
+> **Lo que se cambia y lo que no.** Solo `Iz`. El area se deja RECTANGULAR a
+> proposito: los dos modelos sacan el peso propio de la viga de `A * gamma` y
+> el peso de la losa ya entra aparte como carga tributaria; si el area
+> llevara el ala, la losa pesaria dos veces y el equilibrio cerraria igual,
+> sin avisar. `Iy` y `J` tampoco: el ala casi no ayuda en planta ni a
+> torsion, y dejarlos es el lado seguro.
+>
+> **Lo que falta: conectarla.** El ala depende de la luz (`b_eff <= L/4`) y
+> las luces van de 0.35 a 10.00 m, asi que NO sirve una seccion por tipo:
+> cada viga necesita la suya. Eso pide, en los DOS edificios, que el modelo
+> calcule `Iz` por viga y que el exportador emita una seccion por luz
+> distinta (hoy el nombre de seccion y el `tipo` son el mismo string en
+> Ingenieria, `export_unity.py:219`, asi que ademas hay que separarlos).
+> **No se hizo a medias a proposito**: con el ala en un cuerpo y no en el
+> otro, comparar los dos edificios dejaria de significar nada. Mientras
+> tanto el modelo no cambio: el repo sigue consistente y la suite verde.
+>
+> ---
+>
+> ## 23-09, HECHO: el pilar de Ingenieria (70x70 del plano, Ø22 de norma)
+>
+> **Donde quedo el mapa D/C, en tres pasos medidos sobre el conjunto con las
+> 15 combinaciones:**
+>
+> | | NO PASA de 3105 filas | elementos |
+> | --- | --- | --- |
+> | como estaba (0.50x0.50, Ø16) | 282 | 75 |
+> | con la seccion del plano (0.70x0.70, Ø16) | 167 | 49 |
+> | **+ el diametro minimo de norma (Ø22)** | **119** | **32** |
+>
+> **Y lo que queda ya casi no son columnas** (item 5, medido el 24-09 con
+> `comun/nucleos.py`, que agrupa las patas de UN piso de un nucleo):
+>
+> | | filas | elementos | que le pasa al GRUPO |
+> | --- | --- | --- | --- |
+> | pata de un nucleo **comprimido** | **92** (77 %) | 24 | la traccion de la pata es el par interno |
+> | pata de un nucleo traccionado **dentro** de su `As*fy` | **11** (9 %) | 6 | el grupo aguanta su traccion |
+> | pata de un nucleo **por sobre** su `As*fy` | **0** | 0 | — |
+> | muros que NO son pata de nada | 9 | 5 | — |
+> | columnas de Ingenieria | 7 | 2 | — |
+>
+> **Ni un solo grupo esta sobrepasado en axial.** Las 103 filas de pata salen
+> enteras de mirar la pata sola: el nucleo resiste el volcamiento como un par
+> de axiales entre sus patas, y la traccionada se compara despues contra su
+> propio `As*fy` como si esa traccion fuera carga externa. **El diametro no
+> puede bajar esto**: se arregla con la seccion de fibras del nucleo completo
+> (biaxial, porque 12 de los 17 grupos tienen muros cruzados; 1-2 dias).
+>
+> Lo que queda SIN coartada son **16 filas en 7 elementos**, todas en
+> `0.9G +- 1.4E`: los muros `200014`, `200015`, `200030` y `200031` del LT2
+> (todos `M 0.30x1.45`, u de 1.007 a 2.126), el `100465` de Ingenieria
+> (u 1.302) y las columnas `100042` y `100043` (u 1.198 y 1.149).
+>
+> Mientras tanto, el dato **lo dice**: cada fila de demanda viaja con
+> `nucleo_patas`, `nucleo_P`, `nucleo_Asfy` y `nucleo_estado`, y la ficha P-M
+> del visor escribe "Pata de un nucleo de N muros: el grupo esta COMPRIMIDO
+> (X kN)...". El veredicto `pasa` NO cambia: revisar pata por pata es un
+> procedimiento aceptado y el ala traccionada tiene que llevar su traccion
+> con su propio fierro. Lo que cambia es que el mapa deja de presentar como
+> falta de capacidad lo que es un reparto interno.
+>
+> ### El pilar: 0.70 x 0.70 del plano
+>
+> **Es el hallazgo mas grande de toda la lista, y no estaba en ella. Ya esta
+> adoptado**, con la lamina como origen: Pedro conto 18 pilares en la
+> **lamina 2017_67-103** y los vio todos de 70x70.
+>
+> **Efecto en el conjunto, ya en los datos: 282 -> 167 NO PASA de 3105 filas.**
+> Columnas de Ingenieria 126 -> 55 filas / 19 elementos; muros de Ingenieria
+> 132 -> 88 / 20; el LT2 no se toca (24 / 10). El desplazamiento maximo de los
+> 15 casos baja de 53.91 a 39.10 mm, y por eso la escala grafica de la
+> deformada pasa de x83 a x110.
+>
+> **Numeros de control nuevos** (CLAUDE.md seccion 8, AGENTS.md,
+> `edificios/conjunto/README.md`): Ingenieria `G = 52 600.50 kN` (era
+> 50 652.2; el peso propio de las columnas sube 1 948.3 kN) y conjunto
+> `G = 86 749.48 kN`, que sigue siendo **exactamente** la suma de los dos
+> cuerpos (diferencia 0.0000 kN: la junta sigue libre).
+>
+> **Como quedo declarado.** No como constante: en
+> `edificios/ingenieria/perfiles/ingenieria_2017_67.json`, bloque `secciones`,
+> con su `origen`. De paso se declararon ahi tambien las vigas, la losa y el
+> `f'c`, que tenian el mismo problema, marcadas con `_supuesto: true`.
+> `benchmark_3d.py` las LEE de ahi y ya no las tiene escritas; si falta una,
+> el KeyError dice cual (antes un default silencioso escondia el 0.50).
+>
+> - **El conteo calza**: el modelo tiene exactamente **18 columnas por piso**
+>   (21 posiciones en planta x 5 niveles = los 82 *elementos*). Lo que no
+>   calza es el **tamano**.
+> - **De donde sale el 0.50**: `edificios/ingenieria/benchmark_3d.py:409`,
+>   `col_b, col_h = 0.50, 0.50`. Es una **constante pelada**, sin `origen`,
+>   sin `_supuesto` y sin referencia a ninguna lamina, bajo un encabezado
+>   "MATERIAL AND SECTION DATA". Lo mismo las vigas (`0.30x0.60`,
+>   `0.30x0.80`), la losa (`0.25`) y el `f'c = 28`. El perfil
+>   `perfiles/ingenieria_2017_67.json` solo declara `_que_es`, `unidades` y
+>   `terreno`: **ninguna dimension de Ingenieria es trazable al plano**. Es
+>   exactamente lo que CLAUDE.md seccion 5 dice que no puede pasar.
+> - **Medido** (23-09) rehaciendo el pipeline entero de Ingenieria con
+>   `col_b, col_h = 0.70, 0.70` --armar + calcular + exportar, asi que el
+>   peso propio tambien cambia-- y despues **restaurado**: no se adopto nada.
+>
+>   | | 0.50 x 0.50 (hoy) | 0.70 x 0.70 |
+>   | --- | --- | --- |
+>   | NO PASA de Ingenieria, 15 combinaciones | 258 filas | **145** |
+>   | de esas, columnas | 126 filas / 38 elem | **56 / 19** |
+>   | de esas, muros | 132 filas / 27 elem | **89 / 21** |
+>   | UZ maximo bajo G | 22.30 mm | **19.04 mm** |
+>   | desplazamiento lateral EY | 33.16 mm | **20.63 mm** (-38 %) |
+>   | desplazamiento lateral EX | 6.88 mm | **5.98 mm** (-13 %) |
+>
+> - **Y el diametro dejo de ser libre, y por eso se cambio** (23-09, con el
+>   OK de Pedro): con 16 barras Ø16 en una columna de 70x70 la cuantia cae a
+>   **0.66 %**, por debajo del minimo de norma (ACI 318-08 10.9.1, ρ >= 1 %),
+>   o sea una columna que la norma no admite. El menor admisible es **Ø22**
+>   (ρ = 1.24 %) y es el que quedo declarado en el perfil. **La justificacion
+>   es el minimo de norma sobre la seccion leida del plano, no "para que
+>   pase"**: es la unica que se sostiene en una defensa, y ademas no deja el
+>   mapa en cero (quedan 7 filas de columna y 112 de muro). El diametro sigue
+>   marcado como supuesto: el 2017_67 no tiene cuadro de pilares.
+>
+>   | Ø en 70x70 | ρ | NO PASA de 1230 |
+>   | --- | --- | --- |
+>   | Ø16 | 0.66 % | 56 (cuantia ilegal) |
+>   | Ø18 | 0.83 % | 31 (cuantia ilegal) |
+>   | **Ø22** | **1.24 %** | **7** |
+>   | Ø25 | 1.60 % | 1 |
+>   | Ø28 | 2.01 % | 0 |
+>
+> - **Ademas explica la otra queja**: "Ingenieria se deforma raro, mucho mas
+>   que el LT2". Con 70x70 el lateral en Y baja un 38 %.
+> - **Que falta para adoptarlo**: que el plano lo confirme (una lamina de
+>   planta o un corte de pilar del 2017_67 con la dimension), y que Eduardo
+>   lo cambie en su carpeta **con su `origen` al lado**. De paso, las vigas,
+>   la losa y el `f'c` tienen el mismo problema de procedencia.
+>
+> ---
+>
+> ## ESTADO AL 23-09: la respuesta, y lo que se hizo
+>
+> Pedro pidió cerrar el **por qué no pasan los casos**. Se cerró, y el
+> resultado cabe en una tabla. Con las **15 combinaciones** (las 9 de antes
+> más las 6 que faltaban, ítem 1b, ya implementadas) y la capacidad tomada
+> por el **peor de los dos sentidos** (ítem 10, ya implementado), el conjunto
+> da **282 NO PASA de 3105 comprobaciones (9.1 %) en 75 elementos de 207**:
+>
+> | causa | filas | elementos | qué es |
+> | --- | --- | --- | --- |
+> | muros que son **pata de un núcleo**, revisados solos (ítem 5) | **156** (55 %) | 37 | un **procedimiento** del chequeo |
+> | columnas de Ingeniería, familia única con **Ø16 supuesto** (ítem 6) | **126** (45 %) | 38 | un **dato que no está en el plano** |
+> | cualquier otra cosa | **0** | 0 | — |
+>
+> O sea: **ninguna de las 282 fallas dice "el edificio no resiste"**. Las 282
+> están enteras en esos dos cubos: revisamos una pata de núcleo contra su
+> propio `As·fy`, y no sabemos el diámetro del fierro de los pilares del
+> 2017_67. No queda **ni un** muro suelto ni una columna del LT2 que falle.
+>
+> El grupo de núcleo se define estricto: muros unidos por una cadena de
+> brazos rígidos **sin viga ni columna en el medio** (de los 183 brazos del
+> conjunto, 96 llegan a un nudo con viga o columna y no unen núcleo). Con esa
+> regla, **77 de los 96 muros son pata de un núcleo**, en 36 grupos.
+>
+> **Las dos mediciones que lo cierran** (23-09, sobre el anexo del conjunto
+> de 15 casos):
+>
+> - **Las patas de núcleo.** 39 de las 43 banderas `u = 9999` son pata de un
+>   grupo unido por brazos rígidos, y **33 de ellas pertenecen a un grupo que
+>   está en COMPRESIÓN NETA**. La tracción que saca a esa pata de su curva es
+>   el par interno del núcleo, no carga que el grupo tenga que tomar. En las
+>   6 que quedan el grupo sí está traccionado, pero muy lejos de su `As·fy`
+>   de grupo (el `100478`: −324 kN contra ~2580 kN del grupo, un 13 %).
+> - **El diámetro.** Las 1230 filas de la familia de columnas de Ingeniería,
+>   rehechas solo cambiando el diámetro y con las 15 combinaciones:
+>
+>   | diámetro | As (cm²) | ρ | NO PASA de 1230 |
+>   | --- | --- | --- | --- |
+>   | **Ø16 (el supuesto de hoy)** | 32.17 | 1.29 % | **126** |
+>   | Ø18 | 40.72 | 1.63 % | 89 |
+>   | Ø22 | 60.82 | 2.43 % | 32 |
+>   | Ø25 | 78.54 | 3.14 % | 8 |
+>   | Ø28 | 98.52 | 3.94 % | 1 |
+>
+>   Un 16Ø22 (ρ = 2.43 %) es tan plausible como el 16Ø16 en un pilar de
+>   50 × 50. **No se puede elegir para que pase**: hay que leerlo del plano.
+>
+> ### Lo que cambió en el código el 23-09
+>
+> - **Ítem 1b HECHO.** `semana03/parametros.json` declara ahora **11**
+>   combinaciones: se agregaron `1.2G+1.0Q−1.4EX`, `1.2G+1.0Q−1.4EY`,
+>   `0.9G±1.4EX` y `0.9G±1.4EY`. El anexo pasó de 9 a 15 casos y la
+>   autoverificación de equilibrio cierra en los 15. Efecto medido: los
+>   elementos que fallan pasan de 52 a 75.
+> - **Ítem 10 HECHO.** `capacidad.interaccion()` corre la sección **y su
+>   espejo** (`capacidad.espejo`) y se queda con el **mínimo** de los dos
+>   `Mn`, que es lo que corresponde comparar con la `|M|` de la demanda. Se
+>   salta la segunda corrida cuando el fierro es simétrico
+>   (`capacidad.fierro_simetrico`). Efecto medido **con las mismas 9
+>   combinaciones de antes**: 110 → **111** NO PASA, los mismos 52
+>   elementos. Volteó **un** veredicto, exactamente el `200045` en EX que
+>   había predicho la revisión adversarial del 18-09.
+>
+> ### Lo que se DESCARTÓ el 23-09: el ítem 4 estaba equivocado
+>
+> El ítem 4 decía que la rama de tracción de la curva P-M "tiene un solo
+> punto" y que densificarla arreglaría los `u > 15`. **Es falso, y
+> densificarla sería inflar la capacidad.** Demostrado sobre el muro
+> `200012` (`As·fy` = 5882.5 kN, `M0` = 9108.7 kN·m en flexión pura):
+>
+> | f | P = f·P_tracción | la recta de 2 puntos | `(As·fy − \|P\|)·jd` |
+> | --- | --- | --- | --- |
+> | 0.90 | −5294.3 | 910.9 | 910.9 |
+> | 0.70 | −4117.8 | 2732.6 | 2732.6 |
+> | 0.50 | −2941.3 | 4554.3 | 4554.3 |
+>
+> Coinciden **al último decimal**: con el acero sin endurecer, la interacción
+> entre tracción pura y flexión pura **es** lineal, así que la recta de dos
+> puntos ya es la rama nominal. Lo que da la corrida de fibras en esa zona
+> (6670 kN·m en vez de 911) sale entero del endurecimiento de `Steel01`, que
+> lleva el acero a `ε_s = 0.10` ≈ 1.47 `fy`: no es capacidad nominal. Los
+> `u > 15` **no son un artefacto de muestreo**; son el axial, y el axial es
+> el ítem 5.
+>
+> ### Lo que sigue abierto, y de quién es
+>
+> | qué | quién | efecto medido |
+> | --- | --- | --- |
+> | El Ø longitudinal de los pilares del 2017_67 | Eduardo + el plano | 126 filas |
+> | Revisar el núcleo como grupo y no pata por pata (sección compuesta) | `comun/`, 1-2 días | 142 filas |
+> | El pilar en (43.02, 55.20) (ítem 3) | el plano | las 7 fallas sin sismo |
+> | Los muros de Ingeniería sobre ±0.00 (ítem 2) | Eduardo | parte de las 142 |
+> | El nivel del `cs` (ítem 1) | el profesor | escala todo |
+> | φ y el chequeo de corte (ítem 9) | decisión | ambos en contra |
+> | Los 11 muros del LT2 sin curva (ítem 8) | Pedro + el plano | omisión, optimista |
+>
+> **Lo que sigue abajo es la lista del 18-09, tal como se escribió**, con sus
+> números de 9 combinaciones. Se conserva porque es el registro de cómo se
+> llegó acá; donde un ítem ya se hizo o se descartó, lo dice este bloque.
+
 Lista priorizada, en orden de **cuánto mueve el D/C × cuánta confianza hay en
 la medición**. Todo lo que dice "medido" se midió el 18-09 sobre el **anexo
 del CONJUNTO** (`info.edificio = "conjunto"`, 937 elementos, 207 con curva
@@ -332,7 +592,7 @@ la de las plantas, y **declarar la deriva medida en el informe**. Esto no es
 un error: es lo que hace fallar 44 de las 51 filas de columna y buena parte
 de las 51 de muro, y hoy no está dicho en ninguna parte.
 
-**Por qué se sospecha.** `edificios/ingenieria/benchmark_3d.py:588-616`
+**Por qué se sospecha.** `edificios/ingenieria/benchmark_3d.py:611-639`
 declara que *cada muro sube solo hasta donde lo muestran las plantas* y que
 *sobre el nivel ±0.00 solo sobrevive el núcleo de escalera/ascensor*, porque
 los muros de la fundación incluyen los **muros de contención** del
@@ -406,7 +666,7 @@ En el plano: las plantas de cielo de los pisos 2.º, 3.º y 4.º del 2017_67,
 para confirmar que sobre ±0.00 solo están las 12 corridas del núcleo.
 
 **Ojo, un detalle que no cuadra:** la tabla del comentario de
-`benchmark_3d.py:596-598` dice "largo presente 168.3 / 105.0 / 78.8 / 13.1 /
+`benchmark_3d.py:619-621` dice "largo presente 168.3 / 105.0 / 78.8 / 13.1 /
 13.1 / 13.1 m" y el modelo trae 117.39 / 90.04 / 18.51 / 18.51 / 18.51.
 Puede ser diferencia de definición (largo en la **planta** contra largo en el
 **piso**), pero hay que cuadrarlo antes de citar cualquiera de los dos.
@@ -663,7 +923,11 @@ Ingeniería); la revisión por grupo es `comun/`, avisar.
 **Qué revisar.** El diámetro longitudinal real de los pilares del 2017_67, o
 la justificación del supuesto con la sensibilidad al lado.
 
-**Por qué se sospecha.** `edificios/ingenieria/enfierradura.py:69`:
+**Por qué se sospecha.** *(23-09: ya no es una constante; el diámetro vive
+en `perfiles/ingenieria_2017_67.json`, `secciones.columna.fierro`, y desde el
+23-09 es Ø22, el mínimo de norma sobre la sección de 70×70 — ver el bloque
+de estado al principio. Lo que sigue es como estaba el 18-09.)*
+`edificios/ingenieria/enfierradura.py` tenía
 `DIAMETRO_LONGITUDINAL_MM = 16.0  # unico dato supuesto`. El dato lo declara
 en el JSON (`origen: "numero y disposicion medidos de la lamina 2017_67-000;
 diametro SUPUESTO"`, `_procedencia: "El proyecto 2017_67 NO tiene cuadro de

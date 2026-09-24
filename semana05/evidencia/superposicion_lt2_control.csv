@@ -10,11 +10,11 @@ E1,columna,5,Elem_5_columna,pasa,True,True,panel del elemento y mapa D/C
 E1,columna,5,Elem_5_columna,sum lambda u_caso (NO es u),0.026913,0.02472,tabla de no linealidad (no se muestra en Unity)
 E1,muro,9,Elem_9_muro,P,3591.014,3591.014,panel del elemento y ventana P-M
 E1,muro,9,Elem_9_muro,M,546.9632,546.9632,panel del elemento y ventana P-M
-E1,muro,9,Elem_9_muro,Mn,27759.1199,27759.1199,panel del elemento y ventana P-M
-E1,muro,9,Elem_9_muro,u,0.019704,0.019704,panel del elemento y ventana P-M
+E1,muro,9,Elem_9_muro,Mn,26109.7731,26109.7731,panel del elemento y ventana P-M
+E1,muro,9,Elem_9_muro,u,0.020949,0.020949,panel del elemento y ventana P-M
 E1,muro,9,Elem_9_muro,extremo,j (superior),j (superior),panel del elemento y ventana P-M
 E1,muro,9,Elem_9_muro,pasa,True,True,panel del elemento y mapa D/C
-E1,muro,9,Elem_9_muro,sum lambda u_caso (NO es u),0.021293,0.019704,tabla de no linealidad (no se muestra en Unity)
+E1,muro,9,Elem_9_muro,sum lambda u_caso (NO es u),0.022786,0.020949,tabla de no linealidad (no se muestra en Unity)
 E1,viga,92,Elem_92_viga_x,My(0),-639.5379,-639.5378,diagrama My
 E1,viga,92,Elem_92_viga_x,My(L),793.7046,793.7048,diagrama My
 E1,viga,92,Elem_92_viga_x,max|My| (x = 5.0000),793.7046,,diagrama My
@@ -32,11 +32,11 @@ E2,columna,5,Elem_5_columna,pasa,True,True,panel del elemento y mapa D/C
 E2,columna,5,Elem_5_columna,sum lambda u_caso (NO es u),0.035854,0.033477,tabla de no linealidad (no se muestra en Unity)
 E2,muro,9,Elem_9_muro,P,4551.8382,4551.8381,panel del elemento y ventana P-M
 E2,muro,9,Elem_9_muro,M,663.8634,663.8634,panel del elemento y ventana P-M
-E2,muro,9,Elem_9_muro,Mn,30352.9987,30352.9984,panel del elemento y ventana P-M
-E2,muro,9,Elem_9_muro,u,0.021871,0.021871,panel del elemento y ventana P-M
+E2,muro,9,Elem_9_muro,Mn,28766.466,28766.4657,panel del elemento y ventana P-M
+E2,muro,9,Elem_9_muro,u,0.023078,0.023078,panel del elemento y ventana P-M
 E2,muro,9,Elem_9_muro,extremo,j (superior),j (superior),panel del elemento y ventana P-M
 E2,muro,9,Elem_9_muro,pasa,True,True,panel del elemento y mapa D/C
-E2,muro,9,Elem_9_muro,sum lambda u_caso (NO es u),0.025944,0.021871,tabla de no linealidad (no se muestra en Unity)
+E2,muro,9,Elem_9_muro,sum lambda u_caso (NO es u),0.027775,0.023078,tabla de no linealidad (no se muestra en Unity)
 E2,viga,92,Elem_92_viga_x,My(0),-826.2312,-826.2311,diagrama My
 E2,viga,92,Elem_92_viga_x,My(L),1022.8738,1022.8739,diagrama My
 E2,viga,92,Elem_92_viga_x,max|My| (x = 5.0000),1022.8738,,diagrama My
@@ -54,11 +54,11 @@ E3,columna,5,Elem_5_columna,pasa,True,True,panel del elemento y mapa D/C
 E3,columna,5,Elem_5_columna,sum lambda u_caso (NO es u),-0.266485,0.192959,tabla de no linealidad (no se muestra en Unity)
 E3,muro,9,Elem_9_muro,P,3285.0992,3285.0991,panel del elemento y ventana P-M
 E3,muro,9,Elem_9_muro,M,4826.6975,4826.6975,panel del elemento y ventana P-M
-E3,muro,9,Elem_9_muro,Mn,26874.1318,26874.1316,panel del elemento y ventana P-M
-E3,muro,9,Elem_9_muro,u,0.179604,0.179604,panel del elemento y ventana P-M
+E3,muro,9,Elem_9_muro,Mn,25214.3851,25214.3849,panel del elemento y ventana P-M
+E3,muro,9,Elem_9_muro,u,0.191426,0.191426,panel del elemento y ventana P-M
 E3,muro,9,Elem_9_muro,extremo,i (inferior),i (inferior),panel del elemento y ventana P-M
 E3,muro,9,Elem_9_muro,pasa,True,True,panel del elemento y mapa D/C
-E3,muro,9,Elem_9_muro,sum lambda u_caso (NO es u),-0.19726,0.179604,tabla de no linealidad (no se muestra en Unity)
+E3,muro,9,Elem_9_muro,sum lambda u_caso (NO es u),-0.217761,0.191426,tabla de no linealidad (no se muestra en Unity)
 E3,viga,92,Elem_92_viga_x,My(0),-742.6361,-742.6359,diagrama My
 E3,viga,92,Elem_92_viga_x,My(L),628.8631,628.8635,diagrama My
 E3,viga,92,Elem_92_viga_x,max|My| (x = 0.0000),-742.6361,,diagrama My

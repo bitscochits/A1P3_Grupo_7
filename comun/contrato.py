@@ -335,7 +335,9 @@ def unir(estructura: dict, vista: dict = None,
     """
     Rehace el diccionario completo. Si vienen resultados, sus
     desplazamientos se vuelven a pegar en cada nodo, que es como los
-    espera el visor.
+    espera el visor: las traslaciones Y LOS GIROS, porque el visor
+    curva cada barra con las funciones de forma de sus dos nodos
+    (VisorEstructura.CurvaDe) y sin rx/ry/rz la dibuja recta.
     """
     completo = dict(estructura)
     if vista:
@@ -349,6 +351,8 @@ def unir(estructura: dict, vista: dict = None,
             d = desp.get(int(n['id']))
             if d:
                 n['ux'], n['uy'], n['uz'] = d['ux'], d['uy'], d['uz']
+                for g in ('rx', 'ry', 'rz'):
+                    n[g] = d.get(g, 0.0)
             nodos.append(n)
         completo['nodos'] = nodos
     return completo

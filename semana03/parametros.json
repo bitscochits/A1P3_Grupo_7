@@ -150,6 +150,54 @@
       "EX": 0.0,
       "EY": 1.4,
       "_por_que": "Sismo en Y."
+    },
+    {
+      "nombre": "1.2G+1.0Q-1.4EX",
+      "G": 1.2,
+      "Q": 1.0,
+      "EX": -1.4,
+      "EY": 0.0,
+      "_por_que": "El sismo actua en los DOS sentidos, y en un modelo lineal -E no es la misma demanda: cambia el signo del axial sismico, asi que la pata de nucleo que con +EX esta comprimida pasa a traccionada. Sin esta combinacion el mapa D/C es optimista."
+    },
+    {
+      "nombre": "1.2G+1.0Q-1.4EY",
+      "G": 1.2,
+      "Q": 1.0,
+      "EX": 0.0,
+      "EY": -1.4,
+      "_por_que": "Sismo en Y, sentido contrario. Ver 1.2G+1.0Q-1.4EX."
+    },
+    {
+      "nombre": "0.9G+1.4EX",
+      "G": 0.9,
+      "Q": 0.0,
+      "EX": 1.4,
+      "EY": 0.0,
+      "_por_que": "Gravedad MINIMA con sismo, ACI 318-08 9.2.1 (9-7) / NCh3171. Es la que manda en traccion de muros y de columnas de borde: con 1.2G la compresion de la gravedad tapa la traccion del sismo. Se usa 0.9 y no 1.2 porque el peso propio, cuando ayuda, no se puede mayorar."
+    },
+    {
+      "nombre": "0.9G-1.4EX",
+      "G": 0.9,
+      "Q": 0.0,
+      "EX": -1.4,
+      "EY": 0.0,
+      "_por_que": "Gravedad minima, sismo en X en el otro sentido."
+    },
+    {
+      "nombre": "0.9G+1.4EY",
+      "G": 0.9,
+      "Q": 0.0,
+      "EX": 0.0,
+      "EY": 1.4,
+      "_por_que": "Gravedad minima, sismo en Y."
+    },
+    {
+      "nombre": "0.9G-1.4EY",
+      "G": 0.9,
+      "Q": 0.0,
+      "EX": 0.0,
+      "EY": -1.4,
+      "_por_que": "Gravedad minima, sismo en Y en el otro sentido."
     }
   ],
   "combinacion_por_defecto": "S3"

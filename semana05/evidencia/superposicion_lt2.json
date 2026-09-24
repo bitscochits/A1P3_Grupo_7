@@ -37,9 +37,9 @@
    },
    "suma_abs_lambdas": 2.0,
    "tiempos_s": {
-    "explicita": 0.0219,
-    "caso_combinado": 0.0118,
-    "post_combinar": 10.8859
+    "explicita": 0.0333,
+    "caso_combinado": 0.0162,
+    "post_combinar": 5.1719
    },
    "cierre_bloque_caso": {
     "cociente": 0.7678571424520488,
@@ -378,10 +378,10 @@
     },
     {
      "n_comparados": 69,
-     "peor_abs": 4.520280140196675e-07,
-     "cota_en_el_peor": 5.552652813278497e-07,
-     "cociente": 0.8140757746255939,
-     "donde": "elemento 61 u",
+     "peor_abs": 3.9975580698112245e-07,
+     "cota_en_el_peor": 5.060972277675156e-07,
+     "cociente": 0.7898794639609389,
+     "donde": "elemento 9 u",
      "fuera_de_cota": 0,
      "calza": true,
      "estado": "E1",
@@ -390,10 +390,10 @@
     },
     {
      "n_comparados": 69,
-     "peor_abs": 4.520280140196675e-07,
-     "cota_en_el_peor": 5.552652813278497e-07,
-     "cociente": 0.8140757746255939,
-     "donde": "elemento 61 u",
+     "peor_abs": 3.9975580698112245e-07,
+     "cota_en_el_peor": 5.060972277675156e-07,
+     "cociente": 0.7898794639609389,
+     "donde": "elemento 9 u",
      "fuera_de_cota": 0,
      "calza": true,
      "estado": "E1",
@@ -402,10 +402,10 @@
     },
     {
      "n_comparados": 69,
-     "peor_abs": 4.520280140196675e-07,
-     "cota_en_el_peor": 5.552652813278497e-07,
-     "cociente": 0.8140757746255939,
-     "donde": "elemento 61 u",
+     "peor_abs": 3.9975580698112245e-07,
+     "cota_en_el_peor": 5.060972277675156e-07,
+     "cociente": 0.7898794639609389,
+     "donde": "elemento 9 u",
      "fuera_de_cota": 0,
      "calza": true,
      "estado": "E1",
@@ -440,12 +440,12 @@
    "identidades": [
     {
      "que": "(3) = (2)",
-     "hojas": 24372,
+     "hojas": 24648,
      "primera_diferencia": null
     },
     {
      "que": "(4) = (2)",
-     "hojas": 24372,
+     "hojas": 24648,
      "primera_diferencia": null
     }
    ],
@@ -535,18 +535,18 @@
      "M": 546.9632,
      "M_fuera_plano": 253.353,
      "extremo": "j (superior)",
-     "Mn": 27759.1199,
-     "u": 0.019704,
+     "Mn": 26109.7731,
+     "u": 0.020949,
      "pasa": true,
      "explicita": {
       "P": 3591.014,
       "M": 546.9632,
-      "Mn": 27759.1199,
-      "u": 0.019704,
+      "Mn": 26109.7731,
+      "u": 0.020949,
       "extremo": "j (superior)"
      },
-     "Mn_de_su_propia_curva": 27759.1199,
-     "suma_lambda_u_de_los_casos_base": 0.021293
+     "Mn_de_su_propia_curva": 26109.7731,
+     "suma_lambda_u_de_los_casos_base": 0.022786
     },
     "viga": {
      "id": 92,
@@ -611,9 +611,9 @@
    },
    "suma_abs_lambdas": 2.8,
    "tiempos_s": {
-    "explicita": 0.28,
-    "caso_combinado": 0.0686,
-    "post_combinar": 0.1213
+    "explicita": 0.0313,
+    "caso_combinado": 0.0187,
+    "post_combinar": 0.035
    },
    "cierre_bloque_caso": {
     "cociente": 0.7875776376478332,
@@ -952,10 +952,10 @@
     },
     {
      "n_comparados": 69,
-     "peor_abs": 4.913631722917519e-07,
-     "cota_en_el_peor": 5.43864482984647e-07,
-     "cociente": 0.9034661899508941,
-     "donde": "elemento 28 u",
+     "peor_abs": 5.352355280374699e-07,
+     "cota_en_el_peor": 6.552685783167892e-07,
+     "cociente": 0.8168185470030437,
+     "donde": "elemento 36 u",
      "fuera_de_cota": 0,
      "calza": true,
      "estado": "E2",
@@ -964,10 +964,10 @@
     },
     {
      "n_comparados": 69,
-     "peor_abs": 4.913631722917519e-07,
-     "cota_en_el_peor": 5.43864482984647e-07,
-     "cociente": 0.9034661899508941,
-     "donde": "elemento 28 u",
+     "peor_abs": 5.352355280374699e-07,
+     "cota_en_el_peor": 6.552685783167892e-07,
+     "cociente": 0.8168185470030437,
+     "donde": "elemento 36 u",
      "fuera_de_cota": 0,
      "calza": true,
      "estado": "E2",
@@ -976,10 +976,10 @@
     },
     {
      "n_comparados": 69,
-     "peor_abs": 4.913631722917519e-07,
-     "cota_en_el_peor": 5.43864482984647e-07,
-     "cociente": 0.9034661899508941,
-     "donde": "elemento 28 u",
+     "peor_abs": 5.352355280374699e-07,
+     "cota_en_el_peor": 6.552685783167892e-07,
+     "cociente": 0.8168185470030437,
+     "donde": "elemento 36 u",
      "fuera_de_cota": 0,
      "calza": true,
      "estado": "E2",
@@ -1014,17 +1014,17 @@
    "identidades": [
     {
      "que": "(3) = (2)",
-     "hojas": 24372,
+     "hojas": 24648,
      "primera_diferencia": null
     },
     {
      "que": "(4) = (2)",
-     "hojas": 24372,
+     "hojas": 24648,
      "primera_diferencia": null
     },
     {
      "que": "(2) = anexo '1.2G+1.6Q'",
-     "hojas": 24370,
+     "hojas": 24646,
      "primera_diferencia": null
     }
    ],
@@ -1114,18 +1114,18 @@
      "M": 663.8634,
      "M_fuera_plano": 324.0776,
      "extremo": "j (superior)",
-     "Mn": 30352.9987,
-     "u": 0.021871,
+     "Mn": 28766.466,
+     "u": 0.023078,
      "pasa": true,
      "explicita": {
       "P": 4551.8381,
       "M": 663.8634,
-      "Mn": 30352.9984,
-      "u": 0.021871,
+      "Mn": 28766.4657,
+      "u": 0.023078,
       "extremo": "j (superior)"
      },
-     "Mn_de_su_propia_curva": 30352.9984,
-     "suma_lambda_u_de_los_casos_base": 0.025944
+     "Mn_de_su_propia_curva": 28766.4657,
+     "suma_lambda_u_de_los_casos_base": 0.027775
     },
     "viga": {
      "id": 92,
@@ -1190,9 +1190,9 @@
    },
    "suma_abs_lambdas": 3.5999999999999996,
    "tiempos_s": {
-    "explicita": 0.1605,
-    "caso_combinado": 0.0966,
-    "post_combinar": 0.0692
+    "explicita": 0.0272,
+    "caso_combinado": 0.0208,
+    "post_combinar": 0.0695
    },
    "cierre_bloque_caso": {
     "cociente": 0.6865079357569445,
@@ -1388,8 +1388,8 @@
     {
      "n_comparados": 69,
      "peor_abs": 0.00019999999999242846,
-     "cota_en_el_peor": 0.00028000000938061757,
-     "cociente": 0.714285690328527,
+     "cota_en_el_peor": 0.00028000000844161793,
+     "cociente": 0.714285692723934,
      "donde": "elemento 76 P",
      "fuera_de_cota": 0,
      "calza": true,
@@ -1400,8 +1400,8 @@
     {
      "n_comparados": 69,
      "peor_abs": 0.00019999999999242846,
-     "cota_en_el_peor": 0.00028000000938061757,
-     "cociente": 0.714285690328527,
+     "cota_en_el_peor": 0.00028000000844161793,
+     "cociente": 0.714285692723934,
      "donde": "elemento 76 P",
      "fuera_de_cota": 0,
      "calza": true,
@@ -1412,8 +1412,8 @@
     {
      "n_comparados": 69,
      "peor_abs": 0.00019999999999242846,
-     "cota_en_el_peor": 0.00028000000938061757,
-     "cociente": 0.714285690328527,
+     "cota_en_el_peor": 0.00028000000844161793,
+     "cociente": 0.714285692723934,
      "donde": "elemento 76 P",
      "fuera_de_cota": 0,
      "calza": true,
@@ -1531,10 +1531,10 @@
     },
     {
      "n_comparados": 69,
-     "peor_abs": 4.887049333685001e-07,
-     "cota_en_el_peor": 5.330237185486813e-07,
-     "cociente": 0.9168540092346122,
-     "donde": "elemento 28 u",
+     "peor_abs": 4.5339007800210274e-07,
+     "cota_en_el_peor": 5.194777464892306e-07,
+     "cociente": 0.872780559063856,
+     "donde": "elemento 12 u",
      "fuera_de_cota": 0,
      "calza": true,
      "estado": "E3",
@@ -1543,10 +1543,10 @@
     },
     {
      "n_comparados": 69,
-     "peor_abs": 4.887049333685001e-07,
-     "cota_en_el_peor": 5.330237185486813e-07,
-     "cociente": 0.9168540092346122,
-     "donde": "elemento 28 u",
+     "peor_abs": 4.5339007800210274e-07,
+     "cota_en_el_peor": 5.194777464892306e-07,
+     "cociente": 0.872780559063856,
+     "donde": "elemento 12 u",
      "fuera_de_cota": 0,
      "calza": true,
      "estado": "E3",
@@ -1555,10 +1555,10 @@
     },
     {
      "n_comparados": 69,
-     "peor_abs": 4.887049333685001e-07,
-     "cota_en_el_peor": 5.330237185486813e-07,
-     "cociente": 0.9168540092346122,
-     "donde": "elemento 28 u",
+     "peor_abs": 4.5339007800210274e-07,
+     "cota_en_el_peor": 5.194777464892306e-07,
+     "cociente": 0.872780559063856,
+     "donde": "elemento 12 u",
      "fuera_de_cota": 0,
      "calza": true,
      "estado": "E3",
@@ -1593,12 +1593,17 @@
    "identidades": [
     {
      "que": "(3) = (2)",
-     "hojas": 24372,
+     "hojas": 24648,
      "primera_diferencia": null
     },
     {
      "que": "(4) = (2)",
-     "hojas": 24372,
+     "hojas": 24648,
+     "primera_diferencia": null
+    },
+    {
+     "que": "(2) = anexo '1.2G+1.0Q-1.4EX'",
+     "hojas": 24646,
      "primera_diferencia": null
     }
    ],
@@ -1725,18 +1730,18 @@
      "M": 4826.6975,
      "M_fuera_plano": 64.3597,
      "extremo": "i (inferior)",
-     "Mn": 26874.1318,
-     "u": 0.179604,
+     "Mn": 25214.3851,
+     "u": 0.191426,
      "pasa": true,
      "explicita": {
       "P": 3285.0991,
       "M": 4826.6975,
-      "Mn": 26874.1316,
-      "u": 0.179604,
+      "Mn": 25214.3849,
+      "u": 0.191426,
       "extremo": "i (inferior)"
      },
-     "Mn_de_su_propia_curva": 26874.1316,
-     "suma_lambda_u_de_los_casos_base": -0.19726
+     "Mn_de_su_propia_curva": 25214.3849,
+     "suma_lambda_u_de_los_casos_base": -0.217761
     },
     "viga": {
      "id": 92,
@@ -1805,5 +1810,5 @@
  "fallas": [],
  "pendientes": [],
  "resultado": "CALZA",
- "segundos": 18.1
+ "segundos": 11.9
 }

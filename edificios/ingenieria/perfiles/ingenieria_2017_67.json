@@ -33,7 +33,7 @@
       "  3.96   TERRAZA ORIENTE (abajo, en 'terrazas'). Los otros 39 apoyos,",
       "         'apoyo en terreno' [0 0 1 1 1 0], que el modelo pone porque 'al",
       "         oriente del eje H el terreno esta en -4.01, que es la cota del",
-      "         nivel 1' (benchmark_3d.py:1031).",
+      "         nivel 1' (benchmark_3d.py:1054).",
       "",
       "Hasta el 18-09 este cuerpo NO declaraba cota: AmbienteVisor.cs caia a su",
       "respaldo de dibujo (el apoyo mas bajo) y daba justo 0.00, con un aviso",
@@ -74,9 +74,9 @@
           "benchmark_3d.py crea esos apoyos (una sola definicion, CLAUDE.md 7.4).",
           "Alla un nudo del nivel 1 se apoya en el terreno si NO tiene el 1er",
           "subterraneo debajo: sobre_subterraneo(x, y), benchmark_3d.py:318, que",
-          "usa build_model() en :1047 para los 31 'apoyos_oriente' de la grilla;",
+          "usa build_model() en :1070 para los 31 'apoyos_oriente' de la grilla;",
           "los otros 8 son los arranques de los ocho muros del oriente, que",
-          "empiezan en el nivel 1 (:1400-1403). El exportador",
+          "empiezan en el nivel 1 (:1423-1426). El exportador",
           "(edificios/ingenieria/export_unity.py, terrenos()) arma la region asi:",
           "",
           "  apoyos    'los del modelo en esta z': los apoyos no auxiliares con",
@@ -100,9 +100,149 @@
           "7.67) cae justo en la cara oeste del cuerpo (muro x = 7.77, e = 0.20;",
           "es la cara con que se mide el calce), asi que la terraza no invade la",
           "junta ni el LT2 en el conjunto. En los otros lados deja 0.10 m de",
-          "tierra fuera de la cara de las columnas de borde (0.50 x 0.50)."
+          "tierra fuera de la cara de las columnas de borde cuando se las creia de",
+          "0.50 x 0.50; con las de 0.70 x 0.70 de la lamina 2017_67-103 el borde",
+          "de la terraza cae justo en su cara. No mueve la region: las huellas",
+          "salen de las POSICIONES de los apoyos, que no cambiaron."
         ]
       }
     ]
+  },
+  "secciones": {
+    "_que_es": [
+      "LAS SECCIONES DEL MODELO DE ESTE CUERPO.",
+      "",
+      "Hasta el 23-09 vivian como constantes peladas en benchmark_3d.py:409,",
+      "sin origen y sin marca de supuesto: ni el pilar, ni las vigas, ni la",
+      "losa, ni el f'c eran trazables al plano, y nadie lo veia. Es justo lo",
+      "que CLAUDE.md seccion 5 dice que no puede pasar. El pilar ademas",
+      "estaba MAL (ver 'columna').",
+      "",
+      "benchmark_3d.py las LEE de aqui y no las duplica (una sola definicion,",
+      "CLAUDE.md 7.4). Si falta una, se cae con su nombre: un default",
+      "silencioso es lo que escondio el 0.50 x 0.50 durante todo el proyecto.",
+      "",
+      "Las que siguen SIN leerse del plano van con _supuesto: true, para que",
+      "se distingan en el DATO y no en la memoria de nadie."
+    ],
+    "columna": {
+      "b": 0.70,
+      "h": 0.70,
+      "origen": "lamina 2017_67-103: 18 pilares por piso, todos rotulados P. 70x70 (leido el 23-09)",
+      "fierro": {
+        "_que_es": [
+          "EL DETALLE TIPICO DE PILAR de este cuerpo, lamina 2017_67-000.",
+          "Hasta el 23-09 eran constantes en enfierradura.py; viven aca por lo",
+          "mismo que las dimensiones, y porque el fierro de los muros ya vive",
+          "en perfiles/muros_2017_67.json. enfierradura.detalle_tipico() los",
+          "LEE de aqui y no los duplica (CLAUDE.md 7.4)."
+        ],
+        "barras_por_cara": 5,
+        "_origen_barras": "numero y disposicion MEDIDOS de la lamina 2017_67-000 (detalle tipico de pilar): 5 por cara, perimetral, o sea 16 barras",
+        "diametro_longitudinal_mm": 22.0,
+        "_supuesto_diametro": true,
+        "_por_que_diametro": [
+          "EL DIAMETRO SIGUE SIENDO SUPUESTO: el proyecto 2017_67 no tiene",
+          "cuadro de pilares (se revisaron sus 38 laminas).",
+          "",
+          "Se elige el MENOR diametro que cumple la cuantia minima de norma",
+          "sobre la seccion de 0.70 x 0.70 que SI se leyo del plano (lamina",
+          "2017_67-103):",
+          "",
+          "  16 barras Ø22 -> As = 60.82 cm2 -> rho = 60.82 / 4900 = 1.24 %",
+          "  ACI 318-08 10.9.1 pide 1 % <= rho <= 8 % en una columna.",
+          "",
+          "Con el Ø16 que se suponia antes la cuantia da 0.66 %: por DEBAJO",
+          "del minimo, o sea una columna que la norma no admite. Ese Ø16 se",
+          "habia elegido cuando se creia que el pilar era de 0.50 x 0.50,",
+          "donde daba 1.29 % y era plausible; al leer la seccion real quedo",
+          "inadmisible. No es que se haya subido para que pase: se baja hasta",
+          "el minimo que la norma permite, y ese minimo resulta ser Ø22.",
+          "",
+          "LO QUE ESTO NO ES: no deja el mapa D/C en cero. Con Ø22 las filas",
+          "de columna que no pasan bajan de 55 a 7; las de muro no dependen",
+          "del fierro de la columna. La sensibilidad completa, medida sobre",
+          "las 1230 filas de esta familia con las 15 combinaciones, esta en",
+          "semana05/QUE_REVISAR.md. Si algun dia aparece el diametro en una",
+          "lamina, se cambia aqui y no hay que tocar codigo."
+        ],
+        "estribo": {
+          "diametro_mm": 10.0,
+          "separacion_cm": 10.0,
+          "esquema": "2E",
+          "origen": "EDf10a10 / Ef10a10 en las elevaciones de eje del propio edificio; el esquema 2E (estribo mas rombo interior) es el de la lamina 2017_67-000"
+        },
+        "recubrimiento_m": 0.05,
+        "_origen_recubrimiento": "detalle tipico de pilar, lamina 2017_67-000"
+      },
+      "_por_que": [
+        "EL MODELO USABA 0.50 x 0.50 Y ESTABA MAL.",
+        "",
+        "El conteo del modelo si estaba bien: 18 columnas por piso (21",
+        "posiciones en planta por 5 niveles = 82 elementos). Lo que estaba mal",
+        "era el tamano, y no habia como notarlo porque el 0.50 no citaba",
+        "ninguna lamina.",
+        "",
+        "MEDIDO el 23-09, rehaciendo el pipeline entero (armar + calcular +",
+        "exportar, o sea con el peso propio nuevo) y con las 15 combinaciones:",
+        "",
+        "                                   0.50x0.50    0.70x0.70",
+        "  NO PASA de Ingenieria            258 filas    145 filas",
+        "    columnas                       126 / 38     56 / 19",
+        "    muros                          132 / 27     89 / 21",
+        "  UZ maximo bajo G                 22.30 mm     19.04 mm",
+        "  desplazamiento lateral EY        33.16 mm     20.63 mm  (-38 %)",
+        "  desplazamiento lateral EX         6.88 mm      5.98 mm  (-13 %)",
+        "",
+        "O sea que el tamano del pilar explicaba a la vez los NO PASA de",
+        "columna y que este cuerpo se deformara mucho mas que el LT2.",
+        "",
+        "OJO CON EL FIERRO: con 16 barras Ø16 (enfierradura.py, el diametro",
+        "sigue siendo supuesto) en 70 x 70 la cuantia queda en 0.66 %, BAJO el",
+        "minimo de norma (ACI 318-08 10.9.1 pide 1 %). El menor diametro",
+        "admisible es Ø22 (1.24 %), y con el las filas de columna que fallan",
+        "bajan de 126 a 7. Queda como decision abierta: el 2017_67 no tiene",
+        "cuadro de pilares."
+      ]
+    },
+    "viga_x": {
+      "b": 0.30,
+      "h": 0.60,
+      "_supuesto": true,
+      "_por_que": [
+        "NO se leyo del plano: viene del modelo de benchmark original. Se",
+        "declara aca para que se vea como supuesto. Compara con el LT2, cuyas",
+        "vigas SI salen de su plano y son 0.60 x 0.80: esta es la mitad de",
+        "ancha, y es la razon de fondo de que este cuerpo flecte mas."
+      ]
+    },
+    "viga_y": {
+      "b": 0.30,
+      "h": 0.80,
+      "_supuesto": true,
+      "_por_que": [
+        "Igual que viga_x: no se leyo del plano. Con 8.90 m de vano da",
+        "EI = 318 MN m2 contra los 712 de la viga del LT2 del mismo vano."
+      ]
+    },
+    "losa": {
+      "espesor_m": 0.25,
+      "_supuesto": true,
+      "_por_que": [
+        "No se leyo del plano. Entra en el peso muerto de la losa,",
+        "w_slab_dead = gamma * espesor + 1.5 = 7.75 kN/m2 (benchmark_3d.py)."
+      ]
+    },
+    "hormigon": {
+      "fpc_MPa": 28.0,
+      "peso_especifico_kNm3": 25.0,
+      "_supuesto": true,
+      "_por_que": [
+        "El f'c no se leyo del plano de este cuerpo. Manda el E del solver",
+        "(Ec = 4700 sqrt(f'c)) y la capacidad; el LT2 declara G35 y por eso el",
+        "conjunto sella el hormigon por seccion (CLAUDE.md seccion 4).",
+        "El peso especifico del hormigon armado, 25 kN/m3, es el de norma."
+      ]
+    }
   }
 }

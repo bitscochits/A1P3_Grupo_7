@@ -299,6 +299,8 @@ visor.AplicarDeformada(desplazamientos); // ya llama a Redibujar()
 - Fuentes de deformada: `VisorQA` (Sin / Cargas G / Sismo EX, EY / Caso activo),
   `VisorSemana04.AplicarDeformadaDelCaso`, `AnalizadorEstructural.MostrarCaso`,
   `VisorCargaMovil`.
+- Los **giros** (`rx, ry, rz`) no son decorativos: con ellos el visor CURVA cada
+  barra (§12). Una fuente que los mande en cero dibuja palos rectos, sin avisar.
 
 ### 2.4 El objeto y el renderer de un elemento
 
@@ -445,7 +447,7 @@ equilibrio con `calcular.equilibrio` por caso y combinación. Nunca lee
 
 | parámetro | forma |
 | --- | --- |
-| `modelo` | el dict que Unity manda a `/analizar`: `info`, `material`, `secciones[{nombre, A, Iy, Iz, J, b, h, largo, espesor, E, G}]`, `nodos[{id, x, y, z, fijo, auxiliar, restricciones[6], ux, uy, uz}]`, `elementos[{id, n1, n2, seccion, tipo, vecxz, localX, localY, localZ, largo, espesor, dir_largo, area_tributaria, w_gravedad}]`, `diafragmas[{nodo_maestro, nodos, perpendicular}]`, `brazos_rigidos`, `casos_de_carga[{nombre, descripcion, cargas_nodales[{nodo, fx, fy, fz, mx, my, mz}], cargas_distribuidas[{elemento, wx, wy, wz}]}]`, `areas_tributarias` |
+| `modelo` | el dict que Unity manda a `/analizar`: `info`, `material`, `secciones[{nombre, A, Iy, Iz, J, b, h, largo, espesor, E, G}]`, `nodos[{id, x, y, z, fijo, auxiliar, restricciones[6], ux, uy, uz, rx, ry, rz}]`, `elementos[{id, n1, n2, seccion, tipo, vecxz, localX, localY, localZ, largo, espesor, dir_largo, area_tributaria, w_gravedad}]`, `diafragmas[{nodo_maestro, nodos, perpendicular}]`, `brazos_rigidos`, `casos_de_carga[{nombre, descripcion, cargas_nodales[{nodo, fx, fy, fz, mx, my, mz}], cargas_distribuidas[{elemento, wx, wy, wz}]}]`, `areas_tributarias` |
 | `respuesta` | lo que devuelve `construir_y_resolver(modelo)` **con** `equilibrio` (P3). Multi-caso: `{ok, error, avisos[str], casos[{nombre, ok, max_desplazamiento, desplazamientos[{id, ux, uy, uz, rx, ry, rz}], reacciones[{id, fx, fy, fz, mx, my, mz}], fuerzas_elementos[{id, f[12]}], equilibrio{...}}]}`. Plana (un caso): `desplazamientos`, `reacciones`, `fuerzas_elementos`, `max_desplazamiento` en la raíz, sin `equilibrio`. Acepta las dos; si falta `equilibrio`, lo calcula con `calcular.equilibrio(modelo, caso, res)` |
 | `ruta` | el servidor pasa `rutas.excel_reanalisis(ed)` = `results/excel/reanalisis_<ed>.xlsx` (ignorado por git) |
 
@@ -742,3 +744,65 @@ Reglas:
   destapa) y los de la terraza que están sobre estructura que baja (6, los
   del recinto de muros del suroeste: se ven encima de los muros).
 - Solo dibuja: ningún cálculo lee `terrenos` (efecto en el D/C: cero).
+
+---
+
+## 12. La curva de la deformada (23-09)
+
+Hasta acá cada barra se dibujaba como un **palo recto** entre sus dos nodos
+deformados. Eso no se dobla: una viga cuyos dos extremos cuelgan de nudos que
+casi no bajan queda igual de recta, y una columna entre dos pisos que se corren
+distinto solo se **inclina**, cuando en la realidad entra en doble curvatura.
+
+- Lo que faltaba no era calcular: eran los **giros** de los nudos, que ya venían
+  en cada desplazamiento (`rx, ry, rz`) y nadie usaba. Un nudo rígido obliga a
+  la barra a arrancar con **su** pendiente, y de ahí sale la curva.
+- La forma son las **funciones de forma del propio elemento** (axial lineal,
+  transversal cúbica de Hermite), las mismas con que OpenSees interpola entre
+  sus dos nodos. La fórmula es la de `semana05/carga_movil.py:471`
+  (`desplazamiento_en`), escrita una vez en Python y transcrita a
+  `VisorEstructura.CurvaDe`. **No es cálculo estructural** (CLAUDE.md §2): no
+  sale ningún número nuevo ni se reporta nada; solo se ponen vértices.
+- El visor la usa en `CurvarBarras()`, al final de `Redibujar()` y antes de
+  `AvisarRedibujado`, para que `AmbienteVisor` y el mapa D/C encuentren ya la
+  malla definitiva. `TRAMOS_CURVA` = 8 tramos, y se salta la barra que se
+  aparta del palo recto menos de `DESVIO_MINIMO` = 1 cm de mundo.
+- La sección se barre **sin cambiar de orientación por la flexión** (igual que
+  `InclinarPlaca` en los muros): las caras de los extremos quedan donde estaban
+  y dos barras seguidas no se abren en el nudo. La malla conserva
+  `"Cube"`/`"Cylinder"` en el nombre porque `AmbienteVisor.Repeticion()` lo lee
+  para repetir la textura. El **collider no se curva**: un clic le pega al palo
+  recto, no a la panza.
+- **La torsión sí gira la sección** (`SeccionGirada`). El giro sobre el propio
+  eje de la barra es `rx, ry, rz` proyectados sobre su `localX`, y en una barra
+  prismática sin torque repartido varía **lineal** entre sus dos nudos, así que
+  no lleva cúbica. Se exagera con el mismo `factorEscala` que las traslaciones,
+  o no se vería: medido, el mayor de los 15 casos del LT2 es 1.9e−3 rad, que a
+  ×74 son 8.2°; en el conjunto bajo G las vigas llegan a 24°. Las columnas casi
+  no se tuercen (3.2e−5 rad, 0.2°) y eso es lo que corresponde. Girar en
+  coordenadas locales cizallaría, porque la escala no es la misma en los dos
+  ejes de la sección (una viga es 0.60 de ancho y 0.80 de canto): se pasa a
+  metros con la escala, se gira ahí y se vuelve. Con menos de `GIRO_MINIMO` =
+  0.01 rad (0.6°) y sin panza, la barra se deja como primitivo.
+- No se curvan los **muros** (ya los cizalla `InclinarPlaca`) ni los **brazos
+  rígidos** (son un artificio), ni las líneas fantasma de otros pisos.
+- **Lo que la curva no dibuja, y no es un error:** la flecha que la carga
+  repartida produce *dentro* del vano no está en ningún GDL nodal, así que no
+  aparece. Medida: viga 331 del LT2 (8.90 m, 0.60×0.80, 32.535 kN/m) dibuja
+  1.388 mm de panza bajo la recta de sus nodos y le faltan 0.747 mm; la 381 de
+  Ingeniería (mismo vano, 0.30×0.80, 33.865 kN/m) dibuja 4.729 mm y le faltan
+  1.555 mm. Sumarla pediría `E`, `I` y la carga del caso **en C#**, que es
+  cálculo: tendría que viajar desde Python (una flecha por barra y por caso,
+  también en la respuesta del servidor). El único sitio donde hoy se suma es el
+  recorrido de la carga móvil, y la suma Python (`flecha_biempotrada`).
+- Guardia: `semana05/test_curva_deformada.py` (en la suite). [1] la
+  interpolación = la elástica exacta de un voladizo con carga en la punta
+  (`P x²(3L−x)/6EI`), en las tres orientaciones, peor 5.2e−18 m. [2] **lee las
+  líneas del C#**, las traduce a Python y las evalúa contra
+  `carga_movil.desplazamiento_en` con 200 tiros al azar (peor 6.9e−17 m): dos
+  copias de la misma fórmula no pueden divergir en silencio. [3] el JSON trae
+  `rx/ry/rz` en todos los nodos y los tres ejes locales unitarios y
+  perpendiculares en todos los elementos. [4] con el modelo real, la curva
+  arranca y termina en sus nodos dentro del redondeo de los ejes a 6 decimales
+  (peor 5.4e−9 m contra una cota de 6.7e−8) y la viga que más se aparta cuelga
+  hacia **abajo** bajo G.

@@ -82,6 +82,7 @@ sys.path.insert(0, os.path.join(_RAIZ, 'semana03'))
 
 import capacidad                             # noqa: E402
 import contrato                              # noqa: E402
+import nucleos                               # noqa: E402
 import demanda_capacidad as dc               # noqa: E402
 import lab_semana03 as lab                   # noqa: E402
 import parametros                            # noqa: E402
@@ -490,7 +491,7 @@ def lista_de_combinaciones(p):
 
 
 def bloque_caso(nombre, tipo, descripcion, factores, resultados, elementos,
-                cargas_base, familias_de, curvas, largos):
+                cargas_base, familias_de, curvas, largos, nucleo_de=None):
     """
     Un caso o una combinacion: desplazamientos, esfuerzos y demandas.
     La combinacion se arma con demanda_capacidad.combinar -- la suma
@@ -571,6 +572,25 @@ def bloque_caso(nombre, tipo, descripcion, factores, resultados, elementos,
                 'pasa': u <= 1.0,
             })
 
+    # --- de que NUCLEO es cada pata (comun/nucleos.py) ---
+    # NO cambia ningun veredicto: dice de DONDE viene el axial. La
+    # traccion que saca a una pata de su curva casi siempre es el par
+    # interno de su grupo, y el mapa la mostraba como una falla de
+    # capacidad. Va despues del bucle porque necesita el P de TODAS
+    # las patas del grupo en ESTE caso.
+    # Las cuatro claves van en TODAS las filas, no solo en las patas: el
+    # contrato exige que cada campo del C# tenga clave en todos los
+    # objetos (semana04/test_contrato_semana04.py). nucleo_patas = 0 es
+    # "este elemento no es pata de ningun nucleo".
+    P_de = {x['id']: x['P'] for x in demandas}
+    for x in demandas:
+        g = (nucleo_de or {}).get(x['id'])
+        P = sum(P_de.get(i, 0.0) for i in g['patas']) if g else 0.0
+        x['nucleo_patas'] = len(g['patas']) if g else 0
+        x['nucleo_P'] = round(P, DECIMALES_FUERZA)
+        x['nucleo_Asfy'] = round(g['Asfy_kN'], DECIMALES_FUERZA) if g else 0.0
+        x['nucleo_estado'] = nucleos.estado(P, g['Asfy_kN']) if g else ''
+
     bloque = {
         'nombre': nombre,
         'tipo': tipo,
@@ -604,11 +624,22 @@ def construir_anexo(edificio, argv=()):
     por_id = {int(e['id']): e for e in modelo['elementos']}
     largos = {eid: lab.largo(e, nodos) for eid, e in por_id.items()}
 
+    # Los grupos de nucleo y el As*fy de cada uno se calculan UNA vez
+    # (cada As*fy arma una seccion de fibras); despues cada caso solo
+    # suma los P de las patas. Ver comun/nucleos.py.
+    _cache = {}
+    nucleo_de = {}
+    for eid, patas in nucleos.grupos(modelo).items():
+        asfy, sin_fierro = nucleos.asfy_de(modelo, patas, _cache)
+        nucleo_de[eid] = {'patas': patas, 'Asfy_kN': asfy,
+                          'sin_fierro': len(sin_fierro)}
+
     casos, cargas, combinaciones, cierre = [], {}, [], {}
     for nombre, tipo, texto, factores in lista_de_combinaciones(p):
         descripcion = arm['casos'][nombre].get('descripcion', '') if texto is None else texto
         bloque, w, peor = bloque_caso(nombre, tipo, descripcion, factores, resultados,
-                                      elementos, cargas_base, familia_de, curvas, largos)
+                                      elementos, cargas_base, familia_de, curvas, largos,
+                                      nucleo_de)
         casos.append(bloque)
         cargas[nombre] = w
         cierre[nombre] = peor

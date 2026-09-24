@@ -108,6 +108,13 @@ SUITE = [
     ('M4 soltar un apoyo',    ['semana05/reanalisis_demo.py', 'lt2',
                                '--apoyo', '2', '1', '1', '1', '0', '0', '0',
                                '--nodo', '186'], False),
+    ('curva de la deformada',  ['semana05/test_curva_deformada.py', 'lt2',
+                                'ingenieria', 'conjunto'], False),
+    # Va con 'lt2' porque es el anexo que la suite deja en disco: asi su
+    # bloque [2] compara de verdad en vez de saltarse (decision 1 de la S5).
+    ('nucleos = grupos del anexo', ['comun/nucleos.py', 'lt2'], False),
+    ('losa colaborante (regla)', ['comun/losa_colaborante.py', 'lt2',
+                                  'ingenieria'], False),
 ]
 
 
