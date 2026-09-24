@@ -66,6 +66,7 @@ rutas.entrar(__file__, os.path.join(rutas.RAIZ, 'semana04'),
 
 import calcular                              # noqa: E402
 import combinar                              # noqa: E402
+import nucleos                               # noqa: E402
 import trazabilidad                          # noqa: E402
 
 # El exportador de Semana 4 POR RUTA: semana03/ tiene otro
@@ -150,6 +151,18 @@ def texto_combinacion(lambdas):
 # ============================================================
 # LA BASE: LOS CUATRO CASOS RESUELTOS UNA VEZ
 # ============================================================
+def _nucleo_de(modelo):
+    """Los grupos de nucleo con su As*fy, en la forma que espera
+    exportar_unity.bloque_caso. Igual que en construir_anexo: se calcula
+    una vez, porque cada As*fy arma una seccion de fibras."""
+    cache, salida = {}, {}
+    for eid, patas in nucleos.grupos(modelo).items():
+        asfy, sin_fierro = nucleos.asfy_de(modelo, patas, cache)
+        salida[eid] = {'patas': patas, 'Asfy_kN': asfy,
+                       'sin_fierro': len(sin_fierro)}
+    return salida
+
+
 def base(edificio, argv=(), silenciar=True):
     r"""
     Todo lo que hace falta para combinar sin volver a OpenSees.
@@ -183,6 +196,11 @@ def base(edificio, argv=(), silenciar=True):
         'cargas_base': {c: eu.cargas_por_elemento(ctx['arm']['casos'][c]) for c in CASOS},
         'familia_de': {int(e['id']): int(e['familia']) for e in anexo['elementos']},
         'largos': largos,
+        # Los grupos de nucleo, con el mismo calculo que el anexo: si no
+        # se pasan, la combinacion sale con nucleo_patas = 0 donde el
+        # anexo trae 3, y la comparacion "(2) identica al caso del anexo"
+        # falla sin que se haya equivocado nadie (paso el 24-09).
+        'nucleo_de': _nucleo_de(modelo),
         'parametros': list(anexo['info']['parametros']),
         'ids_nodos': sorted(nodos),
         'segundos': time.time() - t0,
@@ -207,7 +225,7 @@ def caso_combinado(b, lambdas, nombre=NOMBRE_LIBRE, tipo=TIPO, descripcion=None)
     caso, _cargas, peor = eu.bloque_caso(
         nombre, tipo, descripcion if descripcion is not None else texto_combinacion(lambdas),
         lambdas, ctx['resultados'], b['anexo']['elementos'], b['cargas_base'],
-        b['familia_de'], ctx['curvas'], b['largos'])
+        b['familia_de'], ctx['curvas'], b['largos'], b.get('nucleo_de'))
 
     if not caso['desplazamientos']:
         # Con todos los lambda en cero bloque_caso no recorre ningun caso

@@ -85,10 +85,10 @@
 
   [OK  ] [j] el JSON calza con las clases C# en las dos direcciones (11 clases, 20022 objetos)
 
-  resueltas 36 corridas de OpenSees: construir 0.004 s, resolver y extraer 0.0430 s por corrida
+  resueltas 36 corridas de OpenSees: construir 0.010 s, resolver y extraer 0.0619 s por corrida
   escala grafica fija: x1600 (0.9635 mm -> 1.5 m)
 
-  1546.5 KB, 30 posiciones, 1.9 s en total
+  1546.5 KB, 30 posiciones, 2.7 s en total
   -> data\unity\carga_movil_conjunto.json
   -> unity\Assets\StreamingAssets\carga_movil.json
   -> semana05\evidencia\carga_movil_conjunto.json

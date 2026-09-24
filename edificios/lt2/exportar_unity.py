@@ -522,6 +522,7 @@ def construir():
             'restricciones': [1] * 6 if fijo else [0] * 6,
             'auxiliar': False,
             'ux': round(d[0], 9), 'uy': round(d[1], 9), 'uz': round(d[2], 9),
+            'rx': round(d[3], 9), 'ry': round(d[4], 9), 'rz': round(d[5], 9),
         })
 
     # ---------- Secciones ----------
@@ -625,6 +626,9 @@ def construir():
             'ux': round(ops.nodeDisp(maestro, 1), 9),
             'uy': round(ops.nodeDisp(maestro, 2), 9),
             'uz': round(ops.nodeDisp(maestro, 3), 9),
+            'rx': round(ops.nodeDisp(maestro, 4), 9),
+            'ry': round(ops.nodeDisp(maestro, 5), 9),
+            'rz': round(ops.nodeDisp(maestro, 6), 9),
         })
 
     # ---------- Areas tributarias ----------

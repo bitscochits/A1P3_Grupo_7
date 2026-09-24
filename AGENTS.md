@@ -388,7 +388,7 @@ modelo y el conteo debe cerrar con los rótulos del plano"*. Uno malo:
 |---|---|---|
 | Benchmark, UZ techo bajo G | −0.0635 mm | `benchmark/benchmark_distribuida.py` |
 | LT2, G total | 34 148.98 kN, 232 nodos, 378 elementos | `edificios/lt2/verificar_lt2.py` |
-| Conjunto, G total | 84 801.2 kN = suma de los cuerpos | `comun/calcular.py conjunto` |
+| Conjunto, G total | 86 749.48 kN = suma de los cuerpos | `comun/calcular.py conjunto` |
 | Cada cuerpo dentro del conjunto = cuerpo solo | 0.00e+00 m en el LT2 | `edificios/conjunto/verificar_conjunto.py` |
 | Losa aplicada = losa dibujada | q constante por piso, 0 barras fuera | `comun/verificar_tributarias.py` |
 | Corte basal = carga lateral | error < 1e-7 relativo | `comun/sismo.py` |

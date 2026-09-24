@@ -1,6 +1,6 @@
 {
  "comando": "python semana05/carga_movil.py lt2 --P 100 --divisiones 5",
- "fecha": "2026-09-16 14:48:49",
+ "fecha": "2026-09-24 09:44:07",
  "P_kN": 100.0,
  "recorrido": {
   "elementos": [
@@ -3002,9 +3002,9 @@
   }
  ],
  "tiempos_s": {
-  "construir": 0.0025,
-  "por_corrida": 0.01311,
-  "total": 0.61
+  "construir": 0.0051,
+  "por_corrida": 0.01904,
+  "total": 0.91
  },
  "bytes_json_unity": 742301
 }

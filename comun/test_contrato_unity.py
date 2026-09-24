@@ -641,7 +641,7 @@ if not datos['areas_tributarias']:
 #    del mismo pano -- el total con Lx, Ly del pano
 #    (benchmark_3d.tributarias) y cada entrada con la formula del
 #    cordon sobre su poligono -- redondeadas cada una a 4 decimales
-#    (edificios/ingenieria/export_unity.py:219 y :488). Pueden caer a
+#    (edificios/ingenieria/export_unity.py:220 y :489). Pueden caer a
 #    los dos lados del redondeo: la viga 128 da 8.3971 contra 8.3972,
 #    una unidad, que es justo la cota con n = 1.
 #  - la coma flotante de esas cuentas antes de redondear: la formula

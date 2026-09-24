@@ -351,6 +351,8 @@ public partial class VisorSemana04
             ? $"M = |{e.momento_en_el_plano}|, el de su plano.  Fuera de plano "
               + $"{F(d.M_fuera_plano, "0.0")} kN*m (no se compara)"
             : "";
+        string nucleo = PanelUI.TextoNucleo(d);
+        if (nucleo != "") PM_textoNotas += (PM_textoNotas == "" ? "" : "\n") + nucleo;
     }
 
     /// Un Mn = 0 no es "u infinito": es un P fuera del rango de la curva,

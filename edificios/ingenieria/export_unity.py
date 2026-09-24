@@ -198,6 +198,7 @@ def construir_json(desplazamientos=None):
             "auxiliar": nid in maestros,
             "restricciones": restr,
             "ux": round(d[0], 8), "uy": round(d[1], 8), "uz": round(d[2], 8),
+            "rx": round(d[3], 8), "ry": round(d[4], 8), "rz": round(d[5], 8),
         })
 
     # --- Elementos ---

@@ -18,6 +18,7 @@
   posiciones: 30 (5 por viga, xL = (k + 1/2)/5)
 
   [OK  ] el modelo resuelto es el que dibuja Unity (data\unity\lt2.json): 232 nodos y 378 elementos iguales
+  [AVISO] StreamingAssets/modelo_unity_edificio.json no tiene los nodos de lt2: sincroniza con  python comun/lanzar_unity.py sincronizar lt2
   apoyos que cuentan (regla de calcular.equilibrio): 16 en Fx, 16 en Fy, 16 en Fz; de 21 nodos con reaccion
 
     i  viga    xL     s m |   V_i kN   V_j kN    % i |  palanca     emp. |   SumRz kN   err kN cierre | uz min mm  uz P mm  M P kNm
@@ -84,10 +85,10 @@
 
   [OK  ] [j] el JSON calza con las clases C# en las dos direcciones (11 clases, 8052 objetos)
 
-  resueltas 36 corridas de OpenSees: construir 0.003 s, resolver y extraer 0.0131 s por corrida
+  resueltas 36 corridas de OpenSees: construir 0.005 s, resolver y extraer 0.0190 s por corrida
   escala grafica fija: x1600 (0.9635 mm -> 1.5 m)
 
-  724.9 KB, 30 posiciones, 0.6 s en total
+  724.9 KB, 30 posiciones, 0.9 s en total
   -> data\unity\carga_movil_lt2.json
   -> unity\Assets\StreamingAssets\carga_movil.json
   -> semana05\evidencia\carga_movil_lt2.json

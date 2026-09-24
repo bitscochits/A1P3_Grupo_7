@@ -96,6 +96,13 @@ SUITE = [
     ('M1 borrar columna 69',  ['semana05/reanalisis_demo.py', 'lt2', '--borrar-elemento', '69',
                                '--nodo', '186', '--elemento', '337'], False),
     ('M2 cs 0.20',            ['semana05/comparar_anexos.py', 'lt2', '--cs', '0.20'], False),
+    ('curva de la deformada',  ['semana05/test_curva_deformada.py', 'lt2',
+                                'ingenieria', 'conjunto'], False),
+    # Va con 'lt2' porque es el anexo que la suite deja en disco: asi su
+    # bloque [2] compara de verdad en vez de saltarse (decision 1 de la S5).
+    ('nucleos = grupos del anexo', ['comun/nucleos.py', 'lt2'], False),
+    ('losa colaborante (regla)', ['comun/losa_colaborante.py', 'lt2',
+                                  'ingenieria'], False),
 ]
 
 

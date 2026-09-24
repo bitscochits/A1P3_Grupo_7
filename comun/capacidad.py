@@ -65,6 +65,7 @@ r"""
 """
 from __future__ import annotations
 
+import copy
 import math
 import os
 import sys
@@ -754,22 +755,41 @@ def interaccion(sec, niveles=None, nf=FIBRAS_NUCLEO, paso=None):
                    (0.0, 0.05, 0.10, 0.15, 0.20, 0.30, 0.40,
                     0.50, 0.65, 0.80)]
 
-    puntos = [{'P_kN': P_traccion, 'M_kNm': 0.0, 'de': 'traccion pura'}]
+    # LOS DOS SENTIDOS DEL MOMENTO
+    # Una seccion con el fierro descentrado -- los muros del LT2 lo
+    # estan -- tiene DOS capacidades, una por sentido, y el sismo va en
+    # los dos. La demanda se compara con |M| (demanda_capacidad.demanda),
+    # asi que la capacidad honesta es el MINIMO de las dos. Informar
+    # solo la directa es optimista en un tercio de las filas de muro.
+    # Si el fierro es simetrico las dos corridas dan lo mismo y la
+    # segunda no se hace (es la mitad del tiempo de las 54 familias).
+    otra = None if fierro_simetrico(sec) else espejo(sec)
+
+    puntos = [{'P_kN': P_traccion, 'M_kNm': 0.0, 'de': 'traccion pura',
+               'sentido': 'los dos'}]
     for P in niveles:
         r = momento_curvatura(sec, P=P, nf=nf, paso=paso)
         if not r['M']:
             continue
+        M = r['M_aci'] if r['M_aci'] else r['M_max']
+        sentido = 'los dos' if otra is None else 'directo'
+        if otra is not None:
+            r2 = momento_curvatura(otra, P=P, nf=nf, paso=paso)
+            M2 = (r2['M_aci'] if r2['M_aci'] else r2['M_max']) if r2['M'] else None
+            if M2 is not None and M2 < M:
+                r, M, sentido = r2, M2, 'espejado'
         puntos.append({
             'P_kN': float(P),
-            'M_kNm': r['M_aci'] if r['M_aci'] else r['M_max'],
+            'M_kNm': M,
             'M_max_kNm': r['M_max'],
             'phi_kNm': r['phi_aci'] or r['phi_en_M_max'],
             'de': ('hormigon a 0.003 (nominal)' if r['M_aci']
                    else 'maximo del M-phi'),
             'motivo': r['motivo_termino'],
+            'sentido': sentido,
         })
     puntos.append({'P_kN': P_compresion, 'M_kNm': 0.0,
-                   'de': 'compresion pura'})
+                   'de': 'compresion pura', 'sentido': 'los dos'})
     return puntos
 
 
@@ -912,6 +932,41 @@ def main(argv):
             print('    %3d fibras  M_max = %8.1f kN m   %.3f %% vs la mas fina'
                   % (s['fibras'], s['M_max'], 100 * s['error_vs_mas_fino']))
     return 0
+
+
+# ============================================================
+# LOS DOS SENTIDOS DEL MOMENTO
+#   Van al final del modulo para no correr las lineas que citan los
+#   informes (CLAUDE.md seccion 6).
+# ============================================================
+def espejo(sec):
+    """
+    La MISMA seccion con el fierro reflejado (y -> -y).
+
+    Sirve para la capacidad del otro sentido del momento. Se refleja
+    solo la posicion de las barras: el hormigon es un rectangulo b x h
+    simetrico, y el estribo, el confinamiento y los materiales no
+    dependen del sentido. Es una copia: no toca la seccion original.
+    """
+    otra = copy.copy(sec)
+    otra.barras = [(-y, z, a) for (y, z, a) in sec.barras]
+    otra.nombre = sec.nombre + ' (espejada)'
+    return otra
+
+
+def fierro_simetrico(sec, tol=1e-6):
+    """
+    True si el fierro es simetrico respecto de y = 0, o sea si las dos
+    corridas darian lo mismo y la espejada se puede saltar.
+
+    Se compara el conjunto de barras con el conjunto reflejado, barra
+    por barra y con su area: dos barras en +y y -y con areas distintas
+    NO son simetricas, aunque las posiciones si lo sean.
+    """
+    def clave(barras):
+        return sorted((round(y, 9), round(z, 9), round(a, 12))
+                      for y, z, a in barras)
+    return clave(sec.barras) == clave((-y, z, a) for y, z, a in sec.barras)
 
 
 if __name__ == '__main__':

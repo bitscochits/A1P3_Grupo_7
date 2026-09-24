@@ -56,5 +56,5 @@ hacer, y la que atrapó el error del módulo elástico.
 ## Números
 
 558 nodos, 937 elementos, 10 diafragmas, 47 secciones.
-G = 84 801.2 kN = 34 148.98 (LT2) + 50 652.2 (Ingeniería).
+G = 86 749.48 kN = 34 148.98 (LT2) + 52 600.50 (Ingeniería).
 Separación cara a cara 0.050 m. 705 polígonos tributarios.

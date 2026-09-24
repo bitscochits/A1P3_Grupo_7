@@ -114,7 +114,7 @@ en "Esfuerzos", aparece `carga repartida (beamUniform) wz -27.749 kN/m`.
 
 **De dónde salen.** `w_pp` y `= w_G` no se calculan en C#: son
 `w_peso_propio` y `w_total_G` de la entrada tributaria, que escribe
-`edificios/lt2/exportar_unity.py:657` (`en_G`) leyendo lo que el modelo le
+`edificios/lt2/exportar_unity.py:661` (`en_G`) leyendo lo que el modelo le
 pasó a `eleLoad` en G, por origen (`ModeloLT2.repartidas`,
 `modelo_lt2.py:1388` para el peso propio `A·γ` y `:1411` para la losa
 `q·A/L`). Van en la entrada y no en el elemento porque son dibujo (no entran

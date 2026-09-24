@@ -172,8 +172,8 @@ public class VisorEstructura : MonoBehaviour
     // la geometria y pide redibujar.
     private bool realistaDibujado = false;
 
-    // Mallas propias de los muros inclinados de la deformada: una por muro,
-    // se destruyen en cada Redibujar (si no, quedan huerfanas).
+    // Mallas propias de la deformada: el muro cizallado y la barra curvada,
+    // una por elemento. Se destruyen en cada Redibujar (si no, quedan huerfanas).
     private readonly List<Mesh> mallasPropias = new List<Mesh>();
 
     /// true si las barras se dibujan con su seccion b x h: en la vista
@@ -199,7 +199,7 @@ public class VisorEstructura : MonoBehaviour
         {
             GameObject go;
             if (!objetoDeElemento.TryGetValue(kv.Key, out go) || go == null) continue;
-            go.transform.localScale = EscalaPerfil(kv.Key, kv.Value);
+            go.transform.localScale = EscalaPerfil(kv.Key, kv.Value); Curvar(kv.Key);
         }
     }
 
@@ -322,7 +322,7 @@ public class VisorEstructura : MonoBehaviour
         foreach (Nodo n in Modelo.nodos)
         {
             deformadaActual[n.id] = new DespNodo {
-                id = n.id, ux = n.ux, uy = n.uy, uz = n.uz
+                id = n.id, ux = n.ux, uy = n.uy, uz = n.uz, rx = n.rx, ry = n.ry, rz = n.rz
             };
         }
     }
@@ -524,7 +524,7 @@ public class VisorEstructura : MonoBehaviour
         // Los renderers de antes ya no existen: quien pinta encima
         // (ambiente, mapa D/C) vuelve a pintar. Avisa Redibujado y
         // despues MaterialesCambiados, en ese orden.
-        EventosVisor.AvisarRedibujado();
+        CurvarBarras(); EventosVisor.AvisarRedibujado();
     }
 
     /// Una barra de otro piso: linea gris, SIN collider (un click pasa al
@@ -874,4 +874,323 @@ public class VisorEstructura : MonoBehaviour
     {
         if (necesitaRedibujar) { necesitaRedibujar = false; Redibujar(); }
     }
+
+    // ============================================================
+    // LA CURVA DE LA DEFORMADA
+    // ============================================================
+    // Va al final de la clase para no correr las lineas que citan los
+    // informes (CLAUDE.md seccion 6). Las constantes tambien.
+    //
+    // POR QUE
+    // Una barra dibujada como un palo recto entre sus dos nodos
+    // deformados NO se dobla. Una viga cargada baja en el centro, pero
+    // si sus dos extremos cuelgan de nudos que casi no bajan, el palo
+    // queda igual de recto y parece que la viga no trabaja. Y una
+    // columna entre dos pisos que se corren distinto solo se INCLINA,
+    // cuando en la realidad entra en doble curvatura: se dobla como una
+    // S y sale vertical de los dos nudos, porque el nudo es rigido.
+    //
+    // Lo que faltaba no era calcular nada: son los GIROS de los nudos,
+    // que ya venian en cada desplazamiento (rx, ry, rz) y nadie usaba.
+    // El nudo rigido obliga a la barra a arrancar con SU pendiente, y
+    // de ahi sale la curva.
+    //
+    // NO ES CALCULO ESTRUCTURAL (CLAUDE.md seccion 2)
+    // No sale ningun numero nuevo ni se reporta nada: son las MISMAS
+    // funciones de forma con que el elemento de OpenSees interpola
+    // entre sus dos nodos, usadas para poner vertices. La formula es la
+    // de semana05/carga_movil.py:471 desplazamiento_en(), donde esta
+    // verificada contra la misma viga partida en nodos y con Betti;
+    // aca se omite su termino de carga puntual, que solo existe en el
+    // recorrido de la carga movil.
+    //
+    // QUE NO SE CURVA
+    //   muro   la placa ya sigue a sus nodos cizallada (InclinarPlaca)
+    //   brazo  es un artificio rigido: no tiene forma que mostrar
+    //   y cualquier barra sin ejes locales, sin giros, o que se aparta
+    //   del palo recto menos de DESVIO_MINIMO (no se distinguiria).
+    //
+    // EL COLLIDER NO SE CURVA: sigue siendo la caja del primitivo entre
+    // los dos nodos deformados. Un clic sobre una barra muy curvada le
+    // pega al palo recto, no a la panza. Se prefirio eso a un
+    // MeshCollider por barra, que en el conjunto son 800 mallas.
+
+    /// En cuantos tramos se parte la barra para dibujar su curva. Una
+    /// cubica queda lisa con 8, y cada tramo cuesta un anillo de
+    /// vertices en cada una de las ~800 barras del conjunto.
+    const int TRAMOS_CURVA = 8;
+
+    /// Cuanto tiene que apartarse la curva del palo recto, en metros de
+    /// mundo (ya exagerados por factorEscala), para que valga la pena
+    /// darle malla propia. Debajo de esto no se ve la diferencia.
+    const float DESVIO_MINIMO = 0.01f;
+
+    /// Lados del tubo con que se curva una barra sin perfil.
+    const int LADOS_TUBO = 8;
+
+    /// Desde que giro sobre su propio eje (rad, YA exagerados) vale la
+    /// pena torcer la seccion. 0.01 rad son 0.6 grados: menos no se ve.
+    const float GIRO_MINIMO = 0.01f;
+
+    /// Curva todas las barras dibujadas. Corre al final de Redibujar y
+    /// ANTES de AvisarRedibujado, para que quien pinta encima
+    /// (AmbienteVisor, mapa D/C) encuentre ya la malla definitiva.
+    void CurvarBarras()
+    {
+        if (!mostrarDeformada || Modelo == null || Modelo.elementos == null) return;
+        foreach (Elemento e in Modelo.elementos) Curvar(e.id);
+    }
+
+    /// Le cambia la malla a UNA barra para que siga su curva. Se puede
+    /// volver a llamar sobre la misma barra: la malla se rehace con la
+    /// escala que tenga puesta en ese momento, que es lo que necesita
+    /// FijarBarrasDelgadas cuando adelgaza la barra de un diagrama.
+    void Curvar(int id)
+    {
+        if (!mostrarDeformada || Modelo == null) return;
+        GameObject go;
+        if (!objetoDeElemento.TryGetValue(id, out go) || go == null) return;
+        Elemento e = Modelo.ElementoPorId(id);
+        if (e == null || e.EsMuro || e.EsBrazo) return;
+        float[] giro;
+        Vector3[] curva = CurvaDe(e, out giro);
+        if (curva != null) CurvarMalla(go, curva, giro);
+    }
+
+    /// <summary>
+    /// Los TRAMOS_CURVA+1 puntos del eje deformado de la barra, en
+    /// mundo Unity, o null si esta barra no tiene curva que dibujar.
+    ///
+    /// Todo el algebra va en ejes OPENSEES (Z vertical), que es como
+    /// vienen localX/localY/localZ y como esta escrita la formula en
+    /// Python; el cambio a Unity se hace al final, una sola vez, con el
+    /// Ejes.AUnity de siempre.
+    ///
+    /// Los extremos salen EXACTOS: en xi = 0 y xi = 1 las funciones de
+    /// forma valen 1 y 0, asi que curva[0] y curva[n] son las mismas
+    /// posiciones que da PosicionDe(). Por eso dos barras seguidas
+    /// siguen tocandose en el nudo.
+    /// </summary>
+    Vector3[] CurvaDe(Elemento e, out float[] giro)
+    {
+        giro = null;
+        Nodo a = Modelo.NodoPorId(e.n1), b = Modelo.NodoPorId(e.n2);
+        if (a == null || b == null) return null;
+
+        DespNodo di, dj;
+        if (!deformadaActual.TryGetValue(a.id, out di)) return null;
+        if (!deformadaActual.TryGetValue(b.id, out dj)) return null;
+
+        Vector3 ex = EjeLocal(e.localX), ey = EjeLocal(e.localY), ez = EjeLocal(e.localZ);
+        if (ex == Vector3.zero || ey == Vector3.zero || ez == Vector3.zero) return null;
+
+        Vector3 pa = new Vector3(a.x, a.y, a.z), pb = new Vector3(b.x, b.y, b.z);
+        float L = (pb - pa).magnitude;
+        if (L < 1e-6f) return null;
+
+        Vector3 ti = new Vector3(di.ux, di.uy, di.uz), tj = new Vector3(dj.ux, dj.uy, dj.uz);
+        Vector3 ri = new Vector3(di.rx, di.ry, di.rz), rj = new Vector3(dj.rx, dj.ry, dj.rz);
+        // Sin giros la cubica se degrada a la recta que ya dibuja el
+        // primitivo. Pasa con un JSON viejo, sin rx/ry/rz.
+        if (ri == Vector3.zero && rj == Vector3.zero) return null;
+
+        Vector3[] curva = new Vector3[TRAMOS_CURVA + 1];
+        float[] torsion = new float[TRAMOS_CURVA + 1];
+        for (int k = 0; k <= TRAMOS_CURVA; k++)
+        {
+            float xi = k / (float)TRAMOS_CURVA;
+            // LA TORSION: el giro sobre el PROPIO eje de la barra. En una
+            // barra prismatica sin torque repartido varia LINEAL entre sus
+            // dos nudos, asi que no lleva cubica. Se exagera con el mismo
+            // factorEscala que las traslaciones, si no no se veria: medido
+            // en el LT2, el mayor de los 15 casos es 1.9e-3 rad, que a x74
+            // son 8.2 grados (en el conjunto, bajo G, hasta 24).
+            torsion[k] = ((1f - xi) * Vector3.Dot(ex, ri)
+                          + xi * Vector3.Dot(ex, rj)) * factorEscala;
+            float N1 = 1f - 3f * xi * xi + 2f * xi * xi * xi;
+            float N2 = xi - 2f * xi * xi + xi * xi * xi;
+            float N3 = 3f * xi * xi - 2f * xi * xi * xi;
+            float N4 = -xi * xi + xi * xi * xi;
+            // axial lineal; en local y, cubica con dv/dx = +rz_local;
+            // en local z, con dw/dx = -ry_local (girar +ry lleva el eje
+            // x hacia -z). Es carga_movil.desplazamiento_en() sin el
+            // termino de la carga puntual.
+            float u = (1f - xi) * Vector3.Dot(ex, ti) + xi * Vector3.Dot(ex, tj);
+            float v = N1 * Vector3.Dot(ey, ti) + N2 * L * Vector3.Dot(ez, ri)
+                    + N3 * Vector3.Dot(ey, tj) + N4 * L * Vector3.Dot(ez, rj);
+            float w = N1 * Vector3.Dot(ez, ti) - N2 * L * Vector3.Dot(ey, ri)
+                    + N3 * Vector3.Dot(ez, tj) - N4 * L * Vector3.Dot(ey, rj);
+            Vector3 p = Vector3.Lerp(pa, pb, xi) + (u * ex + v * ey + w * ez) * factorEscala;
+            curva[k] = Ejes.AUnity(p.x, p.y, p.z);
+        }
+
+        // Cuanto se aparta del palo recto que dibujaria el primitivo, y
+        // cuanto se tuerce. Con cualquiera de las dos vale la malla.
+        float desvio = 0f;
+        for (int k = 1; k < TRAMOS_CURVA; k++)
+            desvio = Mathf.Max(desvio, Vector3.Distance(
+                curva[k], Vector3.Lerp(curva[0], curva[TRAMOS_CURVA], k / (float)TRAMOS_CURVA)));
+        float giroMax = Mathf.Max(Mathf.Abs(torsion[0]), Mathf.Abs(torsion[TRAMOS_CURVA]));
+        if (desvio < DESVIO_MINIMO && giroMax < GIRO_MINIMO) return null;
+        giro = torsion;
+        return curva;
+    }
+
+    /// Un eje local del JSON (ejes OpenSees) como versor. Vector3.zero
+    /// si no viene: esa barra se queda recta en vez de curvarse mal.
+    static Vector3 EjeLocal(float[] v)
+    {
+        if (v == null || v.Length < 3) return Vector3.zero;
+        Vector3 r = new Vector3(v[0], v[1], v[2]);
+        return r.sqrMagnitude > 1e-8f ? r.normalized : Vector3.zero;
+    }
+
+    /// <summary>
+    /// Cambia la malla del primitivo por una barra que sigue la curva.
+    ///
+    /// La seccion se BARRE sin girar, igual que InclinarPlaca en los
+    /// muros: las caras de los extremos quedan como estaban y dos
+    /// barras seguidas no se abren en el nudo. Girar la seccion con la
+    /// tangente se ve mejor en una barra suelta y abre las esquinas.
+    ///
+    /// Los vertices van en coordenadas LOCALES del objeto, que sigue
+    /// siendo el mismo primitivo con su posicion, rotacion y escala
+    /// (b, h, largo). InverseTransformPoint ya divide por esa escala,
+    /// asi que la curva sale del tamano justo sin corregir nada, y
+    /// FijarBarrasDelgadas puede cambiar la escala y volver a llamar.
+    ///
+    /// El nombre de la malla conserva "Cube"/"Cylinder" porque
+    /// AmbienteVisor.Repeticion() lo lee para repetir la textura.
+    /// </summary>
+    void CurvarMalla(GameObject go, Vector3[] curva, float[] giro)
+    {
+        MeshFilter mf = go.GetComponent<MeshFilter>();
+        if (mf == null || mf.sharedMesh == null) return;
+        bool caja = mf.sharedMesh.name.Contains("Cube");
+        if (!caja && !mf.sharedMesh.name.Contains("Cylinder")) return;
+
+        int lados = caja ? 4 : LADOS_TUBO;
+        int n = curva.Length - 1;
+        Vector3 escala = go.transform.localScale;
+        Vector3[,] anillo = new Vector3[curva.Length, lados];
+        Vector3[,] hacia = new Vector3[curva.Length, lados];   // hacia afuera, ya girado
+        for (int k = 0; k <= n; k++)
+        {
+            Vector3 c = go.transform.InverseTransformPoint(curva[k]);
+            float g = giro != null && k < giro.Length ? giro[k] : 0f;
+            for (int i = 0; i < lados; i++)
+            {
+                Vector3 s = SeccionGirada(caja, i, g, escala);
+                anillo[k, i] = c + s;
+                hacia[k, i] = s;
+            }
+        }
+
+        var vertices = new List<Vector3>();
+        var uvs = new List<Vector2>();
+        var tri = new List<int>();
+        for (int k = 0; k < n; k++)
+            for (int i = 0; i < lados; i++)
+            {
+                int j = (i + 1) % lados;
+                // El cubo mapea cada cara entera (0..1), como el
+                // primitivo; el tubo reparte la vuelta entre sus lados.
+                float u0 = caja ? 0f : i / (float)lados;
+                float u1 = caja ? 1f : (i + 1) / (float)lados;
+                // Hacia afuera de ESA cara, con la seccion ya torcida.
+                Vector3 fuera = (hacia[k, i] + hacia[k, j]
+                                 + hacia[k + 1, i] + hacia[k + 1, j]) * 0.25f;
+                Cara(vertices, uvs, tri, fuera,
+                     anillo[k, i], anillo[k, j], anillo[k + 1, j], anillo[k + 1, i],
+                     u0, u1, k / (float)n, (k + 1) / (float)n);
+            }
+        Tapa(vertices, uvs, tri, anillo, 0, lados, caja ? Vector3.back : Vector3.down);
+        Tapa(vertices, uvs, tri, anillo, n, lados, caja ? Vector3.forward : Vector3.up);
+
+        Mesh malla = new Mesh { name = (caja ? "Cube" : "Cylinder") + " curvado" };
+        malla.SetVertices(vertices);
+        malla.SetUVs(0, uvs);
+        malla.SetTriangles(tri, 0);
+        malla.RecalculateNormals();
+        malla.RecalculateBounds();
+        mf.sharedMesh = malla;
+        mallasPropias.Add(malla);
+    }
+
+    /// La seccion del primitivo alrededor de su eje, en coordenadas
+    /// locales: el cubo mide 1 y corre en Z; el cilindro mide 2 de alto,
+    /// radio 0.5, y corre en Y. Los cuatro vertices del cubo van en
+    /// orden antihorario, asi que el punto medio de dos seguidos apunta
+    /// hacia afuera de la barra.
+    static Vector3 Seccion(bool caja, int i)
+    {
+        if (caja)
+            return new Vector3(i == 0 || i == 3 ? -0.5f : 0.5f, i < 2 ? -0.5f : 0.5f, 0f);
+        float ang = 2f * Mathf.PI * i / LADOS_TUBO;
+        return new Vector3(0.5f * Mathf.Cos(ang), 0f, 0.5f * Mathf.Sin(ang));
+    }
+
+    /// <summary>
+    /// La seccion GIRADA sobre el eje de la barra: la torsion.
+    ///
+    /// El giro es un giro de verdad en METROS, y las coordenadas
+    /// locales estan escaladas distinto en cada eje (una viga es 0.60
+    /// de ancho y 0.80 de canto). Girar directamente en locales no
+    /// giraria: cizallaria la seccion y la viga saldria mas ancha de un
+    /// lado. Por eso se pasa a metros con la escala, se gira ahi, y se
+    /// vuelve. El cilindro tiene la misma escala en sus dos ejes
+    /// transversales, asi que no necesita la correccion.
+    /// </summary>
+    static Vector3 SeccionGirada(bool caja, int i, float giro, Vector3 escala)
+    {
+        Vector3 s = Seccion(caja, i);
+        if (Mathf.Abs(giro) < 1e-6f) return s;
+        float c = Mathf.Cos(giro), sn = Mathf.Sin(giro);
+        if (!caja)
+            return new Vector3(s.x * c - s.z * sn, s.y, s.x * sn + s.z * c);
+        float sx = Mathf.Abs(escala.x), sy = Mathf.Abs(escala.y);
+        if (sx < 1e-6f || sy < 1e-6f) return s;
+        float mx = s.x * sx, my = s.y * sy;             // a metros
+        return new Vector3((mx * c - my * sn) / sx,     // girado y de vuelta
+                           (mx * sn + my * c) / sy, s.z);
+    }
+
+    /// Un cuadrilatero con sus dos triangulos, mirando hacia 'fuera'.
+    /// El orden se elige con el producto cruz y no se supone, como en
+    /// InclinarPlaca: con la barra curvada el cuadrilatero ya no es
+    /// plano ni tiene siempre la misma mano.
+    static void Cara(List<Vector3> v, List<Vector2> uv, List<int> tri, Vector3 fuera,
+                     Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3,
+                     float u0, float u1, float v0, float v1)
+    {
+        int i0 = v.Count;
+        v.Add(p0); v.Add(p1); v.Add(p2); v.Add(p3);
+        uv.Add(new Vector2(u0, v0)); uv.Add(new Vector2(u1, v0));
+        uv.Add(new Vector2(u1, v1)); uv.Add(new Vector2(u0, v1));
+        if (Vector3.Dot(Vector3.Cross(p1 - p0, p2 - p0), fuera) > 0f)
+            tri.AddRange(new[] { i0, i0 + 1, i0 + 2, i0, i0 + 2, i0 + 3 });
+        else
+            tri.AddRange(new[] { i0, i0 + 2, i0 + 1, i0, i0 + 3, i0 + 2 });
+    }
+
+    /// La tapa de un extremo: un abanico sobre el anillo k.
+    static void Tapa(List<Vector3> v, List<Vector2> uv, List<int> tri,
+                     Vector3[,] anillo, int k, int lados, Vector3 fuera)
+    {
+        int i0 = v.Count;
+        for (int i = 0; i < lados; i++)
+        {
+            v.Add(anillo[k, i]);
+            float ang = 2f * Mathf.PI * i / lados;
+            uv.Add(new Vector2(0.5f + 0.5f * Mathf.Cos(ang), 0.5f + 0.5f * Mathf.Sin(ang)));
+        }
+        for (int i = 1; i + 1 < lados; i++)
+        {
+            if (Vector3.Dot(Vector3.Cross(v[i0 + i] - v[i0], v[i0 + i + 1] - v[i0]), fuera) > 0f)
+                tri.AddRange(new[] { i0, i0 + i, i0 + i + 1 });
+            else
+                tri.AddRange(new[] { i0, i0 + i + 1, i0 + i });
+        }
+    }
+
 }

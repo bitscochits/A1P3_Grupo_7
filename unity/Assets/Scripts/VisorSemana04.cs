@@ -131,6 +131,15 @@ public class DemandaS4
     public float Mn;
     public float u;
     public bool pasa;
+
+    // De que NUCLEO es esta pata, si lo es (lo calcula comun/nucleos.py).
+    // NO cambia 'pasa': dice de DONDE viene el axial, porque la traccion
+    // que saca a una pata de su curva casi siempre es el par interno de
+    // su grupo. nucleo_patas = 0 -> este muro no es pata de un nucleo.
+    // nucleo_estado: "comprimido", "traccion_dentro" o "traccion_fuera".
+    public int nucleo_patas;
+    public float nucleo_P, nucleo_Asfy;
+    public string nucleo_estado;
 }
 
 [System.Serializable]
