@@ -80,17 +80,30 @@ volvió a medir).
 
 ## 3. Cómo identificar un teléfono compatible
 
-Lo que hay que llenar (hoy **por llenar**: no se revisó ningún teléfono):
+**Los teléfonos del grupo (25-09): los tres son iPhone.** Eduardo y Monse
+tienen un iPhone 16 y Pedro un iPhone 16 Pro Max, los tres con iOS 26.5.2.
 
-| dato | mínimo | teléfono |
-| --- | --- | --- |
-| modelo | — | por llenar |
-| versión de Android / API | 8.0 / 26 | por llenar |
-| ABI | `arm64-v8a` (ARM64) | por llenar |
-| GPU y OpenGL ES / Vulkan | ES 3.0+ o Vulkan | por llenar |
-| RAM | 1 GB | por llenar |
-| resolución y densidad | — (el panel escala por dpi) | por llenar |
-| WebGL 2 en Chrome (para Web) | "Hardware accelerated" | por llenar |
+| dato | mínimo para el build **Web** | iPhone 16 | iPhone 16 Pro Max |
+| --- | --- | --- | --- |
+| sistema | Safari con WebGL 2 (iOS 15 o más) | iOS 26.5.2 | iOS 26.5.2 |
+| procesador | 64 bits | Apple A18 | Apple A18 Pro |
+| GPU / API | WebGL 2.0 (sobre Metal en iOS) | GPU Apple de 5 núcleos | GPU Apple de 6 núcleos |
+| RAM | ~1 GB libre para la pestaña (el build pesa 70 MB en disco) | 8 GB | 8 GB |
+| pantalla | — (el panel escala por dpi) | 2556 × 1179, 460 ppi | 2868 × 1320, 460 ppi |
+
+**Qué significa para el build:**
+
+- **El APK de Android no sirve**: ninguno tiene Android. Por eso no se
+  instaló el módulo de Android.
+- **Una app nativa de iOS no se puede compilar aquí**: Unity genera un
+  proyecto de Xcode, y firmarlo e instalarlo exige un **Mac** con Xcode y
+  una cuenta de desarrollador de Apple. No hay Mac en el grupo.
+- **El camino que sí sirve es el build Web en Safari**, y es el que se hizo
+  (§6.1): la misma app, compilada a WebAssembly, servida desde el PC por la
+  red local. No se instala nada en el teléfono.
+
+Con esto los tres teléfonos quedan **compatibles con el build Web**. Lo que
+falta confirmar en cada uno es que la app abra y se pueda tocar (§6.3).
 
 ### Sin cables
 
@@ -166,6 +179,25 @@ Es análisis de código: **nada de esto se probó en un teléfono**.
 Siempre con Unity y la app **cerrados**: los builds corren Unity en batch.
 
 ### 6.1 Build Web (el módulo ya está instalado)
+
+> **Hecho el 25-09, con el conjunto.** `lanzar_unity.py web conjunto`:
+> 24 min de compilación, `build\web` de 70.2 MB (`web.wasm` 44 MB,
+> `web.data` 12 MB). Abierto en Chrome de escritorio desde la IP de la red
+> local: carga el modelo (558 nodos, 937 elementos), los 3 estados de
+> superposición y la carga móvil, sin excepciones.
+>
+> **El primer build tenía un error que solo aparece en Web y Android:**
+> `Can't add component because class 'SphereCollider' doesn't exist!`
+> (558 veces, un nodo cada una) y lo mismo con `CapsuleCollider` (531
+> barras). Esos builds quitan del motor las clases que ninguna escena usa
+> ("Strip Engine Code"), y los colisionadores los agrega
+> `GameObject.CreatePrimitive` por código. Sin ellos no se puede
+> seleccionar nada tocando la pantalla. Lo arregla
+> `unity/Assets/link.xml`, que le pide a Unity conservarlos; con él, el
+> build nuevo da 0 de esos errores. El build de Windows no quita código
+> del motor, por eso ahí nunca se vio.
+>
+> **Falta:** abrirlo en un iPhone del grupo (Safari) y revisar lo de §6.3.
 
 ```powershell
 .\.venv\Scripts\python.exe comun\lanzar_unity.py sincronizar lt2
