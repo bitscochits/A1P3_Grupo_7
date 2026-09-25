@@ -5,6 +5,16 @@ Integrantes: Pedro Castillo, Monserrat Cubillos, Eduardo Vergara
 Repositorio: https://github.com/bitscochits/A1P3_Grupo_7
 Commit entregado: el hash que figura en Canvas (rama `semana05`, llevada a `main` por fast-forward)
 
+> **Actualizado el 25-09** (rama `semana05-lab`, PR #8). Tres cosas cambiaron
+> después de la entrega y este informe las recoge: (1) el **build móvil
+> inicial ya está hecho** —Web, para los iPhone del grupo— y se probó en un
+> iPhone 16 (§6); (2) el commit `f1529e3` de `main` llevó el anexo de 9 a
+> **15 casos** (las 11 combinaciones de NCh3171), la capacidad a revisar la
+> sección y su espejo, y la deformada a dibujarse curva; (3) el LAB de la
+> Semana 5 (`semana05_lab/`) agregó sliders que combinan en Unity. Las
+> cifras de este informe son las de hoy; donde un número es del 17-09, se
+> dice.
+
 Edificio de la demo: **LT2** (cuerpo nuevo, planos `2024_22`): 232 nodos y
 378 elementos. Todo lo de la entrega está en [`semana05/`](../semana05/).
 Documentos de apoyo:
@@ -20,19 +30,25 @@ Documentos de apoyo:
 - contrato entre piezas: [`semana05/CONTRATO.md`](../semana05/CONTRATO.md)
 
 La regla de oro no cambia: **Python/OpenSees calcula y Unity muestra**. En
-C# no hay sumas de superposición, repartos ni interpolación de `Mn`. Cuando
-Unity necesita un número nuevo, se lo pide a Python (servidor) o lo lee de
-un JSON que Python precalculó.
+el avance, C# no hace sumas de superposición, repartos ni interpolación de
+`Mn`: cuando Unity necesita un número nuevo, se lo pide a Python (servidor)
+o lo lee de un JSON que Python precalculó. **La única excepción es del LAB**
+(`semana05_lab/`): los sliders instantáneos escalan y suman en Unity los
+cuatro casos base que OpenSees ya resolvió, y rehacen la demanda con la
+regla de Python. No resuelven la estructura, y lo que la app calcula al
+moverlos se cruza contra Python (`verificar_instantanea.py --registro`, en
+la suite).
 
 Todos los números de este informe salen de una salida real. Los
 `archivo:línea` se comprobaron con `grep` el 17-09 sobre la rama
 `semana05`. Cuando algo no se comprobó, se dice.
 
 ```powershell
-python comun\verificar_todo.py                         # la suite: 41 de 41 EN OK
+python comun\verificar_todo.py                         # la suite: 47 de 47 EN OK (25-09)
 python semana05\servidor_s5.py                         # EL servidor de la Semana 5 (puerto 5000)
 python comun\lanzar_unity.py app lt2                   # la app de Windows
-build\LaboratorioEstructural.exe -capturarS5 semana05\capturas   # las 23 fotos + registro.txt
+build\LaboratorioEstructural.exe -capturarS5 semana05\capturas   # las 25 fotos + registro.txt
+python comun\lanzar_unity.py web conjunto              # el build movil (Web), en build\web
 python semana05\comparar_unity.py semana05\capturas\registro.txt  # Unity contra Python
 ```
 
@@ -44,11 +60,12 @@ Estado de las once funciones del enunciado. "Cómo se verificó" nombra la
 evidencia; `[n]` es el bloque de
 [`semana05/evidencia/unity_vs_python.txt`](../semana05/evidencia/unity_vs_python.txt),
 que compara lo que Unity leyó (float de 32 bits, escrito por el exe en
-`registro.txt`) contra lo que calculó Python. Da **486 filas y 0 FALLA**.
+`registro.txt`) contra lo que calculó Python. Da **488 filas y 0 FALLA**
+(captura del 24-09, con la build posterior a `f1529e3`).
 
 | función | estado | cómo se usa en la app | código | cómo se verificó | limitación |
 | --- | --- | --- | --- | --- | --- |
-| **Navegación** | implementada en Windows; la táctil está compilada pero no se probó en un equipo | Clic izquierdo y arrastrar orbita, clic derecho o medio panea, la rueda hace zoom y **F** encuadra. En Vista > Cámara hay botones Planta, Elev. X, Elev. Y e Iso; en el inspector, "Centrar (C)". En pantalla táctil: un dedo orbita, la pinza hace zoom y dos dedos panean | `CamaraOrbital.cs:170` (táctil), `:224` (rueda), `:234` (F), `:348` `Aplicar` (corre la cámara medio panel), `:382` `EncuadrarTodo` | Las 23 fotos las encuadra la captura automática con esta cámara, y el registro guarda su centro y distancia (foto 01: distancia 41.2) | La F no responde si un campo de texto tiene el foco (`CamaraOrbital.cs:234`). Pinza y dos dedos no se probaron en un teléfono |
+| **Navegación** | implementada en Windows; la táctil, probada el 25-09 en un iPhone 16 con el build Web (§6) | Clic izquierdo y arrastrar orbita, clic derecho o medio panea, la rueda hace zoom y **F** encuadra. En Vista > Cámara hay botones Planta, Elev. X, Elev. Y e Iso; en el inspector, "Centrar (C)". En pantalla táctil: un dedo orbita, la pinza hace zoom y dos dedos panean | `CamaraOrbital.cs:170` (táctil), `:224` (rueda), `:234` (F), `:348` `Aplicar` (corre la cámara medio panel), `:382` `EncuadrarTodo` | Las 23 fotos las encuadra la captura automática con esta cámara, y el registro guarda su centro y distancia (foto 01: distancia 41.2) | La F no responde si un campo de texto tiene el foco (`CamaraOrbital.cs:234`). Pinza y dos dedos no se probaron en un teléfono |
 | **Selección** | implementada | Clic en una barra, un nodo o un símbolo de apoyo. También "Ir a ID" con los botones Elemento o Nodo. La cabecera muestra lo seleccionado con Ver, Centrar y x, y Esc lo suelta. Lo seleccionado se resalta en cian | `VisorQA.cs:424` `LeerClick`, `:485` `SeleccionarNodo`, `:501` `FijarSeleccion`, `:2374` "Ir a ID" | `[4]` `ux.donde.*`: elemento 5, nodos 5 → 21 y sus coordenadas calzan con `data/unity/lt2.json`. Fotos 09 y 10 | La captura selecciona por código, no con el mouse. El campo "Ir a ID" no se actualiza al seleccionar con clic: en las fotos 11 y 13 dice 5 con la viga 92 seleccionada |
 | **Apoyos** | implementada | Capas > Control de calidad > "Apoyos". Hay un símbolo por tipo con leyenda y conteo: cubo verde = empotrado `[1 1 1 1 1 1]` (16 en el LT2), placa = apoyo en terreno `[0 0 1 1 1 0]`, rombo = otra combinación, esfera = maestro de diafragma. Al seleccionar un nodo, el bloque "Como esta apoyado" lo explica en palabras | `VisorQA.cs:250` `TipoApoyo`, `:1200` `DibujarApoyos`, `:1059` bloque del nodo, `:2192` leyenda | `[4]` `ux.apoyo.*`: nodo 5, restricciones `1,1,1,1,1,1`, fijo. Fotos 04 y 10 | En el LT2 no hay apoyos en terreno (el conteo da 0); sí los hay en Ingeniería y en el conjunto |
 | **Ejes (locales)** | implementada | Capas > "Ejes locales" dibuja rojo = x, verde = y, azul = z de OpenSees. El inspector tiene el bloque "Ejes locales (OpenSees)" | `VisorQA.cs:1277` `DibujarEjesLocales` (lee `localX/Y/Z` del JSON), `:2171` casilla. Se calculan en Python: `edificios/lt2/exportar_unity.py:106` y `:549`, con `contrato.ejes_locales` | `comun/test_contrato_unity.py:203` exige que vengan. `semana04/verificar_semana04.py` usa la misma regla para la prueba E·A/L (en la suite, OK) | Ninguna foto de la Semana 5 los muestra prendidos, y no hay una fila de ejes en `unity_vs_python.txt` |
@@ -476,78 +493,86 @@ Lo que quedó pendiente (baja prioridad):
 
 Detalle en [`semana05/MOVIL.md`](../semana05/MOVIL.md).
 
-**El build móvil inicial no se hizo, por decisión de prioridad: Windows
-primero, móvil al final y sin instalar Android.** No hay un APK ni un build
-Web. El editor tiene `WebGLSupport` y `windowsstandalonesupport` en
-`PlaybackEngines`, y no tiene Android (listado el 17-09). El build Web no
-necesitaba instalar nada (`lanzar_unity.py web lt2`), pero tampoco se hizo,
-por la misma prioridad.
+**El build móvil inicial está hecho y probado en un teléfono (25-09).** Es el
+build **Web**, abierto en Safari, porque los tres integrantes tienen iPhone:
+el APK de Android no les sirve y una app nativa de iOS exige un Mac con
+Xcode, que el grupo no tiene. El módulo WebGL ya estaba instalado en el
+editor, así que no hubo que instalar nada.
 
-**Tampoco se identificó un teléfono concreto.** Ningún integrante revisó
-el suyo, y la tabla de `MOVIL.md` §3 sigue por llenar. Esta sección da los
-requisitos que tiene que cumplir ese teléfono y cómo revisarlos.
+![La app en Safari del iPhone 16](../semana05/evidencia/movil_iphone16_safari_conjunto.jpg)
+
+*Captura del iPhone 16 de Eduardo (iOS 26.5.2), en Safari, por el WiFi de la
+casa: el conjunto (558 nodos, 937 elementos) en S3, con la cabecera que da
+Python (23.38 mm, NO PASA 9/207) y la viga 100307 del cuerpo antiguo
+seleccionada con su diagrama de momento. Se probó además que tocar una barra
+la selecciona y que los sliders instantáneos mueven la deformada.*
 
 ### Teléfono compatible
 
-Lo que pide el proyecto está en `unity/ProjectSettings/ProjectSettings.asset`
-y en `ConstruirApp.cs`:
-
-| requisito | valor | dónde | cómo identificarlo en el teléfono |
+| dato | mínimo para el build Web | iPhone 16 (Eduardo, Monse) | iPhone 16 Pro Max (Pedro) |
 | --- | --- | --- | --- |
-| Android | 8.0 o superior (API 26) | `ProjectSettings.asset:182` `AndroidMinSdkVersion: 26` | Ajustes > Acerca del teléfono > Versión de Android |
-| procesador | ARM64 | `ProjectSettings.asset:274`; `ConstruirApp.cs:129` | `adb shell getprop ro.product.cpu.abi` debe decir `arm64-v8a` (o una app de información de hardware) |
-| gráficos | Vulkan u OpenGL ES 3 | `ProjectSettings.asset:541-542` | `adb shell dumpsys SurfaceFlinger` muestra la versión de GLES |
-| orientación | horizontal | `ConstruirApp.cs:132` | — |
-| iPhone | no hay build nativo (hace falta un Mac con Xcode); solo el build Web en el navegador | — | — |
+| sistema | Safari con WebGL 2 (iOS 15 o más) | iOS 26.5.2 | iOS 26.5.2 |
+| procesador | 64 bits | Apple A18 | Apple A18 Pro |
+| GPU / API | WebGL 2.0 (sobre Metal) | GPU Apple de 5 núcleos | GPU Apple de 6 núcleos |
+| RAM | ~1 GB libre para la pestaña | 8 GB | 8 GB |
+| pantalla | — (el panel escala por dpi) | 2556 × 1179, 460 ppi | 2868 × 1320, 460 ppi |
 
-Los comandos de identificación **no se probaron**: no hay un teléfono
-conectado ni `adb` instalado (viene con el módulo de Android).
+Los tres son compatibles con el build Web; el que se probó es el iPhone 16.
+Para Android, el proyecto pide Android 8.0 (API 26), ARM64 y OpenGL ES 3 o
+Vulkan (`ProjectSettings.asset:182`, `:274`, `:541-542`), pero ningún
+integrante tiene uno.
 
-### Qué quedó listo en el código
+### El build
 
-Todo está compilado para Windows (0 errores). Nada se probó en un
-teléfono ni en un navegador.
+```powershell
+python comun\lanzar_unity.py web conjunto            # 24 min; build\web, 70.2 MB
+cd build\web
+..\..\.venv\Scripts\python.exe -m http.server 8080 --bind 0.0.0.0
+```
 
-- **Lectura de datos que sirve en Android y Web.** En esas plataformas
-  `StreamingAssets` no es una carpeta y `File.ReadAllText` falla. Por eso
-  todo pasa por `LectorStreaming.Leer`, que usa `UnityWebRequest`
-  (`LectorStreaming.cs:111`). Lo usan `VisorEstructura.cs:246`,
-  `VisorSemana03.cs:341`, `VisorSemana04.cs:352`,
-  `VisorSemana04.Superposicion.cs:310` y `VisorCargaMovil.cs:318`.
-- **Cámara táctil** (`CamaraOrbital.cs:170`, `:244`): un dedo orbita, la
-  pinza hace zoom y dos dedos panean. El umbral que separa un toque de un
-  arrastre crece con el dpi (`PanelUI.cs:149`), porque en un teléfono de
-  alta densidad un dedo quieto se mueve más de 5 px.
-- **Panel escalado por DPI** (`PanelUI.cs:126`): toma 96 dpi de referencia
-  en PC y 160 en móvil, acotado entre 0.8 y 3.5.
-- **Métodos de build**:
-  - `ConstruirApp.ConstruirWeb` (`:93`), con compresión `Disabled` (`:107`)
-    para que el navegador lo cargue desde un servidor simple;
-  - `ConstruirApp.ConstruirAndroid` (`:114`): id `cl.uandes.grupo7.laboratorio`
-    (`:59`), IL2CPP, ARM64, horizontal y `.apk`;
-  - toda build permite HTTP (`:202`), para poder hablar con el servidor del
-    PC.
-- **Lanzador**: modos `web` y `android` (`comun/lanzar_unity.py:555`,
-  `:558`). Sin el módulo, `python comun/lanzar_unity.py android lt2 --seco`
-  responde "El editor de Unity no tiene el modulo para android ... No se
-  abrio Unity ni se copio nada" (corrido el 17-09).
+y en Safari, `http://<IPv4 del PC>:8080` (el teléfono en el mismo WiFi).
+`web.wasm` pesa 44 MB y `web.data` 12 MB; la primera carga baja unos 56 MB.
+Los datos van en `StreamingAssets` y se leen con `LectorStreaming.Leer`
+(`UnityWebRequest`), que es lo que funciona en Web, donde `StreamingAssets`
+no es una carpeta. `lanzar_unity.py sincronizar <ed>` cambia el edificio
+sin recompilar.
 
-### Pasos para hacer el build móvil
+**Un error que solo aparece en Web (y Android), encontrado al probarlo.**
+Abierto en Chrome, el primer build daba
+`Can't add component because class 'SphereCollider' doesn't exist!` 558
+veces (un nodo cada una) y lo mismo con `CapsuleCollider` 531 (una barra
+cada una). Esos builds quitan del motor las clases que ninguna escena usa
+("Strip Engine Code"), y los colisionadores los agrega
+`GameObject.CreatePrimitive` por código: sin ellos, el `Raycast` del toque
+no encuentra nada y **no se puede seleccionar**. Lo arregla
+[`unity/Assets/link.xml`](../unity/Assets/link.xml), que le pide a Unity
+conservarlos. Con él, 0 de esos errores, y la app carga el modelo, los 3
+estados de superposición y la carga móvil sin excepciones. En Windows no se
+veía porque ese build no quita código del motor.
 
-1. Unity Hub > Installs > 6000.5.10f1 > Add modules > **Android Build
-   Support** con OpenJDK y Android SDK & NDK Tools. La auditoría midió con
-   un *dry-run* unos 2.42 GB de descarga y unos 8.3 GB en disco.
-2. `python comun\lanzar_unity.py sincronizar lt2` (copia modelo, anexos,
-   superposición, carga móvil y Excel).
-3. `python comun\lanzar_unity.py android lt2` → `build/android/LaboratorioEstructural.apk`.
-4. En el teléfono, activar la depuración USB y correr
-   `adb install build\android\LaboratorioEstructural.apk`.
-5. Para reanalizar desde el teléfono: `python semana05\servidor_s5.py --lan`
-   (escucha en `0.0.0.0`, `servidor_s5.py:210`) y escribir la IP del PC en
-   el campo URL del panel. Sin servidor, la app muestra lo precalculado:
-   modelo, casos, E1..E3, P-M y carga móvil.
-6. Alternativa sin Android: `python comun\lanzar_unity.py web lt2` →
-   `build/web`, servido por HTTP.
+### Qué funciona en el teléfono y qué no
+
+- **Sin servidor**: modelo, los 15 casos, E1..E3, sliders instantáneos, P-M,
+  mapa D/C y carga móvil. Es todo precalculado o aritmética sobre lo
+  precalculado.
+- **Con servidor** (`servidor_s5.py --lan` y la IP del PC en el campo URL):
+  LIBRE y el reanálisis de la pestaña Modificar. No se probó desde el
+  teléfono.
+- **Cámara táctil**: un dedo orbita, la pinza hace zoom y dos dedos panean
+  (`CamaraOrbital.cs:170`, `:244`); el umbral entre toque y arrastre crece
+  con el dpi (`PanelUI.cs:149`).
+- **Mejorable en vertical**: el panel ocupa casi media pantalla y corta los
+  botones de la derecha. En horizontal cabe entero; para mostrarlo conviene
+  girar el teléfono.
+
+### Lo que no se hizo
+
+- **App nativa de iOS**: necesita un Mac con Xcode y una cuenta de
+  desarrollador de Apple.
+- **APK de Android**: el camino está listo en el código
+  (`ConstruirApp.ConstruirAndroid`, IL2CPP, ARM64, horizontal) pero exige
+  instalar el módulo (unos 2.42 GB de descarga) y no hay un Android en el
+  grupo. Pasos en [`MOVIL.md`](../semana05/MOVIL.md) §6.2.
 
 ---
 
@@ -699,20 +724,20 @@ Los resultados se pueden abrir en Excel **sin reemplazar los JSON**. Los
 escribe un módulo genérico, `comun/excel.py`, pensado para reutilizarlo.
 
 - **Libro del anexo, versionado**: `data/excel/<ed>_resultados.xlsx`. Se
-  genera con `python semana05\exportar_excel.py lt2`. Tamaños: lt2 650 468
-  B, ingenieria 960 791 B, conjunto 1 590 323 B.
+  genera con `python semana05\exportar_excel.py lt2`. Tamaños (25-09, con
+  15 casos): lt2 1 025 572 B, ingenieria 1 531 264 B, conjunto 2 537 196 B.
 - **Hojas** (las mismas diez en los tres):
 
   | hoja | filas en el LT2 |
   | --- | --- |
   | LEEME | — |
-  | Resumen | 9, una por caso: equilibrio, \|u\| máx, corte basal, NO PASA, peor D/C |
+  | Resumen | 15, una por caso: equilibrio, \|u\| máx, corte basal, NO PASA, peor D/C |
   | Nodos | 232 |
-  | Desplazamientos | 2 088 = 232 × 9 casos |
+  | Desplazamientos | 3 480 = 232 × 15 casos |
   | Elementos | 378 |
-  | Esfuerzos | 6 804 = 378 × 2 extremos × 9 |
-  | Reacciones | 189 = 21 × 9, con las columnas "Cuenta en Fx/Fy" y "Cuenta en Fz" |
-  | Demanda-capacidad | 621 = 69 × 9, con color por D/C |
+  | Esfuerzos | 11 340 = 378 × 2 extremos × 15 |
+  | Reacciones | 315 = 21 × 15, con las columnas "Cuenta en Fx/Fy" y "Cuenta en Fz" |
+  | Demanda-capacidad | 1 035 = 69 × 15, con color por D/C |
   | Curvas P-M | 312 = 26 familias × 12 puntos |
   | Supuestos | 18 |
 
@@ -748,14 +773,15 @@ escribe un módulo genérico, `comun/excel.py`, pensado para reutilizarlo.
 
 | qué | resultado | de dónde |
 | --- | --- | --- |
-| Suite completa | **41 de 41 EN OK**, salida 0, en dos corridas: **131 s** y **8 min 14 s** de reloj (el test del Excel es el que más varía: 366 s en la segunda) | `python comun\verificar_todo.py`, 17-09 |
+| Suite completa | **47 de 47 EN OK** el 24-09, con `StreamingAssets` en el LT2 (el 17-09 eran 41 de 41: 131 s y 8 min 14 s). Con `StreamingAssets` en el conjunto, como lo dejó `f1529e3` en `main`, fallan "superposicion s5 lt2" y "contrato JSON-C# s5", porque exigen que `StreamingAssets/superposicion.json` sea el del LT2: es de estado, no de cálculo | `python comun\verificar_todo.py` |
 | Entradas nuevas de la Semana 5 | superposición lt2 5.6 s, ingeniería 5.4 s, contrato JSON-C# 2.8 s, Excel de 3 edificios 57.8 s, carga móvil 1.1 s, M1 0.7 s, M2 4.7 s: todas OK | la misma corrida (`comun/verificar_todo.py:90-98`) |
 | Unity lee el anexo de la Semana 4 | 23 OK, con Unity real en batch (12.4 s dentro de la suite) | `semana04/verificar_unity_semana04.py` |
 | Contratos JSON ↔ C# | Semana 4: 59 OK. Semana 5: 181 OK, 0 FALLA | `test_contrato_semana04.py`, `test_contrato_semana05.py` |
 | C# compila | 0 errores y 0 avisos en los dos ensamblados | `semana05/compilar_unity.py` |
 | Regresión de la Semana 4, byte a byte | Ingeniería: `registro.txt` de 283 líneas, md5 `e7404300…`, **idéntico** al commiteado (integración). Después de los arreglos visuales, el `registro.txt` S4 del LT2 salió idéntico al de la integración (151 líneas, md5 `ceb64162…`). Con la build de la revisión final se repitió y dio el mismo md5 | `-capturarS4` + `cmp` |
-| Unity contra Python | **486 filas, 0 FALLA**: [1] superposición 144, [2] M1 146, [3] carga móvil 97, [4] preguntas del visor 58, [5] registro 41. "TODO CALZA". Frente a las 456 de antes: 28 filas de la fuente de la cabecera en las fotos 15 a 22 (`anexo`, `reanalisis`, `carga_movil`, con sus números) y 2 de `w_peso_propio` y `w_total_G` de la viga 92. Captura del 17-09 a las 10:10 con la build de este arreglo (la revisión adversarial cambió el rótulo del máximo del reanálisis a "Max. componente"); el resto de la salida quedó igual | [`semana05/evidencia/unity_vs_python.txt`](../semana05/evidencia/unity_vs_python.txt) |
-| Captura de la Semana 5 | 23 fotos, `log.errores = 0`, salida 0, con el servidor prendido | `build/LaboratorioEstructural.exe -capturarS5` |
+| Unity contra Python | **488 filas, 0 FALLA** el 24-09 (144 + 146 + 97 + 58 + 43). El 17-09 eran **486 filas, 0 FALLA**: [1] superposición 144, [2] M1 146, [3] carga móvil 97, [4] preguntas del visor 58, [5] registro 41. "TODO CALZA". Frente a las 456 de antes: 28 filas de la fuente de la cabecera en las fotos 15 a 22 (`anexo`, `reanalisis`, `carga_movil`, con sus números) y 2 de `w_peso_propio` y `w_total_G` de la viga 92. Captura del 17-09 a las 10:10 con la build de este arreglo (la revisión adversarial cambió el rótulo del máximo del reanálisis a "Max. componente"); el resto de la salida quedó igual | [`semana05/evidencia/unity_vs_python.txt`](../semana05/evidencia/unity_vs_python.txt) |
+| Captura de la Semana 5 | 25 fotos (las 23 y las 18b/18c del LAB), `log.errores = 0`, salida 0, con el servidor prendido | `build/LaboratorioEstructural.exe -capturarS5` |
+| Build móvil (Web) | 70.2 MB, 24 min; en Chrome carga el conjunto sin excepciones y 0 colisionadores faltantes; en Safari del iPhone 16 carga, se selecciona al tocar y los sliders responden | `lanzar_unity.py web conjunto`; [captura del iPhone](../semana05/evidencia/movil_iphone16_safari_conjunto.jpg) |
 | Build Windows | BUILD OK, 106 MB, 20 s de build (38 s con el lanzador), la de la revisión final (`build/unity_build.log:8236`) | `python comun\lanzar_unity.py build lt2 --forzar` |
 | M2 en Unity | registro del exe con `--cs 0.20`: columna 5 u 0.296 PASA y muro 9 u 1.078 NO PASA, igual que `comparar_anexos.py`; después, `semana04.json` volvió al md5 `7ad6a421…` | [`semana05/evidencia/m2_cs020/`](../semana05/evidencia/m2_cs020/), `-capturarS4` |
 | StreamingAssets = data | los 6 pares con el mismo md5 en el proyecto y en `build/`; `sincronizar lt2` da "igual 12" | `lanzar_unity.py sincronizar lt2` + md5 |
@@ -880,6 +906,6 @@ total. Las mejoras y la sidequest no suman puntos propios.
 | Modificación / reanálisis | 4 | §2 (M1 y M2 en 5 pasos); [`MODIFICACIONES.md`](../semana05/MODIFICACIONES.md); `reanalisis_demo.py` y `comparar_anexos.py` en la suite; bloque [2]; fotos 21-22; M2 en Unity en [`evidencia/m2_cs020/`](../semana05/evidencia/m2_cs020/) |
 | Superposición / demanda-capacidad | 4 | §3; `verificar_superposicion.py` (4 vías); [`evidencia/superposicion_lt2.*`](../semana05/evidencia/); `test_contrato_semana05.py`; bloque [1]; fotos 14-18 |
 | QA / UX | 3 | §5 (seis preguntas con veredicto, panel y realismo antes/después); [`UX.md`](../semana05/UX.md); fotos 01-14 |
-| Preparación móvil, IA y gestión | 4 | §6 y [`MOVIL.md`](../semana05/MOVIL.md); §7 y [`AGENTS.md`](../AGENTS.md); Gestión |
+| Preparación móvil, IA y gestión | 4 | §6: build Web probado en un iPhone 16, con [captura](../semana05/evidencia/movil_iphone16_safari_conjunto.jpg), y los teléfonos del grupo en [`MOVIL.md`](../semana05/MOVIL.md); §7 y [`AGENTS.md`](../AGENTS.md); Gestión |
 | Sidequest carga móvil (opcional) | — | §4; [`CARGA_MOVIL.md`](../semana05/CARGA_MOVIL.md); bloque [3]; fotos 19-20 |
 | Mejoras: Excel, realismo y suelo, panel | — | Resultados en Excel; §5; `test_excel.py` |
