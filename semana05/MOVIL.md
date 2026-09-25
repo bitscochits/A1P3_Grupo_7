@@ -102,8 +102,8 @@ tienen un iPhone 16 y Pedro un iPhone 16 Pro Max, los tres con iOS 26.5.2.
   (§6.1): la misma app, compilada a WebAssembly, servida desde el PC por la
   red local. No se instala nada en el teléfono.
 
-Con esto los tres teléfonos quedan **compatibles con el build Web**. Lo que
-falta confirmar en cada uno es que la app abra y se pueda tocar (§6.3).
+Con esto los tres teléfonos quedan **compatibles con el build Web**, y en el
+iPhone 16 ya se comprobó que la app abre y responde al toque (§6.1).
 
 ### Sin cables
 
@@ -197,7 +197,11 @@ Siempre con Unity y la app **cerrados**: los builds corren Unity en batch.
 > build nuevo da 0 de esos errores. El build de Windows no quita código
 > del motor, por eso ahí nunca se vio.
 >
-> **Falta:** abrirlo en un iPhone del grupo (Safari) y revisar lo de §6.3.
+> **Probado en un iPhone el 25-09.** Eduardo lo abrió en Safari de su
+> iPhone 16 (iOS 26.5.2), por el WiFi de la casa, en
+> `http://<IPv4 del PC>:8080`: carga el conjunto, se selecciona tocando
+> las barras y los sliders instantáneos mueven la deformada. Falta
+> guardar la captura de pantalla del teléfono como evidencia.
 
 ```powershell
 .\.venv\Scripts\python.exe comun\lanzar_unity.py sincronizar lt2
