@@ -200,8 +200,17 @@ Siempre con Unity y la app **cerrados**: los builds corren Unity en batch.
 > **Probado en un iPhone el 25-09.** Eduardo lo abrió en Safari de su
 > iPhone 16 (iOS 26.5.2), por el WiFi de la casa, en
 > `http://<IPv4 del PC>:8080`: carga el conjunto, se selecciona tocando
-> las barras y los sliders instantáneos mueven la deformada. Falta
-> guardar la captura de pantalla del teléfono como evidencia.
+> las barras y los sliders instantáneos mueven la deformada.
+>
+> Evidencia: [`evidencia/movil_iphone16_safari_conjunto.jpg`](evidencia/movil_iphone16_safari_conjunto.jpg),
+> la captura del iPhone: el conjunto (558 nodos, 937 elementos) en S3,
+> con la cabecera que da Python (23.38 mm, NO PASA 9/207) y la viga
+> 100307 del cuerpo antiguo seleccionada con su diagrama de momento.
+>
+> **Lo que se ve mejorable en vertical:** el panel ocupa casi media
+> pantalla y corta los botones de la derecha ("> Caso ac…",
+> "1.2G+1.…"). En horizontal cabe entero; para la demo conviene girar
+> el teléfono.
 
 ```powershell
 .\.venv\Scripts\python.exe comun\lanzar_unity.py sincronizar lt2
