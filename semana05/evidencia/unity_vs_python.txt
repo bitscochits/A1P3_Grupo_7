@@ -1,6 +1,6 @@
 ======================================================================================================================
   UNITY CONTRA PYTHON   registro semana05\capturas\registro.txt
-  edificio lt2; 1053 datos; equipo 13th Gen Intel(R) Core(TM) i7-13620H (16 hilos) | Windows 11  (10.0.26200) | NVIDIA GeForce RTX 4060 Laptop GPU (Direct3D 12 [level 12.2]) | RAM 32471 MB | pantalla 1600x900 a 120 dpi
+  edificio lt2; 1438 datos; equipo Intel(R) Core(TM) i7-1065G7 CPU @ 1.30GHz (8 hilos) | Windows 11  (10.0.22631) | NVIDIA GeForce GTX 1050 with Max-Q Design (Direct3D 11.0 [level 11.1]) | RAM 16161 MB | pantalla 1600x900 a 120 dpi
   tolerancia por fila = suma de sus causas (f32, ref, impr, ent32): ver el encabezado del script
 ======================================================================================================================
 
@@ -21,8 +21,8 @@
   sup.pre.E1.elem.5.pasa                             True              True                                  igual      ok
   sup.pre.E1.elem.9.P                                3591.01392        3591.014          8.00e-05  2.44e-04  f32+ref    ok
   sup.pre.E1.elem.9.M                                546.963196        546.9632          4.00e-06  6.10e-05  f32+ref    ok
-  sup.pre.E1.elem.9.Mn                               27759.1191        27759.1199        8.00e-04  1.95e-03  f32+ref    ok
-  sup.pre.E1.elem.9.u                                0.0197039992      0.019704          8.00e-10  1.86e-09  f32+ref    ok
+  sup.pre.E1.elem.9.Mn                               26109.7734        26109.7731        3.00e-04  1.95e-03  f32+ref    ok
+  sup.pre.E1.elem.9.u                                0.0209490005      0.020949          5.00e-10  1.86e-09  f32+ref    ok
   sup.pre.E1.elem.9.extremo                          j (superior)      j (superior)                          igual      ok
   sup.pre.E1.elem.9.pasa                             True              True                                  igual      ok
   sup.pre.E1.elem.92.My_i                            -639.537903       -639.5379         3.00e-06  6.10e-05  f32+ref    ok
@@ -55,8 +55,8 @@
   sup.pre.E2.elem.5.pasa                             True              True                                  igual      ok
   sup.pre.E2.elem.9.P                                4551.83838        4551.8382         1.80e-04  4.88e-04  f32+ref    ok
   sup.pre.E2.elem.9.M                                663.863403        663.8634          3.00e-06  6.10e-05  f32+ref    ok
-  sup.pre.E2.elem.9.Mn                               30352.998         30352.9987        7.00e-04  1.95e-03  f32+ref    ok
-  sup.pre.E2.elem.9.u                                0.0218710005      0.021871          5.00e-10  1.86e-09  f32+ref    ok
+  sup.pre.E2.elem.9.Mn                               28766.4668        28766.466         8.00e-04  1.95e-03  f32+ref    ok
+  sup.pre.E2.elem.9.u                                0.0230780002      0.023078          2.00e-10  1.86e-09  f32+ref    ok
   sup.pre.E2.elem.9.extremo                          j (superior)      j (superior)                          igual      ok
   sup.pre.E2.elem.9.pasa                             True              True                                  igual      ok
   sup.pre.E2.elem.92.My_i                            -826.231201       -826.2312         1.00e-06  6.10e-05  f32+ref    ok
@@ -89,8 +89,8 @@
   sup.pre.E3.elem.5.pasa                             True              True                                  igual      ok
   sup.pre.E3.elem.9.P                                3285.09912        3285.0992         8.00e-05  2.44e-04  f32+ref    ok
   sup.pre.E3.elem.9.M                                4826.69727        4826.6975         2.30e-04  4.88e-04  f32+ref    ok
-  sup.pre.E3.elem.9.Mn                               26874.1309        26874.1318        9.00e-04  1.95e-03  f32+ref    ok
-  sup.pre.E3.elem.9.u                                0.179603994       0.179604          6.00e-09  1.49e-08  f32+ref    ok
+  sup.pre.E3.elem.9.Mn                               25214.3848        25214.3851        3.00e-04  1.95e-03  f32+ref    ok
+  sup.pre.E3.elem.9.u                                0.191425994       0.191426          6.00e-09  1.49e-08  f32+ref    ok
   sup.pre.E3.elem.9.extremo                          i (inferior)      i (inferior)                          igual      ok
   sup.pre.E3.elem.9.pasa                             True              True                                  igual      ok
   sup.pre.E3.elem.92.My_i                            -742.636108       -742.6361         8.00e-06  6.10e-05  f32+ref    ok
@@ -127,8 +127,8 @@
   sup.libre.E3.elem.5.pasa                           True              True                                  igual      ok
   sup.libre.E3.elem.9.P                              3285.09912        3285.0992         8.00e-05  2.44e-04  f32+ref    ok
   sup.libre.E3.elem.9.M                              4826.69727        4826.6975         2.30e-04  4.88e-04  f32+ref    ok
-  sup.libre.E3.elem.9.Mn                             26874.1309        26874.1318        9.00e-04  1.95e-03  f32+ref    ok
-  sup.libre.E3.elem.9.u                              0.179603994       0.179604          6.00e-09  1.49e-08  f32+ref    ok
+  sup.libre.E3.elem.9.Mn                             25214.3848        25214.3851        3.00e-04  1.95e-03  f32+ref    ok
+  sup.libre.E3.elem.9.u                              0.191425994       0.191426          6.00e-09  1.49e-08  f32+ref    ok
   sup.libre.E3.elem.9.extremo                        i (inferior)      i (inferior)                          igual      ok
   sup.libre.E3.elem.9.pasa                           True              True                                  igual      ok
   sup.libre.E3.elem.92.My_i                          -742.636108       -742.6361         8.00e-06  6.10e-05  f32+ref    ok
@@ -154,7 +154,7 @@
   sup.libre.E3.equilibrio.error_kN[Fz]               -0.000299359992   -0.00029936       8.00e-12  2.91e-11  f32        ok
   -> 144 filas, 0 FALLA
 
-  referencia: python C:\Users\Administrador\OneDrive\Escritorio\UANDES\202602\Metodos computacionales\P1\A1P1.0_Grupo_7\semana05\reanalisis_demo.py lt2 --borrar-elemento 69 --nodo 186 --elemento 337 --float32  (rc 0, TODO OK; 120 numeros leidos de su salida)
+  referencia: python C:\Proyectos\SAP3000 v1.0\semana05\reanalisis_demo.py lt2 --borrar-elemento 69 --nodo 186 --elemento 337 --float32  (rc 0, TODO OK; 120 numeros leidos de su salida)
   entrada32 medida contra la misma demo sin --float32 (rc 0)
   srv: 21 nodos con restriccion -> una suma de reacciones puede moverse 2.1e-03 kN
 
@@ -463,17 +463,17 @@
   ux.fuerzas.Mz_i                                    0                 -0                0.00e+00  1.40e-45  f32        ok
   ux.fuerzas.Mz_j                                    0                 -0                0.00e+00  1.40e-45  f32        ok
   ux.fuerzas.motivo_sin_diagrama                                                                             igual      ok
-  ux.capacidad.caso_con_mas_no_pasa                  1.2G+1.0Q+1.4EX   1.2G+1.0Q+1.4EX                       igual      ok
-  ux.capacidad.no_pasan                              4                 4                                     igual      ok
+  ux.capacidad.caso_con_mas_no_pasa                  0.9G-1.4EX        0.9G-1.4EX                            igual      ok
+  ux.capacidad.no_pasan                              6                 6                                     igual      ok
   ux.capacidad.fuera_de_curva                        1                 1                                     igual      ok
   ux.capacidad.con_fierro                            69                69                                    igual      ok
-  ux.capacidad.elem.5.P                              6301.04688        6301.0471         2.20e-04  4.88e-04  f32        ok
-  ux.capacidad.elem.5.M                              373.962097        373.9621          3.00e-06  3.05e-05  f32        ok
-  ux.capacidad.elem.5.Mn                             1748.35925        1748.3593         5.00e-05  1.22e-04  f32        ok
-  ux.capacidad.elem.5.u                              0.213892996       0.213893          4.00e-09  1.49e-08  f32        ok
+  ux.capacidad.elem.5.P                              3786.4541         3786.4541         0.00e+00  2.44e-04  f32        ok
+  ux.capacidad.elem.5.M                              345.539307        345.5393          7.00e-06  3.05e-05  f32        ok
+  ux.capacidad.elem.5.Mn                             1728.82007        1728.8201         3.00e-05  1.22e-04  f32        ok
+  ux.capacidad.elem.5.u                              0.199870005       0.19987           5.00e-09  1.49e-08  f32        ok
   ux.capacidad.elem.5.pasa                           True              True                                  igual      ok
   ux.capacidad.elem.5.extremo                        i (inferior)      i (inferior)                          igual      ok
-  ux.capacidad.no_pasa.ids                           12,28,29,45       12,28,29,45                           igual      ok
+  ux.capacidad.no_pasa.ids                           14,15,16,29,30,32 14,15,16,29,30,32                     igual      ok
   ux.capacidad.mapa_activo                           True              True                                  igual      ok
   -> 58 filas, 0 FALLA
 
@@ -481,7 +481,7 @@
   [5] REGISTRO: fotos, log, ids de control, Excel, edificio
 ======================================================================================================================
   dato                                               Unity             Python            |dif|     tol       causa      
-  fotos                                              23                23                                    igual      ok
+  fotos                                              25                25                                    igual      ok
   salida                                             0                 0                                     igual      ok
   log.errores                                        0                 0                                     igual      ok
   lineas AVISO/ERROR en registro.txt                 0                 0                                     igual      ok
@@ -493,7 +493,7 @@
   superposicion.nombres                              E1(precalculado), E1(precalculado),                     igual      ok
   modelo.nodos                                       232               232                                   igual      ok
   modelo.elementos                                   378               378                                   igual      ok
-  modelo.cota_terreno                                -4.01000023       -4.01             2.30e-07  4.77e-07  f32        ok
+  modelo.cota_terreno                                -7.96999979       -7.97             2.10e-07  4.77e-07  f32        ok
   servidor.responde                                  True              True                                  igual      ok
   control.columna                                    5                 5                                     igual      ok
   control.muro                                       9                 9                                     igual      ok
@@ -512,17 +512,19 @@
   foto.11_que_lo_carga_viga_92_area_tributaria_y_w_G Elemento          Elemento                              igual      ok
   foto.12_como_se_deforma_S3_nodo_207.pestana        Elemento          Elemento                              igual      ok
   foto.13_que_fuerzas_tiene_viga_92_My_S3.pestana    Elemento          Elemento                              igual      ok
-  foto.14_capacidad_columna_5_PM_y_mapa_DC_1.2G+1.0Q Elemento          Elemento                              igual      ok
-  foto.14b_mapa_DC_leyenda_y_criticos_1.2G+1.0Q+1.4E Caso              Caso                                  igual      ok
+  foto.14_capacidad_columna_5_PM_y_mapa_DC_0.9G-1.4E Elemento          Elemento                              igual      ok
+  foto.14b_mapa_DC_leyenda_y_criticos_0.9G-1.4EX.pes Caso              Caso                                  igual      ok
   foto.15_superposicion_E1_precalculado.pestana      Caso              Caso                                  igual      ok
   foto.16_superposicion_E2_precalculado.pestana      Caso              Caso                                  igual      ok
   foto.17_superposicion_E3_precalculado.pestana      Caso              Caso                                  igual      ok
   foto.18_superposicion_E3_LIBRE_servidor.pestana    Caso              Caso                                  igual      ok
+  foto.18b_superposicion_instantanea_E3_en_Unity.pes Caso              Caso                                  igual      ok
+  foto.18c_capacidad_columna_5_PM_con_sliders_instan Elemento          Elemento                              igual      ok
   foto.19_carga_movil_posicion_12_viga_205.pestana   Carga movil       Carga movil                           igual      ok
   foto.20_carga_movil_posicion_25_viga_208.pestana   Carga movil       Carga movil                           igual      ok
   foto.21_M1_sin_columna_69_deformada_G_y_equilibrio Modificar         Modificar                             igual      ok
   foto.22_M1_nodo_186_UZ_G.pestana                   Modificar         Modificar                             igual      ok
-  -> 41 filas, 0 FALLA
+  -> 43 filas, 0 FALLA
 
 ======================================================================================================================
   TODO CALZA: lo que muestra Unity es lo que calculo Python

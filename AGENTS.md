@@ -405,6 +405,47 @@ modelo y el conteo debe cerrar con los rótulos del plano"*. Uno malo:
 | M2: Cs 0.10 → 0.20 | G y Q idénticos; EX nuevo = 2·EX base (error/cota ≤ 0.72); muro 9 en EY u 0.635 → 1.479 | `semana05/comparar_anexos.py lt2 --cs 0.20` |
 | Carga móvil: ΣRz = P | peor 2.0e-04 ≤ 8.0e-04 kN en las 30 posiciones; Betti 3.5e-19 m | `semana05/carga_movil.py lt2` |
 | Excel = Python | 47 OK en el LT2; la suma filtrada de Reacciones = `calcular.equilibrio` | `semana05/test_excel.py` |
-| Unity muestra lo que calculó Python (Semana 5) | 486 filas, 0 FALLA (fuera de la suite: necesita el exe y el servidor) | `semana05/comparar_unity.py semana05/capturas/registro.txt` |
+| Unity muestra lo que calculó Python (Semana 5) | 488 filas, 0 FALLA (fuera de la suite: necesita el exe y el servidor) | `semana05/comparar_unity.py semana05/capturas/registro.txt` |
 
 Todo junto: `python comun/verificar_todo.py`.
+
+### Semana 5 — LAB (10 pts): sliders instantáneos y criterios de reanálisis
+- **Tarea:** la segunda entrega de la semana, con otra rúbrica
+  (interactividad, modificación, superposición en Unity, demanda-capacidad
+  dinámica, criterios de reanálisis). Casi todo lo cubría el avance; se
+  agregó lo que faltaba para ese enunciado: los sliders que combinan **en
+  Unity y al instante** (`VisorSemana05.Instantanea.cs`, caso INSTANT), la
+  tabla de criterios de reanálisis derivada de `K·u = F`, las modificaciones
+  M3 (sección) y M4 (apoyo) reproducibles por script, y el paso D2 de
+  `CapturaSemana05` que mueve los sliders en la app real y registra lo que
+  calculó. Todo en `semana05_lab/`.
+- **Cómo se trabajó:** una auditoría previa de 10 agentes (5 auditores y 5
+  escépticos, uno por criterio) sobre el avance, para no construir lo que ya
+  existía; luego el código y los documentos; y una **segunda auditoría de 70
+  agentes** (7 auditores por dimensión —fidelidad C#/Python, runtime de
+  Unity, documentos, comandos, el avance de Pedro, la rúbrica vista por el
+  profesor, la ingeniería de los criterios— y dos escépticos por hallazgo).
+- **Qué encontró la auditoría y se arregló:** (1) el caso INSTANT se
+  registraba con `tipo = "combinacion"` y el hook solo reemplaza casos
+  `"superposicion"`: los sliders funcionaban **una vez** y se congelaban; la
+  réplica en Python no podía verlo, y hoy el registro de la app comprueba que
+  la versión sube en cada movimiento. (2) La fila `Cs` de la tabla y la M2
+  del guion decían "otro caso base": es `λEX = 2` exacto a un paso de
+  redondeo, y `q` o el patrón son los que cambian la forma. (3) `Ins_Aplicar`
+  corría dentro de `OnGUI` (la trampa IMGUI de `CLAUDE.md`); ahora va por
+  `Diferir`. (4) El panel decía que INSTANT se combinó "en Python". (5) La
+  cota del verificador no incluía la aritmética de 32 bits aunque el
+  docstring lo prometía; ahora la réplica la emula y la cota la cuenta
+  (`16 · 2^-24 · Σ|λ·v|`). (6) Ocho datos imprecisos en los documentos
+  (decenas de segundos que eran 2 s; 9 estaciones "en G y Q" que en Q son
+  204 barras; la aritmética del error de interpolación; "< 1 ms" sin medir:
+  son 0.9–4.4 ms).
+- **Qué se verificó:** `verificar_instantanea.py lt2 --registro` cruza los
+  números que Unity escribió al mover los sliders con Python (4 juegos de λ,
+  cotas derivadas del redondeo y del float32) y la réplica en 10 juegos;
+  `comparar_unity.py` TODO CALZA con la evidencia rehecha; la suite completa.
+- **Lo que un agente afirmó y no era cierto:** que correr la app con
+  `-nographics` servía para comprobar el panel (sin gráficas `OnGUI` no corre
+  y las fotos salen ruido); y que el registro anterior probaba que los
+  sliders funcionaban (nadie los había movido). Las dos cosas se corrigieron
+  ejecutando la app de verdad.

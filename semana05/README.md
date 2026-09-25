@@ -47,8 +47,8 @@ Decisiones que ordenan todo lo demás (Pedro, 16-09):
 | `comparar_anexos.py` | M2 sin escribir nada: arma en memoria el anexo con `--cs 0.20` y lo compara con el de la entrega. |
 | `compilar_unity.py` | Compila los C# con el dotnet de Unity, sin abrir Unity. |
 | `comparar_unity.py` | Cruza el `registro.txt` de `CapturaSemana05` (lo que Unity cargó y muestra, en float32 exacto) con Python. |
-| `capturas/` | 23 fotos (`01`…`22`, más `14b`) y `registro.txt`, tomadas sin intervención por `build/LaboratorioEstructural.exe -capturarS5` con el servidor prendido (17-09, 1600×900). |
-| `evidencia/` | `superposicion_lt2.json/.csv/_control.csv` (y los de Ingeniería), `carga_movil_lt2.json/.txt` y `unity_vs_python.txt` (456 filas, 0 FALLA). |
+| `capturas/` | 25 fotos (`01`…`22`, más `14b`, `18b` y `18c`) y `registro.txt`, tomadas sin intervención por `build/LaboratorioEstructural.exe -capturarS5` con el servidor prendido (22-09, 1600×900). |
+| `evidencia/` | `superposicion_lt2.json/.csv/_control.csv` (y los de Ingeniería), `carga_movil_lt2.json/.txt` y `unity_vs_python.txt` (488 filas, 0 FALLA). |
 
 Fuera de la carpeta, lo que la semana agregó o cambió:
 
@@ -85,7 +85,7 @@ Fuera de la carpeta, lo que la semana agregó o cambió:
 | `Scripts/EditorEstructura.cs` · `Scripts/AnalizadorEstructural.cs` | La pestaña Modificar: borrar, crear y mover, "Recalcular en el servidor (Enter)", casos G/Q/EX/EY del reanálisis, tabla de equilibrio que envía Python y "Abrir Excel de este reanalisis". |
 | `Scripts/VisorCargaMovil.cs` | La pestaña Carga movil: posición, Play, reparto, conservación y la deformada de esa posición, todo leído del JSON. |
 | `Scripts/CamaraOrbital.cs` | Táctil (un dedo orbita, dos hacen pinza y paneo) y encuadre que descuenta el panel. |
-| `Scripts/CapturaSemana05.cs` | Con `-capturarS5 <carpeta>` saca las 23 fotos y escribe `registro.txt`. Sin ese argumento no hace nada. |
+| `Scripts/CapturaSemana05.cs` | Con `-capturarS5 <carpeta>` saca las 25 fotos y escribe `registro.txt`. Sin ese argumento no hace nada. |
 | `Scripts/CapturaSemana04.cs` · `Scripts/VisorSemana03.cs` · `Scripts/ModeloEstructural.cs` | Scroll de la foto 01 de la S4, lectura asíncrona con aviso de "otro modelo" y los campos nuevos del contrato (`cota_terreno`, `EquilibrioCaso`, `excel`). |
 | `Editor/ConstruirApp.cs` · `Editor/ConfigurarEscena.cs` | Builds de Windows, Web (compresión `Disabled`) y Android (avisa si falta el módulo), y el montaje reproducible de la escena. |
 | `StreamingAssets/` | `modelo_unity_edificio.json`, `semana03.json`, `semana04.json`, `superposicion.json`, `carga_movil.json` y `resultados.xlsx`, todos del LT2 (los copia `lanzar_unity.py sincronizar lt2`). |
@@ -96,7 +96,7 @@ Fuera de la carpeta, lo que la semana agregó o cambió:
 
 | criterio | pts | en la app | en el código | cómo se verifica |
 | --- | --- | --- | --- | --- |
-| Viewer estructural | 5 | Navegación (arrastrar, rueda, F, C). Selección de barra, nodo o apoyo con inspector en la pestaña **Elemento**. Capas (apoyos por tipo, ejes locales, áreas tributarias, diafragmas). Deformada y diagramas en **Caso**. P-M dentro de Elemento. Filtro de piso en **Vista**. | `VisorQA.cs`, `CamaraOrbital.cs`, `VisorEstructura.cs`, `VisorSemana04.Diagramas.cs`, `VisorSemana04.PM.cs` | `comparar_unity.py` bloque [4]: 56 filas, 0 FALLA. Fotos 01-14b. `test_contrato_semana04.py` (59 OK). |
+| Viewer estructural | 5 | Navegación (arrastrar, rueda, F, C). Selección de barra, nodo o apoyo con inspector en la pestaña **Elemento**. Capas (apoyos por tipo, ejes locales, áreas tributarias, diafragmas). Deformada y diagramas en **Caso**. P-M dentro de Elemento. Filtro de piso en **Vista**. | `VisorQA.cs`, `CamaraOrbital.cs`, `VisorEstructura.cs`, `VisorSemana04.Diagramas.cs`, `VisorSemana04.PM.cs` | `comparar_unity.py` bloque [4]: 58 filas, 0 FALLA. Fotos 01-14b. `test_contrato_semana04.py` (59 OK). |
 | Modificación / reanálisis | 4 | **M1**: pestaña **Modificar**, borrar la barra 69 y "Recalcular en el servidor (Enter)". Se ve el UZ del nodo 186 y la tabla de equilibrio. **M2**: `--cs 0.20` → anexo → cerrar y abrir la app. | `EditorEstructura.cs`, `AnalizadorEstructural.cs`, `comun/servidor_opensees.py`, `semana04/exportar_unity.py` | `reanalisis_demo.py` y `comparar_anexos.py` (en la suite), `test_reanalisis.py`, `test_servidor.py`. `comparar_unity.py` bloque [2]: 138 filas, 0 FALLA. Fotos 21-22. |
 | Superposición / demanda-capacidad | 4 | **Caso** → "Superposicion (Semana 5)": E1, E2 y E3 sin servidor. "Factores libres (servidor Python)" con cuatro sliders → LIBRE. "Mapa demanda / capacidad" y "Criticos del caso activo". | `semana05/superposicion.py`, `servidor_s5.py`, `VisorSemana04.Superposicion.cs`, `VisorSemana04.Mapa.cs` | `verificar_superposicion.py lt2` y `ingenieria` (en la suite). `test_contrato_semana05.py` (181 OK). `comparar_unity.py` bloque [1]: 136 filas, 0 FALLA. Fotos 14-18. |
 | QA / UX | 3 | Las seis preguntas en la pestaña Elemento, la cabecera fija, "Abrir Excel de resultados", la vista Realista o Técnica y la carga móvil. | `VisorQA.cs`, `PanelUI.cs`, `AmbienteVisor*.cs`, `VisorCargaMovil.cs`, `comun/excel.py` | [`UX.md`](UX.md). `comparar_unity.py` bloques [3] (85 filas) y [5] (41 filas). `test_excel.py` (en la suite). 23 fotos. |
@@ -114,7 +114,7 @@ Todo desde la carpeta del repo, con el Python del proyecto. El detalle y
 el orden completo están en [`COMANDOS.md`](COMANDOS.md).
 
 ```powershell
-.\.venv\Scripts\python.exe comun\verificar_todo.py         # 41 de 41 EN OK, 2 a 8 min (17-09, Unity cerrado)
+.\.venv\Scripts\python.exe comun\verificar_todo.py         # 44 de 44 EN OK, 2 a 8 min (17-09, Unity cerrado)
 .\.venv\Scripts\python.exe comun\lanzar_unity.py sincronizar lt2
 .\.venv\Scripts\python.exe semana05\servidor_s5.py         # terminal aparte, se deja abierta
 .\.venv\Scripts\python.exe comun\lanzar_unity.py app lt2   # la app de Windows

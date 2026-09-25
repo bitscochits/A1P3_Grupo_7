@@ -14,6 +14,8 @@ r"""
    python semana05/reanalisis_demo.py lt2 --borrar-elemento 69 --nodo 186 --float32
    python semana05/reanalisis_demo.py lt2 --borrar-elemento 69 --nodo 186 \
           --url http://localhost:5000/analizar
+   python semana05/reanalisis_demo.py lt2 --seccion 337 "V 0.30x0.80" --nodo 186
+   python semana05/reanalisis_demo.py lt2 --apoyo 2 1 1 1 0 0 0 --nodo 186
    python semana05/reanalisis_demo.py lt2 --desde "<modelo_editado.json>" --nodo 186
 
    --float32   manda los numeros como los manda Unity: JsonUtility lee y
@@ -105,6 +107,46 @@ def borrar_elemento(modelo, eid):
         quitadas[caso['nombre']] = [c for c in dist if int(c['elemento']) == eid]
         caso['cargas_distribuidas'] = [c for c in dist if int(c['elemento']) != eid]
     return quitadas
+
+
+def cambiar_seccion(modelo, eid, nombre):
+    """
+    EditorEstructura: la barra pasa a otra seccion del catalogo. Cambia
+    A, Iy, Iz y J, o sea cambia K: exige reanalisis. El peso propio NO
+    se recalcula (las cargas de G ya vienen sumadas en el modelo), y por
+    eso la carga aplicada no se mueve; queda declarado en
+    semana05_lab/CRITERIOS_REANALISIS.md, seccion 4.
+    Devuelve (seccion_antes, seccion_despues) para poder contarlo.
+    """
+    secciones = {str(x['nombre']): x for x in modelo.get('secciones') or []}
+    if nombre not in secciones:
+        raise SystemExit('la seccion %r no esta en el modelo. Hay: %s'
+                         % (nombre, ', '.join(sorted(secciones))))
+    for e in modelo['elementos']:
+        if int(e['id']) == eid:
+            antes = str(e.get('seccion'))
+            e['seccion'] = nombre
+            return secciones.get(antes), secciones[nombre]
+    raise SystemExit('el elemento %d no existe en el modelo' % eid)
+
+
+def cambiar_apoyo(modelo, nid, restricciones):
+    """
+    EditorEstructura: otras restricciones en un nodo. Cambia que grados
+    de libertad estan fijos, o sea cambia K: exige reanalisis.
+    restricciones son 6 enteros [ux uy uz rx ry rz], 1 = fijo.
+    Devuelve (antes, despues).
+    """
+    if len(restricciones) != 6 or any(v not in (0, 1) for v in restricciones):
+        raise SystemExit('--apoyo necesita 6 enteros 0 o 1: [ux uy uz rx ry rz]')
+    for n in modelo['nodos']:
+        if int(n['id']) == nid:
+            antes = list(n.get('restricciones') or ([1] * 6 if n.get('fijo') else [0] * 6))
+            n['restricciones'] = list(restricciones)
+            # 'fijo' es el atajo de los seis: se mantiene coherente.
+            n['fijo'] = all(v == 1 for v in restricciones)
+            return antes, list(restricciones)
+    raise SystemExit('el nodo %d no existe en el modelo' % nid)
 
 
 # ============================================================
@@ -312,6 +354,12 @@ def main(argv=None):
                     help='lt2, ingenieria o conjunto (lee data/unity/<ed>.json)')
     ap.add_argument('--borrar-elemento', type=int, action='append', default=[],
                     metavar='ID', help='barra a borrar (se puede repetir)')
+    ap.add_argument('--seccion', nargs=2, action='append', default=[],
+                    metavar=('ID', 'NOMBRE'),
+                    help='M3: la barra ID pasa a la seccion NOMBRE (se puede repetir)')
+    ap.add_argument('--apoyo', nargs=7, action='append', default=[],
+                    metavar='V',
+                    help='M4: NODO y sus 6 restricciones [ux uy uz rx ry rz], 1 = fijo')
     ap.add_argument('--desde', default=None,
                     help='JSON del modelo ya editado (Guardar JSON de Unity)')
     ap.add_argument('--nodo', type=int, default=None,
@@ -324,8 +372,9 @@ def main(argv=None):
                     help='POST a un servidor vivo, p. ej. http://localhost:5000/analizar')
     args = ap.parse_args(argv)
 
-    if not args.borrar_elemento and not args.desde:
-        ap.error('falta la edicion: --borrar-elemento ID o --desde <modelo_editado.json>')
+    if not (args.borrar_elemento or args.seccion or args.apoyo or args.desde):
+        ap.error('falta la edicion: --borrar-elemento ID, --seccion ID NOMBRE, '
+                 '--apoyo NODO 6 enteros, o --desde <modelo_editado.json>')
 
     ruta = rutas.unity(args.edificio)
     if not os.path.isfile(ruta):
@@ -336,6 +385,7 @@ def main(argv=None):
 
     antes = copy.deepcopy(original)
     quitadas = {}
+    ediciones = []
     if args.desde:
         with open(args.desde, encoding='utf-8-sig') as f:
             despues = json.load(f)
@@ -344,6 +394,20 @@ def main(argv=None):
         for eid in args.borrar_elemento:
             for caso, lista in borrar_elemento(despues, eid).items():
                 quitadas.setdefault(caso, []).extend(lista)
+        for eid, nombre in args.seccion:
+            sa, sd = cambiar_seccion(despues, int(eid), nombre)
+            ediciones.append(
+                'seccion del elemento %s: %s -> %s  (A %.4f -> %.4f m2, '
+                'Iy %.3e -> %.3e, Iz %.3e -> %.3e m4)'
+                % (eid, (sa or {}).get('nombre', '?'), nombre,
+                   float((sa or {}).get('A', 0.0)), float(sd.get('A', 0.0)),
+                   float((sa or {}).get('Iy', 0.0)), float(sd.get('Iy', 0.0)),
+                   float((sa or {}).get('Iz', 0.0)), float(sd.get('Iz', 0.0))))
+        for fila in args.apoyo:
+            nid = int(fila[0])
+            r = [int(v) for v in fila[1:]]
+            antes_r, despues_r = cambiar_apoyo(despues, nid, r)
+            ediciones.append('apoyo del nodo %d: %s -> %s' % (nid, antes_r, despues_r))
 
     if args.float32:
         clases = esquema_csharp()
@@ -358,6 +422,11 @@ def main(argv=None):
     print('  modelo    %s  (%d nodos, %d elementos, casos %s)'
           % (os.path.relpath(ruta, rutas.RAIZ), len(original['nodos']),
              len(original['elementos']), ', '.join(casos)))
+    for c in ediciones:
+        print('  edicion   %s' % c)
+    if ediciones:
+        print('            cambia K -> exige reanalisis '
+              '(semana05_lab/CRITERIOS_REANALISIS.md)')
     print('  motor     %s' % ('POST ' + args.url if args.url else
                               'servidor_opensees.construir_y_resolver, en este proceso'))
     print('  numeros   %s' % ('como JsonUtility: float32 y solo los campos de '
@@ -387,7 +456,9 @@ def main(argv=None):
                    and elems1[e]['seccion'] != elems0[e]['seccion']]
         print('    secciones cambiadas %s' % (cambios or '-'))
     else:
-        print('  EDICION  (EditorEstructura.BorrarElemento + QuitarCargasDeElemento)')
+        print('  EDICION  (%s)'
+              % ('EditorEstructura: seccion o apoyo' if ediciones
+                 else 'EditorEstructura.BorrarElemento + QuitarCargasDeElemento'))
     peso_que_queda = 0.0
     for eid in borrados:
         e = elems0[eid]

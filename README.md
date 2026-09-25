@@ -87,6 +87,7 @@ python comun\lanzar_unity.py app lt2                # la app de Windows
 python semana05\reanalisis_demo.py lt2 --borrar-elemento 69 --nodo 186 --elemento 337   # M1 sin Unity
 python semana05\comparar_anexos.py lt2 --cs 0.20    # M2 sin escribir nada
 python semana05\exportar_excel.py lt2               # el Excel de resultados
+python semana05_lab\verificar_instantanea.py lt2 --registro semana05\capturas\registro.txt   # LAB S5: lo que Unity combino al mover los sliders, contra Python
 ```
 
 **Dónde está el Excel:** `data/excel/<ed>_resultados.xlsx`, versionado
@@ -198,8 +199,17 @@ Todo lo de la entrega está en la carpeta; **para la demo, empezar por
 | `reanalisis_demo.py` · `comparar_anexos.py` | M1 (borrar la columna 69) y M2 (`--cs 0.20`) sin Unity y sin escribir en `data/`. |
 | `compilar_unity.py` · `comparar_unity.py` | Compila los C# sin abrir Unity; cruza el registro de `CapturaSemana05` con Python (486 filas, 0 FALLA). |
 | `README.md` · `GUION_DEMO.md` · `COMANDOS.md` · `UX.md` · `MOVIL.md` · `MODIFICACIONES.md` · `CARGA_MOVIL.md` · `APP_AUTONOMA.md` · `CONTRATO.md` | Mapa de la entrega, guion, chuleta, las seis preguntas del visor, preparación móvil, M1/M2, carga móvil, evaluación de app autónoma y contrato entre piezas. |
-| `capturas/` · `evidencia/` | 23 fotos y `registro.txt` de la app; salidas de verificación. |
+| `capturas/` · `evidencia/` | 25 fotos y `registro.txt` de la app; salidas de verificación. |
 | `reports/semana05.md` | El informe de la entrega. |
+
+### `semana05_lab/` — el LAB de la Semana 5 (10 pts)
+
+| archivo | qué hace |
+| --- | --- |
+| `README.md` | Mapea los cinco criterios del LAB a dónde se demuestra cada uno. |
+| `CRITERIOS_REANALISIS.md` | Cuándo hay que reanalizar y cuándo no, derivado de `K·u = F` y comprobado con el motor (doblar `Cs` es `λEX = 2`, no otro caso base). |
+| `GUION_DEMO.md` | La demostración de 10 minutos, ordenada por la rúbrica. |
+| `verificar_instantanea.py` | Los sliders instantáneos de `VisorSemana05.Instantanea.cs` contra Python: el algoritmo en 10 juegos de λ y, con `--registro`, los números que la app real escribió. |
 
 ### `unity/Assets/Scripts/`
 

@@ -22,7 +22,7 @@ abierto.
 .\.venv\Scripts\python.exe comun\verificar_todo.py
 ```
 
-Tiene que terminar en `41 de 41 EN OK`. El 17-09 tardó entre 131 s y 8 min con Unity
+Tiene que terminar en `44 de 44 EN OK`. El 17-09 tardó entre 131 s y 8 min con Unity
 cerrado. La entrada más lenta es `excel s5` (57.8 s) y la única que abre
 Unity es `JsonUtility real s4` (12.4 s). Sin las entradas lentas:
 
@@ -134,7 +134,7 @@ Si se va a usar LIBRE, hay que reiniciar el servidor con el mismo dato:
 ```
 
 El `--seco` imprime el md5 de origen de cada archivo. Los de la entrega
-(17-09) son: `semana04.json` 7ad6a421…, `semana03.json` e48189e8… y
+(22-09) son: `semana04.json` 95fffa81…, `semana03.json` e48189e8… y
 `superposicion.json` 48153dfd…. Si alguno no coincide, `git diff --stat
 data/unity` dice cuál cambió. Después, `sincronizar lt2` sin `--seco` y
 servidor sin `--cs`.
