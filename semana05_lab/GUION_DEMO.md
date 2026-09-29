@@ -226,13 +226,25 @@ python semana05_lab\verificar_instantanea.py lt2 --registro semana05\capturas\re
 
 ## Si preguntan por el sidequest (SQ4)
 
-Está a medias, y conviene decirlo así: la **carga móvil existe** —
-pestaña *Carga movil*, 30 posiciones resueltas en OpenSees sobre el eje
-de vigas 203–208, con reparto y conservación verificados— pero **no sigue
-al usuario**. Lo que falta es tomar la posición del usuario, encontrar el
-panel de losa que la contiene y resaltar sus vigas receptoras. Los datos
-están (`areas_tributarias`, 243 áreas con sus polígonos y su viga
-dueña); el trabajo no está hecho.
+**Qué hacer:** pestaña **Persona** → *Poner persona*. Caminar con las
+flechas (relativas a la cámara) y cambiar de piso con `PgUp`/`PgDn`.
+
+**Qué se ve:** el paño de losa donde está (contorno verde) y, dentro, la
+región tributaria que pisa (amarilla). Las cuatro vigas del paño se ven
+en celeste y la que se lleva su peso en magenta; si la losa descarga
+directo en un muro, se resalta el muro. El panel dice la carga asignada
+y la compara con la losa que ese elemento ya recibe en G.
+
+> "La persona no se resuelve en OpenSees: se le aplica la regla de
+> reparto del modelo. Unity solo busca en qué polígono tributario cae el
+> punto, y esos polígonos los armó Python. Medimos que ningún punto de
+> losa cae en regiones de dos elementos distintos, así que a quién le
+> llega el peso nunca es ambiguo. Por eso moverse no pide reanálisis;
+> ver cómo se deforma la estructura con la persona encima sí lo pediría."
+
+La **carga móvil** de la pestaña *Carga movil* es la otra mitad: 30
+posiciones sobre el eje de vigas 203–208, **sí** resueltas en OpenSees,
+con reparto y conservación verificados.
 
 ---
 
