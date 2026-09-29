@@ -449,3 +449,30 @@ Todo junto: `python comun/verificar_todo.py`.
   y las fotos salen ruido); y que el registro anterior probaba que los
   sliders funcionaban (nadie los había movido). Las dos cosas se corrigieron
   ejecutando la app de verdad.
+
+### Semana 6 — LAB (10 pts): AR básica en el iPhone
+- **Tarea:** relacionar el modelo con un elemento físico: sesión AR, imagen
+  de referencia, pose, anchor, transformación de coordenadas, el mismo
+  elementTag y un resultado de OpenSees, en un teléfono. Todo en
+  `semana06_lab/`, sobre el **conjunto** como edificio único.
+- **La decisión:** los tres tienen iPhone y no hay Mac, así que AR
+  Foundation (Unity + ARKit) no se puede compilar. Se hizo **AR web**:
+  MindAR (image tracking) y three.js en Safari, con las librerías copiadas
+  al repo. Python exporta el sector y sus resultados (`exportar_ar.py`); el
+  teléfono solo transforma y dibuja.
+- **Cómo se verificó sin teléfono:** `verificar_ar.py` genera un **video
+  sintético** de la imagen impresa vista desde poses conocidas, con la misma
+  cámara que supone MindAR, y se lo da a Chrome como cámara. La app detecta
+  la imagen y recupera la pose con 1–3 mm y < 1.1° de error. Además: los 21
+  elementos y 22 nodos con el mismo tag que OpenSees; 23 024 números
+  idénticos al anexo; la matriz de `ar.js` igual a la de Python a 1e-14.
+- **Lo que las pruebas encontraron:** (1) la primera imagen de referencia
+  era una captura agrandada y borrosa: 21 puntos de seguimiento. Se
+  compararon cuatro candidatas compilándolas con MindAR y quedó la captura
+  del visor sin reescalar (281 puntos de detección). (2) La pantalla de
+  inicio no se ocultaba al elegir el modo: el `display: flex` del CSS le
+  ganaba al atributo `hidden`. El tracking funcionaba detrás, así que el
+  verificador pasaba; solo lo mostró una captura de pantalla. En el iPhone
+  se habría visto solo la pantalla azul.
+- **Lo que falta y se dice:** probarlo en un iPhone real (Safari con el
+  certificado del PC).

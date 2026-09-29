@@ -115,6 +115,12 @@ SUITE = [
     ('nucleos = grupos del anexo', ['comun/nucleos.py', 'lt2'], False),
     ('losa colaborante (regla)', ['comun/losa_colaborante.py', 'lt2',
                                   'ingenieria'], False),
+    # LAB de la semana 6 (AR): la app muestra los mismos tags y los mismos
+    # numeros de OpenSees, y la pose de la imagen en el edificio es la que
+    # se declara. La version completa abre Chrome: la transformacion de
+    # ar.js contra Python y el image tracking con un video sintetico.
+    ('AR: tags, resultados y pose', ['semana06_lab/verificar_ar.py', '--sin-navegador'], False),
+    ('AR: registro y tracking',     ['semana06_lab/verificar_ar.py'], True),
 ]
 
 

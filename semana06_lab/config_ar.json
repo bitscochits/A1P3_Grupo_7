@@ -1,0 +1,26 @@
+{
+  "_que_es": "Donde se pega la imagen de referencia en el edificio real y como se muestra. Es lo UNICO que hay que cambiar para usar otro elemento: despues se corre python semana06_lab/exportar_ar.py.",
+
+  "elemento": 200037,
+  "_elemento_por_que": "Columna lt2:P 0.70x0.70 del primer piso del LT2 (de z = -0.05 a 3.91 m), eje C, sobre la columna demo 200005 del subterraneo. Se eligio la del primer piso porque es la que se puede tocar. Si en terreno se usa otra, se cambia aca.",
+
+  "cara": "+x",
+  "_cara_por_que": "La cara de la columna donde se pega la imagen: +x, -x, +y o -y en ejes de OpenSees (x hacia el este del modelo, y hacia el norte, z arriba). La normal de esa cara es la que sale de la imagen hacia quien la mira.",
+
+  "altura_centro_m": 1.40,
+  "_altura_por_que": "Altura del CENTRO de la imagen sobre el nodo inferior de la columna (el nivel del piso en el modelo). 1.40 m queda a la altura de los ojos. SUPUESTO: el nivel del nodo es el eje de la losa, no el piso terminado; la diferencia (medio espesor de losa + pavimento, unos 10 cm) es error de registro vertical y se dice en la defensa.",
+
+  "ancho_impreso_m": 0.20,
+  "_ancho_por_que": "Ancho REAL de la imagen impresa, medido con regla. MindAR mide todo en 'anchos de imagen': si esto esta mal, el modelo sale agrandado o achicado en la misma proporcion. El PDF de marcador/ la imprime a 20.0 cm al 100 %.",
+
+  "radio_sector_m": 6.0,
+  "_radio_por_que": "Se muestran las barras con algun extremo a menos de esta distancia horizontal del eje de la columna y entre el piso de abajo y el de arriba: la columna, las vigas que llegan a ella y sus vecinas.",
+
+  "modos": {
+    "sitio":   {"escala": 1.0,  "descripcion": "La imagen pegada en la columna real: el modelo se dibuja a tamano real, encima de la columna."},
+    "maqueta": {"escala": 0.02, "descripcion": "La imagen sobre una mesa (la sala de la defensa): el sector a escala 1:50, anclado en el mismo punto de la columna."}
+  },
+  "modo_por_defecto": "maqueta",
+
+  "caso_por_defecto": "1.2G+1.0Q+1.4EX"
+}

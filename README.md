@@ -211,6 +211,17 @@ Todo lo de la entrega está en la carpeta; **para la demo, empezar por
 | `GUION_DEMO.md` | La demostración de 10 minutos, ordenada por la rúbrica. |
 | `verificar_instantanea.py` | Los sliders instantáneos de `VisorSemana05.Instantanea.cs` contra Python: el algoritmo en 10 juegos de λ y, con `--registro`, los números que la app real escribió. |
 
+### `semana06_lab/` — el LAB de la Semana 6: AR en el iPhone (10 pts)
+
+| archivo | qué hace |
+| --- | --- |
+| `README.md` | Mapea los cinco criterios del LAB a dónde se demuestra cada uno. |
+| `exportar_ar.py` | El sector de la columna 200037 del conjunto y sus resultados de OpenSees, con la pose de la imagen en el edificio, a `web/datos/ar.json`. |
+| `web/` | La app de AR (MindAR + three.js) que corre en Safari: tracking, pose, anchor, transformación y dibujo. |
+| `servir.py` | La sirve por https a la red local para el iPhone. |
+| `verificar_ar.py` | Tags, resultados, registro e image tracking con un video sintético. |
+| `COORDENADAS.md` | OpenSees, Unity y AR; rotación, traslación, escala y anchor, con un ejemplo numérico. |
+
 ### `unity/Assets/Scripts/`
 
 `ModeloEstructural.cs` (las clases de datos, fuente de verdad del
