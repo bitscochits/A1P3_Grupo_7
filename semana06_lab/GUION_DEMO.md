@@ -81,8 +81,8 @@ viga, su tag (por ejemplo 200206) se pone celeste y el panel pasa a ella.
 **Qué hacer:** elegir `1.2G+1.0Q+1.4EX`. Cambiar el diagrama a `My`.
 Prender la deformada. Bajar a la curva P-M. Cambiar a `0.9G+1.4EX`.
 
-**Qué se ve:** N = −3702 kN, My = −501 / 484 kN·m, el punto de demanda en
-la curva P-M: P = 3702 kN, M = 510 kN·m, Mn = 1722 kN·m, **u = 0.296,
+**Qué se ve:** N = −3702 kN, My = −499 / 482 kN·m, el punto de demanda en
+la curva P-M: P = 3702 kN, M = 508 kN·m, Mn = 1722 kN·m, **u = 0.295,
 PASA**. El diagrama de momento sobre la columna y las vigas.
 
 > "Todos estos números los calculó OpenSees en el PC: son los del anexo de

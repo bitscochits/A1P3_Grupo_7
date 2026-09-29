@@ -37,9 +37,9 @@
    },
    "suma_abs_lambdas": 2.0,
    "tiempos_s": {
-    "explicita": 0.0333,
-    "caso_combinado": 0.0162,
-    "post_combinar": 5.1719
+    "explicita": 0.0257,
+    "caso_combinado": 0.0183,
+    "post_combinar": 3.5904
    },
    "cierre_bloque_caso": {
     "cociente": 0.7678571424520488,
@@ -611,9 +611,9 @@
    },
    "suma_abs_lambdas": 2.8,
    "tiempos_s": {
-    "explicita": 0.0313,
-    "caso_combinado": 0.0187,
-    "post_combinar": 0.035
+    "explicita": 0.0271,
+    "caso_combinado": 0.0134,
+    "post_combinar": 0.02
    },
    "cierre_bloque_caso": {
     "cociente": 0.7875776376478332,
@@ -1190,9 +1190,9 @@
    },
    "suma_abs_lambdas": 3.5999999999999996,
    "tiempos_s": {
-    "explicita": 0.0272,
-    "caso_combinado": 0.0208,
-    "post_combinar": 0.0695
+    "explicita": 0.0275,
+    "caso_combinado": 0.0145,
+    "post_combinar": 0.0514
    },
    "cierre_bloque_caso": {
     "cociente": 0.6865079357569445,
@@ -1810,5 +1810,5 @@
  "fallas": [],
  "pendientes": [],
  "resultado": "CALZA",
- "segundos": 11.9
+ "segundos": 8.1
 }
