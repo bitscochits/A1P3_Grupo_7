@@ -206,23 +206,33 @@
       ]
     },
     "viga_x": {
-      "b": 0.30,
-      "h": 0.60,
-      "_supuesto": true,
+      "b": 0.60,
+      "h": 0.80,
+      "origen": "igual a la viga tipo del LT2 (V 0.60x0.80, 180 de sus 219 vigas, planos 2024_22); corroborado por Pedro en el plano del 2017_67 y en terreno el 24-09",
       "_por_que": [
-        "NO se leyo del plano: viene del modelo de benchmark original. Se",
-        "declara aca para que se vea como supuesto. Compara con el LT2, cuyas",
-        "vigas SI salen de su plano y son 0.60 x 0.80: esta es la mitad de",
-        "ancha, y es la razon de fondo de que este cuerpo flecte mas."
+        "HASTA EL 24-09 ERA 0.30 x 0.60 Y ESTABA MAL.",
+        "",
+        "Venia del modelo de benchmark original, como el pilar de 0.50 x 0.50,",
+        "y era la mitad de ancha que la del LT2. Pedro verifico en el plano",
+        "y en el edificio que las vigas de este cuerpo son iguales a las del",
+        "LT2: la viga tipo de ese plano es V 0.60 x 0.80 en las dos",
+        "direcciones.",
+        "",
+        "Era, junto con el pilar, la causa de que este cuerpo se deformara",
+        "casi el triple que el LT2 bajo gravedad (19.08 contra 6.71 mm): una",
+        "viga de 0.30 tiene la mitad de inercia que una de 0.60, y aca varias",
+        "vigas descargan en otras vigas (modulos de 10 m partidos por vigas",
+        "secundarias), asi que la flexibilidad se acumula."
       ]
     },
     "viga_y": {
-      "b": 0.30,
+      "b": 0.60,
       "h": 0.80,
-      "_supuesto": true,
+      "origen": "igual a la viga tipo del LT2 (V 0.60x0.80, planos 2024_22); corroborado por Pedro en el plano del 2017_67 y en terreno el 24-09",
       "_por_que": [
-        "Igual que viga_x: no se leyo del plano. Con 8.90 m de vano da",
-        "EI = 318 MN m2 contra los 712 de la viga del LT2 del mismo vano."
+        "HASTA EL 24-09 ERA 0.30 x 0.80. Mismo origen y misma correccion que",
+        "viga_x: con 8.90 m de vano daba EI = 318 MN m2 contra los 712 de la",
+        "viga del LT2 del mismo vano."
       ]
     },
     "losa": {

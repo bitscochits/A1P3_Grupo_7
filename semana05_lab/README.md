@@ -26,7 +26,7 @@ Y en Unity:
 | --- | --- |
 | `unity/Assets/Scripts/VisorSemana05.Instantanea.cs` | Los cuatro sliders que combinan **en el momento y sin servidor**, y rehacen la demanda-capacidad. |
 | `unity/Assets/Scripts/CapturaSemana05.cs`, paso **D2** | Mueve esos sliders en la app real con cuatro juegos de λ y deja lo que Unity calculó en `semana05/capturas/registro.txt` (fotos 18b y 18c). |
-| `capturas_conjunto/` | Las mismas capturas de la app con el **conjunto** (23 fotos y `registro.txt`). `verificar_instantanea.py conjunto --registro semana05_lab/capturas_conjunto/registro.txt` pasa: E3 = 29.67 mm, NO PASA 10/207, igual a Python. |
+| `capturas_conjunto/` | Las mismas capturas de la app con el **conjunto** (23 fotos y `registro.txt`). `verificar_instantanea.py conjunto --registro semana05_lab/capturas_conjunto/registro.txt` pasaba al capturarse (commit `2ba12bd`): E3 = 29.67 mm, NO PASA 10/207, igual a Python. **Ya no corresponde al modelo**: después, las vigas de Ingeniería pasaron a `V 0.60x0.80` (las del LT2, corroboradas en plano y terreno) y con el modelo de hoy E1 da 9.63 mm donde el registro dice 25.04. Hay que volver a capturar; la evidencia del **LT2** (la que corre la suite) no cambió. |
 | `Defensa_LAB_Semana5.pdf` | La guía de defensa para los **dos edificios** (LT2 y conjunto), con los números de hoy. |
 
 ---
@@ -40,7 +40,7 @@ Y en Unity:
 | **Superposición en Unity** | 2 | **Caso → Superposicion (Semana 5)**, bloque *Superposicion INSTANTANEA en Unity*: los sliders `G`, `Q`, `EX`, `EY` actualizan deformada, esfuerzos y P-M **al instante**: entre **0.9 y 4.4 ms** medidos en la app, sin servidor. E1–E3 precalculados y LIBRE por servidor quedan como referencia; los botones `E1`/`E2`/`E3` ponen los mismos factores para comparar a la vista. | `verificar_instantanea.py lt2 --registro semana05/capturas/registro.txt` · `semana05/verificar_superposicion.py` (4 vías) · fotos 17 y 18b (el mismo E3 por dos caminos) |
 | **Demanda-capacidad dinámica** | 2 | El punto (P, M) se mueve con los sliders, y con él `Mn`, `u` y el `pasa / no pasa`. El mapa D/C repinta el edificio y actualiza el conteo. | `verificar_instantanea.py --registro`: `P`, `M`, `Mn`, el extremo que manda, `pasa` y los conteos de la cabecera coinciden con Python en lo que la app escribió · foto 18c (el punto en tracción con λG < 0) |
 | **Defensa / criterios de reanálisis** | 2 | La tabla de [`CRITERIOS_REANALISIS.md`](CRITERIOS_REANALISIS.md), con sus números; y en la app el aviso de anexo desactualizado tras editar, también junto a los sliders. | Cada fila contrastada con el motor: `Cs` ×2 → `EX` ×2 a un paso de redondeo; `E` uniforme ×2 → `Δf = 0.0 kN` |
-| *SQ4 (recomendado)* | — | Carga móvil: pestaña **Carga movil**, 30 posiciones sobre el eje de vigas 203–208, con reparto y conservación. **No** está asociada al movimiento del usuario (ver abajo). | `semana05/CARGA_MOVIL.md` · fotos 19–20 |
+| *SQ4 (recomendado)* | — | Dos partes. La **carga móvil** resuelta en OpenSees: pestaña **Carga movil**, 30 posiciones sobre el eje de vigas 203–208, con reparto y conservación. Y la **carga asociada al usuario**: pestaña **Persona** → *Poner persona*, flechas para caminar y `PgUp`/`PgDn` para cambiar de piso. En cada paso identifica el paño y la región tributaria donde está parada, resalta las vigas receptoras y muestra la carga asignada (ver abajo). | `semana05/CARGA_MOVIL.md` · fotos 19–20 · `unity/Assets/Scripts/VisorPersona.cs` |
 
 ---
 
@@ -166,14 +166,20 @@ minutos, reexporta los anexos y deja el LT2.
 
 ## Lo que queda corto, dicho de frente
 
-- **SQ4 está a medias.** La carga móvil existe y está bien hecha —30
-  posiciones resueltas en OpenSees, con reparto y conservación
-  verificados—, pero recorre un **eje fijo de vigas** y el usuario elige
-  la posición con un control. El enunciado pide que la carga siga **al
-  usuario** y que se identifique el **panel** donde está y las **vigas
-  receptoras**. Los datos para hacerlo ya están (`areas_tributarias`
-  trae 243 áreas, una por viga, con sus 421 polígonos), pero no está
-  construido. Es un sidequest *recomendado*, no obligatorio.
+- **SQ4: la persona muestra el reparto, no resuelve.** La carga móvil
+  recorre un **eje fijo de vigas** (30 posiciones resueltas en OpenSees).
+  La que sigue **al usuario** está en la pestaña **Persona**
+  (`VisorPersona.cs`, agregada después de la entrega). Su peso (0.80 kN
+  por defecto, ~80 kg) se asigna entero al elemento dueño de la región
+  tributaria donde está parada: la misma regla con que el modelo carga
+  la losa. Unity solo ubica un punto dentro de los polígonos que arma
+  Python (`areas_tributarias`), sin calcular nada. Dos propiedades de
+  esos polígonos, medidas sobre el conjunto con 56 758 puntos de muestra,
+  hacen que el reparto no sea ambiguo: **ningún punto de losa cae en
+  regiones de dos elementos distintos** (0 de 49 940), y 92 de las 883
+  regiones son de **muros**, que también se resaltan. Moverse no pide
+  reanálisis. Ver el *efecto* de la persona en la estructura sí lo
+  pediría (agregarla como carga y resolver), y eso no está hecho.
 - **La modificación cubre cuatro de las seis** de la lista (el enunciado
   pide al menos dos): activar/desactivar elemento, intensidad de carga,
   sección y apoyo. Quedan fuera **propiedad material** y **área

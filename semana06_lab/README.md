@@ -59,6 +59,34 @@ El resultado de `verificar_ar.py`, completo:
 
 ---
 
+## El enunciado, punto por punto
+
+La tabla de arriba sigue la rúbrica. Esta sigue la **lista del
+enunciado**, para quien tenga que contestar "¿dónde hace X?" delante del
+profesor. Las funciones son de `web/ar.js`.
+
+| # | requisito | dónde, en el código | qué se ve en el teléfono |
+| --- | --- | --- | --- |
+| 1 | iniciar sesión AR | `iniciar(modo)`: `new MindARThree({...})` y `mindar.start()`, que abre la cámara trasera (`getUserMedia`) | Safari pide la cámara; se ve el video |
+| 2 | detectar una imagen de referencia | `imageTargetSrc: 'targets.mind'` (los puntos de `marcador.png`, compilados en el PC); `anchor.onTargetFound` / `onTargetLost` | *"imagen detectada"* en verde; *"buscando la imagen…"* al taparla |
+| 3 | obtener pose | MindAR estima en cada cuadro la matriz imagen → cámara; el ciclo de `setAnimationLoop` la lee de `anchor.group.matrix` y la pasa a metros | *"pose: 0.42 m, inclinación 35°"* cambia al mover el teléfono |
+| 4 | crear / usar anchor | `mindar.addAnchor(0)` y `anchor.group.add(modelo)`: el modelo queda colgado del sistema de la imagen | el modelo se queda pegado a la imagen al moverse |
+| 5 | transformar coordenadas del modelo | `matrizModeloAAnchor(pose, escala, ancho)`: `M = S(k) · Rᵀ · T(−c)`, con `c` y `R` calculados en `exportar_ar.py` | la columna parada sobre la imagen, a 1:50 (maqueta) o 1:1 (en sitio) |
+| 6 | mostrar un elemento o sector | `construirBarras()`: la columna 200037 y las 20 barras del sector (radio 6 m, `config_ar.json`) | la columna en naranjo, las vigas y sus tags |
+| 7 | mantener el mismo `elementTag` | los tags viajan tal cual del modelo a `datos/ar.json`; `actualizarPanel()` los rotula y muestra la línea `element elasticBeamColumn 200037 …` del anexo | *"elementTag 200037 · columna lt2:P 0.70x0.70"* |
+| 8 | mostrar un resultado de OpenSees | `actualizarPanel()` y `dibujarPM()`: `P`, `V`, `M`, `T`, desplazamientos, curva P-M con el punto de demanda, área tributaria; `construirDiagramas()` y `construirDeformada()` | los números del caso elegido, el diagrama sobre las barras y la P-M |
+
+Y los temas de la defensa, en [`COORDENADAS.md`](COORDENADAS.md):
+
+| tema | sección |
+| --- | --- |
+| coordenadas OpenSees, Unity y AR | §1 (tabla de los cuatro sistemas y `Unity(x, y, z) = OpenSees(x, z, y)`) |
+| escala, rotación y traslación | §3 (la matriz `M` con el nodo 200103 como ejemplo, en sitio y en maqueta) |
+| anchor | §4 |
+| qué corre en el teléfono y qué se calculó antes | §5 |
+
+---
+
 ## Los archivos
 
 | archivo | qué es | corre en |
@@ -114,3 +142,20 @@ Para cambiar de columna: editar `config_ar.json`, y correr
   chico y a 1:50, la diferencia no se ve.
 - **El registro vertical en sitio tiene ~10 cm de incertidumbre**: el nodo
   está en el nivel de la losa (−0.05), no en el piso terminado (`COORDENADAS.md` §6).
+- **El sismo del conjunto se reparte entre los dos cuerpos.** El sismo
+  pseudoestático del anexo (`semana03/lab_semana03.armar_casos`) calcula
+  **un** corte basal `Cs · ΣW` para todo el conjunto y lo reparte en altura
+  sobre los niveles de los dos cuerpos, midiendo las alturas desde la base
+  más baja. Con la junta libre, cada cuerpo debería llevar su propio
+  `Cs · W`. Para la columna 200037, medido el 29-09: `My` sísmico **2.1 %**
+  mayor que en el LT2 solo, y en `1.2G+1.0Q+1.4EX` `u = 0.295` contra
+  `0.290`. No cambia ningún PASA, pero explica por qué la misma columna da
+  números un poco distintos en el visor del LT2 y en esta app. Los
+  resultados de `data/resultados/` (los de `comun/sismo.py`) **sí** dan
+  cada cuerpo igual que solo: lo comprueba `verificar_conjunto.py`.
+- **Datos rehechos el 29-09** con las vigas de Ingeniería en `V 0.60x0.80`
+  (las del LT2, corroboradas en plano y terreno). La columna es del LT2,
+  así que sus números cambian poco, y solo por el reparto del punto
+  anterior: `M` 510 → 508 kN·m, `u` 0.296 → 0.295. La escala de la
+  deformada pasó de ×110 a ×160, porque el conjunto entero se deforma
+  menos. `verificar_ar.py` pasa entero con los datos nuevos.

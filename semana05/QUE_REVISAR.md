@@ -1,5 +1,29 @@
 # Qué revisar para que los NO PASA tengan sentido
 
+> ## 24-09 (tarde), HECHO: las vigas de Ingenieria son las del LT2
+>
+> Pedro corroboro en el plano del 2017_67 y en terreno que las vigas de
+> Ingenieria son iguales a las del LT2: V 0.60x0.80 (la viga tipo de ese
+> plano, 180 de sus 219). Estaban en 0.30x0.60 y 0.30x0.80, sin origen.
+> Quedaron declaradas en el perfil con ese origen.
+>
+> | | antes | ahora |
+> | --- | --- | --- |
+> | Ingenieria bajo G | 19.08 mm | **7.71 mm** (LT2: 6.80) |
+> | razon Ingenieria / LT2 | 2.84 | **1.13** |
+> | lateral EY de Ingenieria | 20.63 mm | 16.80 mm |
+> | NO PASA del conjunto (15 combinaciones) | 119 | **105** |
+> | G de Ingenieria / del conjunto | 52 600.50 / 86 749.48 kN | **63 736.38 / 97 885.36 kN** |
+>
+> O sea: **el "Ingenieria se deforma raro" era el tamano de las vigas**, y
+> con el dato del plano los dos cuerpos se deforman parecido. El G sube por
+> el peso propio de vigas mas grandes; el conjunto sigue siendo exactamente
+> la suma. De los 105 NO PASA, 88 son patas de nucleo (78 en grupos
+> comprimidos, 10 traccionados dentro de su As*fy), 9 filas en 5 muros
+> sueltos y 8 en 3 columnas. La losa colaborante sigue pendiente (abajo).
+>
+> ---
+>
 > ## 24-09, EN CURSO: la losa colaborante (viga T)
 >
 > Pedro pregunto que se podria "inventar" para que Ingenieria dejara de

@@ -62,7 +62,7 @@
     },
     "esperados": {
       "lt2": {"columna": 5, "muro": 9, "viga": 92, "nodo": 207},
-      "ingenieria": {"columna": 18, "muro": 537, "viga": 138, "nodo": 599}
+      "ingenieria": {"columna": 18, "muro": 537, "viga": 138, "nodo": 564}
     }
   }
 }

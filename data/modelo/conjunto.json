@@ -30,14 +30,14 @@
   },
   {
    "nombre": "ingenieria:viga_x",
-   "A": 0.18,
-   "Iy": 0.0013499999999999996,
-   "Iz": 0.0053999999999999986,
-   "J": 0.003707859374999999,
-   "largo": 0.6,
-   "espesor": 0.3,
-   "b": 0.3,
-   "h": 0.6,
+   "A": 0.48,
+   "Iy": 0.014399999999999998,
+   "Iz": 0.025600000000000008,
+   "J": 0.031101609375,
+   "largo": 0.8,
+   "espesor": 0.6,
+   "b": 0.6,
+   "h": 0.8,
    "E": 24870062.324,
    "G": 10362525.9683,
    "E_del_cuerpo": "ingenieria",
@@ -45,13 +45,13 @@
   },
   {
    "nombre": "ingenieria:viga_y",
-   "A": 0.24,
-   "Iy": 0.0017999999999999997,
-   "Iz": 0.012800000000000004,
-   "J": 0.005501803161621094,
+   "A": 0.48,
+   "Iy": 0.014399999999999998,
+   "Iz": 0.025600000000000008,
+   "J": 0.031101609375,
    "largo": 0.8,
-   "espesor": 0.3,
-   "b": 0.3,
+   "espesor": 0.6,
+   "b": 0.6,
    "h": 0.8,
    "E": 24870062.324,
    "G": 10362525.9683,
@@ -15849,7 +15849,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 7.7344,
-   "w_gravedad": 22.6641
+   "w_gravedad": 30.1641
   },
   {
    "id": 100092,
@@ -15858,7 +15858,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 48.135,
-   "w_gravedad": 41.8046
+   "w_gravedad": 49.3046
   },
   {
    "id": 100093,
@@ -15867,7 +15867,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 16.2498,
-   "w_gravedad": 42.6625
+   "w_gravedad": 50.1625
   },
   {
    "id": 100094,
@@ -15876,7 +15876,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 24.5444,
-   "w_gravedad": 23.5219
+   "w_gravedad": 31.0219
   },
   {
    "id": 100095,
@@ -15885,7 +15885,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 7.9688,
-   "w_gravedad": 22.6641
+   "w_gravedad": 30.1641
   },
   {
    "id": 100096,
@@ -15894,7 +15894,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 16.7422,
-   "w_gravedad": 42.6625
+   "w_gravedad": 50.1625
   },
   {
    "id": 100097,
@@ -15903,7 +15903,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 7.7344,
-   "w_gravedad": 22.6641
+   "w_gravedad": 30.1641
   },
   {
    "id": 100098,
@@ -15912,7 +15912,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 16.2498,
-   "w_gravedad": 42.6625
+   "w_gravedad": 50.1625
   },
   {
    "id": 100099,
@@ -15921,7 +15921,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100100,
@@ -15930,7 +15930,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100101,
@@ -15939,7 +15939,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 18.5222,
-   "w_gravedad": 33.2094
+   "w_gravedad": 40.7094
   },
   {
    "id": 100102,
@@ -15948,7 +15948,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 24.5444,
-   "w_gravedad": 23.5219
+   "w_gravedad": 31.0219
   },
   {
    "id": 100103,
@@ -15957,7 +15957,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100104,
@@ -15966,7 +15966,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100105,
@@ -15975,7 +15975,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 18.5222,
-   "w_gravedad": 33.2094
+   "w_gravedad": 40.7094
   },
   {
    "id": 100106,
@@ -15984,7 +15984,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100107,
@@ -15993,7 +15993,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100108,
@@ -16002,7 +16002,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 18.5222,
-   "w_gravedad": 33.2094
+   "w_gravedad": 40.7094
   },
   {
    "id": 100109,
@@ -16011,7 +16011,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 24.5444,
-   "w_gravedad": 23.5219
+   "w_gravedad": 31.0219
   },
   {
    "id": 100110,
@@ -16020,7 +16020,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100111,
@@ -16029,7 +16029,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100112,
@@ -16038,7 +16038,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 18.5222,
-   "w_gravedad": 33.2094
+   "w_gravedad": 40.7094
   },
   {
    "id": 100113,
@@ -16047,7 +16047,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100114,
@@ -16056,7 +16056,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100115,
@@ -16065,7 +16065,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 18.5222,
-   "w_gravedad": 33.2094
+   "w_gravedad": 40.7094
   },
   {
    "id": 100116,
@@ -16074,7 +16074,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 24.5444,
-   "w_gravedad": 23.5219
+   "w_gravedad": 31.0219
   },
   {
    "id": 100117,
@@ -16083,7 +16083,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100118,
@@ -16092,7 +16092,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100119,
@@ -16101,7 +16101,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 18.5222,
-   "w_gravedad": 33.2094
+   "w_gravedad": 40.7094
   },
   {
    "id": 100120,
@@ -16110,7 +16110,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100121,
@@ -16119,7 +16119,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100122,
@@ -16128,7 +16128,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100123,
@@ -16137,7 +16137,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100124,
@@ -16146,7 +16146,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 7.7344,
-   "w_gravedad": 22.6641
+   "w_gravedad": 30.1641
   },
   {
    "id": 100125,
@@ -16155,7 +16155,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 48.135,
-   "w_gravedad": 41.8046
+   "w_gravedad": 49.3046
   },
   {
    "id": 100126,
@@ -16164,7 +16164,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 8.1502,
-   "w_gravedad": 23.6406
+   "w_gravedad": 31.1406
   },
   {
    "id": 100127,
@@ -16173,7 +16173,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 7.9688,
-   "w_gravedad": 22.6641
+   "w_gravedad": 30.1641
   },
   {
    "id": 100128,
@@ -16182,7 +16182,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 8.3971,
-   "w_gravedad": 23.6406
+   "w_gravedad": 31.1406
   },
   {
    "id": 100129,
@@ -16191,7 +16191,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 7.7344,
-   "w_gravedad": 22.6641
+   "w_gravedad": 30.1641
   },
   {
    "id": 100130,
@@ -16200,7 +16200,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 8.1502,
-   "w_gravedad": 23.6406
+   "w_gravedad": 31.1406
   },
   {
    "id": 100131,
@@ -16209,7 +16209,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100132,
@@ -16218,7 +16218,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100133,
@@ -16227,7 +16227,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100134,
@@ -16236,7 +16236,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 1.5625,
-   "w_gravedad": 9.3438
+   "w_gravedad": 16.8438
   },
   {
    "id": 100135,
@@ -16245,7 +16245,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 4.6875,
-   "w_gravedad": 19.0312
+   "w_gravedad": 26.5312
   },
   {
    "id": 100136,
@@ -16254,7 +16254,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100137,
@@ -16263,7 +16263,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 1.5625,
-   "w_gravedad": 9.3438
+   "w_gravedad": 16.8438
   },
   {
    "id": 100138,
@@ -16272,7 +16272,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 4.6875,
-   "w_gravedad": 19.0312
+   "w_gravedad": 26.5312
   },
   {
    "id": 100139,
@@ -16281,7 +16281,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100140,
@@ -16290,7 +16290,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100141,
@@ -16299,7 +16299,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100142,
@@ -16308,7 +16308,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100143,
@@ -16317,7 +16317,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100144,
@@ -16326,7 +16326,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100145,
@@ -16335,7 +16335,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100146,
@@ -16344,7 +16344,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100147,
@@ -16353,7 +16353,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100148,
@@ -16362,7 +16362,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100149,
@@ -16371,7 +16371,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100150,
@@ -16380,7 +16380,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100151,
@@ -16389,7 +16389,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100152,
@@ -16398,7 +16398,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100153,
@@ -16407,7 +16407,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100154,
@@ -16416,7 +16416,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 7.7344,
-   "w_gravedad": 22.6641
+   "w_gravedad": 30.1641
   },
   {
    "id": 100155,
@@ -16425,7 +16425,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 48.135,
-   "w_gravedad": 41.8046
+   "w_gravedad": 49.3046
   },
   {
    "id": 100156,
@@ -16434,7 +16434,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 8.1502,
-   "w_gravedad": 23.6406
+   "w_gravedad": 31.1406
   },
   {
    "id": 100157,
@@ -16443,7 +16443,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 7.9688,
-   "w_gravedad": 22.6641
+   "w_gravedad": 30.1641
   },
   {
    "id": 100158,
@@ -16452,7 +16452,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 8.3971,
-   "w_gravedad": 23.6406
+   "w_gravedad": 31.1406
   },
   {
    "id": 100159,
@@ -16461,7 +16461,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 7.7344,
-   "w_gravedad": 22.6641
+   "w_gravedad": 30.1641
   },
   {
    "id": 100160,
@@ -16470,7 +16470,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 8.1502,
-   "w_gravedad": 23.6406
+   "w_gravedad": 31.1406
   },
   {
    "id": 100161,
@@ -16479,7 +16479,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100162,
@@ -16488,7 +16488,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100163,
@@ -16497,7 +16497,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100164,
@@ -16506,7 +16506,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 1.5625,
-   "w_gravedad": 9.3438
+   "w_gravedad": 16.8438
   },
   {
    "id": 100165,
@@ -16515,7 +16515,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 4.6875,
-   "w_gravedad": 19.0312
+   "w_gravedad": 26.5312
   },
   {
    "id": 100166,
@@ -16524,7 +16524,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100167,
@@ -16533,7 +16533,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 1.5625,
-   "w_gravedad": 9.3438
+   "w_gravedad": 16.8438
   },
   {
    "id": 100168,
@@ -16542,7 +16542,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 4.6875,
-   "w_gravedad": 19.0312
+   "w_gravedad": 26.5312
   },
   {
    "id": 100169,
@@ -16551,7 +16551,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100170,
@@ -16560,7 +16560,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100171,
@@ -16569,7 +16569,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100172,
@@ -16578,7 +16578,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100173,
@@ -16587,7 +16587,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100174,
@@ -16596,7 +16596,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100175,
@@ -16605,7 +16605,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100176,
@@ -16614,7 +16614,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100177,
@@ -16623,7 +16623,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100178,
@@ -16632,7 +16632,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100179,
@@ -16641,7 +16641,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100180,
@@ -16650,7 +16650,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100181,
@@ -16659,7 +16659,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100182,
@@ -16668,7 +16668,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100183,
@@ -16677,7 +16677,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100184,
@@ -16686,7 +16686,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 7.7344,
-   "w_gravedad": 22.6641
+   "w_gravedad": 30.1641
   },
   {
    "id": 100185,
@@ -16695,7 +16695,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 48.135,
-   "w_gravedad": 41.8046
+   "w_gravedad": 49.3046
   },
   {
    "id": 100186,
@@ -16704,7 +16704,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 8.1502,
-   "w_gravedad": 23.6406
+   "w_gravedad": 31.1406
   },
   {
    "id": 100187,
@@ -16713,7 +16713,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 7.9688,
-   "w_gravedad": 22.6641
+   "w_gravedad": 30.1641
   },
   {
    "id": 100188,
@@ -16722,7 +16722,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 8.3971,
-   "w_gravedad": 23.6406
+   "w_gravedad": 31.1406
   },
   {
    "id": 100189,
@@ -16731,7 +16731,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 7.7344,
-   "w_gravedad": 22.6641
+   "w_gravedad": 30.1641
   },
   {
    "id": 100190,
@@ -16740,7 +16740,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 8.1502,
-   "w_gravedad": 23.6406
+   "w_gravedad": 31.1406
   },
   {
    "id": 100191,
@@ -16749,7 +16749,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 1.21,
-   "w_gravedad": 8.7625
+   "w_gravedad": 16.2625
   },
   {
    "id": 100192,
@@ -16758,7 +16758,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 3.96,
-   "w_gravedad": 18.45
+   "w_gravedad": 25.95
   },
   {
    "id": 100193,
@@ -16767,7 +16767,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100194,
@@ -16776,7 +16776,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 1.96,
-   "w_gravedad": 9.925
+   "w_gravedad": 17.425
   },
   {
    "id": 100195,
@@ -16785,7 +16785,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 5.46,
-   "w_gravedad": 19.6125
+   "w_gravedad": 27.1125
   },
   {
    "id": 100196,
@@ -16794,7 +16794,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100197,
@@ -16803,7 +16803,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100198,
@@ -16812,7 +16812,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100199,
@@ -16821,7 +16821,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 15.6058,
-   "w_gravedad": 16.5945
+   "w_gravedad": 24.0945
   },
   {
    "id": 100200,
@@ -16830,7 +16830,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 14.0529,
-   "w_gravedad": 26.282
+   "w_gravedad": 33.782
   },
   {
    "id": 100201,
@@ -16839,7 +16839,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100202,
@@ -16848,7 +16848,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100203,
@@ -16857,7 +16857,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 14.0529,
-   "w_gravedad": 26.282
+   "w_gravedad": 33.782
   },
   {
    "id": 100204,
@@ -16866,7 +16866,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100205,
@@ -16875,7 +16875,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100206,
@@ -16884,7 +16884,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100207,
@@ -16893,7 +16893,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100208,
@@ -16902,7 +16902,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100209,
@@ -16911,7 +16911,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100210,
@@ -16920,7 +16920,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100211,
@@ -16929,7 +16929,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100212,
@@ -16938,7 +16938,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100213,
@@ -16947,7 +16947,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100214,
@@ -16956,7 +16956,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100215,
@@ -16965,7 +16965,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 1.6256,
-   "w_gravedad": 9.4406
+   "w_gravedad": 16.9406
   },
   {
    "id": 100216,
@@ -16974,7 +16974,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 3.2512,
-   "w_gravedad": 14.3812
+   "w_gravedad": 21.8812
   },
   {
    "id": 100217,
@@ -16983,7 +16983,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 1.6256,
-   "w_gravedad": 9.4406
+   "w_gravedad": 16.9406
   },
   {
    "id": 100218,
@@ -16992,7 +16992,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 1.5006,
-   "w_gravedad": 9.2469
+   "w_gravedad": 16.7469
   },
   {
    "id": 100219,
@@ -17001,7 +17001,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 3.0013,
-   "w_gravedad": 13.9938
+   "w_gravedad": 21.4938
   },
   {
    "id": 100220,
@@ -17010,7 +17010,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 1.5006,
-   "w_gravedad": 9.2469
+   "w_gravedad": 16.7469
   },
   {
    "id": 100221,
@@ -17019,7 +17019,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 7.7344,
-   "w_gravedad": 22.6641
+   "w_gravedad": 30.1641
   },
   {
    "id": 100222,
@@ -17028,7 +17028,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 48.135,
-   "w_gravedad": 41.8046
+   "w_gravedad": 49.3046
   },
   {
    "id": 100223,
@@ -17037,7 +17037,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 8.1502,
-   "w_gravedad": 23.6406
+   "w_gravedad": 31.1406
   },
   {
    "id": 100224,
@@ -17046,7 +17046,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 7.9688,
-   "w_gravedad": 22.6641
+   "w_gravedad": 30.1641
   },
   {
    "id": 100225,
@@ -17055,7 +17055,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 8.3971,
-   "w_gravedad": 23.6406
+   "w_gravedad": 31.1406
   },
   {
    "id": 100226,
@@ -17064,7 +17064,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 7.7344,
-   "w_gravedad": 22.6641
+   "w_gravedad": 30.1641
   },
   {
    "id": 100227,
@@ -17073,7 +17073,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 8.1502,
-   "w_gravedad": 23.6406
+   "w_gravedad": 31.1406
   },
   {
    "id": 100228,
@@ -17082,7 +17082,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100229,
@@ -17091,7 +17091,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100230,
@@ -17100,7 +17100,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100231,
@@ -17109,7 +17109,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100232,
@@ -17118,7 +17118,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100233,
@@ -17127,7 +17127,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100234,
@@ -17136,7 +17136,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 15.6058,
-   "w_gravedad": 16.5945
+   "w_gravedad": 24.0945
   },
   {
    "id": 100235,
@@ -17145,7 +17145,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 14.0529,
-   "w_gravedad": 26.282
+   "w_gravedad": 33.782
   },
   {
    "id": 100236,
@@ -17154,7 +17154,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100237,
@@ -17163,7 +17163,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100238,
@@ -17172,7 +17172,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 14.0529,
-   "w_gravedad": 26.282
+   "w_gravedad": 33.782
   },
   {
    "id": 100239,
@@ -17181,7 +17181,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100240,
@@ -17190,7 +17190,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100241,
@@ -17199,7 +17199,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100242,
@@ -17208,7 +17208,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100243,
@@ -17217,7 +17217,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100244,
@@ -17226,7 +17226,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100245,
@@ -17235,7 +17235,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100246,
@@ -17244,7 +17244,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100247,
@@ -17253,7 +17253,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100248,
@@ -17262,7 +17262,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 12.5,
-   "w_gravedad": 23.875
+   "w_gravedad": 31.375
   },
   {
    "id": 100249,
@@ -17271,7 +17271,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 6.25,
-   "w_gravedad": 14.1875
+   "w_gravedad": 21.6875
   },
   {
    "id": 100250,
@@ -17280,7 +17280,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 1.6256,
-   "w_gravedad": 9.4406
+   "w_gravedad": 16.9406
   },
   {
    "id": 100251,
@@ -17289,7 +17289,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 3.2512,
-   "w_gravedad": 14.3812
+   "w_gravedad": 21.8812
   },
   {
    "id": 100252,
@@ -17298,7 +17298,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 1.6256,
-   "w_gravedad": 9.4406
+   "w_gravedad": 16.9406
   },
   {
    "id": 100253,
@@ -17307,7 +17307,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 1.5006,
-   "w_gravedad": 9.2469
+   "w_gravedad": 16.7469
   },
   {
    "id": 100254,
@@ -17316,7 +17316,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 3.0013,
-   "w_gravedad": 13.9938
+   "w_gravedad": 21.4938
   },
   {
    "id": 100255,
@@ -17325,7 +17325,7 @@
    "seccion": "ingenieria:viga_x",
    "tipo": "viga_x",
    "area_tributaria": 1.5006,
-   "w_gravedad": 9.2469
+   "w_gravedad": 16.7469
   },
   {
    "id": 100256,
@@ -17334,7 +17334,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 4.8,
-   "w_gravedad": 20.5312
+   "w_gravedad": 26.5312
   },
   {
    "id": 100257,
@@ -17343,7 +17343,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 9.2625,
-   "w_gravedad": 20.5312
+   "w_gravedad": 26.5312
   },
   {
    "id": 100258,
@@ -17352,7 +17352,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 11.125,
-   "w_gravedad": 23.2437
+   "w_gravedad": 29.2437
   },
   {
    "id": 100259,
@@ -17361,7 +17361,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 8.6775,
-   "w_gravedad": 23.2437
+   "w_gravedad": 29.2437
   },
   {
    "id": 100260,
@@ -17370,7 +17370,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 18.7056,
-   "w_gravedad": 22.7594
+   "w_gravedad": 28.7594
   },
   {
    "id": 100261,
@@ -17379,7 +17379,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 9.0667,
-   "w_gravedad": 33.4479
+   "w_gravedad": 39.4479
   },
   {
    "id": 100262,
@@ -17388,7 +17388,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 17.4958,
-   "w_gravedad": 33.4479
+   "w_gravedad": 39.4479
   },
   {
    "id": 100263,
@@ -17397,7 +17397,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 35.8025,
-   "w_gravedad": 37.1763
+   "w_gravedad": 43.1763
   },
   {
    "id": 100264,
@@ -17406,7 +17406,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 37.4113,
-   "w_gravedad": 39.5188
+   "w_gravedad": 45.5188
   },
   {
    "id": 100265,
@@ -17415,7 +17415,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.0,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100266,
@@ -17424,7 +17424,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100267,
@@ -17433,7 +17433,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.0,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100268,
@@ -17442,7 +17442,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100269,
@@ -17451,7 +17451,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 37.4113,
-   "w_gravedad": 39.5188
+   "w_gravedad": 45.5188
   },
   {
    "id": 100270,
@@ -17460,7 +17460,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.0,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100271,
@@ -17469,7 +17469,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100272,
@@ -17478,7 +17478,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.0,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100273,
@@ -17487,7 +17487,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100274,
@@ -17496,7 +17496,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 37.4113,
-   "w_gravedad": 39.5188
+   "w_gravedad": 45.5188
   },
   {
    "id": 100275,
@@ -17505,7 +17505,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.0,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100276,
@@ -17514,7 +17514,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100277,
@@ -17523,7 +17523,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 8.5333,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100278,
@@ -17532,7 +17532,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 16.4667,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100279,
@@ -17541,7 +17541,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 17.9775,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100280,
@@ -17550,7 +17550,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 14.0225,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100281,
@@ -17559,7 +17559,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 34.0806,
-   "w_gravedad": 36.5347
+   "w_gravedad": 42.5347
   },
   {
    "id": 100282,
@@ -17568,7 +17568,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 12.5,
-   "w_gravedad": 18.9167
+   "w_gravedad": 24.9167
   },
   {
    "id": 100283,
@@ -17577,7 +17577,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 16.0,
-   "w_gravedad": 19.9326
+   "w_gravedad": 25.9326
   },
   {
    "id": 100284,
@@ -17586,7 +17586,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 15.375,
-   "w_gravedad": 19.7753
+   "w_gravedad": 25.7753
   },
   {
    "id": 100285,
@@ -17595,7 +17595,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 4.8,
-   "w_gravedad": 20.5312
+   "w_gravedad": 26.5312
   },
   {
    "id": 100286,
@@ -17604,7 +17604,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 9.2625,
-   "w_gravedad": 20.5312
+   "w_gravedad": 26.5312
   },
   {
    "id": 100287,
@@ -17613,7 +17613,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 11.125,
-   "w_gravedad": 23.2437
+   "w_gravedad": 29.2437
   },
   {
    "id": 100288,
@@ -17622,7 +17622,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 8.6775,
-   "w_gravedad": 23.2437
+   "w_gravedad": 29.2437
   },
   {
    "id": 100289,
@@ -17631,7 +17631,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 9.0667,
-   "w_gravedad": 33.4479
+   "w_gravedad": 39.4479
   },
   {
    "id": 100290,
@@ -17640,7 +17640,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 17.4958,
-   "w_gravedad": 33.4479
+   "w_gravedad": 39.4479
   },
   {
    "id": 100291,
@@ -17649,7 +17649,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 35.8025,
-   "w_gravedad": 37.1763
+   "w_gravedad": 43.1763
   },
   {
    "id": 100292,
@@ -17658,7 +17658,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 20.3125,
-   "w_gravedad": 26.9896
+   "w_gravedad": 32.9896
   },
   {
    "id": 100293,
@@ -17667,7 +17667,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100294,
@@ -17676,7 +17676,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 15.625,
-   "w_gravedad": 22.1458
+   "w_gravedad": 28.1458
   },
   {
    "id": 100295,
@@ -17685,7 +17685,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 20.3125,
-   "w_gravedad": 26.9896
+   "w_gravedad": 32.9896
   },
   {
    "id": 100296,
@@ -17694,7 +17694,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100297,
@@ -17703,7 +17703,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.0,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100298,
@@ -17712,7 +17712,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100299,
@@ -17721,7 +17721,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.0,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100300,
@@ -17730,7 +17730,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100301,
@@ -17739,7 +17739,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.0,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100302,
@@ -17748,7 +17748,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100303,
@@ -17757,7 +17757,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 8.5333,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100304,
@@ -17766,7 +17766,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 16.4667,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100305,
@@ -17775,7 +17775,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 17.9775,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100306,
@@ -17784,7 +17784,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 14.0225,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100307,
@@ -17793,7 +17793,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 12.5,
-   "w_gravedad": 18.9167
+   "w_gravedad": 24.9167
   },
   {
    "id": 100308,
@@ -17802,7 +17802,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 16.0,
-   "w_gravedad": 19.9326
+   "w_gravedad": 25.9326
   },
   {
    "id": 100309,
@@ -17811,7 +17811,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 4.8,
-   "w_gravedad": 20.5312
+   "w_gravedad": 26.5312
   },
   {
    "id": 100310,
@@ -17820,7 +17820,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 9.2625,
-   "w_gravedad": 20.5312
+   "w_gravedad": 26.5312
   },
   {
    "id": 100311,
@@ -17829,7 +17829,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 11.125,
-   "w_gravedad": 23.2437
+   "w_gravedad": 29.2437
   },
   {
    "id": 100312,
@@ -17838,7 +17838,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 8.6775,
-   "w_gravedad": 23.2437
+   "w_gravedad": 29.2437
   },
   {
    "id": 100313,
@@ -17847,7 +17847,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 9.0667,
-   "w_gravedad": 33.4479
+   "w_gravedad": 39.4479
   },
   {
    "id": 100314,
@@ -17856,7 +17856,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 17.4958,
-   "w_gravedad": 33.4479
+   "w_gravedad": 39.4479
   },
   {
    "id": 100315,
@@ -17865,7 +17865,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 35.8025,
-   "w_gravedad": 37.1763
+   "w_gravedad": 43.1763
   },
   {
    "id": 100316,
@@ -17874,7 +17874,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 20.3125,
-   "w_gravedad": 26.9896
+   "w_gravedad": 32.9896
   },
   {
    "id": 100317,
@@ -17883,7 +17883,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100318,
@@ -17892,7 +17892,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 15.625,
-   "w_gravedad": 22.1458
+   "w_gravedad": 28.1458
   },
   {
    "id": 100319,
@@ -17901,7 +17901,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 20.3125,
-   "w_gravedad": 26.9896
+   "w_gravedad": 32.9896
   },
   {
    "id": 100320,
@@ -17910,7 +17910,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100321,
@@ -17919,7 +17919,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.0,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100322,
@@ -17928,7 +17928,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100323,
@@ -17937,7 +17937,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.0,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100324,
@@ -17946,7 +17946,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100325,
@@ -17955,7 +17955,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.0,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100326,
@@ -17964,7 +17964,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100327,
@@ -17973,7 +17973,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 8.5333,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100328,
@@ -17982,7 +17982,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 16.4667,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100329,
@@ -17991,7 +17991,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 17.9775,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100330,
@@ -18000,7 +18000,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 14.0225,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100331,
@@ -18009,7 +18009,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 12.5,
-   "w_gravedad": 18.9167
+   "w_gravedad": 24.9167
   },
   {
    "id": 100332,
@@ -18018,7 +18018,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 16.0,
-   "w_gravedad": 19.9326
+   "w_gravedad": 25.9326
   },
   {
    "id": 100333,
@@ -18027,7 +18027,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 4.8,
-   "w_gravedad": 20.5312
+   "w_gravedad": 26.5312
   },
   {
    "id": 100334,
@@ -18036,7 +18036,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 9.2625,
-   "w_gravedad": 20.5312
+   "w_gravedad": 26.5312
   },
   {
    "id": 100335,
@@ -18045,7 +18045,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 11.125,
-   "w_gravedad": 23.2437
+   "w_gravedad": 29.2437
   },
   {
    "id": 100336,
@@ -18054,7 +18054,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 8.6775,
-   "w_gravedad": 23.2437
+   "w_gravedad": 29.2437
   },
   {
    "id": 100337,
@@ -18063,7 +18063,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 7.203,
-   "w_gravedad": 27.8059
+   "w_gravedad": 33.8059
   },
   {
    "id": 100338,
@@ -18072,7 +18072,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 13.8995,
-   "w_gravedad": 27.8059
+   "w_gravedad": 33.8059
   },
   {
    "id": 100339,
@@ -18081,7 +18081,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 35.8025,
-   "w_gravedad": 37.1763
+   "w_gravedad": 43.1763
   },
   {
    "id": 100340,
@@ -18090,7 +18090,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 15.58,
-   "w_gravedad": 22.0993
+   "w_gravedad": 28.0993
   },
   {
    "id": 100341,
@@ -18099,7 +18099,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 21.04,
-   "w_gravedad": 27.7413
+   "w_gravedad": 33.7413
   },
   {
    "id": 100342,
@@ -18108,7 +18108,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100343,
@@ -18117,7 +18117,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 3.7442,
-   "w_gravedad": 13.4981
+   "w_gravedad": 19.4981
   },
   {
    "id": 100344,
@@ -18126,7 +18126,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.0,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100345,
@@ -18135,7 +18135,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100346,
@@ -18144,7 +18144,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.0,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100347,
@@ -18153,7 +18153,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100348,
@@ -18162,7 +18162,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 3.7442,
-   "w_gravedad": 13.4981
+   "w_gravedad": 19.4981
   },
   {
    "id": 100349,
@@ -18171,7 +18171,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.0,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100350,
@@ -18180,7 +18180,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100351,
@@ -18189,7 +18189,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.0,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100352,
@@ -18198,7 +18198,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100353,
@@ -18207,7 +18207,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 8.5333,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100354,
@@ -18216,7 +18216,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 16.4667,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100355,
@@ -18225,7 +18225,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 17.9775,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100356,
@@ -18234,7 +18234,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 14.0225,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100357,
@@ -18243,7 +18243,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 20.4369,
-   "w_gravedad": 27.1181
+   "w_gravedad": 33.1181
   },
   {
    "id": 100358,
@@ -18252,7 +18252,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.7219,
-   "w_gravedad": 28.3983
+   "w_gravedad": 34.3983
   },
   {
    "id": 100359,
@@ -18261,7 +18261,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 15.6237,
-   "w_gravedad": 22.1445
+   "w_gravedad": 28.1445
   },
   {
    "id": 100360,
@@ -18270,7 +18270,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 19.1237,
-   "w_gravedad": 22.6527
+   "w_gravedad": 28.6527
   },
   {
    "id": 100361,
@@ -18279,7 +18279,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 7.6869,
-   "w_gravedad": 13.9431
+   "w_gravedad": 19.9431
   },
   {
    "id": 100362,
@@ -18288,7 +18288,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 9.4019,
-   "w_gravedad": 14.187
+   "w_gravedad": 20.187
   },
   {
    "id": 100363,
@@ -18297,7 +18297,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 4.8,
-   "w_gravedad": 20.5312
+   "w_gravedad": 26.5312
   },
   {
    "id": 100364,
@@ -18306,7 +18306,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 9.2625,
-   "w_gravedad": 20.5312
+   "w_gravedad": 26.5312
   },
   {
    "id": 100365,
@@ -18315,7 +18315,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 11.125,
-   "w_gravedad": 23.2437
+   "w_gravedad": 29.2437
   },
   {
    "id": 100366,
@@ -18324,7 +18324,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 8.6775,
-   "w_gravedad": 23.2437
+   "w_gravedad": 29.2437
   },
   {
    "id": 100367,
@@ -18333,7 +18333,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 9.0667,
-   "w_gravedad": 33.4479
+   "w_gravedad": 39.4479
   },
   {
    "id": 100368,
@@ -18342,7 +18342,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 17.4958,
-   "w_gravedad": 33.4479
+   "w_gravedad": 39.4479
   },
   {
    "id": 100369,
@@ -18351,7 +18351,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 35.8025,
-   "w_gravedad": 37.1763
+   "w_gravedad": 43.1763
   },
   {
    "id": 100370,
@@ -18360,7 +18360,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.0,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100371,
@@ -18369,7 +18369,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100372,
@@ -18378,7 +18378,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 3.7442,
-   "w_gravedad": 13.4981
+   "w_gravedad": 19.4981
   },
   {
    "id": 100373,
@@ -18387,7 +18387,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.0,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100374,
@@ -18396,7 +18396,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100375,
@@ -18405,7 +18405,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.0,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100376,
@@ -18414,7 +18414,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100377,
@@ -18423,7 +18423,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 3.7442,
-   "w_gravedad": 13.4981
+   "w_gravedad": 19.4981
   },
   {
    "id": 100378,
@@ -18432,7 +18432,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.0,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100379,
@@ -18441,7 +18441,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100380,
@@ -18450,7 +18450,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.0,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100381,
@@ -18459,7 +18459,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 32.0,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100382,
@@ -18468,7 +18468,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 8.5333,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100383,
@@ -18477,7 +18477,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 16.4667,
-   "w_gravedad": 31.8333
+   "w_gravedad": 37.8333
   },
   {
    "id": 100384,
@@ -18486,7 +18486,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 17.9775,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100385,
@@ -18495,7 +18495,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 14.0225,
-   "w_gravedad": 33.8652
+   "w_gravedad": 39.8652
   },
   {
    "id": 100386,
@@ -18504,7 +18504,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 20.4369,
-   "w_gravedad": 27.1181
+   "w_gravedad": 33.1181
   },
   {
    "id": 100387,
@@ -18513,7 +18513,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 25.7219,
-   "w_gravedad": 28.3983
+   "w_gravedad": 34.3983
   },
   {
    "id": 100388,
@@ -18522,7 +18522,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 15.6237,
-   "w_gravedad": 22.1445
+   "w_gravedad": 28.1445
   },
   {
    "id": 100389,
@@ -18531,7 +18531,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 19.1237,
-   "w_gravedad": 22.6527
+   "w_gravedad": 28.6527
   },
   {
    "id": 100390,
@@ -18540,7 +18540,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 7.6869,
-   "w_gravedad": 13.9431
+   "w_gravedad": 19.9431
   },
   {
    "id": 100391,
@@ -18549,7 +18549,7 @@
    "seccion": "ingenieria:viga_y",
    "tipo": "viga_y",
    "area_tributaria": 9.4019,
-   "w_gravedad": 14.187
+   "w_gravedad": 20.187
   },
   {
    "id": 100392,
@@ -43561,1807 +43561,1807 @@
     {
      "elemento": 100091,
      "wy": 0.0,
-     "wz": -22.664062,
+     "wz": -30.164062,
      "wx": 0.0
     },
     {
      "elemento": 100095,
      "wy": 0.0,
-     "wz": -22.664063,
+     "wz": -30.164063,
      "wx": 0.0
     },
     {
      "elemento": 100097,
      "wy": 0.0,
-     "wz": -22.664062,
+     "wz": -30.164062,
      "wx": 0.0
     },
     {
      "elemento": 100092,
      "wy": 0.0,
-     "wz": -41.804625,
+     "wz": -49.304625,
      "wx": 0.0
     },
     {
      "elemento": 100256,
      "wy": 0.0,
-     "wz": -20.53125,
+     "wz": -26.53125,
      "wx": 0.0
     },
     {
      "elemento": 100257,
      "wy": 0.0,
-     "wz": -20.53125,
+     "wz": -26.53125,
      "wx": 0.0
     },
     {
      "elemento": 100261,
      "wy": 0.0,
-     "wz": -33.447917,
+     "wz": -39.447917,
      "wx": 0.0
     },
     {
      "elemento": 100262,
      "wy": 0.0,
-     "wz": -33.447917,
+     "wz": -39.447917,
      "wx": 0.0
     },
     {
      "elemento": 100099,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100100,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100265,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100103,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100104,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100267,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100106,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100107,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100270,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100110,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100111,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100272,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100113,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100114,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100275,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100117,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100118,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100277,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100278,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100120,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100121,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100282,
      "wy": 0.0,
-     "wz": -18.916667,
+     "wz": -24.916667,
      "wx": 0.0
     },
     {
      "elemento": 100093,
      "wy": 0.0,
-     "wz": -42.662453,
+     "wz": -50.162453,
      "wx": 0.0
     },
     {
      "elemento": 100096,
      "wy": 0.0,
-     "wz": -42.662453,
+     "wz": -50.162453,
      "wx": 0.0
     },
     {
      "elemento": 100098,
      "wy": 0.0,
-     "wz": -42.662453,
+     "wz": -50.162453,
      "wx": 0.0
     },
     {
      "elemento": 100258,
      "wy": 0.0,
-     "wz": -23.24375,
+     "wz": -29.24375,
      "wx": 0.0
     },
     {
      "elemento": 100259,
      "wy": 0.0,
-     "wz": -23.24375,
+     "wz": -29.24375,
      "wx": 0.0
     },
     {
      "elemento": 100263,
      "wy": 0.0,
-     "wz": -37.176334,
+     "wz": -43.176334,
      "wx": 0.0
     },
     {
      "elemento": 100101,
      "wy": 0.0,
-     "wz": -33.209391,
+     "wz": -40.709391,
      "wx": 0.0
     },
     {
      "elemento": 100266,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100105,
      "wy": 0.0,
-     "wz": -33.209391,
+     "wz": -40.709391,
      "wx": 0.0
     },
     {
      "elemento": 100268,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100108,
      "wy": 0.0,
-     "wz": -33.209391,
+     "wz": -40.709391,
      "wx": 0.0
     },
     {
      "elemento": 100271,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100112,
      "wy": 0.0,
-     "wz": -33.209391,
+     "wz": -40.709391,
      "wx": 0.0
     },
     {
      "elemento": 100273,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100115,
      "wy": 0.0,
-     "wz": -33.209391,
+     "wz": -40.709391,
      "wx": 0.0
     },
     {
      "elemento": 100276,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100119,
      "wy": 0.0,
-     "wz": -33.209391,
+     "wz": -40.709391,
      "wx": 0.0
     },
     {
      "elemento": 100279,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100280,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100122,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100283,
      "wy": 0.0,
-     "wz": -19.932584,
+     "wz": -25.932584,
      "wx": 0.0
     },
     {
      "elemento": 100094,
      "wy": 0.0,
-     "wz": -23.521891,
+     "wz": -31.021891,
      "wx": 0.0
     },
     {
      "elemento": 100260,
      "wy": 0.0,
-     "wz": -22.759375,
+     "wz": -28.759375,
      "wx": 0.0
     },
     {
      "elemento": 100264,
      "wy": 0.0,
-     "wz": -39.51875,
+     "wz": -45.51875,
      "wx": 0.0
     },
     {
      "elemento": 100102,
      "wy": 0.0,
-     "wz": -23.521891,
+     "wz": -31.021891,
      "wx": 0.0
     },
     {
      "elemento": 100269,
      "wy": 0.0,
-     "wz": -39.51875,
+     "wz": -45.51875,
      "wx": 0.0
     },
     {
      "elemento": 100109,
      "wy": 0.0,
-     "wz": -23.521891,
+     "wz": -31.021891,
      "wx": 0.0
     },
     {
      "elemento": 100274,
      "wy": 0.0,
-     "wz": -39.51875,
+     "wz": -45.51875,
      "wx": 0.0
     },
     {
      "elemento": 100116,
      "wy": 0.0,
-     "wz": -23.521891,
+     "wz": -31.021891,
      "wx": 0.0
     },
     {
      "elemento": 100281,
      "wy": 0.0,
-     "wz": -36.534664,
+     "wz": -42.534664,
      "wx": 0.0
     },
     {
      "elemento": 100123,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100284,
      "wy": 0.0,
-     "wz": -19.775289,
+     "wz": -25.775289,
      "wx": 0.0
     },
     {
      "elemento": 100124,
      "wy": 0.0,
-     "wz": -22.664062,
+     "wz": -30.164062,
      "wx": 0.0
     },
     {
      "elemento": 100127,
      "wy": 0.0,
-     "wz": -22.664063,
+     "wz": -30.164063,
      "wx": 0.0
     },
     {
      "elemento": 100129,
      "wy": 0.0,
-     "wz": -22.664062,
+     "wz": -30.164062,
      "wx": 0.0
     },
     {
      "elemento": 100125,
      "wy": 0.0,
-     "wz": -41.804625,
+     "wz": -49.304625,
      "wx": 0.0
     },
     {
      "elemento": 100285,
      "wy": 0.0,
-     "wz": -20.53125,
+     "wz": -26.53125,
      "wx": 0.0
     },
     {
      "elemento": 100286,
      "wy": 0.0,
-     "wz": -20.53125,
+     "wz": -26.53125,
      "wx": 0.0
     },
     {
      "elemento": 100289,
      "wy": 0.0,
-     "wz": -33.447917,
+     "wz": -39.447917,
      "wx": 0.0
     },
     {
      "elemento": 100290,
      "wy": 0.0,
-     "wz": -33.447917,
+     "wz": -39.447917,
      "wx": 0.0
     },
     {
      "elemento": 100131,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100132,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100292,
      "wy": 0.0,
-     "wz": -26.989583,
+     "wz": -32.989583,
      "wx": 0.0
     },
     {
      "elemento": 100134,
      "wy": 0.0,
-     "wz": -9.34375,
+     "wz": -16.84375,
      "wx": 0.0
     },
     {
      "elemento": 100135,
      "wy": 0.0,
-     "wz": -19.03125,
+     "wz": -26.53125,
      "wx": 0.0
     },
     {
      "elemento": 100294,
      "wy": 0.0,
-     "wz": -22.145833,
+     "wz": -28.145833,
      "wx": 0.0
     },
     {
      "elemento": 100137,
      "wy": 0.0,
-     "wz": -9.34375,
+     "wz": -16.84375,
      "wx": 0.0
     },
     {
      "elemento": 100138,
      "wy": 0.0,
-     "wz": -19.03125,
+     "wz": -26.53125,
      "wx": 0.0
     },
     {
      "elemento": 100295,
      "wy": 0.0,
-     "wz": -26.989583,
+     "wz": -32.989583,
      "wx": 0.0
     },
     {
      "elemento": 100139,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100140,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100297,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100142,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100143,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100299,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100145,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100146,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100301,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100148,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100149,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100303,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100304,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100151,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100152,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100307,
      "wy": 0.0,
-     "wz": -18.916667,
+     "wz": -24.916667,
      "wx": 0.0
     },
     {
      "elemento": 100126,
      "wy": 0.0,
-     "wz": -23.640562,
+     "wz": -31.140562,
      "wx": 0.0
     },
     {
      "elemento": 100128,
      "wy": 0.0,
-     "wz": -23.640562,
+     "wz": -31.140562,
      "wx": 0.0
     },
     {
      "elemento": 100130,
      "wy": 0.0,
-     "wz": -23.640562,
+     "wz": -31.140562,
      "wx": 0.0
     },
     {
      "elemento": 100287,
      "wy": 0.0,
-     "wz": -23.24375,
+     "wz": -29.24375,
      "wx": 0.0
     },
     {
      "elemento": 100288,
      "wy": 0.0,
-     "wz": -23.24375,
+     "wz": -29.24375,
      "wx": 0.0
     },
     {
      "elemento": 100291,
      "wy": 0.0,
-     "wz": -37.176334,
+     "wz": -43.176334,
      "wx": 0.0
     },
     {
      "elemento": 100133,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100293,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100136,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100296,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100141,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100298,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100144,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100300,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100147,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100302,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100150,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100305,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100306,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100153,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100308,
      "wy": 0.0,
-     "wz": -19.932584,
+     "wz": -25.932584,
      "wx": 0.0
     },
     {
      "elemento": 100154,
      "wy": 0.0,
-     "wz": -22.664062,
+     "wz": -30.164062,
      "wx": 0.0
     },
     {
      "elemento": 100157,
      "wy": 0.0,
-     "wz": -22.664063,
+     "wz": -30.164063,
      "wx": 0.0
     },
     {
      "elemento": 100159,
      "wy": 0.0,
-     "wz": -22.664062,
+     "wz": -30.164062,
      "wx": 0.0
     },
     {
      "elemento": 100155,
      "wy": 0.0,
-     "wz": -41.804625,
+     "wz": -49.304625,
      "wx": 0.0
     },
     {
      "elemento": 100309,
      "wy": 0.0,
-     "wz": -20.53125,
+     "wz": -26.53125,
      "wx": 0.0
     },
     {
      "elemento": 100310,
      "wy": 0.0,
-     "wz": -20.53125,
+     "wz": -26.53125,
      "wx": 0.0
     },
     {
      "elemento": 100313,
      "wy": 0.0,
-     "wz": -33.447917,
+     "wz": -39.447917,
      "wx": 0.0
     },
     {
      "elemento": 100314,
      "wy": 0.0,
-     "wz": -33.447917,
+     "wz": -39.447917,
      "wx": 0.0
     },
     {
      "elemento": 100161,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100162,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100316,
      "wy": 0.0,
-     "wz": -26.989583,
+     "wz": -32.989583,
      "wx": 0.0
     },
     {
      "elemento": 100164,
      "wy": 0.0,
-     "wz": -9.34375,
+     "wz": -16.84375,
      "wx": 0.0
     },
     {
      "elemento": 100165,
      "wy": 0.0,
-     "wz": -19.03125,
+     "wz": -26.53125,
      "wx": 0.0
     },
     {
      "elemento": 100318,
      "wy": 0.0,
-     "wz": -22.145833,
+     "wz": -28.145833,
      "wx": 0.0
     },
     {
      "elemento": 100167,
      "wy": 0.0,
-     "wz": -9.34375,
+     "wz": -16.84375,
      "wx": 0.0
     },
     {
      "elemento": 100168,
      "wy": 0.0,
-     "wz": -19.03125,
+     "wz": -26.53125,
      "wx": 0.0
     },
     {
      "elemento": 100319,
      "wy": 0.0,
-     "wz": -26.989583,
+     "wz": -32.989583,
      "wx": 0.0
     },
     {
      "elemento": 100169,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100170,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100321,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100172,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100173,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100323,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100175,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100176,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100325,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100178,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100179,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100327,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100328,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100181,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100182,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100331,
      "wy": 0.0,
-     "wz": -18.916667,
+     "wz": -24.916667,
      "wx": 0.0
     },
     {
      "elemento": 100156,
      "wy": 0.0,
-     "wz": -23.640562,
+     "wz": -31.140562,
      "wx": 0.0
     },
     {
      "elemento": 100158,
      "wy": 0.0,
-     "wz": -23.640562,
+     "wz": -31.140562,
      "wx": 0.0
     },
     {
      "elemento": 100160,
      "wy": 0.0,
-     "wz": -23.640562,
+     "wz": -31.140562,
      "wx": 0.0
     },
     {
      "elemento": 100311,
      "wy": 0.0,
-     "wz": -23.24375,
+     "wz": -29.24375,
      "wx": 0.0
     },
     {
      "elemento": 100312,
      "wy": 0.0,
-     "wz": -23.24375,
+     "wz": -29.24375,
      "wx": 0.0
     },
     {
      "elemento": 100315,
      "wy": 0.0,
-     "wz": -37.176334,
+     "wz": -43.176334,
      "wx": 0.0
     },
     {
      "elemento": 100163,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100317,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100166,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100320,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100171,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100322,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100174,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100324,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100177,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100326,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100180,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100329,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100330,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100183,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100332,
      "wy": 0.0,
-     "wz": -19.932584,
+     "wz": -25.932584,
      "wx": 0.0
     },
     {
      "elemento": 100199,
      "wy": 0.0,
-     "wz": -16.594476,
+     "wz": -24.094476,
      "wx": 0.0
     },
     {
      "elemento": 100200,
      "wy": 0.0,
-     "wz": -26.281976,
+     "wz": -33.781976,
      "wx": 0.0
     },
     {
      "elemento": 100203,
      "wy": 0.0,
-     "wz": -26.281976,
+     "wz": -33.781976,
      "wx": 0.0
     },
     {
      "elemento": 100343,
      "wy": 0.0,
-     "wz": -13.498125,
+     "wz": -19.498125,
      "wx": 0.0
     },
     {
      "elemento": 100348,
      "wy": 0.0,
-     "wz": -13.498125,
+     "wz": -19.498125,
      "wx": 0.0
     },
     {
      "elemento": 100184,
      "wy": 0.0,
-     "wz": -22.664062,
+     "wz": -30.164062,
      "wx": 0.0
     },
     {
      "elemento": 100187,
      "wy": 0.0,
-     "wz": -22.664063,
+     "wz": -30.164063,
      "wx": 0.0
     },
     {
      "elemento": 100189,
      "wy": 0.0,
-     "wz": -22.664062,
+     "wz": -30.164062,
      "wx": 0.0
     },
     {
      "elemento": 100185,
      "wy": 0.0,
-     "wz": -41.804625,
+     "wz": -49.304625,
      "wx": 0.0
     },
     {
      "elemento": 100333,
      "wy": 0.0,
-     "wz": -20.53125,
+     "wz": -26.53125,
      "wx": 0.0
     },
     {
      "elemento": 100334,
      "wy": 0.0,
-     "wz": -20.53125,
+     "wz": -26.53125,
      "wx": 0.0
     },
     {
      "elemento": 100337,
      "wy": 0.0,
-     "wz": -27.805917,
+     "wz": -33.805917,
      "wx": 0.0
     },
     {
      "elemento": 100338,
      "wy": 0.0,
-     "wz": -27.805917,
+     "wz": -33.805917,
      "wx": 0.0
     },
     {
      "elemento": 100191,
      "wy": 0.0,
-     "wz": -8.7625,
+     "wz": -16.2625,
      "wx": 0.0
     },
     {
      "elemento": 100192,
      "wy": 0.0,
-     "wz": -18.45,
+     "wz": -25.95,
      "wx": 0.0
     },
     {
      "elemento": 100340,
      "wy": 0.0,
-     "wz": -22.099333,
+     "wz": -28.099333,
      "wx": 0.0
     },
     {
      "elemento": 100194,
      "wy": 0.0,
-     "wz": -9.925,
+     "wz": -17.425,
      "wx": 0.0
     },
     {
      "elemento": 100195,
      "wy": 0.0,
-     "wz": -19.6125,
+     "wz": -27.1125,
      "wx": 0.0
     },
     {
      "elemento": 100341,
      "wy": 0.0,
-     "wz": -27.741333,
+     "wz": -33.741333,
      "wx": 0.0
     },
     {
      "elemento": 100196,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100197,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100344,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100201,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100346,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100204,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100349,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100206,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100207,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100351,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100209,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100210,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100353,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100354,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100212,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100213,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100357,
      "wy": 0.0,
-     "wz": -27.118104,
+     "wz": -33.118104,
      "wx": 0.0
     },
     {
      "elemento": 100215,
      "wy": 0.0,
-     "wz": -9.440625,
+     "wz": -16.940625,
      "wx": 0.0
     },
     {
      "elemento": 100216,
      "wy": 0.0,
-     "wz": -14.38125,
+     "wz": -21.88125,
      "wx": 0.0
     },
     {
      "elemento": 100359,
      "wy": 0.0,
-     "wz": -22.144542,
+     "wz": -28.144542,
      "wx": 0.0
     },
     {
      "elemento": 100218,
      "wy": 0.0,
-     "wz": -9.246875,
+     "wz": -16.746875,
      "wx": 0.0
     },
     {
      "elemento": 100219,
      "wy": 0.0,
-     "wz": -13.99375,
+     "wz": -21.49375,
      "wx": 0.0
     },
     {
      "elemento": 100361,
      "wy": 0.0,
-     "wz": -13.943104,
+     "wz": -19.943104,
      "wx": 0.0
     },
     {
      "elemento": 100186,
      "wy": 0.0,
-     "wz": -23.640562,
+     "wz": -31.140562,
      "wx": 0.0
     },
     {
      "elemento": 100188,
      "wy": 0.0,
-     "wz": -23.640562,
+     "wz": -31.140562,
      "wx": 0.0
     },
     {
      "elemento": 100190,
      "wy": 0.0,
-     "wz": -23.640562,
+     "wz": -31.140562,
      "wx": 0.0
     },
     {
      "elemento": 100335,
      "wy": 0.0,
-     "wz": -23.24375,
+     "wz": -29.24375,
      "wx": 0.0
     },
     {
      "elemento": 100336,
      "wy": 0.0,
-     "wz": -23.24375,
+     "wz": -29.24375,
      "wx": 0.0
     },
     {
      "elemento": 100339,
      "wy": 0.0,
-     "wz": -37.176334,
+     "wz": -43.176334,
      "wx": 0.0
     },
     {
      "elemento": 100193,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100342,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100198,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100345,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100202,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100347,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100205,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100350,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100208,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100352,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100211,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100355,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100356,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100214,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100358,
      "wy": 0.0,
-     "wz": -28.398262,
+     "wz": -34.398262,
      "wx": 0.0
     },
     {
      "elemento": 100217,
      "wy": 0.0,
-     "wz": -9.440625,
+     "wz": -16.940625,
      "wx": 0.0
     },
     {
      "elemento": 100360,
      "wy": 0.0,
-     "wz": -22.652704,
+     "wz": -28.652704,
      "wx": 0.0
     },
     {
      "elemento": 100220,
      "wy": 0.0,
-     "wz": -9.246875,
+     "wz": -16.746875,
      "wx": 0.0
     },
     {
      "elemento": 100362,
      "wy": 0.0,
-     "wz": -14.187026,
+     "wz": -20.187026,
      "wx": 0.0
     },
     {
      "elemento": 100234,
      "wy": 0.0,
-     "wz": -16.594476,
+     "wz": -24.094476,
      "wx": 0.0
     },
     {
      "elemento": 100235,
      "wy": 0.0,
-     "wz": -26.281976,
+     "wz": -33.781976,
      "wx": 0.0
     },
     {
      "elemento": 100238,
      "wy": 0.0,
-     "wz": -26.281976,
+     "wz": -33.781976,
      "wx": 0.0
     },
     {
      "elemento": 100372,
      "wy": 0.0,
-     "wz": -13.498125,
+     "wz": -19.498125,
      "wx": 0.0
     },
     {
      "elemento": 100377,
      "wy": 0.0,
-     "wz": -13.498125,
+     "wz": -19.498125,
      "wx": 0.0
     },
     {
      "elemento": 100221,
      "wy": 0.0,
-     "wz": -22.664062,
+     "wz": -30.164062,
      "wx": 0.0
     },
     {
      "elemento": 100224,
      "wy": 0.0,
-     "wz": -22.664063,
+     "wz": -30.164063,
      "wx": 0.0
     },
     {
      "elemento": 100226,
      "wy": 0.0,
-     "wz": -22.664062,
+     "wz": -30.164062,
      "wx": 0.0
     },
     {
      "elemento": 100222,
      "wy": 0.0,
-     "wz": -41.804625,
+     "wz": -49.304625,
      "wx": 0.0
     },
     {
      "elemento": 100363,
      "wy": 0.0,
-     "wz": -20.53125,
+     "wz": -26.53125,
      "wx": 0.0
     },
     {
      "elemento": 100364,
      "wy": 0.0,
-     "wz": -20.53125,
+     "wz": -26.53125,
      "wx": 0.0
     },
     {
      "elemento": 100367,
      "wy": 0.0,
-     "wz": -33.447917,
+     "wz": -39.447917,
      "wx": 0.0
     },
     {
      "elemento": 100368,
      "wy": 0.0,
-     "wz": -33.447917,
+     "wz": -39.447917,
      "wx": 0.0
     },
     {
      "elemento": 100228,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100229,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100370,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100231,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100232,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100373,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100236,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100375,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100239,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100378,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100241,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100242,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100380,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100244,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100245,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100382,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100383,
      "wy": 0.0,
-     "wz": -31.833333,
+     "wz": -37.833333,
      "wx": 0.0
     },
     {
      "elemento": 100247,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100248,
      "wy": 0.0,
-     "wz": -23.875,
+     "wz": -31.375,
      "wx": 0.0
     },
     {
      "elemento": 100386,
      "wy": 0.0,
-     "wz": -27.118104,
+     "wz": -33.118104,
      "wx": 0.0
     },
     {
      "elemento": 100250,
      "wy": 0.0,
-     "wz": -9.440625,
+     "wz": -16.940625,
      "wx": 0.0
     },
     {
      "elemento": 100251,
      "wy": 0.0,
-     "wz": -14.38125,
+     "wz": -21.88125,
      "wx": 0.0
     },
     {
      "elemento": 100388,
      "wy": 0.0,
-     "wz": -22.144542,
+     "wz": -28.144542,
      "wx": 0.0
     },
     {
      "elemento": 100253,
      "wy": 0.0,
-     "wz": -9.246875,
+     "wz": -16.746875,
      "wx": 0.0
     },
     {
      "elemento": 100254,
      "wy": 0.0,
-     "wz": -13.99375,
+     "wz": -21.49375,
      "wx": 0.0
     },
     {
      "elemento": 100390,
      "wy": 0.0,
-     "wz": -13.943104,
+     "wz": -19.943104,
      "wx": 0.0
     },
     {
      "elemento": 100223,
      "wy": 0.0,
-     "wz": -23.640562,
+     "wz": -31.140562,
      "wx": 0.0
     },
     {
      "elemento": 100225,
      "wy": 0.0,
-     "wz": -23.640562,
+     "wz": -31.140562,
      "wx": 0.0
     },
     {
      "elemento": 100227,
      "wy": 0.0,
-     "wz": -23.640562,
+     "wz": -31.140562,
      "wx": 0.0
     },
     {
      "elemento": 100365,
      "wy": 0.0,
-     "wz": -23.24375,
+     "wz": -29.24375,
      "wx": 0.0
     },
     {
      "elemento": 100366,
      "wy": 0.0,
-     "wz": -23.24375,
+     "wz": -29.24375,
      "wx": 0.0
     },
     {
      "elemento": 100369,
      "wy": 0.0,
-     "wz": -37.176334,
+     "wz": -43.176334,
      "wx": 0.0
     },
     {
      "elemento": 100230,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100371,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100233,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100374,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100237,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100376,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100240,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100379,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100243,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100381,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100246,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100384,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100385,
      "wy": 0.0,
-     "wz": -33.865169,
+     "wz": -39.865169,
      "wx": 0.0
     },
     {
      "elemento": 100249,
      "wy": 0.0,
-     "wz": -14.1875,
+     "wz": -21.6875,
      "wx": 0.0
     },
     {
      "elemento": 100387,
      "wy": 0.0,
-     "wz": -28.398262,
+     "wz": -34.398262,
      "wx": 0.0
     },
     {
      "elemento": 100252,
      "wy": 0.0,
-     "wz": -9.440625,
+     "wz": -16.940625,
      "wx": 0.0
     },
     {
      "elemento": 100389,
      "wy": 0.0,
-     "wz": -22.652704,
+     "wz": -28.652704,
      "wx": 0.0
     },
     {
      "elemento": 100255,
      "wy": 0.0,
-     "wz": -9.246875,
+     "wz": -16.746875,
      "wx": 0.0
     },
     {
      "elemento": 100391,
      "wy": 0.0,
-     "wz": -14.187026,
+     "wz": -20.187026,
      "wx": 0.0
     },
     {
@@ -50081,23 +50081,23 @@
    "cargas_nodales": [
     {
      "nodo": 100714,
-     "fx": 509.9984
+     "fx": 593.6608
     },
     {
      "nodo": 100715,
-     "fx": 665.6146
+     "fx": 794.5019
     },
     {
      "nodo": 100716,
-     "fx": 909.9157
+     "fx": 1104.2185
     },
     {
      "nodo": 100717,
-     "fx": 1451.238
+     "fx": 1768.0778
     },
     {
      "nodo": 100718,
-     "fx": 1656.3674
+     "fx": 2046.2632
     },
     {
      "nodo": 200228,
@@ -50153,23 +50153,23 @@
    "cargas_nodales": [
     {
      "nodo": 100714,
-     "fy": 509.9984
+     "fy": 593.6608
     },
     {
      "nodo": 100715,
-     "fy": 665.6146
+     "fy": 794.5019
     },
     {
      "nodo": 100716,
-     "fy": 909.9157
+     "fy": 1104.2185
     },
     {
      "nodo": 100717,
-     "fy": 1451.238
+     "fy": 1768.0778
     },
     {
      "nodo": 100718,
-     "fy": 1656.3674
+     "fy": 2046.2632
     },
     {
      "nodo": 200228,
