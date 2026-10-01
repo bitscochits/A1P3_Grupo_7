@@ -9,8 +9,9 @@ Qué capturar (el detalle está en `python semana06/precision_ar.py`, bloque [5]
 
 1. **Maqueta, captura de pantalla del iPhone.** Tiene que verse la barra
    con "imagen detectada" y el panel de `elementTag 200037` en
-   `1.2G+1.0Q+1.4EX` con estos valores: P 3702.0 kN, M 510.2 kN·m,
-   Mn 1721.9 kN·m, u 0.296 PASA.
+   `1.2G+1.0Q+1.4EX` con estos valores: P 3701.8 kN, M 507.6 kN·m,
+   Mn 1721.9 kN·m, u 0.295 PASA (los de `python semana06/traza_200037.py`,
+   bloque [5]: si los datos se rehacen, valen los que imprima).
 2. **Focal, con una cinta.** El teléfono de frente a la imagen a 30, 50 y
    80 cm. Anotar lo que dice "pose:" en la tabla de abajo.
 3. **Regla vertical (maqueta).** El techo dibujado de la columna tiene que

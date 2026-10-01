@@ -388,7 +388,7 @@ modelo y el conteo debe cerrar con los rótulos del plano"*. Uno malo:
 |---|---|---|
 | Benchmark, UZ techo bajo G | −0.0635 mm | `benchmark/benchmark_distribuida.py` |
 | LT2, G total | 34 148.98 kN, 232 nodos, 378 elementos | `edificios/lt2/verificar_lt2.py` |
-| Conjunto, G total | 86 749.48 kN = suma de los cuerpos | `comun/calcular.py conjunto` |
+| Conjunto, G total | 97 885.36 kN = 63 736.38 + 34 148.98, la suma de los cuerpos (desde las vigas V 0.60x0.80 de Ingeniería, 29-09) | `comun/calcular.py conjunto` |
 | Cada cuerpo dentro del conjunto = cuerpo solo | 0.00e+00 m en el LT2 | `edificios/conjunto/verificar_conjunto.py` |
 | Losa aplicada = losa dibujada | q constante por piso, 0 barras fuera | `comun/verificar_tributarias.py` |
 | Corte basal = carga lateral | error < 1e-7 relativo | `comun/sismo.py` |
@@ -490,8 +490,8 @@ Todo junto: `python comun/verificar_todo.py`.
   `verificar_semana06.py` (la tabla del §5, con criterio escrito por fila),
   `traza_200037.py` (§4) y `precision_ar.py` (§3). Los tres van en la suite.
 - **Lo que los contrastadores corrigieron:** (1) la u que gobierna en
-  200037 no es la de S3 (0.224) ni la del caso por defecto (0.296): es la de
-  0.9G+1.4EX (0.303). (2) La u crítica de un muro se había tomado de EY solo,
+  200037 no es la de S3 ni la del caso por defecto (0.295 al 01-10): es la de
+  0.9G+1.4EX (0.301). (2) La u crítica de un muro se había tomado de EY solo,
   que no es una combinación de diseño. (3) La 200037 no es "del primer piso":
   es la tercera columna de su eje, del piso 2 según las láminas. Se corrigió
   en `semana06_lab/`. (4) La tabla de P-M muro no puede decir "Whitney =

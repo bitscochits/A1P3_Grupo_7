@@ -9,8 +9,15 @@ El edificio es el **conjunto**: los dos cuerpos del Edificio de Ingeniería
 en un solo modelo, `data/modelo/conjunto.json`, con **558 nodos y 937
 elementos**. Son el antiguo (planos 2017_67, tags 1xxxxx) y el LT2 (planos
 2024_22, tags 2xxxxx), unidos por una junta de dilatación libre de 5 cm. El
-peso propio es G = 86 749.48 kN = 52 600.50 + 34 148.98. El elemento de la
+peso propio es G = 97 885.36 kN = 63 736.38 + 34 148.98. El elemento de la
 AR es la **columna 200037**.
+
+> **Datos al 01-10.** Todos los números ya incluyen el cambio del 29-09 de
+> Pedro (`cce28b9`): las vigas de Ingeniería pasaron a la viga tipo del LT2,
+> V 0.60×0.80, corroborada en el plano 2017_67 y en terreno. Con eso G de
+> Ingeniería subió de 52 600.50 a 63 736.38 kN, los NO PASA del conjunto
+> bajaron de 119 a 105 filas y la columna 200037 casi no cambió (u 0.296 →
+> 0.295 en el caso por defecto).
 
 Dónde está cada cosa:
 
@@ -36,7 +43,7 @@ python semana06\traza_200037.py              # §4: la columna 200037, de la lá
 python semana06\precision_ar.py              # §3: el presupuesto de error del registro
 python semana06_lab\verificar_ar.py          # la app de AR, criterio por criterio (Chrome o Edge)
 python semana06_lab\servir.py                # la app por https en la red local, para el iPhone
-python comun\verificar_todo.py               # la suite: 50 de 52 el 29-09 (§6, error 27)
+python comun\verificar_todo.py               # la suite: 52 de 52 el 01-10 (§6, error 27)
 ```
 
 > **En una línea.** La cadena lámina → modelo → OpenSees → app está
@@ -53,16 +60,15 @@ python comun\verificar_todo.py               # la suite: 50 de 52 el 29-09 (§6,
 > 2. Las líneas 85 y 842-844 ponen el suelo en −4.01 como "provisorio": hoy
 >    está en −7.97 con `provisorio: false`
 >    (`edificios/lt2/perfiles/lt2_2024_22.json`, `terreno`).
-> 3. La línea 777 atribuye dos fallas de la suite a que `StreamingAssets`
->    esté en el conjunto. El motivo preciso es otro: sobre el estado
->    versionado (todo del conjunto), las dos pruebas pasan solas (29-09:
->    "ESTA SANO" y "TODO CALZA"). Dentro de la suite fallan porque la suite
->    copia a `StreamingAssets` los anexos del LT2 pero no su
->    `superposicion.json`, y la carpeta queda mezclada (§6, error 27).
+> 3. La línea 777 dice que dos entradas de la suite fallan con
+>    `StreamingAssets` en el conjunto. Era un problema de estado, no de
+>    cálculo: comparan `StreamingAssets/superposicion.json` con el del LT2.
+>    Desde `d55d276` (Pedro, 29-09) lo versionado vuelve a ser el LT2, y la
+>    suite completa da **52 de 52** (01-10).
 > 4. CLAUDE.md daba la escala de la deformada del conjunto como x83: hoy es
->    **x110** (Ingeniería x78, LT2 x74). La escala la recalcula Python, y
->    cambió con los pilares 0.70×0.70 y las 15 combinaciones. CLAUDE.md ya
->    está corregido.
+>    **x160** (Ingeniería x110, LT2 x74). La escala la recalcula Python, y
+>    cambió con los pilares 0.70×0.70, las 15 combinaciones y las vigas
+>    V 0.60×0.80. CLAUDE.md ya está corregido.
 
 ---
 
@@ -82,7 +88,7 @@ python comun\verificar_todo.py               # la suite: 50 de 52 el 29-09 (§6,
 | **Anchor** | El grupo de three.js que MindAR mueve con esa pose. Tiene el origen en el centro de la imagen, x a la derecha, y hacia arriba de la imagen y z saliendo de ella. **1 unidad = el ancho impreso** (0.20 m). Lo que cuelga del anchor queda pegado a la imagen | `ar.js:363-364` (`mindar.addAnchor(0)`, `anchor.group.add(modelo)`) | [3b]: el centro de la pose cae en el origen del anchor, [0, 0, 0], en los dos modos |
 | **Transform** | La matriz fija que lleva un punto de OpenSees (m) al anchor: `M = S(k)·Rᵀ·T(−c)` (§2). El teléfono la arma con lo que manda Python: el centro `c` de la imagen y sus ejes `R`, **escritos en coordenadas de OpenSees** | `ar.js:44` `matrizModeloAAnchor` = `exportar_ar.py:89` `a_anchor`; la pose de la imagen en el edificio, `exportar_ar.py:138` `pose_del_marcador` | [3a]: ejes ortonormales y derechos, con residuo 0.0e+00. [3b]: la matriz de `ar.js`, corrida en Chrome, es la de Python a 2.8e-14 anchos en los 22 nodos; la columna mide 3.960 m a 1:1 y 7.9 cm a 1:50 |
 | **Elemento** | El sector: 21 barras y 22 nodos alrededor de la columna (las barras con algún extremo a menos de 6 m de su eje, entre −0.05 y 3.91), cada una con **su tag de OpenSees**. La 200037 va en naranjo. Tocar una barra la selecciona por su tag (raycast) | `exportar_ar.py:191` `sector`; `ar.js:369-375` | [1]: los 21 elementos y los 22 nodos tienen el mismo tag, nodos, tipo, sección y coordenadas que `data/modelo/conjunto.json`, y la línea `element elasticBeamColumn <tag> <n1> <n2>` del anexo nombra los mismos |
-| **Resultado** | El panel muestra el caso elegido (hay 15: 4 base y 11 combinaciones): N, V, T y M en los dos extremos, los desplazamientos, la demanda P-M (P, M, Mn y u) y la curva de interacción. En 3D dibuja el diagrama de momento y la deformada (x110). **El teléfono no calcula**: lee `ar.json`, que Python arma a partir del anexo de OpenSees | `ar.js:260` `actualizarPanel`; `web/datos/ar.json` ← `exportar_ar.py` ← `data/unity/semana04.json` ← OpenSees | [2]: 23 024 números de la app son idénticos bit a bit a los del anexo. El §4 compara el anexo con OpenSees resuelto de nuevo |
+| **Resultado** | El panel muestra el caso elegido (hay 15: 4 base y 11 combinaciones): N, V, T y M en los dos extremos, los desplazamientos, la demanda P-M (P, M, Mn y u) y la curva de interacción. En 3D dibuja el diagrama de momento y la deformada (x160). **El teléfono no calcula**: lee `ar.json`, que Python arma a partir del anexo de OpenSees | `ar.js:260` `actualizarPanel`; `web/datos/ar.json` ← `exportar_ar.py` ← `data/unity/semana04.json` ← OpenSees | [2]: 23 024 números de la app son idénticos bit a bit a los del anexo. El §4 compara el anexo con OpenSees resuelto de nuevo |
 
 **Por qué es AR web y no Unity.** Los tres integrantes tienen iPhone y el
 grupo no tiene Mac. AR Foundation con ARKit exige compilar en Xcode, que solo
@@ -351,39 +357,39 @@ del servidor:
 
 | | N | Vy | Vz | T | My | Mz |
 |---|---|---|---|---|---|---|
-| OpenSees, extremo i | 3701.9981 | −49.1098 | −248.8805 | −0.8352 | 501.2024 | −95.3063 |
-| app (`ar.json`), extremo i | 3701.9980 | −49.1098 | −248.8805 | −0.8351 | 501.2023 | −95.3063 |
-| OpenSees, extremo j | −3701.9981 | 49.1098 | 248.8805 | 0.8352 | 484.3642 | −99.1684 |
-| app (`ar.json`), extremo j | −3701.9980 | 49.1098 | 248.8805 | 0.8351 | 484.3643 | −99.1683 |
+| OpenSees, extremo i | 3701.8253 | −49.0182 | −247.5748 | −0.8324 | 498.5698 | −95.1289 |
+| app (`ar.json`), extremo i | 3701.8253 | −49.0181 | −247.5748 | −0.8323 | 498.5698 | −95.1289 |
+| OpenSees, extremo j | −3701.8253 | 49.0182 | 247.5748 | 0.8324 | 481.8266 | −98.9831 |
+| app (`ar.json`), extremo j | −3701.8253 | 49.0181 | 247.5748 | 0.8323 | 481.8266 | −98.9831 |
 
 (Es el vector `localForce` `[N, Vy, Vz, T, My, Mz]` de cada extremo, en kN y
 kN·m.)
 
 - **Casos base G, Q, EX y EY:** la mayor diferencia entre la app y OpenSees
-  es 4.83e-5, bajo la cota de 5e-5 (el servidor escribe 4 decimales).
-- **La combinación:** la mayor diferencia es **1.44e-4 kN·m**, en T. La
+  es 4.95e-5, bajo la cota de 5e-5 (el servidor escribe 4 decimales).
+- **La combinación:** la mayor diferencia es **7.65e-5 kN·m**, en T. La
   cota es 0.5e-4 × (Σ|λ| + 1) = 0.5e-4 × (3.6 + 1) = 2.30e-4: cada caso
   llega redondeado y se multiplica por su factor, y el anexo vuelve a
   redondear la suma.
 - **Linealidad:** la misma combinación corrida como **un solo caso de
-  carga** difiere de la suma en 5.8e-11 kN y 4.3e-16 m. El modelo es
+  carga** difiere de la suma en 1.1e-11 kN y 3.2e-16 m. El modelo es
   lineal, así que la suma del anexo es válida.
 - **Desplazamientos:** la mayor diferencia es 1.17e-8 m, con cota 2.3e-8. El
-  techo se corre ux = 14.15 mm. Entre los dos extremos hay 6.19 mm en
+  techo se corre ux = 14.07 mm. Entre los dos extremos hay 6.15 mm en
   3.96 m, pero con la combinación **mayorada** y la gravedad adentro: **no**
   es la deriva de NCh433.
-- **Demanda:** manda el extremo i. Ahí P = 3701.9981 kN y
-  M = √(501.20² + 95.31²) = 510.1835 kN·m (en j, M = 494.41). La curva de
-  la familia 29 (20 Ø25, E Ø12a10) da Mn(P) = 1721.8827 kN·m, y
-  u = M/Mn = **0.296294**, igual al de la app. PASA.
+- **Demanda:** manda el extremo i. Ahí P = 3701.8253 kN y
+  M = √(498.57² + 95.13²) = 507.5641 kN·m (en j, M = 491.89). La curva de
+  la familia 29 (20 Ø25, E Ø12a10) da Mn(P) = 1721.8685 kN·m, y
+  u = M/Mn = **0.294775**, igual al de la app. PASA.
 - **La combinación que gobierna** entre las 10 mayoradas no es la del caso
-  por defecto: es **0.9G+1.4EX**, con P = 2270.7 kN, M = 476.8 kN·m,
-  Mn = 1573.0 kN·m y **u = 0.303**, que PASA. Con menos axial, la columna
+  por defecto: es **0.9G+1.4EX**, con P = 2270.6 kN, M = 474.2 kN·m,
+  Mn = 1573.0 kN·m y **u = 0.301**, que PASA. Con menos axial, la columna
   queda bajo el balanceado y pierde más Mn de lo que baja M. Mn es
-  **nominal, sin φ**: con φ = 0.65, u = 0.466, y sigue pasando.
+  **nominal, sin φ**: con φ = 0.65, u = 0.464, y sigue pasando.
 - **Junta libre:** `lt2_G.json`, elemento 37, y `conjunto_G.json`, elemento
   200037, dan las mismas 12 fuerzas. El tag 37 también existe en Ingeniería
-  (N = 1399.26 kN, otra columna): por eso el conjunto suma 100 000 y
+  (N = 1743.72 kN, otra columna): por eso el conjunto suma 100 000 y
   200 000.
 
 ### El panel del teléfono
@@ -393,16 +399,17 @@ que reproduce `traza_200037.py` [5]):
 
 ```
 elementTag 200037 · columna lt2:P 0.70x0.70
-N  −3702.0 / −3702.0 · Vy 49.1 / 49.1 · Vz 248.9 / 248.9 · T 0.8 / 0.8 · My −501.2 / 484.4 · Mz 95.3 / −99.2
-u [mm]  7.96 / −0.44 / −3.28  y  14.15 / −0.76 / −4.36
-Demanda (extremo i (inferior))  P 3702.0 kN  M 510.2 kN·m · Mn(P) 1721.9 kN·m · u = M/Mn 0.296 PASA
+N  −3701.8 / −3701.8 · Vy 49.0 / 49.0 · Vz 247.6 / 247.6 · T 0.8 / 0.8 · My −498.6 / 481.8 · Mz 95.1 / −99.0
+u [mm]  7.92 / −0.44 / −3.28  y  14.07 / −0.75 / −4.36
+Demanda (extremo i (inferior))  P 3701.8 kN  M 507.6 kN·m · Mn(P) 1721.9 kN·m · u = M/Mn 0.295 PASA
 element elasticBeamColumn 200037 200062 200103 A=0.4900 E=2.7806e+07 …
 ```
 
 El panel muestra esfuerzos **internos**, con la convención del anexo:
 N = −f₀, así que la compresión sale negativa. P de la demanda es positiva en
-compresión: −3702.0 y 3702.0 son el mismo axial. Son los números de la
-captura del §1, y los de la tabla de arriba redondeados.
+compresión: −3701.8 y 3701.8 son el mismo axial. Son los números de la
+captura del §1 (rehecha el 01-10 con los datos nuevos), y los de la tabla de
+arriba redondeados.
 
 **Dicho de frente.** Está demostrado que el elemento de la lámina, el del
 modelo, el de OpenSees y el de la app son el mismo, con los mismos números.
@@ -424,19 +431,19 @@ El script está en la suite.
 
 | Prueba | Estado | Número | Cómo se comprobó |
 |---|---|---|---|
-| Equilibrio G | **OK** | aplicada −86 749.4804 kN, reacción 86 749.4801 kN: error **3.1e-4 kN** (cota 4.2e-3). G = 86 749.48 = 52 600.50 + 34 148.98, el número de control | `calcular.equilibrio` sobre el G del anexo, resuelto ahora. La cota es 84 apoyos que cuentan en Fz × 0.5e-4 (el redondeo del servidor). Las reacciones se separan por grado de libertad: sumar todas dobla el corte |
-| Equilibrio Q | **OK** | aplicada −20 509.6333 kN, reacción 20 509.6330 kN: error **2.9e-4 kN** (cota 4.2e-3) | Es el Q del anexo, el que muestra Unity: q = 3.0 kN/m² uniforme por área tributaria |
-| Corte basal EX | **OK** | V = **9 700.4297 kN** aplicado, −9 700.4299 kN en los apoyos: error 1.9e-4 (cota 2.25e-3, 45 apoyos fuera de diafragma). V = 0.10 × (86 749.48 + 0.5 × 20 509.63) = 0.10 × 97 004.30 | El peso sísmico se controla por fuera de `armar_casos`: G y Q se suman de sus propios casos. El reparto es el triangular invertido declarado: F_i/(W_i·h_i) = 0.0089177 en los 10 diafragmas (desvío 1.9e-16). Sumar la columna entera de reacciones daría −28 720.52 kN (×2.96) |
-| Corte basal EY | **OK** | 9 700.4297 kN contra −9 700.4300 kN: error 2.9e-4 (cota 2.25e-3) | Igual que EX. Sumar la columna entera daría −22 969.42 kN (×2.37) |
-| Superposición | **OK** | **33 de 33** comparaciones dentro de la cota: 11 combinaciones × desplazamientos, reacciones y fuerzas `localForce`. La peor llega a 1.000 de la cota (1.4G, fuerzas) | `combinar.verificar` en las 11 combinaciones de `semana03/parametros.json`, contra OpenSees resuelto **con la carga combinada**, en todo el modelo (3348 GDL, 564 reacciones y 11 244 fuerzas por combinación). La cota es el redondeo del servidor más la coma flotante, `0.5·10⁻ᵈ(Σ\|λ\|+1) + 4ε·Σ\|λ\|·\|valor\|`. Además: la combinación de 200037 corrida como un caso difiere de la suma en 5.8e-11 (§4); los 15 casos del anexo son la suma de los base (`verificar_semana04.py conjunto` [2] y [3], en la suite); los sliders de Unity dan lo de Python (`verificar_instantanea.py conjunto`: E3 = 29.6700 mm y NO PASA 10/207, iguales) |
+| Equilibrio G | **OK** | aplicada −97 885.3604 kN, reacción 97 885.3605 kN: error **8.6e-5 kN** (cota 4.2e-3). G = 97 885.36 = 63 736.38 + 34 148.98: cada cuerpo calculado desde su propio modelo, y los tres son los números de control que el script lee de CLAUDE.md | `calcular.equilibrio` sobre el G del anexo, resuelto ahora. La cota es 84 apoyos que cuentan en Fz × 0.5e-4 (el redondeo del servidor). Las reacciones se separan por grado de libertad: sumar todas dobla el corte |
+| Equilibrio Q | **OK** | aplicada −20 509.6333 kN, reacción 20 509.6332 kN: error **9.0e-5 kN** (cota 4.2e-3) | Es el Q del anexo, el que muestra Unity: q = 3.0 kN/m² uniforme por área tributaria |
+| Corte basal EX | **OK** | V = **10 814.0177 kN** aplicado, −10 814.0177 kN en los apoyos: error 5.9e-6 (cota 2.25e-3, 45 apoyos fuera de diafragma). V = 0.10 × (97 885.36 + 0.5 × 20 509.63) = 0.10 × 108 140.18 | El peso sísmico se controla por fuera de `armar_casos`: G y Q se suman de sus propios casos. El reparto es el triangular invertido declarado: F_i/(W_i·h_i) = 0.0088636 en los 10 diafragmas (desvío 2.0e-16). Sumar la columna entera de reacciones daría −31 474.95 kN (×2.91) |
+| Corte basal EY | **OK** | 10 814.0177 kN contra −10 814.0174 kN: error 3.1e-4 (cota 2.25e-3) | Igual que EX. Sumar la columna entera daría −25 717.39 kN (×2.38) |
+| Superposición | **OK** | **33 de 33** comparaciones dentro de la cota: 11 combinaciones × desplazamientos, reacciones y fuerzas `localForce`. La peor llega a 1.000 de la cota (1.4G, fuerzas) | `combinar.verificar` en las 11 combinaciones de `semana03/parametros.json`, contra OpenSees resuelto **con la carga combinada**, en todo el modelo (3348 GDL, 564 reacciones y 11 244 fuerzas por combinación). La cota es el redondeo del servidor más la coma flotante, `0.5·10⁻ᵈ(Σ\|λ\|+1) + 4ε·Σ\|λ\|·\|valor\|`. Además: la combinación de 200037 corrida como un caso difiere de la suma en 1.1e-11 (§4); los 15 casos del anexo son la suma de los base (`verificar_semana04.py conjunto` [2] y [3], en la suite); y los sliders de Unity combinan como Python (`verificar_instantanea.py`, en la suite con el LT2; el registro del conjunto de `semana05_lab/capturas_conjunto/` es anterior al cambio de vigas y no se usa) |
 | M-phi | **OK** | columna 200037 a P = 0: Mn (hormigón a 0.003) = **1190.2** kN·m contra Whitney a mano 1194.6 (**0.37 %**). La rigidez fisurada de la curva es 201 835 kN·m² y Ec·I_cr a mano 202 176 (0.17 %). M_max 1549.1 kN·m en φ = 0.2027 1/m; ductilidad de curvatura 43 | Criterio: fibras contra cálculo a mano ≤ 2 %. Ese umbral detecta un diámetro menos: con Ø22, Whitney baja 20.5 %. El mallado de 20 contra 40 fibras da 0.22 %, dentro del < 0.5 % que declara `capacidad.py`. La curva la corta el acero en εsu = 0.10 (supuesto A630-420H), no el análisis |
-| P-M columna | **OK** | tracción pura −4123.3 = −As·fy (exacta); flexión pura, fibras contra Whitney **0.37 %**; balanceado (P = 6232 kN), fibras 1751.7 bajo Whitney 2025.9 (15.7 %, del lado seguro). Gobierna 0.9G+1.4EX con **u = 0.303**, PASA | La curva del anexo (familia 29, 12 puntos) coincide con `capacidad.interaccion` a 4.2e-5. La u de los 15 casos, rehecha con `demanda_capacidad` sobre los esfuerzos del anexo, coincide con la guardada (peor 4.7e-7). En el balanceado, sin confinar da 1901.6 (6.5 %): el confinamiento explica cerca de la mitad de la diferencia |
-| P-M muro | **PARCIAL** | 100537 (antiguo, 0.30×16.85, My): u = **0.514** en 0.9G−1.4EY. 200009 (LT2, 0.25×7.95, Mz): u = **0.667** en 0.9G+1.4EY. Los dos PASAN | **Cierra:** tracción pura exacta; el momento del plano, elegido por inercias, es el grande (en EY, 26 796.5 contra 19.7 kN·m fuera del plano); la curva del anexo es `capacidad.interaccion`; la u rehecha es la del anexo; y con las mismas hipótesis (mismo sentido, sin endurecimiento y 40 fibras) fibras = Whitney al 0.19 % y 0.38 %. **Abierto, y medido:** (1) 20 fibras no alcanzan en un muro largo: a P = 0, Mn sale 4.3 % (100537) y 2.2 % (200009) sobre el de 40 fibras. Con 40, las u que gobiernan pasan a 0.525 y 0.671, y ninguna cambia de PASA a NO PASA. (2) Cerca de P = 0 la curva incluye el endurecimiento de Steel01 (+15.6 % y +11.6 %): no es el Mn nominal de ACI. Por eso `verificar_rc.py` imprime −16.4 % en 100537 |
+| P-M columna | **OK** | tracción pura −4123.3 = −As·fy (exacta); flexión pura, fibras contra Whitney **0.37 %**; balanceado (P = 6232 kN), fibras 1751.7 bajo Whitney 2025.9 (15.7 %, del lado seguro). Gobierna 0.9G+1.4EX con **u = 0.301**, PASA | La curva del anexo (familia 29, 12 puntos) coincide con `capacidad.interaccion` a 4.2e-5. La u de los 15 casos, rehecha con `demanda_capacidad` sobre los esfuerzos del anexo, coincide con la guardada (peor 3.5e-7). En el balanceado, sin confinar da 1901.6 (6.5 %): el confinamiento explica cerca de la mitad de la diferencia |
+| P-M muro | **PARCIAL** | 100537 (antiguo, 0.30×16.85, My): u = **0.577** en 0.9G−1.4EY. 200009 (LT2, 0.25×7.95, Mz): u = **0.662** en 0.9G+1.4EY. Los dos PASAN | **Cierra:** tracción pura exacta; el momento del plano, elegido por inercias, es el grande (en EY, 31 162.9 contra 19.7 kN·m fuera del plano); la curva del anexo es `capacidad.interaccion`; la u rehecha es la del anexo; y con las mismas hipótesis (mismo sentido, sin endurecimiento y 40 fibras) fibras = Whitney al 0.19 % y 0.38 %. **Abierto, y medido:** (1) 20 fibras no alcanzan en un muro largo: a P = 0, Mn sale 4.3 % (100537) y 2.2 % (200009) sobre el de 40 fibras. Con 40, las u que gobiernan pasan a 0.589 y 0.667, y ninguna cambia de PASA a NO PASA. (2) Cerca de P = 0 la curva incluye el endurecimiento de Steel01 (+15.6 % y +11.6 %): no es el Mn nominal de ACI. Por eso `verificar_rc.py` imprime −16.4 % en 100537 |
 | IDs Unity | **OK** | 558 nodos y 937 elementos con el **mismo tag** en el modelo, el visor, el anexo y el GameObject: `Elem_200037_columna` = `element elasticBeamColumn 200037 200062 200103` | `comun/test_contrato_unity.py conjunto`: "EL CONTRATO JSON <-> UNITY ESTA SANO", con 96 de 96 muros iguales a su cuerpo de origen. Hay 0 diferencias de tag, nodos, tipo, sección y coordenadas entre `data/modelo/conjunto.json` y `data/unity/conjunto.json`. El nombre del GameObject sale de `VisorEstructura.cs:507` |
 | AR | **PARCIAL** | la app coincide con OpenSees bit a bit (23 024 números); la matriz de `ar.js` con la de Python a 2.8e-14; el tracking sintético da 0.6–2.6 mm y ≤ 1.1°. **No se probó en un iPhone** | `semana06_lab/verificar_ar.py` [1] a [4] (§1 y §2). La fila pasa sola a OK cuando hay una captura del teléfono en `semana06/evidencia/iphone/` |
 
 **Dos cortes basales, y por qué.** `python comun/sismo.py conjunto`
-informa 8 826.20 kN, no 9 700.43. Lee el EX guardado en `data/modelo/`, que
+informa 9 939.79 kN, no 10 814.02. Lee el EX guardado en `data/modelo/`, que
 arma cada cuerpo con **su** peso sísmico. Ese caso también cierra (error
 1.0e-5 kN). La diferencia, 874.23 kN, se explica completa:
 
@@ -447,7 +454,7 @@ arma cada cuerpo con **su** peso sísmico. Ese caso también cierra (error
 - −101.15 kN por la fórmula propia de Ingeniería.
 
 Unity y la app muestran el del anexo. Los desplazamientos máximos lo
-confirman: el EX del anexo da 17.7229 mm, y el del modelo 16.5068. Que haya
+confirman: el EX del anexo da 17.6154 mm, y el del modelo 16.5068. Que haya
 dos definiciones del peso sísmico es un error conocido (§6, 14).
 
 ---
@@ -467,7 +474,7 @@ P-M) y se volvieron a contar el 29-09.
 | 2 | **Fierro de muros del LT2 incompleto o mal leído.** El extractor lee CANT y no NUM: 181 barras de borde donde el plano da 411. De esas 181 asignaciones, 66 no son del muro (36 de dintel y 30 de la elevación perpendicular). 23 muros tienen barras recortadas contra la cara y 24 tienen el grupo descentrado | sí: Mn del LT2 hasta +97 % | `semana05/QUE_REVISAR.md` | pasar a NUM, sacar las barras ajenas y corregir el marco de `s` (H3). No se midió cuántos NO PASA arreglaría |
 | 3 | **Sin φ y sin chequeo de corte.** u = M/Mn compara la demanda mayorada con la capacidad **nominal**. No hay Vn: la app muestra Vz = 248.9 kN en 200037 y nada lo compara | sí, en contra (u sube) | `git grep capacidad_corte` no encuentra código | H2 |
 | 4 | **Cs = 0.10 sin R, I ni corte mínimo.** Es un valor de trabajo declarado (`semana03/parametros.json`). Escala todo el sismo, y con él todos los NO PASA | sí | declarado como supuesto; `--cs` lo cambia sin tocar código | el valor del profesor; H5 |
-| 5 | **NO PASA en el mapa D/C: 119 de 3105 filas, en 32 de 207 elementos.** 27 de esas filas vienen de EX, EY y S3, que no son combinaciones de diseño. En las 10 mayoradas quedan 92 de 2070, en los mismos 32 elementos: 78 son una pata de núcleo comprimido revisada sola contra su propio As·fy y 14 no son pata. **Todas dependen del sismo**: en G, Q, 1.4G y 1.2G+1.6Q no falla nada. Sin explicación quedan 7 elementos: 200014 y 200015 (u 1.72 y 2.13, en tracción con −1.4EX), 200030 y 200031, 100465, y las columnas 100042 y 100043 | sí | recontado sobre el anexo del conjunto; `QUE_REVISAR.md` | el núcleo como sección compuesta (H1) y el fierro de muros (2) |
+| 5 | **NO PASA en el mapa D/C: 105 de 3105 filas, en 34 de 207 elementos** (eran 119 antes de las vigas V 0.60×0.80). 21 de esas filas vienen de EX, EY y S3, que no son combinaciones de diseño. En las 10 mayoradas quedan 84 de 2070, en los mismos 34 elementos: 69 son una pata de núcleo comprimido revisada sola contra su propio As·fy y 15 no son pata. **Todas dependen del sismo**: en G, Q, 1.4G y 1.2G+1.6Q no falla nada. Sin explicación quedan 8 elementos: 200014 y 200015 (u 1.69 y 2.09, en tracción con 0.9G−1.4EX), 200030 (1.07), 100465 (1.37), las columnas 100042 y 100043 (§6, 10), y 100041 y 100464, que pasan apenas el 1 (1.007 y 1.018) | sí | recontado sobre el anexo del conjunto; `QUE_REVISAR.md` | el núcleo como sección compuesta (H1) y el fierro de muros (2) |
 
 ### Impacto medio
 
@@ -477,11 +484,11 @@ P-M) y se volvieron a contar el 29-09.
 | 7 | **El error de pose se midió con la cámara ideal de MindAR** (video sintético de 45°): es una cota inferior. La focal real del iPhone no está verificada, y en maqueta pesa 2.5 a 4 veces el resto (§3) | no (presentación) | `precision_ar.py` [4], simulado con un FOV supuesto | la prueba de la cinta (N2) |
 | 8 | **Registro vertical en sitio: 5 a 10 cm, y la columna por confirmar.** −0.05 es un nivel de losa, no el piso terminado. La 200037 es la del piso 2 según las láminas; el LAB decía "primer piso" (corregido) | no | §3 | medir Δ en obra y confirmar la columna (N2) |
 | 9 | **Torsión en EY.** `sismo.py conjunto --detalle` marca torsión EXTREMA en 8 de los 9 pisos que se mueven. En el LT2, u_max/u_prom = 1.70 en los cinco pisos, idéntico corriendo el LT2 solo; el giro explica el 80 % del desplazamiento del borde. Es la planta, no un error: la rigidez en Y está cargada a un lado. Pero el sismo se aplica en el nodo maestro, sin torsión accidental (NCh433), y `sismo.py` calcula **un** centro de rigidez para dos cuerpos independientes | sí | salida de `sismo.py conjunto --detalle` | H5 |
-| 10 | **Nudo colgado de la parrilla de Ingeniería (43.02, 55.20).** 100042 y 100043 fallan en todas las combinaciones con EY (peor u 1.198 y 1.149). Hay unos 19 mm de diferencia de flecha entre el nudo y sus columnas | sí | `QUE_REVISAR.md` | mirarlo en el plano 2017_67: puede faltar un pilar |
-| 11 | **u = 9999 en 28 filas de 11 elementos** (la P cae fuera de la curva). 25 son pata de núcleo comprimido y 3 de uno traccionado; ningún elemento aislado cae fuera. 19 de las 28 están en combinaciones de diseño | sí | recontado; CLAUDE.md §6 explica por qué no se densifica la curva | H1 |
-| 12 | **Mallado de 20 fibras en muros largos** (+4.3 % y +2.2 % de Mn a P = 0) y **endurecimiento de Steel01** en el Mn cerca de P = 0 (+15.6 % y +11.6 %) | sí, poco: u 0.514 → 0.525 y 0.667 → 0.671 | la fila P-M muro del §5 lo mide | escalar las fibras con el largo del muro; nominal sin endurecimiento |
+| 10 | **Nudo colgado de la parrilla de Ingeniería (43.02, 55.20).** 100042 y 100043 fallan en 3 de las 4 combinaciones mayoradas con EY (peor u 1.153 y 1.067; eran 1.198 y 1.149 antes de las vigas nuevas). Ninguna falla es de gravedad sola | sí | `QUE_REVISAR.md` | mirarlo en el plano 2017_67: puede faltar un pilar |
+| 11 | **u = 9999 en 22 filas de 9 elementos** (la P cae fuera de la curva). 20 son pata de núcleo comprimido y 2 de uno traccionado; ningún elemento aislado cae fuera. 17 de las 22 están en combinaciones de diseño | sí | recontado; CLAUDE.md §6 explica por qué no se densifica la curva | H1 |
+| 12 | **Mallado de 20 fibras en muros largos** (+4.3 % y +2.2 % de Mn a P = 0) y **endurecimiento de Steel01** en el Mn cerca de P = 0 (+15.6 % y +11.6 %) | sí, poco: u 0.577 → 0.589 y 0.662 → 0.667 | la fila P-M muro del §5 lo mide | escalar las fibras con el largo del muro; nominal sin endurecimiento |
 | 13 | **Inercia bruta sin fisurar.** En 200037, Ec·I_cr/Ec·Ig = 201 835/556 343 = 0.36. Los desplazamientos quedan del lado bajo | sí | §5 M-phi; `semana04/trazabilidad.py` | factores de fisuración (decisión de grupo) |
-| 14 | **Dos definiciones del peso sísmico** (anexo 9700.43 y modelo 8826.20, §5). El anexo cuenta los 2 339.27 kN aplicados directo sobre los apoyos (+233.93 kN de corte, +2.4 %). Un solo patrón para los dos cuerpos le pasa +82.94 kN (+2.2 %) al LT2. El equilibrio no lo ve, porque el total cierra | sí, poco | explicado al redondeo | una sola definición, con W por cuerpo (H5) |
+| 14 | **Dos definiciones del peso sísmico** (anexo 10 814.02 y modelo 9 939.79, §5). El anexo cuenta los 2 339.27 kN aplicados directo sobre los apoyos (+233.93 kN de corte, +2.2 %). Un solo patrón para los dos cuerpos le pasa al LT2 +59.44 kN (+1.6 %) sobre su propio Cs·W (3 851.72 contra 3 792.28): +125.30 por el patrón común y −65.86 por el desempate de niveles. Para la 200037 eso es +2.1 % de My sísmico (u 0.295 contra 0.290 con el LT2 solo, medido por Pedro). El equilibrio no lo ve, porque el total cierra | sí, poco | explicado al redondeo | una sola definición, con W por cuerpo (H5) |
 | 15 | **Losa colaborante: la regla está escrita, pero no conectada.** Iz sube ×1.39 en el LT2 y ×1.81 en Ingeniería (medianas). Las vigas quedan más flexibles | sí | `comun/losa_colaborante.py` en la suite | H4 |
 | 16 | **El reanálisis en vivo usa otra Q y otro sismo que el anexo.** Solo G coincide (LT2: Q −11 361.00 contra −7 547.68 kN) | sí, en vivo | `reports/semana05.md`, limitaciones | una sola Q (la del anexo) en `/analizar` |
 | 17 | **La columna se revisa con el momento resultante** √(My² + Mz²) contra una curva uniaxial. Es una aproximación biaxial; en 200037 el momento está a 10.8° del eje principal | poco | declarado en `demanda_capacidad.demanda` | superficie biaxial (Bresler o fibras a 45°) |
@@ -499,7 +506,7 @@ P-M) y se volvieron a contar el 29-09.
 | 24 | Losas de dibujo: 536.94 m² contra 504.66 del campo `area` (LT2) | solo dibujo | cuadrarlas (P5) |
 | 25 | 462 áreas tributarias de Ingeniería sin qG, w ni luz (PEND del contrato) | el equilibrio de G cierra igual | P6 |
 | 26 | La AR va por https con un certificado autofirmado (Safari avisa), y el visor tiene HTTP abierto (`ConstruirApp.cs:202`). `verificar_ar.py` necesita Chrome o Edge y Pillow, que no está en `requirements.txt` | sirve en la red local; el README del LAB ya nombra el verificador y el aviso del firewall | GitHub Pages (P3) |
-| 27 | **La suite completa da 50 de 52** (29-09). Fallan "superposicion s5 lt2" y "contrato JSON-C# s5" porque la suite copia a `StreamingAssets` los anexos del LT2 y no su `superposicion.json`: la carpeta queda mezclada, y esas dos pruebas lo detectan. Es un problema de estado, no de cálculo: solas y sobre el estado versionado, las dos pasan. La suite también deja `data/unity/semana03.json` y `semana04.json` en el LT2, y hay que restaurarlos antes de la demo (`git checkout` o `lanzar_unity.py sincronizar conjunto`) | los scripts de la AR y de la S6 arman el anexo del conjunto en memoria si hace falta. `lanzar_unity.py sincronizar lt2` arreglaría la mezcla, pero también copia a las carpetas del build y cambiaría la demo del teléfono | que la suite copie `superposicion_lt2.json` solo a `unity/Assets/StreamingAssets` (P7) |
+| 27 | **La suite escribe archivos versionados.** Da 52 de 52 (01-10), pero deja `StreamingAssets/modelo_unity_edificio.json` con el modelo de **Ingeniería** (lo escribe `edificios/ingenieria/export_unity.py`, llamado por `benchmark_3d.py`) mientras los anexos quedan en el LT2, y reescribe los tiempos de `semana05/evidencia/superposicion_*.json`. Hasta el 29-09, con lo versionado en el conjunto, eso hacía fallar 2 entradas de la S5 (50 de 52) | se restaura con `git checkout` (lo que se hizo el 01-10) o con `lanzar_unity.py preparar <edificio>` antes de una demo. Los scripts de la AR y de la S6 arman el anexo del conjunto en memoria si en disco hay otro | que la suite no deje `StreamingAssets` mezclado (P7) |
 | 28 | Modificación: 4 de 6 tipos (faltan material y área tributaria); la carga móvil (SQ4) no sigue al usuario | el enunciado pedía al menos 2 | H6 |
 | 29 | `verificar_rc.py` no tiene criterio de pasa/falla, y su docstring dice 11.5 % (de antes del espejo) | `verificar_semana06.py` le pone criterio a la comparación | actualizar el docstring |
 
@@ -514,9 +521,9 @@ estimadas, no medidas.
 
 | # | tarea | quién | horas | hecho cuando |
 |---|---|---|---|---|
-| N1 | **AR en un iPhone real**, en maqueta y en sitio, con `servir.py` y Safari. Si Safari no acepta el certificado, el plan B es GitHub Pages | Eduardo | 3–5 | hay una captura **del teléfono** en `semana06/evidencia/iphone/` con "imagen detectada" y el panel de 200037 en `1.2G+1.0Q+1.4EX`: P 3702.0, M 510.2, Mn 1721.9 y u 0.296 PASA. Con eso `verificar_semana06.py` pone la fila AR en OK. Otro integrante lo reproduce siguiendo `GUION_DEMO.md` |
+| N1 | **AR en un iPhone real**, en maqueta y en sitio, con `servir.py` y Safari. Si Safari no acepta el certificado, el plan B es GitHub Pages | Eduardo | 3–5 | hay una captura **del teléfono** en `semana06/evidencia/iphone/` con "imagen detectada" y el panel de 200037 en `1.2G+1.0Q+1.4EX`: P 3701.8, M 507.6, Mn 1721.9 y u 0.295 PASA. Con eso `verificar_semana06.py` pone la fila AR en OK. Otro integrante lo reproduce siguiendo `GUION_DEMO.md` |
 | N2 | **Medir el error real**: la prueba de la cinta (focal) a 30, 50 y 80 cm; la regla vertical en maqueta; y en sitio, la columna confirmada y el desnivel entre la base dibujada y el piso | Eduardo y Monse | 2 | la tabla de `evidencia/iphone/LEEME.md` está llena y el §3 tiene el error medido en cm y grados |
-| N3 | **Suite completa** (hoy 50 de 52, §6 error 27) y restaurar los anexos del conjunto | Pedro | 1 | 52 de 52, o las dos fallas de estado arregladas (P7), con fecha y hash, y `git status` limpio |
+| N3 | **Suite completa** otra vez después de N1 (el 01-10 dio 52 de 52) y restaurar lo que deja escrito (§6, 27) | Pedro | 1 | 52 de 52 con fecha y hash, y `git status` limpio |
 | N4 | **Revisar la tabla del §5** contra `evidencia/qa_semana06.md` regenerada después de N1 | Monse | 1 | las diez filas con estado, número y comando, y la fila AR en OK |
 | N5 | **Repasar el §6** con el grupo: que cada uno pueda explicar los errores 1 a 5 | los tres | 2 | cada integrante responde "¿por qué hay NO PASA?" y "¿qué error tiene la AR?" |
 | N6 | **Llevar `semana06` a `main`** y dejar el hash en Canvas | Eduardo | 0.5 | `git rev-list --count origin/main..semana06` = 0 |
@@ -540,7 +547,7 @@ estimadas, no medidas.
 | H1 | El núcleo como **sección compuesta** de fibras, biaxial | Pedro | 8–16 | reevalúa las 78 filas de pata comprimida y las 25 con u = 9999 |
 | H2 | **φ(εt)** desde la corrida de fibras y **Vn** de muros y columnas (ACI 318-08) | Monse y Pedro | 8–12 | el D/C de diseño, no el nominal |
 | H3 | El fierro de muros del LT2 bien leído (NUM, sin barras ajenas, `s` en el marco del muro) y los 11 sin curva | Pedro | 8–12 | de 207 a 218 elementos con demanda |
-| H4 | La losa colaborante conectada en los dos cuerpos | Pedro y Eduardo | 8–12 | G sigue en 86 749.48 kN y las vigas ganan rigidez |
+| H4 | La losa colaborante conectada en los dos cuerpos | Pedro y Eduardo | 8–12 | G sigue en 97 885.36 kN y las vigas ganan rigidez |
 | H5 | El sismo con R e I de NCh433, la fuerza en el centro de masa, la torsión accidental y un W por cuerpo | Pedro | 4–8 | una sola definición del peso sísmico |
 | H6 | La carga móvil que sigue al usuario (SQ4) | Eduardo | 8–12 | ΣRz = P en cada posición |
 | H7 | **Pushover** no lineal | Monse y Pedro | 20–40 | la rama elástica igual a la rigidez lineal |

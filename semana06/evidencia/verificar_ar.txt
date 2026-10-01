@@ -2,7 +2,7 @@
   LA APP DE AR, CRITERIO POR CRITERIO
 ==============================================================================
   app       semana06_lab\web\datos\ar.json (conjunto, elemento 200037, 21 elementos)
-  anexo     data\unity\semana04.json
+  anexo     semana04/exportar_unity.construir_anexo('conjunto') en memoria (el de disco era lt2)
 
 [1] ELEMENTO / ID: los tags de la app son los de OpenSees
 ---------------------------------------------------------
@@ -14,7 +14,7 @@
 ------------------------------------------------------------------
   [OK  ] los 15 casos del anexo, en el mismo orden
   [OK  ] 23024 numeros (esfuerzos, desplazamientos, demandas y curvas P-M) identicos al anexo, bit a bit
-         ej.: 200037 en 1.2G+1.0Q+1.4EX: P = 3702.0 kN, M = 510.2 kN m, Mn = 1721.9 kN m, u = 0.296, PASA
+         ej.: 200037 en 1.2G+1.0Q+1.4EX: P = 3701.8 kN, M = 507.6 kN m, Mn = 1721.9 kN m, u = 0.295, PASA
 
 [3a] REGISTRO: la pose del marcador en el modelo
 ------------------------------------------------
@@ -38,13 +38,13 @@
 
 [4] IMAGE TRACKING: video sintetico con pose conocida -> la pose que estima la app
 ------------------------------------------------------------------------------
-  [OK  ] d = 0.45 m, inclinacion 0, giro 0: la app DETECTA la imagen (7 poses publicadas)
+  [OK  ] d = 0.45 m, inclinacion 0, giro 0: la app DETECTA la imagen (8 poses publicadas)
   [OK  ] d = 0.45 m, inclinacion 0, giro 0: distancia estimada 0.451 m (verdad 0.450, error 1.1 mm, cota 5.2 mm; la imagen ocupa 258 px)
   [OK  ] d = 0.45 m, inclinacion 0, giro 0: inclinacion estimada 1.1 deg (verdad 0) y los tres ejes a 1.1 deg de los verdaderos (cota 2.7 deg)
-  [OK  ] d = 0.55 m, inclinacion 30, giro 0: la app DETECTA la imagen (6 poses publicadas)
+  [OK  ] d = 0.55 m, inclinacion 30, giro 0: la app DETECTA la imagen (8 poses publicadas)
   [OK  ] d = 0.55 m, inclinacion 30, giro 0: distancia estimada 0.551 m (verdad 0.550, error 0.6 mm, cota 7.8 mm; la imagen ocupa 211 px)
   [OK  ] d = 0.55 m, inclinacion 30, giro 0: inclinacion estimada 29.8 deg (verdad 30) y los tres ejes a 0.7 deg de los verdaderos (cota 3.3 deg)
-  [OK  ] d = 0.60 m, inclinacion 40, giro 20: la app DETECTA la imagen (6 poses publicadas)
+  [OK  ] d = 0.60 m, inclinacion 40, giro 20: la app DETECTA la imagen (8 poses publicadas)
   [OK  ] d = 0.60 m, inclinacion 40, giro 20: distancia estimada 0.597 m (verdad 0.600, error 2.6 mm, cota 9.3 mm; la imagen ocupa 193 px)
   [OK  ] d = 0.60 m, inclinacion 40, giro 20: inclinacion estimada 40.6 deg (verdad 40) y los tres ejes a 0.9 deg de los verdaderos (cota 3.6 deg)
 

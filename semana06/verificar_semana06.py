@@ -50,6 +50,7 @@ import io
 import json
 import math
 import os
+import re
 import subprocess
 import sys
 import time
@@ -101,9 +102,11 @@ R_KN = 0.5e-4
 # calcular.equilibrio devuelve error_kN redondeado a 8 decimales.
 R_EQ = 0.5e-8
 
-# Numeros de control de CLAUDE.md, seccion 8, escritos con 2 decimales.
-G_CONTROL = 86749.48
-G_CUERPOS = (52600.50, 34148.98)
+# Los numeros de control viven en CLAUDE.md, seccion 8, con 2 decimales. Se
+# leen de ahi y no se copian: cuando cambia una seccion (las vigas de
+# Ingenieria, el 29-09) cambian ahi, y una copia aca quedaria vieja.
+CLAUDE = os.path.join(rutas.RAIZ, 'CLAUDE.md')
+CONTROL = {'lt2': 'LT2', 'ingenieria': 'Ingeniería', 'conjunto': 'conjunto'}
 
 # Whitney y las fibras no son el mismo modelo (bloque rectangular contra
 # la parabola de Concrete01 con Mander), asi que no coinciden al
@@ -220,6 +223,25 @@ def contexto():
 # ============================================================
 # EQUILIBRIO G Y Q
 # ============================================================
+def numeros_de_control():
+    """{edificio: G} de la seccion 8 de CLAUDE.md ('LT2 `G = 34 148.98 kN`')."""
+    with io.open(CLAUDE, encoding='utf-8') as fh:
+        texto = fh.read()
+    control = {}
+    for ed, rotulo in CONTROL.items():
+        m = re.search(r'%s `G = ([\d ]+\.\d+) kN`' % rotulo, texto)
+        if not m:
+            raise SystemExit('CLAUDE.md no tiene el numero de control de G de %s' % rotulo)
+        control[ed] = float(m.group(1).replace(' ', ''))
+    return control
+
+
+def caso_g(edificio):
+    """El caso G guardado en el modelo de un cuerpo."""
+    modelo = contrato.cargar_modelo(edificio)
+    return next(c for c in modelo['casos_de_carga'] if c['nombre'] == 'G')
+
+
 def fila_equilibrio(ctx, nombre):
     f = Fila('Equilibrio %s' % nombre, 'python semana06/verificar_semana06.py')
     modelo, caso, res = ctx['modelo'], ctx['casos'][nombre], ctx['res'][nombre]
@@ -235,9 +257,18 @@ def fila_equilibrio(ctx, nombre):
             'en x e y: error %.1e / %.1e kN (cotas %.1e / %.1e)'
             % (abs(e[0]), abs(e[1]), cota[0], cota[1]))
     if nombre == 'G':
-        f.check(abs(-a[2] - G_CONTROL) <= 0.005,
-                'G = %.2f kN = numero de control de CLAUDE.md (%.2f = %.2f + %.2f)'
-                % (-a[2], G_CONTROL, G_CUERPOS[0], G_CUERPOS[1]))
+        # El conjunto es la suma de sus cuerpos: el G de cada uno sale de su
+        # propio modelo, y los tres tienen que ser el numero de control.
+        control = numeros_de_control()
+        g = {ed: -calcular.equilibrio(contrato.cargar_modelo(ed), caso_g(ed),
+                                      {'reacciones': []})['aplicada_kN'][2]
+             for ed in ('lt2', 'ingenieria')}
+        g['conjunto'] = -a[2]
+        f.check(all(abs(g[ed] - control[ed]) <= 0.005 for ed in g)
+                and abs(g['conjunto'] - g['lt2'] - g['ingenieria']) <= 0.005,
+                'G = %.2f kN = %.2f (Ingenieria) + %.2f (LT2), cada cuerpo desde su propio '
+                'modelo; los tres son los numeros de control de CLAUDE.md'
+                % (g['conjunto'], g['ingenieria'], g['lt2']))
     else:
         f.info('Q del anexo: q = %.1f kN/m2 uniforme por area tributaria '
                '(semana03/parametros.json), el que muestra Unity' % ctx['p']['q_Q'])

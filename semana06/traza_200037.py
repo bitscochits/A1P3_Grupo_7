@@ -294,7 +294,7 @@ def panel(ar, nombre, app):
           % (app['extremo'], app['P'], app['M'], app['Mn'], app['u'], 'PASA' if app['pasa'] else 'NO PASA'))
     print('    %s' % e['tag_opensees'])
     print('  (esfuerzos internos del anexo: N = -f[0], asi que la compresion sale negativa en el panel')
-    print('   y positiva como P de la demanda: -3702.0 y 3702.0 son el mismo axial)')
+    print('   y positiva como P de la demanda: %.1f y %.1f son el mismo axial)' % (s['N'][0], app['P']))
 
 
 def junta(inf):
