@@ -1,0 +1,83 @@
+==============================================================================
+  SEMANA 6: PRECISION DEL REGISTRO DE LA AR (estimacion simple)
+==============================================================================
+  app       semana06_lab/web/datos/ar.json (conjunto, elemento 200037, 22 nodos)
+  tracking  semana06/evidencia/verificar_ar.txt, bloque [4]: VIDEO SINTETICO con la camara que supone MindAR,
+            a 0.45 m: distancia 0.451 m (error 1.1 mm), ejes a 1.1 grados, imagen de 258 px
+            a 0.55 m: distancia 0.551 m (error 0.6 mm), ejes a 0.7 grados, imagen de 211 px
+            a 0.60 m: distancia 0.597 m (error 2.6 mm), ejes a 0.9 grados, imagen de 193 px
+            -> se usa el peor: 1.1 grados y 0.43 % de la distancia
+
+[1] BRAZO, SITIO (escala 1): distancia al centro de la imagen, dibujada
+-----------------------------------------------------------------------
+  nodo 200062 (base de la columna): q = (0.000, -1.400, -0.350) m, |q| = 1.4431 m
+  nodo 200103 (techo de la columna): q = (0.000, 2.560, -0.350) m, |q| = 2.5838 m
+  nodo 200117 (el mas lejano del sector): q = (8.900, 2.560, -5.350) m, |q| = 10.6951 m
+
+[2] FUENTES y [3] PRESUPUESTO, SITIO (en cm)
+--------------------------------------------
+  fuente                                        nodo 200103  nodo 200117
+  tracking, angulo (1.1 grados)                        4.96        19.94
+  tracking, distancia (0.43 %)                         1.12         4.63
+  impresion (1 %, supuesto)                            2.58        10.70
+  colocacion, corrimiento (5 mm, supuesto)             0.50         0.50
+  colocacion, giro (1 grado, supuesto)                 4.47        16.16
+  suma cuadratica (RSS)                                7.26        28.19
+  peor caso (suma directa)                            13.63        51.93
+  EXTRAPOLADO a 1.5 m (no medido): angulo          8.6-16.5    35.6-68.4
+    (1.9 a 3.7 grados en vez de 1.1)                       
+  RSS con sesgo de nivel de 5 cm                       8.82        28.63
+  peor caso con sesgo de 5 cm                         18.63        56.93
+  RSS con sesgo de nivel de 10 cm                     12.36        29.91
+  peor caso con sesgo de 10 cm                        23.63        61.93
+
+[1] BRAZO, MAQUETA (escala 0.02): distancia al centro de la imagen, dibujada
+----------------------------------------------------------------------------
+  nodo 200062 (base de la columna): q = (0.000, 0.000, 0.000) m, |q| = 0.0000 m
+  nodo 200103 (techo de la columna): q = (0.000, 0.000, 0.079) m, |q| = 0.0792 m
+  nodo 200122 (el mas lejano del sector): q = (0.000, -0.205, 0.079) m, |q| = 0.2193 m
+
+[2] FUENTES y [3] PRESUPUESTO, MAQUETA (en mm)
+----------------------------------------------
+  fuente                                        nodo 200103  nodo 200122
+  tracking, angulo (1.1 grados)                        1.52         4.21
+  tracking, distancia (0.43 %)                         0.34         0.95
+  impresion (1 %, supuesto)                            0.79         2.19
+  suma cuadratica (RSS)                                1.75         4.84
+  peor caso (suma directa)                             2.66         7.35
+
+[4] FOCAL: MindAR supone 45 grados de campo vertical; el iPhone, 70 en el lado largo (SUPUESTO)
+------------------------------------------------------------------------------
+  pantalla 1179 x 2556 px, 460 ppi: f = 1825.2 px; el lado corto ve 35.8 grados
+  [OK  ] control: de frente, simulacion 12.322 px = formula cerrada 12.322 px
+  sitio: camara a 1.50 m del centro de la imagen, 25 grados
+    f_MindAR / f_real = 1.268, video apaisado (alto = lado corto, 55.4 grados):
+      techo 200103: 308.7 px; peor visible 558.4 px (nodo 200061) = 30.8 mm de pantalla; la app dice 1.184 veces la distancia real (ajuste rms 0.97 px)
+    f_MindAR / f_real = 1.690, video vertical (alto = lado largo, 70 grados):
+      techo 200103: 707.2 px; peor visible 968.2 px (nodo 200061) = 53.5 mm de pantalla; la app dice 1.495 veces la distancia real (ajuste rms 1.34 px)
+  maqueta: camara a 0.50 m del centro de la imagen, 45 grados
+    f_MindAR / f_real = 1.268, video apaisado (alto = lado corto, 55.4 grados):
+      techo 200103: 5.7 px; peor visible 67.2 px (nodo 200122) = 3.7 mm de pantalla; la app dice 1.255 veces la distancia real (ajuste rms 4.25 px)
+    f_MindAR / f_real = 1.690, video vertical (alto = lado largo, 70 grados):
+      techo 200103: 12.5 px; peor visible 115.1 px (nodo 200122) = 6.4 mm de pantalla; la app dice 1.664 veces la distancia real (ajuste rms 8.22 px)
+
+[5] PRUEBA EN EL iPHONE: lo que hay que medir y lo que tiene que dar
+--------------------------------------------------------------------
+  a) FOCAL, con una cinta: el telefono de frente a la imagen a 30, 50 y 80 cm; la barra
+     "pose:" tiene que decir lo mismo que la cinta. Si dice 1.27 o 1.69 veces lo medido, la
+     fila [4] se confirma y esa razon es la correccion.
+  b) TEMBLOR: el telefono apoyado 10 s, grabando la pantalla; la dispersion de "pose:".
+  c) MAQUETA, con una regla, desde el centro de la imagen (en el plano de la mesa):
+     nodo 200064: x = 17.8 cm, y = 0.0 cm (z = 0.00 cm: sobre la mesa, sin paralaje)
+     nodo 200078: x = 0.0 cm, y = -10.0 cm (z = 0.00 cm: sobre la mesa, sin paralaje)
+     y con una regla VERTICAL (la unica que ve la focal): el techo 200103 a 7.92 cm de la mesa.
+  d) SITIO: confirmar primero en obra cual es la columna (ver reports/semana06.md, punto 3);
+     cinta en las dos aristas de la cara +x a 0.5, 1.0 y 2.0 m sobre el centro de la imagen;
+     la caja dibujada (0.70 m) tiene que calzar con ellas. La base dibujada esta 1.40 m bajo
+     el centro de la imagen: la distancia entre esa base y el piso real es el sesgo de nivel.
+
+==============================================================================
+  SITIO:   techo de la columna 7.3 cm RSS (8.8 cm con 5 cm de sesgo de nivel); nodo 200117 a 10.7 m: 28.2 cm
+  MAQUETA: techo de la columna 1.7 mm RSS; nodo 200122 a 21.9 cm: 4.8 mm
+  SIN la focal [4] y SIN confirmar la columna en obra. Nada de esto se midio en un iPhone.
+==============================================================================

@@ -9,7 +9,7 @@ sus **resultados de OpenSees**.
 
 El edificio es el **conjunto** (los dos cuerpos en un solo modelo,
 `data/modelo/conjunto.json`). El elemento es la **columna 200037**: la del
-primer piso del eje C del cuerpo LT2, `lt2:P 0.70x0.70`, de −0.05 a 3.91 m.
+piso 2 del eje C del cuerpo LT2 (por los títulos de las láminas; confirmar en obra), `lt2:P 0.70x0.70`, de −0.05 a 3.91 m.
 
 ![La app, en modo maqueta](capturas/01_maqueta_vertical_columna_200037.png)
 
@@ -80,7 +80,11 @@ El resultado de `verificar_ar.py`, completo:
 ```powershell
 .\.venv\Scripts\python.exe semana06_lab\exportar_ar.py                 # si se cambia config_ar.json
 .\.venv\Scripts\python.exe semana06_lab\servir.py                      # deja la terminal abierta
+.\.venv\Scripts\python.exe semana06_lab\verificar_ar.py                # los cuatro bloques (Chrome o Edge)
 ```
+
+La primera vez, Windows pregunta si Python puede recibir conexiones: hay que
+permitirlo en **redes privadas**, o el iPhone no llega al PC.
 
 El servidor imprime la dirección, por ejemplo `https://192.168.1.13:8443`.
 En el iPhone, conectado al **mismo WiFi**:
@@ -109,4 +113,4 @@ Para cambiar de columna: editar `config_ar.json`, y correr
   de Windows la dibuja curva con las funciones de forma; en AR, con un sector
   chico y a 1:50, la diferencia no se ve.
 - **El registro vertical en sitio tiene ~10 cm de incertidumbre**: el nodo
-  está en el eje de la losa, no en el piso terminado (`COORDENADAS.md` §6).
+  está en el nivel de la losa (−0.05), no en el piso terminado (`COORDENADAS.md` §6).

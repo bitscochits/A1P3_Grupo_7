@@ -36,6 +36,7 @@ import socket
 import ssl
 import subprocess
 import sys
+import time
 import urllib.parse
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
@@ -75,7 +76,9 @@ def certificado(ips):
     crt, key = os.path.join(CERT, 'cert.pem'), os.path.join(CERT, 'key.pem')
     marca = os.path.join(CERT, 'ips.txt')
     san = ','.join(['DNS:localhost', 'IP:127.0.0.1'] + ['IP:%s' % i for i in ips])
-    if os.path.exists(crt) and os.path.exists(marca) and open(marca).read() == san:
+    # Se rehace si cambio la IP del PC o si le queda poco: dura 60 dias.
+    if (os.path.exists(crt) and os.path.exists(marca) and open(marca).read() == san
+            and time.time() - os.path.getmtime(crt) < 50 * 86400):
         return crt, key
     openssl = buscar_openssl()
     if not openssl:

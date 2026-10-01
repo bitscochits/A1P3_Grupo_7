@@ -1,0 +1,53 @@
+==============================================================================
+  LA APP DE AR, CRITERIO POR CRITERIO
+==============================================================================
+  app       semana06_lab\web\datos\ar.json (conjunto, elemento 200037, 21 elementos)
+  anexo     data\unity\semana04.json
+
+[1] ELEMENTO / ID: los tags de la app son los de OpenSees
+---------------------------------------------------------
+  [OK  ] 21 elementos: mismo elementTag, nodos, tipo y seccion que el modelo; la linea "element elasticBeamColumn <tag> <n1> <n2>" del anexo nombra los mismos
+  [OK  ] 22 nodos: mismo nodeTag y las mismas x, y, z de OpenSees
+  [OK  ] el marcador esta en el elemento 200037 (columna lt2:P 0.70x0.70), el mismo que muestra la app
+
+[2] RESULTADO ESTRUCTURAL: cada numero de la app es el de OpenSees
+------------------------------------------------------------------
+  [OK  ] los 15 casos del anexo, en el mismo orden
+  [OK  ] 23024 numeros (esfuerzos, desplazamientos, demandas y curvas P-M) identicos al anexo, bit a bit
+         ej.: 200037 en 1.2G+1.0Q+1.4EX: P = 3702.0 kN, M = 510.2 kN m, Mn = 1721.9 kN m, u = 0.296, PASA
+
+[3a] REGISTRO: la pose del marcador en el modelo
+------------------------------------------------
+  [OK  ] sitio: ejes ortonormales (0.0e+00) y derechos, x cruz y = z (0.0e+00)
+  [OK  ] maqueta: ejes ortonormales (0.0e+00) y derechos, x cruz y = z (0.0e+00)
+  [OK  ] sitio: el centro de la imagen esta en la cara +x, a 0.350 m del eje de la columna (medio ancho), centrado en la cara
+  [OK  ] sitio: centro a 1.40 m sobre el nodo inferior (z = -0.05) y el arriba de la imagen es +z de OpenSees
+  [OK  ] maqueta: origen en la base de la columna y +z de OpenSees saliendo de la imagen
+  [OK  ] hay Chrome o Edge para correr ar.js
+  [OK  ] ar.js carga sin errores de JavaScript
+
+[3b] REGISTRO: la transformacion de ar.js (en Chrome) contra la de Python
+-------------------------------------------------------------------------
+  [OK  ] ar.js corrio y publico su transformacion (AR_TRANSFORM)
+  [OK  ] sitio: 22 nodos, Python = ar.js (peor 2.8e-14 anchos en nodo 200059, cota 1.7e-11)
+  [OK  ] sitio: el centro de la pose cae en el origen del anchor [0, 0, 0]
+  [OK  ] maqueta: 22 nodos, Python = ar.js (peor 5.6e-16 anchos en nodo 200059, cota 1.7e-11)
+  [OK  ] maqueta: el centro de la pose cae en el origen del anchor [0, 0, 0]
+  [OK  ] sitio: la columna mide 3.960 m en el anchor x ancho, igual que en OpenSees (L = 3.960 m): escala 1:1
+  [OK  ] maqueta: la columna mide 7.9 cm sobre la mesa = 3.96 m x 0.02
+
+[4] IMAGE TRACKING: video sintetico con pose conocida -> la pose que estima la app
+------------------------------------------------------------------------------
+  [OK  ] d = 0.45 m, inclinacion 0, giro 0: la app DETECTA la imagen (7 poses publicadas)
+  [OK  ] d = 0.45 m, inclinacion 0, giro 0: distancia estimada 0.451 m (verdad 0.450, error 1.1 mm, cota 5.2 mm; la imagen ocupa 258 px)
+  [OK  ] d = 0.45 m, inclinacion 0, giro 0: inclinacion estimada 1.1 deg (verdad 0) y los tres ejes a 1.1 deg de los verdaderos (cota 2.7 deg)
+  [OK  ] d = 0.55 m, inclinacion 30, giro 0: la app DETECTA la imagen (6 poses publicadas)
+  [OK  ] d = 0.55 m, inclinacion 30, giro 0: distancia estimada 0.551 m (verdad 0.550, error 0.6 mm, cota 7.8 mm; la imagen ocupa 211 px)
+  [OK  ] d = 0.55 m, inclinacion 30, giro 0: inclinacion estimada 29.8 deg (verdad 30) y los tres ejes a 0.7 deg de los verdaderos (cota 3.3 deg)
+  [OK  ] d = 0.60 m, inclinacion 40, giro 20: la app DETECTA la imagen (6 poses publicadas)
+  [OK  ] d = 0.60 m, inclinacion 40, giro 20: distancia estimada 0.597 m (verdad 0.600, error 2.6 mm, cota 9.3 mm; la imagen ocupa 193 px)
+  [OK  ] d = 0.60 m, inclinacion 40, giro 20: inclinacion estimada 40.6 deg (verdad 40) y los tres ejes a 0.9 deg de los verdaderos (cota 3.6 deg)
+
+==============================================================================
+  LA APP DE AR MUESTRA EL MISMO ELEMENTO Y LOS MISMOS NUMEROS DE OPENSEES, BIEN REGISTRADOS
+==============================================================================

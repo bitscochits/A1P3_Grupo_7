@@ -102,7 +102,7 @@ Cualquiera de los tres tiene que poder contestar:
 | ¿Qué es el anchor? | El sistema de coordenadas de la imagen, que MindAR mueve en cada cuadro con la pose. Todo lo que cuelga de él queda pegado a la imagen. |
 | ¿Por qué es web y no Unity? | Tenemos iPhone y no Mac: la AR de Unity en iOS exige compilar en Xcode. En el navegador, MindAR hace lo mismo. |
 | ¿Cómo sabe dónde está la columna? | La imagen se pega en su cara `+x` a 1.40 m. Python calcula dónde queda eso en el modelo: centro `(−2.38, 55.08, 1.35)` y ejes. |
-| ¿Qué error tiene? | La pose: 1–3 mm y < 1.1° (medido con video sintético). En sitio, ~10 cm vertical por el nivel del nodo (eje de losa, no piso). |
+| ¿Qué error tiene? | La pose: 1–3 mm y < 1.1° (medido con video sintético). En sitio, 5–10 cm vertical por el nivel del nodo (nivel de losa, no piso terminado). |
 
 ---
 

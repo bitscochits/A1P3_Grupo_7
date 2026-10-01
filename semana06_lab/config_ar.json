@@ -2,13 +2,13 @@
   "_que_es": "Donde se pega la imagen de referencia en el edificio real y como se muestra. Es lo UNICO que hay que cambiar para usar otro elemento: despues se corre python semana06_lab/exportar_ar.py.",
 
   "elemento": 200037,
-  "_elemento_por_que": "Columna lt2:P 0.70x0.70 del primer piso del LT2 (de z = -0.05 a 3.91 m), eje C, sobre la columna demo 200005 del subterraneo. Se eligio la del primer piso porque es la que se puede tocar. Si en terreno se usa otra, se cambia aca.",
+  "_elemento_por_que": "Columna lt2:P 0.70x0.70 del eje C del LT2, de z = -0.05 a 3.91 m: la TERCERA de su eje desde la base (200005 de -7.97 a -4.01, 200021 de -4.01 a -0.05, 200037). Por los titulos de las laminas (lt2_2024_22.json, niveles_del_modelo) -0.05 es el cielo del piso 1, o sea que es la columna del PISO 2; como el edificio esta en pendiente, hay que confirmar en obra cual es antes de pegar la imagen (un piso son 3.96 m de error). Si en terreno se usa otra, se cambia aca.",
 
   "cara": "+x",
   "_cara_por_que": "La cara de la columna donde se pega la imagen: +x, -x, +y o -y en ejes de OpenSees (x hacia el este del modelo, y hacia el norte, z arriba). La normal de esa cara es la que sale de la imagen hacia quien la mira.",
 
   "altura_centro_m": 1.40,
-  "_altura_por_que": "Altura del CENTRO de la imagen sobre el nodo inferior de la columna (el nivel del piso en el modelo). 1.40 m queda a la altura de los ojos. SUPUESTO: el nivel del nodo es el eje de la losa, no el piso terminado; la diferencia (medio espesor de losa + pavimento, unos 10 cm) es error de registro vertical y se dice en la defensa.",
+  "_altura_por_que": "Altura del CENTRO de la imagen sobre el nodo inferior de la columna (el nivel del piso en el modelo). 1.40 m queda a la altura de los ojos. SUPUESTO: el nodo esta en la cota -0.05 que el perfil rotula como nivel (cielo piso 1) de una losa de 15 cm, no en el piso terminado, y ningun archivo dice si es su cara superior o su eje; la diferencia (5 a 10 cm) es error de registro vertical, se mide en obra y se dice en la defensa.",
 
   "ancho_impreso_m": 0.20,
   "_ancho_por_que": "Ancho REAL de la imagen impresa, medido con regla. MindAR mide todo en 'anchos de imagen': si esto esta mal, el modelo sale agrandado o achicado en la misma proporcion. El PDF de marcador/ la imprime a 20.0 cm al 100 %.",

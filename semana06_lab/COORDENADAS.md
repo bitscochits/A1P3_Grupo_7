@@ -147,10 +147,10 @@ número estructural del panel es el del anexo de OpenSees, bit a bit
 
 ## 6. Las fuentes de error del registro (para decirlas de frente)
 
-- **La altura del piso.** El nodo inferior está en el eje de la losa
-  (`z = −0.05`), no en el piso terminado. Entre los dos hay medio espesor de
-  losa más el pavimento, unos 10 cm: en sitio, el modelo puede quedar esos
-  10 cm más abajo o más arriba de lo real. Está declarado en
+- **La altura del piso.** El nodo inferior está en el nivel de la losa
+  (`z = −0.05`, "cielo piso 1", losa de 15 cm), no en el piso terminado, y
+  ningún archivo dice si es su cara o su eje: entre 5 y 10 cm, que en sitio
+  dejan el modelo esos cm más abajo o más arriba de lo real. Está declarado en
   `config_ar.json`.
 - **El ancho impreso.** Si la impresora escala la imagen, todo sale escalado
   en la misma proporción. El PDF trae una regla de 10 cm para comprobarlo.

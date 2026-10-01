@@ -121,6 +121,12 @@ SUITE = [
     # ar.js contra Python y el image tracking con un video sintetico.
     ('AR: tags, resultados y pose', ['semana06_lab/verificar_ar.py', '--sin-navegador'], False),
     ('AR: registro y tracking',     ['semana06_lab/verificar_ar.py'], True),
+    # AVANCE de la semana 6: la tabla de QA del informe, en vivo sobre el
+    # conjunto; la columna 200037 de la lamina al telefono; y el
+    # presupuesto de error del registro (lee evidencia/verificar_ar.txt).
+    ('QA final S6 (tabla)',   ['semana06/verificar_semana06.py'], False),
+    ('S6: 200037 lamina -> app', ['semana06/traza_200037.py'], False),
+    ('S6: precision del registro', ['semana06/precision_ar.py'], False),
 ]
 
 

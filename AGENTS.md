@@ -476,3 +476,29 @@ Todo junto: `python comun/verificar_todo.py`.
   se habría visto solo la pantalla azul.
 - **Lo que falta y se dice:** probarlo en un iPhone real (Safari con el
   certificado del PC).
+
+### Semana 6 — AVANCE (20 pts): validación AR y cierre técnico
+- **Tarea:** `reports/semana06.md` con el flujo AR, la transformación, la
+  precisión, un elemento real con su resultado, la tabla de QA estructural,
+  los errores conocidos y el plan final. Los scripts que producen sus
+  números están en `semana06/`.
+- **Cómo se trabajó:** primero un relevo con 7 agentes, uno por bloque
+  (equilibrio y corte, superposición, capacidad, IDs y AR, trazabilidad de la
+  200037, precisión, errores y plan). Cada uno tuvo un contrastador que
+  volvió a correr sus números y le corrigió lo que no se sostenía. Después
+  se escribieron tres scripts que rehacen esos números en vivo:
+  `verificar_semana06.py` (la tabla del §5, con criterio escrito por fila),
+  `traza_200037.py` (§4) y `precision_ar.py` (§3). Los tres van en la suite.
+- **Lo que los contrastadores corrigieron:** (1) la u que gobierna en
+  200037 no es la de S3 (0.224) ni la del caso por defecto (0.296): es la de
+  0.9G+1.4EX (0.303). (2) La u crítica de un muro se había tomado de EY solo,
+  que no es una combinación de diseño. (3) La 200037 no es "del primer piso":
+  es la tercera columna de su eje, del piso 2 según las láminas. Se corrigió
+  en `semana06_lab/`. (4) La tabla de P-M muro no puede decir "Whitney =
+  fibras 0.3 %" si `verificar_rc` imprime −16.4 %: se muestra el número bruto
+  y su desglose (sentido, mallado, endurecimiento). (5) `comun/combinar.py`
+  deja pasar un empate de redondeo (exceso 2.6e-15) solo por un margen de 5 %
+  elegido a mano. La tabla de la S6 usa la cota medida.
+- **Lo que falta y se dice:** la AR sigue sin probarse en un iPhone. La
+  focal que supone MindAR (45°) no está verificada, y el mallado de 20
+  fibras no alcanza en muros largos. Todo está en el §6 del informe.
