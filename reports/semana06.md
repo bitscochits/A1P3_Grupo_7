@@ -34,22 +34,30 @@ el teléfono dibuja.** La app de AR no resuelve nada: toma los números del
 anexo de OpenSees y los muestra encima de la imagen.
 
 Todos los números de este informe salen de una salida real, con su comando.
-Se volvieron a correr el 29-09 sobre la rama `semana06`. Cuando algo no se
-comprobó, se dice.
+Se volvieron a correr el 29-09 sobre la rama `semana06`, y el 02-10 con lo
+que se agregó después de la prueba en terreno (§1.1, §3.1 y §4.1). Cuando
+algo no se comprobó, se dice.
 
 ```powershell
 python semana06\verificar_semana06.py        # §5: la tabla de QA, en vivo (6 s)
 python semana06\traza_200037.py              # §4: la columna 200037, de la lámina al teléfono
 python semana06\precision_ar.py              # §3: el presupuesto de error del registro
+python semana06\proyeccion_terreno.py        # §4.1: la viga 100164 del modelo, dibujada sobre la foto real
 python semana06_lab\verificar_ar.py          # la app de AR, criterio por criterio (Chrome o Edge)
+python semana06_lab\verificar_ar.py --config semana06_lab\config_ar_viga_100164.json   # la viga en terreno
 python semana06_lab\servir.py                # la app por https en la red local, para el iPhone
-python comun\verificar_todo.py               # la suite: 52 de 52 el 01-10 (§6, error 27)
+python comun\verificar_todo.py               # la suite: 57 de 57 el 02-10 (§6, error 27)
 ```
 
 > **En una línea.** La cadena lámina → modelo → OpenSees → app está
 > comprobada número a número. La app registra y sigue la imagen en Chrome
-> con una cámara sintética. **Todavía no se probó en un iPhone**: es lo
-> primero del plan (§7, N1) y el mayor error conocido (§6).
+> con una cámara sintética. **El 30-09 se probó en un iPhone**: en la sala,
+> con el marcador, y **en el edificio, sobre dos vigas reales** (100161 y
+> 100164), usando una foto del lugar como imagen de referencia (§1.1). El
+> modelo dibujado con la pose de esa foto cae sobre la viga real, y un nudo
+> que no entró al ajuste cae a 2.4 cm de su columna (§4.1). Lo que sigue sin
+> medirse **en el teléfono** es el error de la pose con la focal real (§6,
+> errores 1 y 7).
 
 > **Fe de erratas de la Semana 5.** Cuatro frases de
 > [`reports/semana05.md`](semana05.md) quedaron desactualizadas.
@@ -115,7 +123,9 @@ firmado por el PC para su IP. La decisión y la alternativa están en
    unos 30 s.
 
 Lo que se comprueba sin teléfono lo hace el paso 5. El paso 3, Safari con la
-cámara real, **no se ha hecho todavía** (§6, error 1).
+cámara real, **se hizo el 30-09** en un iPhone del grupo (captura en
+[`semana06/evidencia/iphone/`](../semana06/evidencia/iphone/LEEME.md); lo que
+muestra y lo que no, en §1.1).
 
 ![La app en modo maqueta, en Chrome con la cámara sintética](../semana06_lab/capturas/01_maqueta_vertical_columna_200037.png)
 
@@ -124,6 +134,65 @@ no un iPhone. La imagen está a 42 cm con 35° de inclinación. Arriba dice
 "imagen detectada" y la pose estimada. La columna 200037 va en naranjo sobre
 la imagen, a 1:50, y abajo están los números de OpenSees de
 `1.2G+1.0Q+1.4EX`.*
+
+### 1.1 En el teléfono y en el edificio (30-09 a 02-10)
+
+**En el iPhone.** La app corrió en Safari, servida por `servir.py`, y
+reconoció el marcador:
+
+![Captura del iPhone: imagen detectada y elementTag 200037](../semana06/evidencia/iphone/01_iphone_safari_imagen_detectada_200037.jpg)
+
+*Captura de pantalla **del teléfono**. Dice "imagen detectada", la pose
+estimada (1.01 m, 30°) y `elementTag 200037 · columna lt2:P 0.70x0.70`. El
+marcador estaba en la pantalla de un notebook, **de pie**: el modo maqueta
+supone la imagen acostada, por eso el sector se ve en planta. Y la pantalla
+no mide 20 cm, así que la distancia de 1.01 m no es la real. Prueba la
+sesión AR, la detección, el anchor y el tag en el teléfono; **no** mide
+error.*
+
+**En el edificio: una foto del lugar como imagen de referencia.** Pegar el
+marcador en una columna exige confirmar cuál es (§3, punto 2) y dejarlo
+plano y derecho. En terreno se probó otra cosa: **la imagen de referencia
+puede ser una foto de la estructura misma**. MindAR no necesita un
+marcador, sino una imagen plana con detalle. Hay dos conjuntos de datos
+más, que se eligen en la pantalla de inicio de la app:
+
+| conjunto | imagen de referencia | cómo se ubica la imagen en el edificio | elemento |
+|---|---|---|---|
+| `config_ar.json` (por defecto) | el marcador impreso | en la cara +x de la columna, a 1.40 m (`pose_del_marcador`) | columna **200037** |
+| `config_ar_viga_100161.json` | foto **de frente** del fondo de la viga, con un access point (`marcador/foto_viga_100161.jpg`) | el recorte va de borde a borde del fondo: su alto es b = 0.60 m, lo que da la escala (1.12 m de ancho), y su centro está a 0.30 m de la cara de la viga 100316 medido en terreno (`pose_en_viga`) | viga **100161** |
+| `config_ar_viga_100164.json` | foto **en diagonal** del cielo, con una X de cinta en el nodo 100352 (`marcador/foto_vigas_100352.jpg`) | **PnP**: la pose desde la que se tomó la foto se ajusta con 3 puntos y 2 bordes de vigas cuya posición da el modelo, con la focal del iPhone (26 mm eq.). La imagen es el plano de la foto a la profundidad de la X (`camara_de_la_foto`, `pose_por_foto`) | viga **100164** |
+
+El flujo es el mismo de arriba: solo cambia el primer eslabón.
+
+```
+ foto del lugar  ─PnP (PC)─▶  pose de la foto en el edificio (c, R)  ─▶  igual que arriba:
+                               ↑ 3 puntos + 2 bordes del modelo          POSE → ANCHOR → M_AO → ELEMENTO → RESULTADO
+```
+
+**Lo que se agregó a la app** (`web/ar.js`; solo transforma y dibuja, no
+calcula nada estructural):
+
+- **Cada modo, su imagen.** En sitio, la app busca la foto del lugar; en la
+  maqueta, el marcador impreso, con su ancho real (una foto del cielo de
+  2.9 m acostada en una mesa no sirve). Una imagen por archivo de MindAR:
+  con la foto del access point y el marcador en el mismo archivo, la foto
+  dejaba de detectarse a 40° + 20° de giro (medido 3 veces); sola, sí.
+- **Calce a mano.** Botones que corren, giran y escalan el modelo sobre la
+  imagen: una matriz más, `A = T(t)·R_z(θ)·S(s)`, en el sistema de la
+  imagen. Se guarda en el teléfono y se muestra, para pasarla a la
+  configuración.
+- **Giroscopio.** Al perder la imagen (por ejemplo, al alejarse), la app
+  guarda la última pose y le aplica el giro que mide el teléfono. Así el
+  modelo queda fijo al mirar para los lados. **Solo giros**: si se camina,
+  se corre.
+- **Cuánto se dibuja.** El sector de las vigas se exporta con 25 m de
+  radio (126 y 140 barras), y el teléfono elige dibujar 6, 12 o 25 m.
+
+**Cómo se comprobó.** `verificar_ar.py --config <conjunto>` corre los mismos
+cuatro bloques en cada conjunto. Cada modo se prueba con **su** imagen en
+el video sintético, y la foto del cielo además con el ajuste de la foto
+(§3.1). Resultado del 02-10: 32, 43 y 44 OK, 0 FALLA. Están en la suite.
 
 ---
 
@@ -177,6 +246,54 @@ x_pantalla  =  P_MindAR · T_CA(t) · M_AO · p
 `T_CA(t)` sale del seguimiento en cada cuadro. `M_AO` no cambia mientras no
 se mueva la imagen. **El registro es `M_AO`**: dice dónde está la imagen
 dentro del edificio.
+
+**Con lo que se agregó en terreno (§1.1)**, la cadena gana dos factores, y
+ninguno es cálculo estructural:
+
+```
+x_pantalla  =  P_MindAR · T_CA(t) · A · M_AO · p
+
+A = T(t) · R_z(θ) · S(s)             calce a mano, en el sistema de la imagen (identidad si no se toca)
+T_CA(t) = R(q_t⁻¹ · q₀) · T_CA(t₀)   si se pierde la imagen: la última pose, girada con el giroscopio
+```
+
+`q₀` es la orientación del teléfono en el último cuadro con imagen y `q_t`
+la de ahora. La pose vieja se gira con el giro relativo, y como la cámara
+de MindAR está quieta en el origen, el modelo queda fijo en el espacio
+mientras solo se gire el teléfono. El signo se comprueba en Chrome: girar
+10° a la izquierda corre un punto del frente a la derecha en sen 10°
+(`verificar_ar.py` [3c], error 2.1e-18).
+
+**La pose de una foto del lugar (viga 100164).** Ahí `c` y `R` no salen de
+una cara declarada, sino de **desde dónde se tomó la foto**. Para la cámara
+de la foto (x a la derecha, y hacia abajo, z hacia adelante) vale:
+
+```
+u = f·X_c/Z_c + W/2,   v = f·Y_c/Z_c + H/2,   X_c = R_f (X − C)
+```
+
+con `f` = 961 px (26 mm equivalentes sobre la diagonal de 960 × 1280 px).
+Se ajustan `R_f` y `C` por mínimos cuadrados con 3 puntos (la X = nodo
+100352 y dos esquinas del fondo de las vigas) y 2 bordes de vigas, todos
+con su posición en el modelo. Resultado: la cámara en C = (24.32, 50.20,
+2.10), mirando al sur y 32° hacia arriba, con **1.6 px de error medio**.
+**La focal no se ajusta**: con puntos casi en un plano, distancia y zoom se
+compensan, y el ajuste libre se va a un teleobjetivo a 14 m bajo tierra
+(medido). La imagen de referencia es el plano de la foto a la profundidad
+de la X, d = 2.90 m. Su centro y sus ejes son:
+
+```
+c = C + d · R_fᵀ (u_c − W/2, v_c − H/2, f)/f
+eₓ = R_fᵀ (1, 0, 0),   e_y = R_fᵀ (0, −1, 0),   e_z = R_fᵀ (0, 0, −1)
+ancho = d · (ancho del recorte en px) / f = 2.899 m
+```
+
+Con eso, `M_AO` es la misma fórmula de arriba. Para el nodo 100352, en
+sitio: p − c = (−1.229, −0.275, −0.102) m → q = (1.218, −0.262, −0.213) m
+→ a = q/2.899 = (0.420, −0.090, −0.073) anchos. En la maqueta (marcador
+impreso de 0.20 m, 1:50, origen en el piso bajo la viga): q = (1.249,
+0.046, 3.96) m → a = (0.125, 0.005, 0.396) anchos: 2.5 cm a la derecha y
+7.9 cm sobre la mesa.
 
 **Los números.** En modo **sitio**, c = (−2.38, 55.0833, 1.35),
 eₓ = (0, 1, 0), e_y = (0, 0, 1), e_z = (1, 0, 0) y k = 1/0.20 = 5:
@@ -328,6 +445,30 @@ tabla para anotarla en
   distancia entre la base dibujada y el piso real es el sesgo de nivel, y se
   corrige con `altura_centro_m = 1.40 + Δ`.
 
+### 3.1 Medido en terreno: la viga 100164
+
+Con la foto del cielo (§1.1) hay algo que el marcador no da: **puntos de
+la estructura real cuya posición en el modelo se conoce**. Con ellos el
+error de registro se mide en la foto misma, en vez de suponerlo
+(`python semana06/proyeccion_terreno.py`, evidencia
+[`semana06/evidencia/terreno/`](../semana06/evidencia/terreno/proyeccion_viga_100164.txt)).
+
+| # | fuente | valor | en el edificio | de dónde sale |
+|---|---|---|---|---|
+| 1 | ajuste de la foto | 1.6 px de error medio, 3.9 px el peor | 4.8 mm medio, 1.2 cm el peor, a la profundidad de la X (2.90 m) | **medido**: los 3 puntos y 2 bordes, reproyectados (`verificar_ar.py` [3a]) |
+| 2 | **comprobación independiente** | el nodo 100359, que no entra al ajuste, cae a **7.3 px** de la columna blanca | **2.4 cm** | **medido**; la tolerancia es 15 px porque el centro de la columna se ubica a ojo |
+| 3 | focal supuesta (26 mm eq.) | con 24 mm la cámara se corre 0.21 m y el eje gira 1.25° | hasta **10 cm** en el dibujo de los nudos a menos de 6 m | **medido** rehaciendo el ajuste con 24, 26 y 28 mm. El ajuste no distingue entre ellas (1.71, 1.57 y 1.47 px). La comprobación prefiere apenas la más corta (5.5, 7.3 y 11.6 px) |
+| 4 | pose de MindAR sobre la foto | distancia 0.1 a 1.2 % y ejes a 1.0–2.4° (varía un poco entre corridas) | a 3 m, 1° son 5 cm | **medido en video sintético** con la foto a 6.5–8.7 m (la foto mide 2.9 m: misma escala en píxeles que el marcador) |
+| 5 | nivel: modelo de ejes | la viga se dibuja centrada en su eje, con el fondo en eje − h/2 = 3.51 | si la cota del nodo es la cara superior de la losa, el fondo real está en 3.11: **0.40 m** | **no medido**. El ajuste calza el fondo dibujado con el real, así que el modelo entero queda corrido eso en la vertical respecto de la obra. Consistente con la cámara ajustada a 2.15 m sobre −0.05 (un teléfono en la mano, a ~1.75 m del piso real) |
+| 6 | paralaje de una foto en diagonal | la imagen es un plano; la estructura, no | crece al alejarse del punto desde donde se tomó la foto | **no medido**; por eso conviene pararse donde se tomó |
+
+**En resumen:** parado donde se tomó la foto, la viga dibujada cae sobre la
+real con un error de **2 a 5 cm** en la foto misma (filas 1 y 2), al que
+hay que sumarle hasta 10 cm por no conocer la focal (fila 3). Además está
+el corrimiento vertical de **0.40 m** del modelo de ejes (fila 5). Las
+filas 1 y 2 se miden en la foto, no en el video del teléfono: medir en
+vivo sigue pendiente (§6, error 7).
+
 ---
 
 ## 4. Resultados: un elemento real, de la lámina al teléfono
@@ -413,9 +554,37 @@ arriba redondeados.
 
 **Dicho de frente.** Está demostrado que el elemento de la lámina, el del
 modelo, el de OpenSees y el de la app son el mismo, con los mismos números.
-**Que el modelo calce sobre la columna física no está demostrado:** no hay
-una foto en sitio ni una prueba en el iPhone (§7, N1 y N2). El Ø25 y el acero
-A630-420H son supuestos, y están marcados en el dato.
+**Que el modelo calce sobre la columna física no está demostrado:** la app
+corrió en el iPhone (§1.1), pero la imagen no se pegó en la columna, que
+además hay que confirmar en obra (§7, N2). Sobre una **viga** real sí se
+demostró: §4.1. El Ø25 y el acero A630-420H son supuestos, y están marcados
+en el dato.
+
+### 4.1 Un elemento real en terreno: la viga 100164
+
+La viga que se fotografió desde abajo el 30-09, entre la X de cinta y la
+columna blanca, **es la 100164 del modelo**. Se comprueba así:
+
+| | qué | número |
+|---|---|---|
+| **ID** | `element elasticBeamColumn 100164 100352 100359 A=0.4800 E=2.4870e+07 G=1.0363e+07 J=3.110e-02 Iy=2.560e-02 Iz=1.440e-02 vecxz=(0,0,1)` (la línea del anexo, la misma que muestra el panel) | `ingenieria:viga_x`, V 0.60×0.80 (las del LT2, corroboradas en plano y en terreno), L = 2.50 m, de (23.02, 47.70) a (25.52, 47.70), cota 3.91, viga del borde sur del cuerpo antiguo |
+| **Nudos en terreno** | el nodo **100352** es la X pintada en el cruce con la viga 100316. El **100359** es donde llega la columna blanca, **que el modelo no tiene** (al 100359 solo llegan tres vigas: §6, error 30) | separados 2.50 m, como en el modelo |
+| **Resultado** (OpenSees, anexo; `ar_viga_100164.json`) | `1.2G+1.6Q`: **My = −413.3 / −305.3 / −161.1 kN·m** (extremo i / centro / extremo j), Vz = 71.9 → 129.9 kN, T = 15.8 kN·m (es viga de borde), N = 0 (diafragma). Bajo G, el nodo 100352 baja 3.90 mm. En la app, el diagrama que se abre es My, que es donde trabaja la viga (vecxz vertical) | bit a bit con el anexo: `verificar_ar.py --config …100164.json` [2] |
+| **Correspondencia** | el modelo dibujado sobre la foto real con la cámara ajustada (abajo). El fondo de la 100164 (naranjo) y el de las vigas que la cruzan (celeste) caen sobre los reales. El nodo 100359 (cruz roja), que **no entró al ajuste**, cae en la columna blanca | 7.3 px = **2.4 cm** (§3.1) |
+
+![La viga 100164 del modelo, dibujada sobre la foto real](../semana06/evidencia/terreno/proyeccion_viga_100164.jpg)
+
+*`python semana06/proyeccion_terreno.py --salida`. Es la foto que la app usa
+como imagen de referencia en sitio, con el modelo del conjunto proyectado
+**con la pose que se calcula de ella** (§2). Si la pose estuviera mal, las
+líneas caerían corridas. Amarillo: los 3 puntos medidos; rojo: la
+comprobación.*
+
+Esto prueba el **registro**: la pose de la foto dentro del edificio, que es
+lo que la app usa en sitio. No prueba lo que hace MindAR en vivo con la
+cámara del teléfono: eso se probó en el iPhone (la app reconoció la foto
+del access point en la viga 100161, y ahí se probó el calce a mano), pero
+sin una medición de error en el teléfono (§6, error 1).
 
 ---
 
@@ -440,7 +609,7 @@ El script está en la suite.
 | P-M columna | **OK** | tracción pura −4123.3 = −As·fy (exacta); flexión pura, fibras contra Whitney **0.37 %**; balanceado (P = 6232 kN), fibras 1751.7 bajo Whitney 2025.9 (15.7 %, del lado seguro). Gobierna 0.9G+1.4EX con **u = 0.301**, PASA | La curva del anexo (familia 29, 12 puntos) coincide con `capacidad.interaccion` a 4.2e-5. La u de los 15 casos, rehecha con `demanda_capacidad` sobre los esfuerzos del anexo, coincide con la guardada (peor 3.5e-7). En el balanceado, sin confinar da 1901.6 (6.5 %): el confinamiento explica cerca de la mitad de la diferencia |
 | P-M muro | **PARCIAL** | 100537 (antiguo, 0.30×16.85, My): u = **0.577** en 0.9G−1.4EY. 200009 (LT2, 0.25×7.95, Mz): u = **0.662** en 0.9G+1.4EY. Los dos PASAN | **Cierra:** tracción pura exacta; el momento del plano, elegido por inercias, es el grande (en EY, 31 162.9 contra 19.7 kN·m fuera del plano); la curva del anexo es `capacidad.interaccion`; la u rehecha es la del anexo; y con las mismas hipótesis (mismo sentido, sin endurecimiento y 40 fibras) fibras = Whitney al 0.19 % y 0.38 %. **Abierto, y medido:** (1) 20 fibras no alcanzan en un muro largo: a P = 0, Mn sale 4.3 % (100537) y 2.2 % (200009) sobre el de 40 fibras. Con 40, las u que gobiernan pasan a 0.589 y 0.667, y ninguna cambia de PASA a NO PASA. (2) Cerca de P = 0 la curva incluye el endurecimiento de Steel01 (+15.6 % y +11.6 %): no es el Mn nominal de ACI. Por eso `verificar_rc.py` imprime −16.4 % en 100537 |
 | IDs Unity | **OK** | 558 nodos y 937 elementos con el **mismo tag** en el modelo, el visor, el anexo y el GameObject: `Elem_200037_columna` = `element elasticBeamColumn 200037 200062 200103` | `comun/test_contrato_unity.py conjunto`: "EL CONTRATO JSON <-> UNITY ESTA SANO", con 96 de 96 muros iguales a su cuerpo de origen. Hay 0 diferencias de tag, nodos, tipo, sección y coordenadas entre `data/modelo/conjunto.json` y `data/unity/conjunto.json`. El nombre del GameObject sale de `VisorEstructura.cs:507` |
-| AR | **PARCIAL** | la app coincide con OpenSees bit a bit (23 024 números); la matriz de `ar.js` con la de Python a 2.8e-14; el tracking sintético da 0.6–2.6 mm y ≤ 1.1°. **No se probó en un iPhone** | `semana06_lab/verificar_ar.py` [1] a [4] (§1 y §2). La fila pasa sola a OK cuando hay una captura del teléfono en `semana06/evidencia/iphone/` |
+| AR | **OK** | la app coincide con OpenSees bit a bit (23 024 números en la 200037); la matriz de `ar.js` con la de Python a 2.8e-14; el tracking sintético da 0.6–2.6 mm y ≤ 1.1°. **Probada en un iPhone** el 30-09 (captura del teléfono) y en terreno sobre dos vigas: la 100164 dibujada sobre la foto real, con un nudo de control a 2.4 cm (§4.1) | `semana06_lab/verificar_ar.py` [1] a [4] en los tres conjuntos de datos (§1, §1.1 y §2), `semana06/proyeccion_terreno.py` y la captura de `semana06/evidencia/iphone/`. Lo que falta, el error medido **en el teléfono**, está en el §6, errores 1 y 7 |
 
 **Dos cortes basales, y por qué.** `python comun/sismo.py conjunto`
 informa 9 939.79 kN, no 10 814.02. Lee el EX guardado en `data/modelo/`, que
@@ -470,7 +639,7 @@ P-M) y se volvieron a contar el 29-09.
 
 | # | error | ¿cambia números? | estado y evidencia | qué falta |
 |---|---|---|---|---|
-| 1 | **La AR no se probó en un iPhone real.** Toda la evidencia es de Chrome de escritorio con cámara sintética, incluidas las dos capturas de `semana06_lab/capturas/`. El título del commit `99393f9` dice "en el iPhone"; el README del LAB dice, correctamente, que no | no | 0 pruebas en el teléfono | N1 del plan: `servir.py` + Safari, en maqueta y en sitio, con captura **del teléfono** en `semana06/evidencia/iphone/` |
+| 1 | **La AR corrió en un iPhone, pero su error no se midió en el teléfono.** El 30-09 se probó en Safari: detección, pose, anchor y tag con el marcador (captura en `semana06/evidencia/iphone/`), y en el edificio, la viga 100161 con una foto de su fondo, con el calce a mano. La captura es con el marcador **de pie en una pantalla**, no impreso en la mesa, y con el panel plegado. Del giroscopio y de la foto del cielo (viga 100164) no hay captura del teléfono. El registro de la 100164 se midió **en la foto** (§3.1), no en vivo | no | 1 captura del teléfono | capturas en maqueta (marcador impreso, panel desplegado) y en sitio sobre la 100164; la prueba de la cinta (N2) |
 | 2 | **Fierro de muros del LT2 incompleto o mal leído.** El extractor lee CANT y no NUM: 181 barras de borde donde el plano da 411. De esas 181 asignaciones, 66 no son del muro (36 de dintel y 30 de la elevación perpendicular). 23 muros tienen barras recortadas contra la cara y 24 tienen el grupo descentrado | sí: Mn del LT2 hasta +97 % | `semana05/QUE_REVISAR.md` | pasar a NUM, sacar las barras ajenas y corregir el marco de `s` (H3). No se midió cuántos NO PASA arreglaría |
 | 3 | **Sin φ y sin chequeo de corte.** u = M/Mn compara la demanda mayorada con la capacidad **nominal**. No hay Vn: la app muestra Vz = 248.9 kN en 200037 y nada lo compara | sí, en contra (u sube) | `git grep capacidad_corte` no encuentra código | H2 |
 | 4 | **Cs = 0.10 sin R, I ni corte mínimo.** Es un valor de trabajo declarado (`semana03/parametros.json`). Escala todo el sismo, y con él todos los NO PASA | sí | declarado como supuesto; `--cs` lo cambia sin tocar código | el valor del profesor; H5 |
@@ -482,7 +651,7 @@ P-M) y se volvieron a contar el 29-09.
 |---|---|---|---|---|
 | 6 | **11 verticales del LT2 sin curva P-M** (200010, 011, 013, 026, 027, 042, 043, 058, 059, 074 y 075). No cuentan ni como PASA ni como NO PASA, y en el mapa salen grises: es una omisión **optimista** | sí | 218 verticales, 207 con demanda | leerles el fierro o declararlo `_supuesto`, y que el mapa diga "sin revisar" (P4, H3) |
 | 7 | **El error de pose se midió con la cámara ideal de MindAR** (video sintético de 45°): es una cota inferior. La focal real del iPhone no está verificada, y en maqueta pesa 2.5 a 4 veces el resto (§3) | no (presentación) | `precision_ar.py` [4], simulado con un FOV supuesto | la prueba de la cinta (N2) |
-| 8 | **Registro vertical en sitio: 5 a 10 cm, y la columna por confirmar.** −0.05 es un nivel de losa, no el piso terminado. La 200037 es la del piso 2 según las láminas; el LAB decía "primer piso" (corregido) | no | §3 | medir Δ en obra y confirmar la columna (N2) |
+| 8 | **Registro vertical en sitio: 5 a 10 cm, y la columna por confirmar.** −0.05 es un nivel de losa, no el piso terminado. La 200037 es la del piso 2 según las láminas; el LAB decía "primer piso" (corregido). **En las vigas, hasta 0.40 m**: el modelo es de ejes y dibuja el fondo de la viga en eje − h/2; si la cota del nodo es la cara superior de la losa, el fondo real está 0.40 m más abajo, y al calzar el fondo con el real el modelo entero queda corrido eso en la vertical (§3.1, fila 5) | no | §3 y §3.1 | medir Δ en obra (la altura del teléfono al tomar la foto lo da) y confirmar la columna (N2) |
 | 9 | **Torsión en EY.** `sismo.py conjunto --detalle` marca torsión EXTREMA en 8 de los 9 pisos que se mueven. En el LT2, u_max/u_prom = 1.70 en los cinco pisos, idéntico corriendo el LT2 solo; el giro explica el 80 % del desplazamiento del borde. Es la planta, no un error: la rigidez en Y está cargada a un lado. Pero el sismo se aplica en el nodo maestro, sin torsión accidental (NCh433), y `sismo.py` calcula **un** centro de rigidez para dos cuerpos independientes | sí | salida de `sismo.py conjunto --detalle` | H5 |
 | 10 | **Nudo colgado de la parrilla de Ingeniería (43.02, 55.20).** 100042 y 100043 fallan en 3 de las 4 combinaciones mayoradas con EY (peor u 1.153 y 1.067; eran 1.198 y 1.149 antes de las vigas nuevas). Ninguna falla es de gravedad sola | sí | `QUE_REVISAR.md` | mirarlo en el plano 2017_67: puede faltar un pilar |
 | 11 | **u = 9999 en 22 filas de 9 elementos** (la P cae fuera de la curva). 20 son pata de núcleo comprimido y 2 de uno traccionado; ningún elemento aislado cae fuera. 17 de las 22 están en combinaciones de diseño | sí | recontado; CLAUDE.md §6 explica por qué no se densifica la curva | H1 |
@@ -507,8 +676,11 @@ P-M) y se volvieron a contar el 29-09.
 | 25 | 462 áreas tributarias de Ingeniería sin qG, w ni luz (PEND del contrato) | el equilibrio de G cierra igual | P6 |
 | 26 | La AR va por https con un certificado autofirmado (Safari avisa), y el visor tiene HTTP abierto (`ConstruirApp.cs:202`). `verificar_ar.py` necesita Chrome o Edge y Pillow, que no está en `requirements.txt` | sirve en la red local; el README del LAB ya nombra el verificador y el aviso del firewall | GitHub Pages (P3) |
 | 27 | **La suite escribe archivos versionados.** Da 52 de 52 (01-10), pero deja `StreamingAssets/modelo_unity_edificio.json` con el modelo de **Ingeniería** (lo escribe `edificios/ingenieria/export_unity.py`, llamado por `benchmark_3d.py`) mientras los anexos quedan en el LT2, y reescribe los tiempos de `semana05/evidencia/superposicion_*.json`. Hasta el 29-09, con lo versionado en el conjunto, eso hacía fallar 2 entradas de la S5 (50 de 52) | se restaura con `git checkout` (lo que se hizo el 01-10) o con `lanzar_unity.py preparar <edificio>` antes de una demo. Los scripts de la AR y de la S6 arman el anexo del conjunto en memoria si en disco hay otro | que la suite no deje `StreamingAssets` mezclado (P7) |
-| 28 | Modificación: 4 de 6 tipos (faltan material y área tributaria); la carga móvil (SQ4) no sigue al usuario | el enunciado pedía al menos 2 | H6 |
+| 28 | Modificación: 4 de 6 tipos (faltan material y área tributaria). La carga que sigue al usuario (SQ4, pestaña **Persona** de Unity, `VisorPersona.cs`) identifica el paño, resalta las vigas receptoras y muestra la carga asignada, pero no se resuelve en OpenSees | el enunciado pedía al menos 2 | H6 |
 | 29 | `verificar_rc.py` no tiene criterio de pasa/falla, y su docstring dice 11.5 % (de antes del espejo) | `verificar_semana06.py` le pone criterio a la comparación | actualizar el docstring |
+| 30 | **Una columna real que el modelo no tiene.** En terreno, en el nodo 100359 hay una columna (la blanca de la foto del cielo, §4.1), y en el modelo al 100359 solo llegan tres vigas (100164, 100167 y 100318). No se sabe si es estructural | si lo es, cambia el apoyo de esas vigas | visto el 30-09 | revisarla en el plano 2017_67 (como el error 10) |
+| 31 | **La foto en diagonal como imagen de referencia calza mejor desde donde se tomó.** La app la trata como un plano y el cielo no lo es: al alejarse de ese punto aparece paralaje. Y la **focal** del ajuste es supuesta (26 mm eq.): con 24 mm el dibujo se corre hasta 10 cm (§3.1, fila 3) | no (presentación) | §3.1 | conocer el teléfono que tomó la foto, o ajustar la focal con más puntos fuera del plano |
+| 32 | **El giroscopio solo corrige giros.** Al perder la imagen, el modelo queda fijo si se gira el teléfono, pero se corre si se camina: el navegador no mide la traslación (Safari no trae seguimiento del espacio sin imagen) | no (presentación) | `ar.js`, `verificar_ar.py` [3c] comprueba el signo | AR nativa (H8) |
 
 ---
 
@@ -521,7 +693,7 @@ estimadas, no medidas.
 
 | # | tarea | quién | horas | hecho cuando |
 |---|---|---|---|---|
-| N1 | **AR en un iPhone real**, en maqueta y en sitio, con `servir.py` y Safari. Si Safari no acepta el certificado, el plan B es GitHub Pages | Eduardo | 3–5 | hay una captura **del teléfono** en `semana06/evidencia/iphone/` con "imagen detectada" y el panel de 200037 en `1.2G+1.0Q+1.4EX`: P 3701.8, M 507.6, Mn 1721.9 y u 0.295 PASA. Con eso `verificar_semana06.py` pone la fila AR en OK. Otro integrante lo reproduce siguiendo `GUION_DEMO.md` |
+| N1 | **AR en un iPhone real**, en maqueta y en sitio, con `servir.py` y Safari. **Hecho en parte (30-09)**: Safari aceptó el certificado, la app detectó el marcador y, en el edificio, la foto de la viga 100161 (§1.1). Falta la captura con el marcador impreso y el panel desplegado | Eduardo | 3–5 | hay una captura **del teléfono** en `semana06/evidencia/iphone/` con "imagen detectada" y el panel de 200037 en `1.2G+1.0Q+1.4EX`: P 3701.8, M 507.6, Mn 1721.9 y u 0.295 PASA (hoy hay una, sin el panel desplegado). Otro integrante lo reproduce siguiendo `GUION_DEMO.md` |
 | N2 | **Medir el error real**: la prueba de la cinta (focal) a 30, 50 y 80 cm; la regla vertical en maqueta; y en sitio, la columna confirmada y el desnivel entre la base dibujada y el piso | Eduardo y Monse | 2 | la tabla de `evidencia/iphone/LEEME.md` está llena y el §3 tiene el error medido en cm y grados |
 | N3 | **Suite completa** otra vez después de N1 (el 01-10 dio 52 de 52) y restaurar lo que deja escrito (§6, 27) | Pedro | 1 | 52 de 52 con fecha y hash, y `git status` limpio |
 | N4 | **Revisar la tabla del §5** contra `evidencia/qa_semana06.md` regenerada después de N1 | Monse | 1 | las diez filas con estado, número y comando, y la fila AR en OK |
@@ -549,7 +721,7 @@ estimadas, no medidas.
 | H3 | El fierro de muros del LT2 bien leído (NUM, sin barras ajenas, `s` en el marco del muro) y los 11 sin curva | Pedro | 8–12 | de 207 a 218 elementos con demanda |
 | H4 | La losa colaborante conectada en los dos cuerpos | Pedro y Eduardo | 8–12 | G sigue en 97 885.36 kN y las vigas ganan rigidez |
 | H5 | El sismo con R e I de NCh433, la fuerza en el centro de masa, la torsión accidental y un W por cuerpo | Pedro | 4–8 | una sola definición del peso sísmico |
-| H6 | La carga móvil que sigue al usuario (SQ4) | Eduardo | 8–12 | ΣRz = P en cada posición |
+| H6 | La carga que sigue al usuario (SQ4) **resuelta en OpenSees**: la pestaña Persona ya muestra el reparto | Eduardo | 8–12 | ΣRz = P en cada posición |
 | H7 | **Pushover** no lineal | Monse y Pedro | 20–40 | la rama elástica igual a la rigidez lineal |
 | H8 | AR nativa con ARKit (necesita un Mac) | Eduardo | 15–25 | la focal real, sin supuestos |
 | H9 | **As-built**: medir la 200037 y 3 a 5 pilares y compararlos con el modelo | los tres | 4–6 | valida el 0.70×0.70 y el Ø22 supuesto |
@@ -560,8 +732,8 @@ estimadas, no medidas.
 
 | criterio | puntos | dónde |
 |---|---|---|
-| AR reproducible | 5 | §1 (flujo y "Cómo reproducirlo"), `semana06_lab/README.md`, `verificar_ar.py` en la suite. **Falta la prueba en el iPhone** (N1) |
-| Transformaciones/registro | 4 | §2 (la composición `S(k)·Rᵀ·T(−c)`, con números) y §3 (presupuesto de error, focal y prueba en el teléfono) |
-| Trazabilidad estructural | 3 | §4: la 200037 de la lámina 2024_22-101/305 al panel, con `traza_200037.py` |
+| AR reproducible | 5 | §1 (flujo y "Cómo reproducirlo") y §1.1 (en el iPhone y en terreno, con tres conjuntos de datos), `semana06_lab/README.md`, `verificar_ar.py` en la suite para los tres. Falta la captura con el panel desplegado (N1) |
+| Transformaciones/registro | 4 | §2 (la composición `S(k)·Rᵀ·T(−c)`, con números) y §3 (presupuesto de error, focal y prueba en el teléfono); la pose de una foto del lugar por PnP (§2) y el registro **medido** en terreno (§3.1) |
+| Trazabilidad estructural | 3 | §4: la 200037 de la lámina 2024_22-101/305 al panel, con `traza_200037.py`; §4.1: la viga 100164 en terreno, con su ID, su resultado y el modelo dibujado sobre la foto real (`proyeccion_terreno.py`) |
 | QA global | 5 | §5: diez filas en vivo con `verificar_semana06.py`, en la suite |
 | Plan de cierre | 3 | §6 (29 errores, sin ocultar) y §7 (núcleo / polish / Honors, con dueño y "hecho cuando") |

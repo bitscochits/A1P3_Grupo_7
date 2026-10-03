@@ -1,0 +1,9 @@
+PROYECCION DEL MODELO SOBRE LA FOTO REAL (semana06/proyeccion_terreno.py)
+foto              marcador/foto_vigas_100352.jpg (960 x 1280 px)
+focal             961.4 px (26 mm equivalentes, supuesto: camara 1x del iPhone)
+camara ajustada   C = (24.322, 50.199, 2.096) m, mira hacia (-0.028, -0.846, 0.532)
+ajuste            3 puntos + 2 rectas, error medio 1.57 px; residuos [-0.36, 3.83, -0.01, 0.76, 0.52, -2.47, -0.46, 0.19, -0.37, -1.58]
+COMPROBACION      nodo 100359 (no entro al ajuste) cae en (44.8, 675.1) px; la columna blanca esta en [50, 670]: 7.3 px
+a la profundidad de ese nodo, 7.3 px son 2.4 cm
+elementos dibujados 39: 100032, 100035, 100036, 100129, 100131, 100132, 100134, 100135, 100137, 100138, 100139, 100140, 100142, 100159, 100161, 100162, 100164, 100165, 100167, 100168, 100169, 100170, 100172, 100289, 100290, 100292, 100293, 100294, 100295, 100296, 100297, 100313, 100314, 100316, 100317, 100318, 100319, 100320, 100321
+imagen            semana06\evidencia\terreno\proyeccion_viga_100164.jpg

@@ -121,12 +121,27 @@ SUITE = [
     # ar.js contra Python y el image tracking con un video sintetico.
     ('AR: tags, resultados y pose', ['semana06_lab/verificar_ar.py', '--sin-navegador'], False),
     ('AR: registro y tracking',     ['semana06_lab/verificar_ar.py'], True),
+    # Las dos vigas probadas en terreno el 30-09, cada una con una foto del
+    # lugar como imagen de referencia: la 100161 (foto de frente de su fondo)
+    # y la 100164 (foto en diagonal, con la pose de la foto por PnP y la
+    # comprobacion de la columna blanca del nodo 100359).
+    ('AR terreno: viga 100161',     ['semana06_lab/verificar_ar.py', '--sin-navegador',
+                                     '--config', 'semana06_lab/config_ar_viga_100161.json'], False),
+    ('AR terreno: viga 100164',     ['semana06_lab/verificar_ar.py', '--sin-navegador',
+                                     '--config', 'semana06_lab/config_ar_viga_100164.json'], False),
+    ('AR terreno: tracking 100161', ['semana06_lab/verificar_ar.py',
+                                     '--config', 'semana06_lab/config_ar_viga_100161.json'], True),
+    ('AR terreno: tracking 100164', ['semana06_lab/verificar_ar.py',
+                                     '--config', 'semana06_lab/config_ar_viga_100164.json'], True),
     # AVANCE de la semana 6: la tabla de QA del informe, en vivo sobre el
     # conjunto; la columna 200037 de la lamina al telefono; y el
     # presupuesto de error del registro (lee evidencia/verificar_ar.txt).
     ('QA final S6 (tabla)',   ['semana06/verificar_semana06.py'], False),
     ('S6: 200037 lamina -> app', ['semana06/traza_200037.py'], False),
     ('S6: precision del registro', ['semana06/precision_ar.py'], False),
+    # La viga 100164 del modelo, dibujada con la camara ajustada sobre la
+    # foto real; el nodo 100359 (que no entra al ajuste) cae en la columna.
+    ('S6: viga 100164 sobre la foto', ['semana06/proyeccion_terreno.py'], False),
 ]
 
 
