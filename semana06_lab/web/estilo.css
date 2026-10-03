@@ -34,6 +34,11 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #111; color:
 #datos .pasa { color: #7ee2a2; font-weight: 700; } #datos .nopasa { color: #ff7b7b; font-weight: 700; }
 #datos .tag { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 11px; opacity: .85; word-break: break-all; }
 #pm { width: 100%; max-width: 600px; background: #fff; border-radius: 6px; }
+#calce { border: 1px solid #3a4150; border-radius: 8px; padding: 6px 8px; margin-bottom: 8px; }
+.calce-fila { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 4px 0; font-size: 13px; }
+.calce-fila button { background: #2b3342; color: #fff; border: 1px solid #56607a; border-radius: 6px;
+  padding: 7px 10px; font-size: 14px; min-width: 40px; }
+.calce-fila button:active { background: #c8641e; }
 
 @media (orientation: landscape) {
   #panel { left: auto; top: calc(40px + env(safe-area-inset-top, 0px)); width: 42vw; max-height: none; border-top: 0;

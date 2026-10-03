@@ -17,23 +17,30 @@ const estado = document.getElementById('estado');
 const decir = (t) => { estado.textContent = t; console.log('COMPILAR ' + t); };
 
 const q = new URLSearchParams(location.search);
-const fuente = q.get('img') || '../marcador.png';
+// Una o varias imagenes, separadas por coma: el orden es el indice que
+// usa ar.js (addAnchor(i)). 0 = el marcador impreso, 1 = la foto del lugar.
+const fuentes = (q.get('img') || '../marcador.png').split(',');
 const guardar = q.get('guardar') !== '0';
-const img = new Image();
-img.src = fuente + '?' + Date.now();
-await img.decode();
-decir('imagen ' + img.naturalWidth + 'x' + img.naturalHeight + ', compilando');
+const nombre = q.get('nombre') || 'targets.mind';
+const imgs = [];
+for (const fuente of fuentes) {
+  const img = new Image();
+  img.src = fuente + '?' + Date.now();
+  await img.decode();
+  imgs.push(img);
+}
+decir('imagenes ' + imgs.map(i => i.naturalWidth + 'x' + i.naturalHeight).join(', ') + ', compilando');
 
 const compiler = new Compiler();
 const t0 = performance.now();
-const datos = await compiler.compileImageTargets([img], (p) => decir('avance ' + p.toFixed(0) + ' %'));
+const datos = await compiler.compileImageTargets(imgs, (p) => decir('avance ' + p.toFixed(0) + ' %'));
 const buffer = await compiler.exportData();
 const puntos = datos.map(d => d.trackingData.map(t => t.points.length));
 const match = datos.map(d => d.matchingData.map(m => m.maximaPoints.length + m.minimaPoints.length));
 decir('listo en ' + ((performance.now() - t0) / 1000).toFixed(1) + ' s; puntos de tracking por escala ' + JSON.stringify(puntos) + '; puntos de deteccion por escala ' + JSON.stringify(match));
 if (!guardar) { decir('FIN sin guardar'); throw new Error('fin'); }
 
-const r = await fetch('/guardar?nombre=targets.mind', { method: 'POST', body: buffer });
-decir(r.ok ? 'GUARDADO targets.mind (' + buffer.byteLength + ' bytes)' : 'ERROR al guardar: ' + r.status);
+const r = await fetch('/guardar?nombre=' + encodeURIComponent(nombre), { method: 'POST', body: buffer });
+decir(r.ok ? 'GUARDADO ' + nombre + ' (' + buffer.byteLength + ' bytes)' : 'ERROR al guardar: ' + r.status);
 </script>
 </body>

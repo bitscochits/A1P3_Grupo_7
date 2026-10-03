@@ -1,0 +1,62 @@
+{
+  "_que_es": "Conjunto de datos de la AR EN TERRENO (30-09): la viga 100161 vista desde abajo, con una foto de su fondo como imagen de referencia. Se exporta con: python semana06_lab/exportar_ar.py --config semana06_lab/config_ar_viga_100161.json (sale web/datos/ar_viga_100161.json); en el telefono se elige en la pantalla de inicio. El conjunto por defecto (config_ar.json) sigue siendo la columna 200037 con el marcador impreso.",
+  "elemento": 100161,
+  "_elemento_por_que": "Viga de Ingenieria (ingenieria:viga_x, V 0.60x0.80) del borde sur, de x = 18.02 a 23.02 m en y = 47.70, cota 3.91. La eligio el grupo en terreno el 30-09: tiene un access point Aruba en el fondo, que da detalle para que la camara la reconozca. Se mira desde el piso de abajo.",
+  "cara": "abajo",
+  "_cara_por_que": "La imagen es una FOTO del fondo de la viga tomada desde abajo, de frente (marcador/foto_viga_100161.jpg, recortada a web/foto_viga_100161.png). Para una columna: +x, -x, +y o -y (la cara donde se pega la imagen), con altura_centro_m.",
+  "foto": {
+    "archivo": "marcador/foto_viga_100161.jpg",
+    "tamano_px": [
+      960,
+      1280
+    ],
+    "recorte": [
+      0,
+      460,
+      960,
+      974
+    ],
+    "imagen_web": "foto_viga_100161.png",
+    "_recorte_por_que": "Justo de un borde del fondo de la viga al otro (filas 460 a 974, medidas en la foto ampliada): el centro del recorte cae en el eje de la viga y su alto es b = 0.60 m."
+  },
+  "referencia": {
+    "viga_perpendicular": 100316,
+    "distancia_desde_su_cara_m": 0.3
+  },
+  "_referencia_por_que": "Lo que se midio en terreno: el centro de la foto (el access point) esta a unos 30 cm de la viga perpendicular 100316, que se cruza con la 100161 en el nodo 100352 (x = 23.02). SUPUESTO: los 30 cm se cuentan desde la CARA de la 100316 (lo que se ve desde abajo), no desde su eje; si fuera desde el eje, poner 0.0 aca y el modelo se corre 30 cm a lo largo de la viga. Es 'aprox': ese es el error de registro a lo largo de la viga.",
+  "arriba_de_la_imagen": "interior",
+  "_arriba_por_que": "Los cables que salen del access point van hacia arriba en la foto, y el grupo dice que van hacia el interior del edificio: el arriba de la foto mira hacia el centro de Ingenieria en ese nivel (+y). Si en terreno el modelo sale girado en 180 grados, poner 'exterior'.",
+  "ancho_impreso_m": 1.1206,
+  "_ancho_por_que": "Ancho REAL de lo que muestra la foto recortada. No se midio con huincha: sale del ancho de la viga. El recorte va justo de un borde del fondo al otro (filas 460 a 974 de la foto, 514 px) y la viga mide b = 0.60 m, asi que 1 m = 856.7 px y los 960 px de ancho son 1.1206 m. Supone la foto tomada de frente; si salio en diagonal, el ancho sale un poco corrido.",
+  "maqueta_con": {
+    "imagen": "web/marcador.png",
+    "ancho_m": 0.2,
+    "targets": "targets.mind"
+  },
+  "_maqueta_con_por_que": "La maqueta sobre la mesa usa el MARCADOR IMPRESO (20 cm), no la foto: la foto mide 1.12 m en el cielo.",
+  "targets": {
+    "archivo": "targets_viga_100161.mind",
+    "imagenes": [
+      "foto_viga_100161.png"
+    ]
+  },
+  "_targets_por_que": "Lo que busca MindAR EN SITIO: solo la foto del lugar. La maqueta busca solo el marcador impreso (targets.mind, maqueta_con). Una imagen por archivo: con la foto del access point y el marcador juntos, la foto no se detectaba a 40 grados + 20 de giro.",
+  "altura_centro_m": 1.4,
+  "_altura_por_que": "Solo para columnas (altura del centro de la imagen sobre el nodo inferior). Con cara 'abajo' no se usa.",
+  "radio_sector_m": 25.0,
+  "_radio_por_que": "Se EXPORTAN las barras con algun extremo a menos de esta distancia horizontal del centro de la imagen y entre el piso de abajo y el nivel de la viga (126 elementos, 1.1 MB). Con 6 m eran 22: al alejarse de la viga no se veia mas. El telefono elige cuanto dibujar (control 'Mostrar'): 6, 12 o 25 m.",
+  "radio_por_defecto": 6.0,
+  "_radio_por_defecto_por_que": "Lo que se dibuja al abrir: la viga, las que se cruzan con ella y las columnas que la sostienen. Se agranda en el telefono al alejarse.",
+  "modos": {
+    "sitio": {
+      "escala": 1.0,
+      "descripcion": "La camara apunta al fondo de la viga real: el modelo se dibuja a tamano real, encima de ella."
+    },
+    "maqueta": {
+      "escala": 0.02,
+      "descripcion": "El marcador impreso sobre una mesa: el sector a escala 1:50, parado sobre el."
+    }
+  },
+  "modo_por_defecto": "sitio",
+  "caso_por_defecto": "1.2G+1.6Q"
+}

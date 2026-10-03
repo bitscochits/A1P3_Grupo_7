@@ -31,6 +31,7 @@ import argparse
 import functools
 import http.server
 import os
+import re
 import shutil
 import socket
 import ssl
@@ -42,7 +43,8 @@ import urllib.parse
 AQUI = os.path.dirname(os.path.abspath(__file__))
 WEB = os.path.join(AQUI, 'web')
 CERT = os.path.join(AQUI, '.cert')
-PERMITIDOS = {'targets.mind'}
+# targets.mind (la columna 200037) y targets_<conjunto>.mind (cada viga en terreno).
+PERMITIDO = re.compile(r'^targets(_[a-z0-9_]+)?\.mind$')
 
 
 def ips_locales():
@@ -105,7 +107,7 @@ class Manejador(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         partes = urllib.parse.urlparse(self.path)
         nombre = urllib.parse.parse_qs(partes.query).get('nombre', [''])[0]
-        if partes.path != '/guardar' or nombre not in PERMITIDOS or self.client_address[0] != '127.0.0.1':
+        if partes.path != '/guardar' or not PERMITIDO.match(nombre) or self.client_address[0] != '127.0.0.1':
             self.send_error(403)
             return
         largo = int(self.headers.get('Content-Length', 0))

@@ -49,6 +49,7 @@ sys.path.insert(0, AQUI)
 import exportar_ar as ex                       # noqa: E402
 
 AR = os.path.join(AQUI, 'web', 'datos', 'ar.json')
+CONFIG = ex.CONFIG                    # main() los cambia con --config (otro conjunto de datos)
 MARCADOR = os.path.join(AQUI, 'web', 'marcador.png')
 PUERTO = 8093
 NAVEGADORES = (r'C:\Program Files\Google\Chrome\Application\chrome.exe',
@@ -102,7 +103,8 @@ def bloque_ids(ar, modelo, anexo, inf):
              (N[n['id']]['x'], N[n['id']]['y'], N[n['id']]['z']) != (n['x'], n['y'], n['z'])]
     inf.check(not malos, '%d nodos: mismo nodeTag y las mismas x, y, z de OpenSees' % len(ar['nodos']), malos[:5])
     obj = E[ar['objetivo']]
-    inf.check(ar['marcador']['elemento'] == ar['objetivo'] and obj['tipo'] == 'columna',
+    tipo_ok = {'abajo': obj['tipo'].startswith('viga'), 'foto': True}.get(ar['marcador']['cara'], obj['tipo'] == 'columna')
+    inf.check(ar['marcador']['elemento'] == ar['objetivo'] and tipo_ok,
               'el marcador esta en el elemento %d (%s %s), el mismo que muestra la app'
               % (obj['id'], obj['tipo'], obj['seccion']))
 
@@ -165,6 +167,10 @@ def bloque_pose(ar, modelo, inf):
     E = {e['id']: e for e in modelo['elementos']}
     obj = E[ar['objetivo']]
     m = ar['marcador']
+    if m['cara'] == 'abajo':
+        return pose_en_viga(ar, m, obj, N, inf)
+    if m['cara'] == 'foto':
+        return pose_por_foto(ar, m, obj, N, inf)
     n1 = N[obj['n1']]
     d = ex.resta(m['centro'], [n1['x'], n1['y'], m['centro'][2]])
     dist_cara = ex.punto(d, m['ejes']['z'])
@@ -181,6 +187,115 @@ def bloque_pose(ar, modelo, inf):
               'maqueta: origen en la base de la columna y +z de OpenSees saliendo de la imagen')
 
 
+def pose_en_viga(ar, m, obj, N, inf):
+    """[3a] para una foto en el FONDO de una viga: se rehace desde la
+    geometria del modelo, sin llamar a exportar_ar.pose_en_viga."""
+    a, b = N[obj['n1']], N[obj['n2']]
+    pa, pb = [a['x'], a['y'], a['z']], [b['x'], b['y'], b['z']]
+    L = math.dist(pa, pb)
+    u = [(pb[i] - pa[i]) / L for i in range(3)]
+    c = m['centro']
+    d = ex.resta(c, pa)
+    lateral = math.hypot(d[0] - ex.punto(d, u) * u[0], d[1] - ex.punto(d, u) * u[1])
+    inf.check(lateral <= 1e-6, 'sitio: el centro de la foto esta sobre el eje de la viga %d en planta '
+              '(a %.1e m)' % (obj['id'], lateral))
+    nc = m['nodo_cruce']
+    E_ar = {e['id']: e for e in ar['elementos']}
+    perp = E_ar.get(m['viga_perpendicular'])
+    comparten = perp is not None and nc in (obj['n1'], obj['n2']) and nc in (perp['n1'], perp['n2'])
+    s = math.hypot(c[0] - N[nc]['x'], c[1] - N[nc]['y'])
+    inf.check(comparten and abs(s - m['distancia_al_nodo_m']) <= 1e-6 and 0 < s < L,
+              'sitio: la foto esta a %.3f m del nodo %d, donde la viga %d se cruza con la %d (dentro de L = %.2f m)'
+              % (s, nc, obj['id'], m['viga_perpendicular'], L))
+    h = next(e['h'] for e in ar['elementos'] if e['id'] == obj['id'])
+    inf.check(abs(c[2] - (a['z'] - h / 2.0)) <= 1e-6 and m['ejes']['z'] == [0.0, 0.0, -1.0],
+              'sitio: en el fondo de la viga (z = %.2f = eje %.2f - h/2 %.2f) y la normal de la foto mira hacia abajo'
+              % (c[2], a['z'], h / 2.0))
+    y = m['ejes']['y']
+    cuerpo = obj['id'] // 100000
+    nivel = [n for t, n in N.items() if t // 100000 == cuerpo and abs(n['z'] - a['z']) < 1e-6]
+    g = [sum(n['x'] for n in nivel) / len(nivel), sum(n['y'] for n in nivel) / len(nivel)]
+    hacia = (g[0] - c[0]) * y[0] + (g[1] - c[1]) * y[1]
+    esperado = {'interior': hacia > 0, 'exterior': hacia < 0}.get(m['arriba_de_la_imagen'], True)
+    inf.check(abs(y[2]) <= EPS and abs(ex.punto(y, u)) <= EPS and esperado,
+              'sitio: el arriba de la foto es horizontal, perpendicular a la viga y mira al %s'
+              % m['arriba_de_la_imagen'])
+    abajo = max(n['z'] for t, n in N.items() if t // 100000 == cuerpo and n['z'] < a['z'] - 1e-3)
+    mq = m['maqueta']
+    inf.check(mq['centro'] == [c[0], c[1], abajo] and mq['ejes']['z'] == [0.0, 0.0, 1.0],
+              'maqueta: origen en el piso de abajo (z = %.2f), bajo la foto, y +z de OpenSees saliendo de ella' % abajo)
+
+
+def pose_por_foto(ar, m, obj, N, inf):
+    """[3a] para una foto en diagonal: se reproyecta cada punto medido con la
+    camara que ajusto exportar_ar, con numpy aparte, y se mira la
+    comprobacion que NO entro al ajuste."""
+    import numpy as np
+    with open(CONFIG, encoding='utf-8') as fh:
+        foto = json.load(fh)['foto']
+    cam = m['camara']
+    C, f = np.array(cam['C']), cam['f_px']
+    W, H = foto['tamano_px']
+    # La rotacion, desde los ejes publicados: filas = derecha, abajo y adelante de la camara.
+    R = np.array([m['ejes']['x'], [-v for v in m['ejes']['y']], [-v for v in m['ejes']['z']]])
+
+    def px(X):
+        Xc = R @ (np.array(X, float) - C)
+        return np.array([f * Xc[0] / Xc[2] + W / 2, f * Xc[1] / Xc[2] + H / 2]), Xc[2]
+
+    # Cota: los puntos se midieron a mano en la foto ampliada 4x (+-2 px por
+    # coordenada, hasta 2.8 px en diagonal) y la focal es la nominal del
+    # telefono, sin corregir distorsion del lente (~1 px en el centro de la foto).
+    cota = 2 * math.hypot(2, 2) + 1
+    peor = 0.0
+    for p in foto['puntos']:
+        q, z = px(p['m'])
+        peor = max(peor, float(np.hypot(*(q - np.array(p['px'])))))
+    for r in foto.get('rectas', []):
+        a, b = np.array(r['px'][0], float), np.array(r['px'][1], float)
+        n = np.array([-(b - a)[1], (b - a)[0]]) / np.linalg.norm(b - a)
+        for X in r['m']:
+            q, _ = px(X)
+            peor = max(peor, abs(float((q - a) @ n)))
+    inf.check(peor <= cota, 'foto: %d puntos y %d rectas reproyectados con la camara ajustada (peor %.1f px, cota %.1f px; '
+              'error medio del ajuste %.1f px)' % (len(foto['puntos']), len(foto.get('rectas', [])), peor, cota, cam['rms_px']))
+    hs = {e['id']: e['h'] for e in ar['elementos']}
+    for p in [pp for pp in foto['puntos'] if 'nodo' in pp] + [foto['comprobacion']]:
+        n = N[p['nodo']]
+        ok = abs(p['m'][0] - n['x']) < 1e-9 and abs(p['m'][1] - n['y']) < 1e-9 and abs(p['m'][2] - (n['z'] - hs[obj['id']] / 2)) < 1e-9
+        inf.check(ok, 'foto: el punto del nodo %d esta en sus x, y del modelo y en el fondo de la viga (z = %.2f)'
+                  % (p['nodo'], p['m'][2]))
+    c = foto['comprobacion']
+    q, _ = px(c['m'])
+    err = float(np.hypot(*(q - np.array(c['px']))))
+    inf.check(err <= c['tolerancia_px'], 'foto: COMPROBACION que no entro al ajuste: el nodo %d cae en %s px, a %.1f px de la '
+              'columna blanca %s (tolerancia %d px)' % (c['nodo'], np.round(q, 0).tolist(), err, c['px'], c['tolerancia_px']))
+    _, zc = px(m['centro'])
+    inf.check(abs(zc - cam['profundidad_m']) <= 1e-4 and abs(m['ancho_m'] - (foto['recorte'][2] - foto['recorte'][0]) * zc / f) <= 1e-4,
+              'foto: la imagen es el plano de la foto a %.2f m (la profundidad de la X), de %.3f m de ancho' % (zc, m['ancho_m']))
+    mq = m['maqueta']
+    inf.check(mq['ejes']['z'] == [0.0, 0.0, 1.0], 'maqueta: +z de OpenSees saliendo de la foto acostada')
+
+
+def bloque_giro(consola, inf):
+    """[3c] El giroscopio (al perder la imagen): el signo de cada giro. Un
+    error de convencion -- un eje cambiado, un angulo con el signo al
+    reves -- haria que el modelo se mueva CON el telefono en vez de quedarse
+    fijo, y en la pantalla solo se ve "raro"."""
+    titulo('[3c] GIROSCOPIO: al girar el telefono, el modelo se queda fijo en el espacio')
+    lineas = [l for l in consola if l.startswith('AR_GIRO ')]
+    if not inf.check(bool(lineas), 'ar.js publico la prueba del giroscopio (AR_GIRO)'):
+        return
+    g = json.loads(lineas[-1][len('AR_GIRO '):])
+    s, c = math.sin(math.radians(10)), math.cos(math.radians(10))
+    cota = 1e-12                                   # ~10 operaciones en doble precision
+    for nombre, esperado, que in (('base', [0, 0, -1], 'sin girar, el punto sigue al frente'),
+                                  ('izquierda10', [s, 0, -c], 'girar 10 grados a la izquierda lo corre a la derecha'),
+                                  ('arriba10', [0, -s, -c], 'levantar la camara 10 grados lo baja')):
+        err = max(abs(g[nombre][i] - esperado[i]) for i in range(3))
+        inf.check(err <= cota, '%s: %s (%s; error %.1e)' % (nombre, que, [round(v, 4) for v in g[nombre]], err))
+
+
 def bloque_transformacion(ar, consola, inf):
     titulo('[3b] REGISTRO: la transformacion de ar.js (en Chrome) contra la de Python')
     lineas = [l for l in consola if l.startswith('AR_TRANSFORM ')]
@@ -192,7 +307,7 @@ def bloque_transformacion(ar, consola, inf):
         esc = ar['modos'][modo]['escala']
         peor, donde = 0.0, ''
         for n in ar['nodos']:
-            py = ex.a_anchor([n['x'], n['y'], n['z']], dict(pose, ancho_m=ar['marcador']['ancho_m']), esc)
+            py = ex.a_anchor([n['x'], n['y'], n['z']], dict(pose, ancho_m=ancho_de(ar, modo)), esc)
             j = js[modo]['puntos'][str(n['id'])]
             err = max(abs(py[i] - j[i]) for i in range(3))
             if err > peor:
@@ -210,12 +325,12 @@ def bloque_transformacion(ar, consola, inf):
     a = js['sitio']['puntos'][str(obj['n1'])]
     b = js['sitio']['puntos'][str(obj['n2'])]
     alto = math.dist(a, b) * ar['marcador']['ancho_m']
-    inf.check(abs(alto - obj['L']) <= 1e-9, 'sitio: la columna mide %.3f m en el anchor x ancho, igual que en '
+    inf.check(abs(alto - obj['L']) <= 1e-9, 'sitio: el elemento mide %.3f m en el anchor x ancho, igual que en '
               'OpenSees (L = %.3f m): escala 1:1' % (alto, obj['L']))
     q = js['maqueta']['puntos']
-    alto_m = math.dist(q[str(obj['n1'])], q[str(obj['n2'])]) * ar['marcador']['ancho_m']
+    alto_m = math.dist(q[str(obj['n1'])], q[str(obj['n2'])]) * ancho_de(ar, 'maqueta')
     inf.check(abs(alto_m - obj['L'] * ar['modos']['maqueta']['escala']) <= 1e-9,
-              'maqueta: la columna mide %.1f cm sobre la mesa = %.2f m x %g' % (alto_m * 100, obj['L'],
+              'maqueta: el elemento mide %.1f cm sobre la mesa = %.2f m x %g' % (alto_m * 100, obj['L'],
                                                                               ar['modos']['maqueta']['escala']))
 
 
@@ -240,13 +355,20 @@ def mat(a, b):
     return [[sum(a[i][k] * b[k][j] for k in range(len(b))) for j in range(len(b[0]))] for i in range(len(a))]
 
 
-def generar_video(ruta, ancho_m, dist, incl_deg, giro_deg, cuadros=45):
+def ancho_de(ar, modo):
+    """Cada modo con SU imagen: la maqueta puede usar el marcador impreso
+    (0.20 m) aunque en sitio la imagen sea una foto del lugar (ar.js anchoDe)."""
+    pose = ar['marcador'] if modo == 'sitio' else ar['marcador']['maqueta']
+    return pose.get('ancho_m') or ar['marcador']['ancho_m']
+
+
+def generar_video(ruta, ancho_m, dist, incl_deg, giro_deg, cuadros=45, imagen=MARCADOR):
     """La imagen impresa vista desde una camara con la pose dada, con los
     intrinsecos de MindAR, escrita como video .y4m (lo que Chrome acepta
     como camara falsa). Devuelve la pose verdadera."""
     import numpy as np
     from PIL import Image
-    src = np.asarray(Image.open(MARCADOR).convert('RGB'), dtype=np.float32)
+    src = np.asarray(Image.open(imagen).convert('RGB'), dtype=np.float32)
     H0, W0 = src.shape[:2]
     alto_m = ancho_m * H0 / W0
     f = (H_VIDEO / 2) / math.tan(FOVY / 2)
@@ -284,20 +406,34 @@ def generar_video(ruta, ancho_m, dist, incl_deg, giro_deg, cuadros=45):
             for pl in planos:
                 fh.write(pl.tobytes())
     ancho_px = f * ancho_m / dist
-    return {'dist_m': dist, 'incl_deg': incl_deg, 'giro_deg': giro_deg, 'R': R.tolist(), 'ancho_px': ancho_px}
+    return {'dist_m': dist, 'incl_deg': incl_deg, 'giro_deg': giro_deg, 'R': R.tolist(), 'ancho_px': ancho_px,
+            'lado_corto_px': f * min(ancho_m, alto_m) / dist}
 
 
 def bloque_tracking(ar, nav, inf):
     titulo('[4] IMAGE TRACKING: video sintetico con pose conocida -> la pose que estima la app')
-    poses = [(0.45, 0.0, 0.0), (0.55, 30.0, 0.0), (0.60, 40.0, 20.0)]
+    # Las distancias escalan con el ancho de la imagen, para que ocupe lo
+    # mismo en el cuadro (~200-260 px) sea el marcador de 0.20 m o una foto
+    # mas grande: las cotas de abajo salen de ese tamano en pixeles, y con
+    # la imagen mas ancha que el cuadro no quedan esquinas que ubicar.
+    # Se prueba CADA modo con SU imagen: la maqueta con el marcador impreso
+    # y, si en sitio se usa una foto del lugar, en sitio con la foto.
+    web = lambda nombre: os.path.join(AQUI, 'web', nombre)
+    modos = [('maqueta', web(ar['marcador']['maqueta'].get('imagen', 'marcador.png')))]
+    if ar['marcador'].get('imagen', 'marcador.png') != 'marcador.png':
+        modos.append(('sitio', web(ar['marcador']['imagen'])))
+    pruebas = []
+    for modo, imagen in modos:
+        k = ancho_de(ar, modo) / 0.20
+        pruebas += [(modo, imagen, d * k, i, g) for d, i, g in ((0.45, 0.0, 0.0), (0.55, 30.0, 0.0), (0.60, 40.0, 20.0))]
     carpeta = tempfile.mkdtemp(prefix='ar_video_')
     try:
-        for dist, incl, giro in poses:
+        for modo, imagen, dist, incl, giro in pruebas:
             video = os.path.join(carpeta, 'pose.y4m')
-            verdad = generar_video(video, ar['marcador']['ancho_m'], dist, incl, giro)
-            consola = navegador(nav, 'index.html?prueba=1&iniciar=maqueta', 60, video=video, esperar='AR_POSE', minimo=6)
+            verdad = generar_video(video, ancho_de(ar, modo), dist, incl, giro, imagen=imagen)
+            consola = navegador(nav, 'index.html?prueba=1&iniciar=%s&datos=%s' % (modo, os.path.basename(AR)), 60, video=video, esperar='AR_POSE', minimo=6)
             poses_js = [json.loads(l[len('AR_POSE '):]) for l in consola if l.startswith('AR_POSE ')]
-            etiqueta = 'd = %.2f m, inclinacion %g, giro %g' % (dist, incl, giro)
+            etiqueta = '%s (%s), d = %.2f m, inclinacion %g, giro %g' % (modo, os.path.basename(imagen), dist, incl, giro)
             if not inf.check(len(poses_js) >= 3, '%s: la app DETECTA la imagen (%d poses publicadas)'
                              % (etiqueta, len(poses_js))):
                 continue
@@ -320,9 +456,13 @@ def bloque_tracking(ar, nav, inf):
             # MindAR ubica sus esquinas a ~1 px; eso mueve la distancia en
             # d * 1/ancho_px por lado y el angulo en atan(2/ancho_px) por
             # esquina. Se dejan 3 px de margen (esquinas en varias escalas).
+            # El angulo lo fija el LADO CORTO: el giro en torno al eje largo
+            # se lee en cuanto se corren las esquinas a lo largo del corto.
+            # En el marcador impreso (1000 x 1010 px) es el ancho; en la foto
+            # de la viga (960 x 514) es el alto, 138 px de 258.
             px = 3.0
             cota_d = dist * px / verdad['ancho_px']
-            cota_a = math.degrees(math.atan(2 * px / verdad['ancho_px'])) * 2
+            cota_a = math.degrees(math.atan(2 * px / verdad['lado_corto_px'])) * 2
             inf.check(abs(d_est - dist) <= cota_d,
                       '%s: distancia estimada %.3f m (verdad %.3f, error %.1f mm, cota %.1f mm; la imagen ocupa %.0f px)'
                       % (etiqueta, d_est, dist, abs(d_est - dist) * 1000, cota_d * 1000, verdad['ancho_px']))
@@ -376,7 +516,12 @@ def navegador(nav, pagina, segundos, video=None, esperar=None, minimo=1):
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument('--sin-navegador', action='store_true', help='solo los bloques [1], [2] y [3a]')
+    ap.add_argument('--config', default=ex.CONFIG,
+                    help='otro conjunto de datos, p. ej. semana06_lab/config_ar_viga_100164.json')
     args = ap.parse_args(argv)
+    global AR, CONFIG
+    CONFIG = os.path.abspath(args.config)
+    AR = ex.salida_de(CONFIG)
 
     print('=' * 78)
     print('  LA APP DE AR, CRITERIO POR CRITERIO')
@@ -402,10 +547,11 @@ def main(argv=None):
                                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             try:
                 time.sleep(1.5)
-                consola = navegador(nav, 'index.html?prueba=1', 40, esperar='AR_TRANSFORM')
+                consola = navegador(nav, 'index.html?prueba=1&datos=' + os.path.basename(AR), 40, esperar='AR_TRANSFORM')
                 errores = [l for l in consola if 'Uncaught' in l or 'Error' in l]
                 inf.check(not errores, 'ar.js carga sin errores de JavaScript', errores[:3])
                 bloque_transformacion(ar, consola, inf)
+                bloque_giro(consola, inf)
                 bloque_tracking(ar, nav, inf)
             finally:
                 srv.kill()

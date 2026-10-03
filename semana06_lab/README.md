@@ -21,6 +21,47 @@ Abajo, los números de OpenSees para `1.2G+1.0Q+1.4EX`.*
 
 ---
 
+## Lo nuevo (30-09 a 02-10): en el iPhone y en el edificio
+
+La app corrió en el **iPhone** (captura en
+[`semana06/evidencia/iphone/`](../semana06/evidencia/iphone/LEEME.md)) y se
+probó **en el edificio**, sobre vigas reales, usando **una foto del lugar
+como imagen de referencia**. El detalle está en el
+[informe, §1.1, §3.1 y §4.1](../reports/semana06.md).
+
+**Tres conjuntos de datos**, que se eligen en la pantalla de inicio (o con
+`?datos=` en la dirección):
+
+| config | imagen en sitio | elemento | sale en |
+|---|---|---|---|
+| `config_ar.json` (por defecto) | el marcador impreso, en la cara de la columna | columna **200037** | `web/datos/ar.json` |
+| `config_ar_viga_100161.json` | foto **de frente** del fondo de la viga (`marcador/foto_viga_100161.jpg`) | viga **100161** | `web/datos/ar_viga_100161.json` |
+| `config_ar_viga_100164.json` | foto **en diagonal** del cielo con la X del nodo 100352; su pose se ajusta por **PnP** con puntos del modelo | viga **100164** | `web/datos/ar_viga_100164.json` |
+
+```powershell
+.\.venv\Scripts\python.exe semana06_lab\exportar_ar.py --config semana06_lab\config_ar_viga_100164.json
+.\.venv\Scripts\python.exe semana06_lab\marcador\compilar_marcador.py --config semana06_lab\config_ar_viga_100164.json
+.\.venv\Scripts\python.exe semana06_lab\verificar_ar.py --config semana06_lab\config_ar_viga_100164.json
+```
+
+**Lo que se agregó a la app** (solo transforma y dibuja):
+
+- **Cada modo, su imagen.** En sitio, la foto del lugar
+  (`targets_viga_*.mind`); en la maqueta, siempre el marcador impreso
+  (`targets.mind`), con su ancho real de 20 cm. Va una imagen por archivo,
+  porque con dos en el mismo la foto del access point dejaba de detectarse
+  en la vista más oblicua.
+- **Calce a mano:** corre, gira y escala el modelo sobre la imagen. Es una
+  matriz más, en el sistema de la imagen; se guarda en el teléfono y
+  muestra sus valores.
+- **Si se pierde la imagen:** seguir con el giroscopio (por defecto),
+  congelar u ocultar. El giroscopio solo corrige **giros**: si se camina,
+  el modelo se corre.
+- **Mostrar 6, 12 o 25 m** alrededor: las vigas se exportan con un sector
+  de 25 m.
+
+---
+
 ## Por qué es AR web y no una app de Unity
 
 Los tres integrantes tienen **iPhone** y el grupo **no tiene Mac**. La AR

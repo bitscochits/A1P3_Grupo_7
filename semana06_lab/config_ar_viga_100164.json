@@ -1,0 +1,163 @@
+{
+  "_que_es": "Conjunto de datos de la AR EN TERRENO (30-09): la viga 100164, con una foto EN DIAGONAL del cielo como imagen de referencia y la pose de la foto calculada por PnP. Se exporta con: python semana06_lab/exportar_ar.py --config semana06_lab/config_ar_viga_100164.json (sale web/datos/ar_viga_100164.json); en el telefono se elige en la pantalla de inicio. El conjunto por defecto (config_ar.json) sigue siendo la columna 200037 con el marcador impreso.",
+  "elemento": 100164,
+  "_elemento_por_que": "Viga de Ingenieria (ingenieria:viga_x, V 0.60x0.80) del borde sur, entre el nodo 100352 (x = 23.02, marcado con una X de cinta en terreno) y el 100359 (x = 25.52, donde esta la columna blanca), en y = 47.70, cota 3.91. Es la que cruza la foto.",
+  "cara": "foto",
+  "_cara_por_que": "La imagen es una foto EN DIAGONAL, tomada desde abajo mirando hacia los ventanales (marcador/foto_vigas_100352.jpg). No se supone que sea de frente: Python calcula desde donde se tomo (PnP) con los puntos de abajo, y la imagen de referencia es el plano de la foto a la profundidad de la X. Para una columna: +x, -x, +y o -y con altura_centro_m; para el fondo de una viga fotografiado de frente: 'abajo' con 'referencia'.",
+  "foto": {
+    "archivo": "marcador/foto_vigas_100352.jpg",
+    "tamano_px": [
+      960,
+      1280
+    ],
+    "focal_mm_equivalente": 26,
+    "_focal_por_que": "Camara principal del iPhone (1x): 26 mm equivalentes sobre la diagonal (24 mm en los Pro). SUPUESTO, y pesa: con 24 mm la camara ajustada se corre 0.21 m y el dibujo de los nudos a menos de 6 m, hasta 0.10 m (medido 02-10). El error del ajuste no distingue entre las dos (1.71 contra 1.57 px). NO se ajusta: con puntos casi en un plano, distancia y zoom se compensan y el ajuste libre se va a un teleobjetivo a 14 m bajo tierra.",
+    "puntos": [
+      {
+        "px": [
+          883,
+          690
+        ],
+        "m": [
+          23.02,
+          47.7,
+          3.51
+        ],
+        "nodo": 100352,
+        "que": "la X de cinta = nodo 100352, en el fondo de la viga dibujada (eje 3.91 - h/2 0.40)"
+      },
+      {
+        "px": [
+          119,
+          621
+        ],
+        "m": [
+          25.22,
+          48.0,
+          3.51
+        ],
+        "que": "esquina del fondo: cara norte de la viga del borde (47.70 + 0.30) con la cara oeste de la 100318 (25.52 - 0.30)"
+      },
+      {
+        "px": [
+          817,
+          641
+        ],
+        "m": [
+          23.32,
+          48.0,
+          3.51
+        ],
+        "que": "esquina del fondo: cara norte de la viga del borde con la cara este de la 100316 (23.02 + 0.30)"
+      }
+    ],
+    "rectas": [
+      {
+        "px": [
+          [
+            817,
+            641
+          ],
+          [
+            855,
+            580
+          ]
+        ],
+        "m": [
+          [
+            23.32,
+            48.6,
+            3.51
+          ],
+          [
+            23.32,
+            49.2,
+            3.51
+          ]
+        ],
+        "que": "borde este del fondo de la 100316 (x = 23.32), que sale de la esquina hacia el interior"
+      },
+      {
+        "px": [
+          [
+            190,
+            724.5
+          ],
+          [
+            900,
+            741.0
+          ]
+        ],
+        "m": [
+          [
+            25.0,
+            47.4,
+            3.51
+          ],
+          [
+            23.2,
+            47.4,
+            3.51
+          ]
+        ],
+        "que": "borde sur del fondo de la viga del borde (y = 47.70 - 0.30)"
+      }
+    ],
+    "_puntos_por_que": "Medidos a mano en la foto ampliada 4x (+-2 px). Todos en el FONDO de las vigas, cuya geometria sale del modelo (nodos y b = 0.60). Se dejo fuera la esquina de arriba (el fondo de la losa): supone 0.55 m entre fondo de viga y losa, y ajustandola sale 0.66 m, asi que no es un dato del modelo.",
+    "comprobacion": {
+      "px": [
+        50,
+        670
+      ],
+      "m": [
+        25.52,
+        47.7,
+        3.51
+      ],
+      "nodo": 100359,
+      "tolerancia_px": 15,
+      "que": "el nodo 100359 tiene que caer en la columna blanca; no entra al ajuste. Tolerancia: el centro de la columna se estima a ojo (se ve ~100 px de ella)"
+    },
+    "recorte": [
+      0,
+      0,
+      960,
+      990
+    ],
+    "_recorte_por_que": "Lo que MindAR busca: todo el cielo con sus vigas, ductos y canaletas. Se deja fuera lo de abajo (ventanales con el cerro y gente), que cambia o esta lejos.",
+    "imagen_web": "foto_vigas_100352.png"
+  },
+  "maqueta_con": {
+    "imagen": "web/marcador.png",
+    "ancho_m": 0.2,
+    "targets": "targets.mind"
+  },
+  "_maqueta_con_por_que": "La maqueta sobre la mesa usa el MARCADOR IMPRESO (marcador/marcador_imprimir.pdf al 100 %, 20.0 cm de ancho), no la foto del cielo: la foto mide 2.9 m alla arriba y acostada en una mesa el edificio saldria diminuto. targets.mind trae las dos imagenes: 0 = marcador (maqueta), 1 = foto (en sitio).",
+  "targets": {
+    "archivo": "targets_viga_100164.mind",
+    "imagenes": [
+      "foto_vigas_100352.png"
+    ]
+  },
+  "_targets_por_que": "Lo que busca MindAR EN SITIO: solo la foto del lugar. La maqueta busca solo el marcador impreso (targets.mind, maqueta_con). Una imagen por archivo: con la foto del access point y el marcador juntos, la foto no se detectaba a 40 grados + 20 de giro.",
+  "ancho_impreso_m": 0,
+  "_ancho_por_que": "Con cara 'foto' el ancho lo calcula Python (el ancho de la foto a la profundidad de la X). Solo se usa con marcador impreso o foto de frente.",
+  "altura_centro_m": 1.4,
+  "_altura_por_que": "Solo para columnas (altura del centro de la imagen sobre el nodo inferior).",
+  "radio_sector_m": 25.0,
+  "_radio_por_que": "Se EXPORTAN las barras con algun extremo a menos de esta distancia horizontal del centro del elemento y entre el piso de abajo y el nivel de la viga. El telefono elige cuanto dibujar (control 'Mostrar'): 6, 12 o 25 m.",
+  "radio_por_defecto": 6.0,
+  "_radio_por_defecto_por_que": "Lo que se dibuja al abrir: la viga, las que se cruzan con ella y las columnas que la sostienen.",
+  "modos": {
+    "sitio": {
+      "escala": 1.0,
+      "descripcion": "La camara mira el cielo desde donde se tomo la foto: el modelo se dibuja a tamano real, encima."
+    },
+    "maqueta": {
+      "escala": 0.02,
+      "descripcion": "El marcador impreso sobre una mesa: el sector a escala 1:50, parado sobre el."
+    }
+  },
+  "modo_por_defecto": "sitio",
+  "caso_por_defecto": "1.2G+1.6Q"
+}

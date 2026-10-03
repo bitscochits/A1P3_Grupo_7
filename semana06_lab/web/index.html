@@ -20,9 +20,16 @@
   <h1>Edificio de Ingeniería · AR</h1>
   <p>Grupo 7 · Métodos Computacionales en Obras Civiles</p>
   <p id="resumen">cargando el modelo…</p>
+  <label class="nota">Elemento
+    <select id="conjunto">
+      <option value="ar.json">columna 200037 · marcador impreso</option>
+      <option value="ar_viga_100161.json">viga 100161 · foto del access point (en terreno)</option>
+      <option value="ar_viga_100164.json">viga 100164 · foto del cielo con la X (en terreno)</option>
+    </select>
+  </label>
   <div class="fila">
-    <button class="modo" data-modo="maqueta">Maqueta<br><small>imagen sobre la mesa, 1:50</small></button>
-    <button class="modo" data-modo="sitio">En sitio<br><small>imagen en la columna, 1:1</small></button>
+    <button class="modo" data-modo="maqueta">Maqueta<br><small>marcador impreso sobre la mesa, 1:50</small></button>
+    <button class="modo" data-modo="sitio">En sitio<br><small>apuntando al lugar de la foto, 1:1</small></button>
   </div>
   <p class="nota">Apunta la cámara a la imagen impresa. Safari va a pedir permiso para la cámara.</p>
 </div>
@@ -48,6 +55,28 @@
       <label><input type="checkbox" id="deformada"> deformada</label>
       <label><input type="checkbox" id="tributarias"> áreas tributarias</label>
       <label><input type="checkbox" id="etiquetas" checked> tags</label>
+      <label>Mostrar <select id="radio"></select></label>
+      <label><input type="checkbox" id="ver-calce"> calce a mano</label>
+      <label>Si se pierde la imagen <select id="perdida">
+        <option value="giroscopio">seguir con el giroscopio</option>
+        <option value="congelar">congelar</option>
+        <option value="ocultar">ocultar</option>
+      </select></label>
+    </div>
+    <div id="calce" hidden>
+      <div class="calce-fila">
+        <span>Mover</span>
+        <button data-t="x,-1">←</button><button data-t="x,1">→</button>
+        <button data-t="y,1">↑</button><button data-t="y,-1">↓</button>
+        <button data-t="z,1">acercar</button><button data-t="z,-1">alejar</button>
+        <select id="paso"><option value="0.01">1 cm</option><option value="0.05" selected>5 cm</option><option value="0.20">20 cm</option></select>
+      </div>
+      <div class="calce-fila">
+        <span>Girar</span><button data-g="1">⟲ 1°</button><button data-g="-1">⟳ 1°</button>
+        <span>Escala</span><button data-s="-1">− 1 %</button><button data-s="1">+ 1 %</button>
+        <button id="calce-cero">reiniciar</button>
+      </div>
+      <p class="nota" id="calce-texto"></p>
     </div>
     <div id="datos"></div>
     <canvas id="pm" width="600" height="360"></canvas>
