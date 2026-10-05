@@ -132,6 +132,7 @@ public partial class VisorPersona : MonoBehaviour, IPanelIncrustable
 
     void OnDisable()
     {
+        SalirCabina();                          // VisorPersona.Cabina.cs: devuelve la camara
         EventosVisor.Redibujado -= AlRedibujar;
         EventosVisor.ModeloEditado -= AlEditarModelo;
         Limpiar();
@@ -174,6 +175,7 @@ public partial class VisorPersona : MonoBehaviour, IPanelIncrustable
         AnimarPiso();                           // VisorPersona.Pisos.cs: el ascensor entre pisos
         // Con el foco en un campo de texto las flechas son del campo.
         if (GUIUtility.keyboardControl != 0) { if (redibujar) Calcular(); AplicarDeformadaSiToca(); return; }
+        if (Input.GetKeyDown(KeyCode.V)) { if (enCabina) SalirCabina(); else EntrarCabina(); }
 
         Vector2 mov = Vector2.zero;
         if (Input.GetKey(KeyCode.UpArrow)) mov.y += 1f;
@@ -181,7 +183,8 @@ public partial class VisorPersona : MonoBehaviour, IPanelIncrustable
         if (Input.GetKey(KeyCode.RightArrow)) mov.x += 1f;
         if (Input.GetKey(KeyCode.LeftArrow)) mov.x -= 1f;
         bool cambio = false;
-        if (mov != Vector2.zero)
+        if (enCabina) cambio = MoverEnCabina();     // VisorPersona.Cabina.cs: avanza y gira
+        else if (mov != Vector2.zero)
         {
             // Relativo a la camara: "arriba" es alejarse de ella. En Unity
             // el plano es X-Z, que en OpenSees es X-Y (Ejes.AUnity).
@@ -230,6 +233,7 @@ public partial class VisorPersona : MonoBehaviour, IPanelIncrustable
     {
         puesta = false;
         ultimo = null;
+        SalirCabina();
         QuitarDeformadaPersona();
         Limpiar();
     }
@@ -506,6 +510,7 @@ public partial class VisorPersona : MonoBehaviour, IPanelIncrustable
     // ============================================================
     void OnGUI()
     {
+        HudCabina();                            // VisorPersona.Cabina.cs
         if (!PanelPropio) return;
         PanelUI.Preparar();
         GUILayout.BeginArea(new Rect(Screen.width - PanelUI.Px(380f), PanelUI.Px(10f),
@@ -536,6 +541,7 @@ public partial class VisorPersona : MonoBehaviour, IPanelIncrustable
         GUI.enabled = puesta;
         if (GUILayout.Button("Quitar persona", boton)) diferida = Quitar;
         PanelPisos(boton);                                  // VisorPersona.Pisos.cs
+        PanelCabina(boton);                                 // VisorPersona.Cabina.cs
         GUI.enabled = true;
 
         GUILayout.Label($"Peso: {F(pesoKN, "0.00")} kN  ({F(pesoKN / 9.80665f * 1000f, "0")} kg)", texto);
@@ -599,6 +605,7 @@ public partial class VisorPersona : MonoBehaviour, IPanelIncrustable
     System.Action diferida;
     void LateUpdate()
     {
+        CamaraDeCabina();                       // VisorPersona.Cabina.cs
         if (diferida == null) return;
         System.Action a = diferida;
         diferida = null;

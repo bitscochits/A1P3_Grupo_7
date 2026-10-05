@@ -123,6 +123,18 @@ public class CapturaPersona : MonoBehaviour
         registro.Add(persona.Captura_Registro());
         yield return Foto(cam, "persona_4_otro_piso", persona.Captura_Donde, 16f, 18f, persona.Captura_RumboViga + 105f);
 
+        // Desde la cabina: la camara la maneja la persona, asi que la foto
+        // va sin mover la orbital. Camina 2 m para ver el paso.
+        persona.Captura_Cabina(true);
+        persona.Captura_Caminar(new Vector2(0f, 2f));
+        persona.Captura_Mirar(persona.Captura_RumboViga + 180f, 15f);   // a lo largo de la viga, hacia adentro
+        yield return new WaitForSecondsRealtime(1.5f);
+        registro.Add("cabina: " + (persona.Captura_EnCabina ? "adentro" : "NO entro") + ", camara en "
+                     + Camera.main.transform.position.ToString("F2"));
+        yield return FotoTalCual("persona_5_cabina");
+        persona.Captura_Cabina(false);
+        yield return new WaitForSecondsRealtime(0.5f);
+
         bool ok = nErrores == 0 && !registro.Exists(l => l.Contains("sin deformada"));
         Fin(null, ok ? 0 : 2);
     }
@@ -141,6 +153,15 @@ public class CapturaPersona : MonoBehaviour
         finally { Destroy(tex); }
         registro.Add(string.Format(System.Globalization.CultureInfo.InvariantCulture,
             "foto {0}: distancia {1:F1} m, pitch {2:F0}, yaw {3:F0}", nombre, distancia, pitch, yaw));
+    }
+
+    IEnumerator FotoTalCual(string nombre)
+    {
+        yield return new WaitForEndOfFrame();
+        Texture2D tex = ScreenCapture.CaptureScreenshotAsTexture();
+        try { File.WriteAllBytes(Path.Combine(carpeta, nombre + ".jpg"), tex.EncodeToJPG(CALIDAD_JPG)); }
+        finally { Destroy(tex); }
+        registro.Add("foto " + nombre + ": la camara de la cabina");
     }
 
     void Fin(string motivo, int codigo)

@@ -220,8 +220,23 @@ minutos, reexporta los anexos y deja el LT2.
   losa bajo él; sube y baja como un ascensor (0.7 s). Si justo arriba no
   hay losa, aparece en la región más cercana y el panel lo dice.
 
+  **Desde la cabina.** V (o *Manejar desde la cabina*) pone la cámara en
+  los ojos del AT-ST: W/S o las flechas avanzan, A/D giran, el botón
+  derecho mira alrededor, Q/E cambian de piso y V sale. La cámara baja
+  con la losa (con la escala de dibujo) y la cabina no se dibuja para no
+  tapar la vista. Mientras tanto `CamaraOrbital` queda apagada y al salir
+  vuelve a su órbita. No hay colisiones: atraviesa columnas y muros.
+
   ![El AT-ST en la viga 200141 del conjunto](capturas_persona/persona_2_cerca.jpg)
   ![Un piso más arriba, con su momento](capturas_persona/persona_4_otro_piso.jpg)
+  ![Desde la cabina, a lo largo de la viga que carga](capturas_persona/persona_5_cabina.jpg)
+
+  La **vista realista** usa desde el 05-10 texturas y cielo descargados,
+  todos CC0 (ambientCG y Poly Haven; `unity/Assets/Resources/Ambiente/LICENCIAS.md`):
+  hormigón con mapa normal, pasto, tierra, acero galvanizado y un cielo
+  HDRI girado para que su sol caiga donde está la luz (las sombras y el
+  cielo coinciden), con tonos ACES. Sin esos recursos vuelve a las
+  texturas procedurales. Los verifica `comun/recursos_realistas.py`.
 
   ```
   python semana05_lab/influencias_persona.py lt2          resuelve, verifica y escribe (15 s; conjunto 100 s)

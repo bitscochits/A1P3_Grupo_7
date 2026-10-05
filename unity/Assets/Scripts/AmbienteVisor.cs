@@ -16,7 +16,8 @@
   ----------------------------------------------------------------
   Tecnica  = la de siempre: colores por tipo, el cielo y la luz de la
              escena. El suelo va en un color mate, sin textura.
-  Realista = hormigon y acero con textura procedural, suelo de pasto,
+  Realista = hormigon y acero con textura (descargada, CC0, o procedural
+             si no esta; AmbienteVisor.Recursos.cs), suelo de pasto,
              excavacion de tierra, cielo mas azul (y la luz ambiente que
              sale de el), luz de dia suave con sombras blandas.
   El mapa D/C pinta ENCIMA de las dos (prioridad mapa > realista >
@@ -63,9 +64,13 @@
   - Niebla: con la de la escena apagada, el 'fog stripping' automatico
     de la build borra las variantes con niebla. Se veria en el editor y
     no en el exe.
-  - Shaders nuevos: solo el de VisorEstructura.ShaderCompatible() (URP
-    Lit, ya incluido en la build) y el skybox que la escena ya usa. Sin
-    keywords (_NORMALMAP, transparencia), que tambien se pierden.
+  - Shaders nuevos ni keywords en materiales creados por codigo: solo el
+    de VisorEstructura.ShaderCompatible() (URP Lit) sin keywords
+    (_NORMALMAP, transparencia), que la build borra. Lo que si los usa
+    (texturas con mapa normal, el cielo HDRI, el post-proceso realista)
+    viene como ASSET en Resources/Ambiente, armado por
+    Editor/RecursosRealistas.cs, y se copia (AmbienteVisor.Recursos.cs):
+    asi la build incluye sus variantes. Sin esos assets, lo procedural.
   - Tocar el asset de URP o QualitySettings: en el editor el cambio
     quedaria guardado en disco.
 ================================================================
@@ -563,6 +568,7 @@ public partial class AmbienteVisor : MonoBehaviour
             RenderSettings.ambientGroundColor = ambienteSuelo;
             RenderSettings.sun = solOriginalDeRender;
             RenderSettings.skybox = cieloOriginal;
+            AplicarVolumen(false);               // AmbienteVisor.Recursos.cs
             DynamicGI.UpdateEnvironment();
             return;
         }
@@ -603,13 +609,21 @@ public partial class AmbienteVisor : MonoBehaviour
             }
             RenderSettings.skybox = cieloRealista;
         }
+        // El HDRI, si esta (AmbienteVisor.Recursos.cs), en vez del procedural.
+        Material hdri = CieloReal();
+        if (hdri != null) RenderSettings.skybox = hdri;
+        AplicarVolumen(true);
+        bool luzDelCielo = hdri != null;
 
         // La luz ambiente de la realista: tres tonos neutros (Trilight) en vez
         // del cielo azul. No se escribe la sonda a mano: si al arrancar
         // todavia no estaba calculada, guardarla y "restaurarla" dejaria la
         // vista tecnica a oscuras. Se pide recalcularla; si en alguna
         // plataforma no corre, queda la de la escena: nada se rompe.
-        RenderSettings.ambientMode = AmbientMode.Trilight;
+        // Con el HDRI, la luz ambiente sale de el (la sonda se recalcula de
+        // ese cielo); sin el, los tres tonos de siempre.
+        RenderSettings.ambientMode = luzDelCielo ? AmbientMode.Skybox : AmbientMode.Trilight;
+        RenderSettings.ambientIntensity = 1f;
         RenderSettings.ambientSkyColor = AMB_CIELO;
         RenderSettings.ambientEquatorColor = AMB_ECUADOR;
         RenderSettings.ambientGroundColor = AMB_SUELO;
@@ -656,7 +670,10 @@ public partial class AmbienteVisor : MonoBehaviour
         Material m;
         if (materialesRealistas.TryGetValue(clave, out m) && m != null) return m;
 
-        m = NuevoMaterial("Realista_" + clave, tex, color, suavidad, metalico, new Vector2(rep.x, rep.y));
+        // Con el recurso descargado (AmbienteVisor.Recursos.cs); si no, la procedural.
+        m = NuevoMaterialReal("Realista_" + clave, ItemDe(categoria), color, suavidad, metalico,
+                              new Vector2(rep.x, rep.y))
+            ?? NuevoMaterial("Realista_" + clave, tex, color, suavidad, metalico, new Vector2(rep.x, rep.y));
         materialesRealistas[clave] = m;
         return m;
     }
@@ -713,11 +730,16 @@ public partial class AmbienteVisor : MonoBehaviour
         CrearTexturas();
         // Las UV del suelo ya vienen en metros / repeticion (ver la malla):
         // el material no escala.
+        // Los recursos descargados cubren menos metros por imagen que la
+        // procedural: se reescalan sobre las mismas UV (AmbienteVisor.Recursos.cs).
         matSueloRealista = new[]
         {
-            NuevoMaterial("SueloPasto", texPasto, C_PASTO, 0.04f, 0f, Vector2.one),
-            NuevoMaterial("ExcavacionPared", texTierra, C_PARED_TIERRA, 0.03f, 0f, Vector2.one),
-            NuevoMaterial("ExcavacionFondo", texHormigon, C_FONDO, 0.06f, 0f, Vector2.one),
+            NuevoMaterialReal("SueloPasto", "pasto", C_PASTO_REAL, 0.04f, 0f, Vector2.one * (REPETICION_PASTO / TILE_PASTO_M))
+                ?? NuevoMaterial("SueloPasto", texPasto, C_PASTO, 0.04f, 0f, Vector2.one),
+            NuevoMaterialReal("ExcavacionPared", "tierra", C_PARED_TIERRA, 0.03f, 0f, Vector2.one * (REPETICION_TIERRA / TILE_TIERRA_M))
+                ?? NuevoMaterial("ExcavacionPared", texTierra, C_PARED_TIERRA, 0.03f, 0f, Vector2.one),
+            NuevoMaterialReal("ExcavacionFondo", "hormigon_losa", C_FONDO, 0.06f, 0f, Vector2.one)
+                ?? NuevoMaterial("ExcavacionFondo", texHormigon, C_FONDO, 0.06f, 0f, Vector2.one),
         };
         return matSueloRealista;
     }
@@ -1213,6 +1235,7 @@ public partial class AmbienteVisor : MonoBehaviour
         m.SetTriangles(triSuelo, 0);
         m.SetTriangles(triPared, 1);
         m.SetTriangles(triFondo, 2);
+        m.RecalculateTangents();             // para el mapa normal (AmbienteVisor.Recursos.cs)
         m.RecalculateBounds();
         return m;
     }

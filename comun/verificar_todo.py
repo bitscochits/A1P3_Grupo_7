@@ -140,6 +140,10 @@ SUITE = [
     ('persona: deformada conjunto', ['semana05_lab/influencias_persona.py', 'conjunto', '--verificar',
                                      '--registro', 'semana05_lab/capturas_persona/registro.txt'], False),
     ('persona: el AT-ST',           ['semana05_lab/personaje_atst.py', '--verificar'], False),
+    # Las texturas, el cielo y el post-proceso de la vista realista (CC0):
+    # licencias, mapas normales importados como tales, materiales que los
+    # usan, y el cielo girado para que su sol caiga donde esta la luz.
+    ('vista realista: recursos',    ['comun/recursos_realistas.py', '--verificar'], False),
 ]
 
 

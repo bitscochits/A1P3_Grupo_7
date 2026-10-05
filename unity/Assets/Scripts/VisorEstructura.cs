@@ -787,6 +787,9 @@ public class VisorEstructura : MonoBehaviour
         malla.SetUVs(0, uvs);
         malla.SetTriangles(triangulos, 0);
         malla.RecalculateNormals();
+        // Tangentes: sin ellas un material con mapa normal (la vista realista)
+        // sombrea negras las caras que no son horizontales.
+        malla.RecalculateTangents();
         malla.RecalculateBounds();
         caja.GetComponent<MeshFilter>().sharedMesh = malla;
         mallasPropias.Add(malla);
@@ -1112,6 +1115,9 @@ public class VisorEstructura : MonoBehaviour
         malla.SetUVs(0, uvs);
         malla.SetTriangles(tri, 0);
         malla.RecalculateNormals();
+        // Tangentes: sin ellas un material con mapa normal (la vista realista)
+        // sombrea negras las caras que no son horizontales.
+        malla.RecalculateTangents();
         malla.RecalculateBounds();
         mf.sharedMesh = malla;
         mallasPropias.Add(malla);

@@ -177,6 +177,7 @@ public partial class AmbienteVisor
         m.SetTriangles(triArriba, 0);
         m.SetTriangles(triPared, 1);
         m.SetTriangles(new List<int>(), 2);
+        m.RecalculateTangents();             // para el mapa normal (AmbienteVisor.Recursos.cs)
         m.RecalculateBounds();
 
         if (terrazas == null)

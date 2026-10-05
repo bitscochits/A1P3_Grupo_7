@@ -33,7 +33,8 @@ public partial class VisorPersona
 {
     static readonly Color COLOR_MOMENTO = new Color(1.00f, 0.78f, 0.25f);
     static readonly Color COLOR_MOMENTO_BORDE = new Color(0.80f, 0.40f, 0.05f);
-    static readonly Color COLOR_ETIQUETA = new Color(1.00f, 0.95f, 0.80f);
+    // El naranjo del borde: se lee sobre el hormigon claro y sobre el pasto.
+    static readonly Color COLOR_ETIQUETA = new Color(0.95f, 0.45f, 0.05f);
     const int TRAMOS_MOMENTO = 10;
 
     bool verMomentos = true;

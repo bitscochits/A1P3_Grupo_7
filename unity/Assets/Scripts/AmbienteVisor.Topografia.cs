@@ -313,6 +313,7 @@ public partial class AmbienteVisor
         m.SetTriangles(triTalud, 1);
         m.SetTriangles(triFondo, 2);
         m.RecalculateNormals();
+        m.RecalculateTangents();             // para el mapa normal del pasto (AmbienteVisor.Recursos.cs)
         m.RecalculateBounds();
         return m;
     }

@@ -103,7 +103,8 @@ public partial class VisorPersona
         if (d.sqrMagnitude < 1e-12f) return;
         fasePaso = Mathf.Repeat(fasePaso + d.magnitude / LARGO_PASO_M * 2f * Mathf.PI, 2f * Mathf.PI);
         // Unity (x, z) = OpenSees (x, y): rumbo 0 mira a +y de OpenSees.
-        rumboGrados = Mathf.Atan2(d.x, d.y) * Mathf.Rad2Deg;
+        // En la cabina el rumbo lo giran A/D: retroceder no lo da vuelta.
+        if (!enCabina) rumboGrados = Mathf.Atan2(d.x, d.y) * Mathf.Rad2Deg;
     }
 
     /// El AT-ST parado en (x, y, zPiso). false si no hay recurso o se apago.
@@ -117,6 +118,8 @@ public partial class VisorPersona
         for (int k = 0; k < personaje.piezas.Length; k++)
         {
             PiezaPersonaje pz = personaje.piezas[k];
+            // Desde la cabina no se dibuja la cabina: taparia la vista.
+            if (enCabina && pz.nombre == "cuerpo") continue;
             var go = new GameObject(pz.nombre);
             go.transform.SetParent(raiz.transform, false);
             if (pz.pivote != null && pz.pivote.Length == 3)

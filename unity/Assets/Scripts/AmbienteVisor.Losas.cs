@@ -278,6 +278,7 @@ public partial class AmbienteVisor
         malla.SetUVs(0, uv);
         malla.SetTriangles(tri, 0);
         malla.RecalculateNormals();
+        malla.RecalculateTangents();         // para el mapa normal de la losa (AmbienteVisor.Recursos.cs)
         malla.RecalculateBounds();
         return malla;
     }
@@ -331,8 +332,13 @@ public partial class AmbienteVisor
 
         if (matLosa == null && firma.IndexOf('1') >= 0)
         {
-            CrearTexturas();
-            matLosa = NuevoMaterial("Losa", texHormigon, C_LOSA, 0.10f, 0f, Vector2.one);
+            matLosa = NuevoMaterialReal("Losa", "hormigon_losa", C_LOSA, 0.10f, 0f,
+                                        Vector2.one * (REPETICION_HORMIGON / TILE_LOSA_M));
+            if (matLosa == null)
+            {
+                CrearTexturas();
+                matLosa = NuevoMaterial("Losa", texHormigon, C_LOSA, 0.10f, 0f, Vector2.one);
+            }
         }
         for (int i = 0; i < losas.Count; i++)
         {
