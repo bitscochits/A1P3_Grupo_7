@@ -3,7 +3,8 @@
   VisorPersona.cs   --   SQ4: la carga movil ES el usuario
 ================================================================
   Una persona parada en una losa. El usuario la mueve con las flechas
-  (PgUp / PgDn cambian de piso) y en cada paso el visor:
+  (Q / E, PgUp / PgDn o los botones cambian de piso; VisorPersona.Pisos.cs)
+  y en cada paso el visor:
 
     1. IDENTIFICA EL PANO Y LA REGION: el rectangulo de losa entre las
        cuatro vigas que la rodean, y dentro de el la region tributaria
@@ -170,6 +171,7 @@ public partial class VisorPersona : MonoBehaviour, IPanelIncrustable
     void Update()
     {
         if (!puesta || !Listo()) return;
+        AnimarPiso();                           // VisorPersona.Pisos.cs: el ascensor entre pisos
         // Con el foco en un campo de texto las flechas son del campo.
         if (GUIUtility.keyboardControl != 0) { if (redibujar) Calcular(); AplicarDeformadaSiToca(); return; }
 
@@ -194,8 +196,8 @@ public partial class VisorPersona : MonoBehaviour, IPanelIncrustable
             AlCaminar(d);                       // VisorPersona.Personaje.cs: el paso y el rumbo
             cambio = true;
         }
-        if (Input.GetKeyDown(KeyCode.PageUp) && piso < pisos.Count - 1) { piso++; cambio = true; }
-        if (Input.GetKeyDown(KeyCode.PageDown) && piso > 0) { piso--; cambio = true; }
+        if (Input.GetKeyDown(KeyCode.PageUp) || Input.GetKeyDown(KeyCode.E)) cambio |= CambiarPiso(+1);
+        if (Input.GetKeyDown(KeyCode.PageDown) || Input.GetKeyDown(KeyCode.Q)) cambio |= CambiarPiso(-1);
         if (cambio || redibujar) Calcular();
         // La deformada se pide al MOVERSE, no al redibujar: aplicarla
         // redibuja, y pedirla en cada redibujo no pararia nunca.
@@ -374,8 +376,9 @@ public partial class VisorPersona : MonoBehaviour, IPanelIncrustable
         Limpiar();
         float z = r.z;
         // Con la deformada puesta, la persona baja con el punto que carga
-        // (dibujado, con la misma escala que el edificio).
-        float dz = DescensoDibujado();
+        // (dibujado, con la misma escala que el edificio). Al cambiar de
+        // piso sube o baja de a poco (AlturaPersona).
+        float dz = DescensoDibujado() + AlturaPersona(z) - z;
 
         // el AT-ST (VisorPersona.Personaje.cs) o, sin el, una capsula de 1.70 m
         if (!DibujarPersonaje(z + dz))
@@ -424,6 +427,8 @@ public partial class VisorPersona : MonoBehaviour, IPanelIncrustable
         // conjunto, 92 de las 883 regiones tributarias son de MUROS (la
         // losa les descarga directo). Se resalta igual.
         if (r.receptora >= 0 && !dibujada) Resaltar(r.receptora, true);
+
+        DibujarMomentos();                      // VisorPersona.Momentos.cs
     }
 
     void Resaltar(int id, bool lleva)
@@ -446,6 +451,8 @@ public partial class VisorPersona : MonoBehaviour, IPanelIncrustable
         if (e == null) return "el elemento " + id;
         if (e.tipo == "muro") return "el muro " + id;
         if (e.tipo == "brazo" || e.tipo == "brazo_rigido") return "el brazo rigido " + id;
+        if (e.tipo == "columna" || e.tipo == "pilar_metal") return "la columna " + id;
+        if (e.tipo == "diagonal") return "la diagonal " + id;
         return "la viga " + id;
     }
 
@@ -518,7 +525,7 @@ public partial class VisorPersona : MonoBehaviour, IPanelIncrustable
 
         GUILayout.Label("SQ4: la carga movil es una persona", texto);
         GUILayout.Label("Ponla en una losa y muevela con las FLECHAS (relativas a la camara). "
-                        + "PgUp / PgDn cambian de piso.", tenue);
+                        + "Q / E (o PgUp / PgDn, o los botones) cambian de piso.", tenue);
 
         if (!Listo()) { GUILayout.Label("Esperando el modelo...", aviso); return; }
 
@@ -528,11 +535,13 @@ public partial class VisorPersona : MonoBehaviour, IPanelIncrustable
             diferida = Poner;
         GUI.enabled = puesta;
         if (GUILayout.Button("Quitar persona", boton)) diferida = Quitar;
+        PanelPisos(boton);                                  // VisorPersona.Pisos.cs
         GUI.enabled = true;
 
         GUILayout.Label($"Peso: {F(pesoKN, "0.00")} kN  ({F(pesoKN / 9.80665f * 1000f, "0")} kg)", texto);
         PanelPeso(boton);                                   // VisorPersona.Deformada.cs
         PanelDeformada(texto, tenue, aviso, boton);
+        PanelMomentos(texto, tenue, aviso, boton);          // VisorPersona.Momentos.cs
 
         if (modeloEditado)
             GUILayout.Label("El modelo se edito: las areas tributarias son las del modelo "

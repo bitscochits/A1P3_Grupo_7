@@ -66,6 +66,7 @@ public class InfoInfluencias
     public string _supuesto_receptor, _supuesto_punto_en_la_viga, _supuesto_muro, _supuesto_P;
     public int n_nodos, n_elementos, n_casos;
     public float P_por_defecto_kN, escala_deformada, largo_dibujo_m, segundos_opensees;
+    public float escala_momento, largo_momento_m;
 }
 
 [Serializable]
@@ -80,6 +81,9 @@ public class CasoInfluencia
     public int nodo, grupo;
     public string gdl, datos;
     public float escala_t, escala_r;
+    public int[] elementos;
+    public float escala_f, escala_m;
+    public string fuerzas;
 }
 
 [Serializable]
@@ -88,6 +92,7 @@ public class ReceptorPersona
     public int elemento, nodo, n1, n2;
     public string tipo;
     public float z, L, flex, dx, dy;
+    public int[] elementos_m;
 }
 
 public partial class VisorPersona
@@ -252,10 +257,14 @@ public partial class VisorPersona
     }
 
     /// La deformada de la carga P en a del receptor r, en acum.
+    /// La deformada de la carga P en a del receptor r, en acum, y los
+    /// esfuerzos de extremo de sus barras en fuerzasPersona: los MISMOS
+    /// pesos para las dos cosas.
     void Combinar(ReceptorPersona r, float a, float P)
     {
         Array.Clear(acum, 0, acum.Length);
         casosUsados = 0;
+        PrepararFuerzas(r);                 // VisorPersona.Momentos.cs
         if (r.tipo == "nodo")
         {
             Sumar(r.nodo, GDL_FZ, P);
@@ -267,7 +276,27 @@ public partial class VisorPersona
         Sumar(r.n2, GDL_FZ, P * N3(a));
         Sumar(r.n2, GDL_MX, P * r.L * N4(a) * -r.dy);
         Sumar(r.n2, GDL_MY, P * r.L * N4(a) * r.dx);
+        float[] propia;
+        if (fuerzasPersona != null && fuerzasPersona.TryGetValue(r.elemento, out propia))
+            SumarEmpotramiento(propia, r, a, P);
     }
+
+    /// Lo que la carga P en a le agrega al localForce de SU viga: las
+    /// fuerzas de empotramiento perfecto, P por N1..N4 (Vz_i, My_i, Vz_j, My_j).
+    static void SumarEmpotramiento(float[] f, ReceptorPersona r, float a, float P)
+    {
+        f[2] += P * N1(a);
+        f[4] += -P * r.L * N2(a);
+        f[8] += P * N3(a);
+        f[10] += -P * r.L * N4(a);
+    }
+
+    /// My(x) de una barra con extremos f; P (kN, hacia abajo) en a si es la
+    /// cargada, 0 si no. Lineal entre extremos mas el quiebre de P.
+    static float MyEn(float[] f, float x, float a, float P) { return -(f[4] + x * f[2] - P * Mathf.Max(0f, x - a)); }
+
+    /// Mz(x): sin carga en y local, lineal entre extremos.
+    static float MzEn(float[] f, float x) { return -(f[5] - x * f[1]); }
 
     void Sumar(int nodo, int gdl, float w)
     {
@@ -282,6 +311,7 @@ public partial class VisorPersona
             int k = 6 * i, q = 6 * m;
             for (int d = 0; d < 6; d++) acum[q + d] += w * u[k + d];
         }
+        SumarFuerzas(nodo, gdl, w);         // VisorPersona.Momentos.cs
         casosUsados++;
     }
 
@@ -304,7 +334,8 @@ public partial class VisorPersona
         if (!deformadaPendiente || Time.unscaledTime - ultimoAplicado < INTERVALO_S) return;
         deformadaPendiente = false;
         ultimoAplicado = Time.unscaledTime;
-        if (!verDeformada || !puesta || ultimo == null || influencias == null || modeloEditado) return;
+        if (!puesta || ultimo == null || influencias == null || modeloEditado) return;
+        if (!verDeformada && !verMomentos) { QuitarDeformadaPersona(); redibujar = true; return; }
         ReceptorPersona r = ultimo.receptora >= 0 ? ReceptorDe(ultimo.receptora, ultimo.z) : null;
         // Fuera de toda losa no carga nada: se quita la deformada (vuelve al pisar losa).
         if (r == null) { QuitarDeformadaPersona(); return; }
@@ -335,8 +366,17 @@ public partial class VisorPersona
         uzCarga = r.tipo == "viga" ? UzEn(r, DespDe(r.n1), DespDe(r.n2), a, a, pesoAplicado) : DespDe(r.nodo).uz;
         mayorMm = mayor * 1000f;
         nodoMayor = nMayor;
+        CerrarMomentos(r, a, pesoAplicado);   // VisorPersona.Momentos.cs
         msUltima = (Time.realtimeSinceStartup - t0) * 1000f;
 
+        // Solo los momentos: no se toca la deformada del visor, y como
+        // nada redibuja, se pide redibujar la persona.
+        if (!verDeformada)
+        {
+            QuitarSoloDeformada();
+            redibujar = true;
+            return;
+        }
         if (!deformadaPuesta)
         {
             factorPrevio = visor.factorEscala;
@@ -393,6 +433,20 @@ public partial class VisorPersona
         bool mia = DeformadaPersonaSigue();
         recActual = null;
         SoltarFlechaEnVano();
+        deformadaPuesta = false;
+        if (!mia) return;
+        visor.LimpiarDeformada();
+        visor.factorEscala = factorPrevio;
+        visor.Redibujar();
+    }
+
+    /// Quita la deformada del visor (si sigue siendo suya) pero deja lo
+    /// calculado: los momentos se siguen mostrando.
+    void QuitarSoloDeformada()
+    {
+        SoltarFlechaEnVano();
+        if (!deformadaPuesta || visor == null) return;
+        bool mia = DeformadaPersonaSigue();
         deformadaPuesta = false;
         if (!mia) return;
         visor.LimpiarDeformada();
@@ -517,7 +571,7 @@ public partial class VisorPersona
         // El cambio se difiere: hecho aca, este mismo evento dibujaria menos
         // controles que su Layout (la trampa de IMGUI de CLAUDE.md).
         if (quiere != verDeformada)
-            diferida = () => { verDeformada = quiere; if (quiere) PedirDeformadaPersona(); else QuitarDeformadaPersona(); };
+            diferida = () => { verDeformada = quiere; if (!quiere) QuitarSoloDeformada(); PedirDeformadaPersona(); };
         if (influencias == null)
         {
             GUILayout.Label(estadoInfluencias.Length > 0 ? estadoInfluencias
@@ -622,12 +676,24 @@ public partial class VisorPersona
             + "nodo_mayor {6} casos {7} ms {8:F2} escala {9:G9}",
             recActual.elemento, recActual.tipo, alfaActual, pesoAplicado, uzCarga, mayorMm, nodoMayor,
             casosUsados, msUltima, visor.factorEscala);
+        float[] fc;
+        if (recActual.tipo == "viga" && fuerzasPersona != null && fuerzasPersona.TryGetValue(recActual.elemento, out fc))
+            sb.AppendFormat(ci, " M_carga {0:G9}", mCarga);
         foreach (int id in new[] { recActual.n1, recActual.n2, nodoMayor })
         {
             DespNodo d = DespDe(id);
             sb.AppendFormat(ci, " | nodo {0} {1:G9} {2:G9} {3:G9} {4:G9} {5:G9} {6:G9}",
                             id, d.ux, d.uy, d.uz, d.rx, d.ry, d.rz);
         }
+        // los esfuerzos de extremo de la viga cargada y de la barra con mas momento
+        if (fuerzasPersona != null)
+            foreach (int id in new[] { recActual.elemento, barraMayor })
+            {
+                float[] f;
+                if (!fuerzasPersona.TryGetValue(id, out f)) continue;
+                sb.Append(" | barra ").Append(id.ToString(ci));
+                for (int i = 0; i < 12; i++) sb.Append(' ').Append(f[i].ToString("G9", ci));
+            }
         return sb.ToString();
     }
 }

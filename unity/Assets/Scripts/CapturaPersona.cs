@@ -9,7 +9,7 @@
 
   Espera el modelo y influencias.json, pone al caminante (100 kN) en el
   primer piso, en la region tributaria mas grande de una viga, saca
-  fotos, lo hace caminar 3 m y vuelve a sacar. En registro.txt deja lo
+  fotos, lo hace caminar 3 m, sube un piso y vuelve a sacar. En registro.txt deja lo
   que Unity SUMO (VisorPersona.Captura_Registro, float en G9) para que
   python semana05_lab/influencias_persona.py <ed> --verificar
   --registro <carpeta>/registro.txt lo cruce con OpenSees. Cierra con
@@ -115,6 +115,13 @@ public class CapturaPersona : MonoBehaviour
         yield return new WaitForSecondsRealtime(1f);
         registro.Add(persona.Captura_Registro());
         yield return Foto(cam, "persona_3_camino", persona.Captura_Donde, 14f, 12f, persona.Captura_RumboViga + 105f);
+
+        // Sube un piso (el ascensor tarda 0.7 s) y vuelve a sumar alla.
+        bool subio = persona.Captura_CambiarPiso(+1);
+        yield return new WaitForSecondsRealtime(1.5f);
+        registro.Add("piso: " + (subio ? "subio a " : "NO subio, sigue en ") + persona.Captura_Piso);
+        registro.Add(persona.Captura_Registro());
+        yield return Foto(cam, "persona_4_otro_piso", persona.Captura_Donde, 16f, 18f, persona.Captura_RumboViga + 105f);
 
         bool ok = nErrores == 0 && !registro.Exists(l => l.Contains("sin deformada"));
         Fin(null, ok ? 0 : 2);

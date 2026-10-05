@@ -82,6 +82,21 @@ r"""
    [5] cada region tributaria tiene receptor, y fuera de su grupo un
        caso vale cero;
    [6] la escala de dibujo lleva el peor caso a LARGO_DIBUJO_M.
+   [8] LOS MOMENTOS: los esfuerzos de extremo (localForce) de la viga
+       cargada y de las barras que tocan sus nodos, sumados como Unity
+       (casos + empotramiento perfecto de la viga cargada) = OpenSees
+       directo; y el momento bajo la carga;
+   [9] el empotramiento y M(x) del C# son carga_movil.empotramiento y
+       carga_movil.esfuerzos_con_puntual.
+
+ LOS MOMENTOS (05-10)
+   Cada caso guarda tambien los esfuerzos de extremo de las barras que
+   muestra algun receptor que lo usa: la viga y las que llegan a sus
+   dos nodos (columnas y vigas vecinas). Sumados con los mismos pesos dan
+   k u de cada barra, exacto; la viga cargada lleva ademas sus fuerzas
+   de empotramiento perfecto, que son P por las mismas N1..N4. A lo largo
+   de una barra sin carga M es lineal entre sus extremos; en la cargada
+   tiene el quiebre de P bajo la carga (esfuerzos_con_puntual).
 ================================================================
 """
 from __future__ import annotations
@@ -156,6 +171,17 @@ N_PRUEBAS = 24
 SEMILLA = 20261005
 
 RESOLUCION_U = carga_movil.RESOLUCION_U   # 1e-8 m y rad: el decimal del servidor
+RESOLUCION_F = carga_movil.RESOLUCION_F   # 1e-4 kN y kN m
+
+# Los momentos se dibujan con el mayor |M| (carga a media viga, en las
+# barras que se dibujan) llevado a este largo, como la deformada.
+LARGO_MOMENTO_M = 1.2
+# localForce = [N, Vy, Vz, T, My, Mz] en i y en j: fuerzas y momentos
+IDX_F = [0, 1, 2, 6, 7, 8]
+IDX_M = [3, 4, 5, 9, 10, 11]
+# Las barras que se dibujan con diagrama (los muros y brazos no: un muro
+# es una placa y un brazo rigido no es una barra que se vea).
+NO_DIBUJAR = ('muro', 'brazo', 'brazo_rigido')
 
 # Las clases C# que leen cada parte del JSON (bloque [4]).
 CLASES_CS = {
@@ -240,6 +266,28 @@ def uz_en(rec, ui, uj, xi, alfa, P):
             - P * rec['flex'] * forma_local(xi, alfa))
 
 
+def empotramiento_local(rec, alfa, P):
+    """
+    Lo que la carga P en alfa le agrega al localForce de SU viga: las
+    fuerzas de empotramiento perfecto, P por N1..N4 (indices Vz_i, My_i,
+    Vz_j, My_j). Es carga_movil.empotramiento con Pz = -P ([9]).
+    """
+    N1, N2, N3, N4 = hermite(alfa)
+    L = rec['L']
+    return {2: P * N1, 4: -P * L * N2, 8: P * N3, 10: -P * L * N4}
+
+
+def my_en(f, x, a, P):
+    """My(x) de la barra con extremos f; P (kN, hacia abajo) en a si es la
+    cargada, 0 si no. Es esfuerzos_con_puntual con Pz = -P ([9])."""
+    return -(f[4] + x * f[2] - P * max(0.0, x - a))
+
+
+def mz_en(f, x):
+    """Mz(x): sin carga en y local, lineal entre extremos."""
+    return -(f[5] - x * f[1])
+
+
 def flecha_bajo_carga(rec, ui, uj, alfa, P):
     """uz (m) del punto cargado (el nodo, si es un muro)."""
     if rec['tipo'] == 'nodo':
@@ -250,10 +298,19 @@ def flecha_bajo_carga(rec, ui, uj, alfa, P):
 # ============================================================
 # LO QUE PUEDE RECIBIR A LA PERSONA
 # ============================================================
+def incidentes(modelo):
+    inc = {}
+    for e in modelo['elementos']:
+        for n in (int(e['n1']), int(e['n2'])):
+            inc.setdefault(n, []).append(int(e['id']))
+    return inc
+
+
 def receptores(vista, modelo, s4, fallas):
     """Un receptor por (elemento, cota) de las areas tributarias del visor."""
     nodos = {int(n['id']): n for n in modelo['nodos']}
     elems = {int(e['id']): e for e in modelo['elementos']}
+    inc = incidentes(modelo)
     salida, malos = {}, []
     for a in vista['areas_tributarias']:
         eid, z = int(a['elemento']), float(a['z'])
@@ -276,11 +333,17 @@ def receptores(vista, modelo, s4, fallas):
                 malos.append('%d: la vertical no cae en su eje local z' % eid)
                 continue
             k = carga_movil.rigidez(modelo, e, nodos, s4)
+            if base['wz'][2] < 1.0 - 1e-9:
+                malos.append('%d: su z local no apunta hacia arriba' % eid)
+                continue
             salida[clave] = {
                 'elemento': eid, 'z': round(z, 4), 'tipo': 'viga', 'nodo': 0,
                 'n1': n1, 'n2': n2, 'L': L,
                 'flex': L ** 3 / (k['E'] * k['Iy_pasa']),
                 'dx': (pj[0] - pi[0]) / L, 'dy': (pj[1] - pi[1]) / L,
+                # las barras cuyos momentos se muestran: la viga y las que
+                # llegan a sus dos nodos
+                'elementos_m': sorted(set(inc[n1]) | set(inc[n2])),
             }
         else:
             en_z = [n for n in (n1, n2) if abs(nodos[n]['z'] - z) < 0.02]
@@ -288,7 +351,8 @@ def receptores(vista, modelo, s4, fallas):
                 malos.append('%d: el muro no tiene un nodo en z = %.2f' % (eid, z))
                 continue
             salida[clave] = {'elemento': eid, 'z': round(z, 4), 'tipo': 'nodo', 'nodo': en_z[0],
-                             'n1': n1, 'n2': n2, 'L': 0.0, 'flex': 0.0, 'dx': 0.0, 'dy': 0.0}
+                             'n1': n1, 'n2': n2, 'L': 0.0, 'flex': 0.0, 'dx': 0.0, 'dy': 0.0,
+                             'elementos_m': sorted(inc[en_z[0]])}
     fallas.check(not malos, '[5] cada region tributaria del visor tiene a donde mandar la carga '
                  '(%d receptores: %d vigas, %d muros)'
                  % (len(salida), sum(r['tipo'] == 'viga' for r in salida.values()),
@@ -367,6 +431,10 @@ class Solver:
             raise SystemExit('OpenSees no convergio')
         return {n: np.array(ops.nodeDisp(n), dtype=float) for n in self.ids}
 
+    def fuerzas(self, elementos):
+        """localForce de esas barras, del ultimo caso resuelto."""
+        return {int(e): np.array(ops.eleResponse(int(e), 'localForce'), dtype=float) for e in elementos}
+
 
 # ============================================================
 # CODIFICAR Y DECODIFICAR (lo mismo que hace el C#)
@@ -382,6 +450,29 @@ def codificar(U):
         q[:, 3:] = np.rint(U[:, 3:] / sr)
     assert np.abs(q).max() <= ENTERO
     return st, sr, base64.b64encode(q.astype('<i2').tobytes()).decode('ascii')
+
+
+def codificar_f(F):
+    """F (k, 12) de localForce -> (escala_f, escala_m, base64 de int16)."""
+    sf = float(np.abs(F[:, IDX_F]).max()) / ENTERO if F.size else 0.0
+    sm = float(np.abs(F[:, IDX_M]).max()) / ENTERO if F.size else 0.0
+    q = np.zeros(F.shape, dtype=np.int64)
+    if sf > 0:
+        q[:, IDX_F] = np.rint(F[:, IDX_F] / sf)
+    if sm > 0:
+        q[:, IDX_M] = np.rint(F[:, IDX_M] / sm)
+    assert q.size == 0 or np.abs(q).max() <= ENTERO
+    return sf, sm, base64.b64encode(q.astype('<i2').tobytes()).decode('ascii')
+
+
+def decodificar_f(caso, f32=True):
+    k = len(caso['elementos'])
+    q = np.frombuffer(base64.b64decode(caso['fuerzas']), dtype='<i2').reshape(k, 12)
+    tipo = np.float32 if f32 else float
+    F = q.astype(tipo)
+    F[:, IDX_F] *= tipo(caso['escala_f'])
+    F[:, IDX_M] *= tipo(caso['escala_m'])
+    return F
 
 
 def decodificar(caso, n, f32=True):
@@ -416,6 +507,15 @@ class Datos:
             self._cache[k] = decodificar(c, len(self.grupos[c['grupo']]), f32)
         return c['grupo'], self._cache[k]
 
+    def F(self, nodo, gdl, f32=True):
+        """{barra: localForce[12]} de un caso."""
+        c = self.casos[(nodo, gdl)]
+        k = ('F', nodo, gdl, f32)
+        if k not in self._cache:
+            M = decodificar_f(c, f32)
+            self._cache[k] = {e: M[i] for i, e in enumerate(c['elementos'])}
+        return self._cache[k]
+
 
 def combinar(datos, rec, alfa, P, f32=True):
     """{nodo: u[6]} como lo arma el C#: suma de a lo mas seis casos."""
@@ -428,6 +528,40 @@ def combinar(datos, rec, alfa, P, f32=True):
             prev = suma.get(n)
             suma[n] = (U[i] * w) if prev is None else (prev + U[i] * w)
     return suma
+
+
+def combinar_f(datos, rec, alfa, P, f32=True):
+    """{barra: localForce[12]} de las barras del receptor, como el C#: la
+    suma de los casos y, en la viga cargada, su empotramiento."""
+    tipo = np.float32 if f32 else float
+    out = {e: np.zeros(12, dtype=tipo) for e in rec['elementos_m']}
+    for nodo, gdl, w in pesos(rec, alfa, P):
+        F = datos.F(nodo, gdl, f32)
+        w = tipo(w)
+        for e in rec['elementos_m']:
+            out[e] = out[e] + F[e] * w
+    if rec['tipo'] == 'viga':
+        f = out[rec['elemento']]
+        for i, v in empotramiento_local(rec, alfa, P).items():
+            f[i] = f[i] + tipo(v)
+    return out
+
+
+def cota_f(datos, rec, alfa, P):
+    """La cota de combinar_f, con las mismas causas que cota()."""
+    out = {e: np.zeros(12) for e in rec['elementos_m']}
+    for nodo, gdl, w in pesos(rec, alfa, P):
+        c = datos.casos[(nodo, gdl)]
+        F = datos.F(nodo, gdl, f32=False)
+        paso = np.zeros(12)
+        paso[IDX_F] = 0.5 * c['escala_f']
+        paso[IDX_M] = 0.5 * c['escala_m']
+        for e in rec['elementos_m']:
+            out[e] += abs(w) * (paso + K_F32 * EPS32 * np.abs(F[e]))
+    if rec['tipo'] == 'viga':
+        for i, v in empotramiento_local(rec, alfa, P).items():
+            out[rec['elemento']][i] += K_F32 * EPS32 * abs(v)
+    return out
 
 
 def cota(datos, rec, alfa, P):
@@ -463,6 +597,12 @@ def armar(ed, modelo, vista, s4, fallas):
           % (len(casos), len({c[0] for c in casos}), len(grupos),
              ', '.join(str(len(g)) for g in grupos)))
 
+    # Las barras de cada caso: las que muestra algun receptor que lo usa.
+    barras = {c: set() for c in casos}
+    for r in recs:
+        for nodo, gdl, _w in pesos(r, 0.5, 1.0):
+            barras[(nodo, gdl)] |= set(r['elementos_m'])
+
     sol = Solver(modelo)
     salida, fuera = [], 0.0
     for k, (nodo, gdl) in enumerate(casos):
@@ -473,9 +613,14 @@ def armar(ed, modelo, vista, s4, fallas):
         if otros:
             fuera = max(fuera, max(otros))
         st, sr, datos = codificar(U)
+        ids = sorted(barras[(nodo, gdl)])
+        f = sol.fuerzas(ids)
+        F = np.array([f[e] for e in ids]).reshape(len(ids), 12)
+        sf, sm, fuerzas = codificar_f(F)
         salida.append({'nodo': nodo, 'gdl': gdl, 'grupo': g,
                        'escala_t': st, 'escala_r': sr, 'datos': datos,
-                       '_U': U})
+                       'elementos': ids, 'escala_f': sf, 'escala_m': sm, 'fuerzas': fuerzas,
+                       '_U': U, '_F': F})
         if (k + 1) % 200 == 0:
             print('    %d de %d (%.0f s)' % (k + 1, len(casos), time.time() - t0), flush=True)
     t_casos = time.time() - t0
@@ -493,13 +638,18 @@ def armar(ed, modelo, vista, s4, fallas):
             'P_por_defecto_kN': P_POR_DEFECTO,
             'escala_deformada': 0.0,
             'largo_dibujo_m': LARGO_DIBUJO_M,
+            'escala_momento': 0.0,
+            'largo_momento_m': LARGO_MOMENTO_M,
             'n_casos': len(salida),
             'segundos_opensees': round(t_casos, 1),
             '_por_que': ('Cada caso es UNA carga unitaria resuelta por OpenSees. La deformada de la '
                          'persona es la suma de a lo mas seis, con los pesos de Hermite de donde '
                          'esta parada, mas la flecha biempotrada dentro de la viga cargada: Unity '
                          'combina, no resuelve. Los datos de cada caso son int16 en base64 por '
-                         'escala_t (traslaciones) y escala_r (giros), solo de los nodos de su grupo.'),
+                         'escala_t (traslaciones) y escala_r (giros), solo de los nodos de su grupo. '
+                         'fuerzas: localForce de las barras de elementos (int16 por escala_f y '
+                         'escala_m); la viga cargada suma su empotramiento perfecto. escala_momento '
+                         'en m por kN m.'),
             '_supuesto_receptor': SUPUESTOS['receptor'],
             '_supuesto_punto_en_la_viga': SUPUESTOS['punto_en_la_viga'],
             '_supuesto_muro': SUPUESTOS['muro'],
@@ -528,6 +678,44 @@ def escala_de_dibujo(datos, recs, P):
     bruta = LARGO_DIBUJO_M / peor
     cifras = 10 ** (math.floor(math.log10(bruta)) - 1)
     return round(bruta / cifras) * cifras, peor, donde
+
+
+def escala_de_momentos(datos, recs, P, dibujables):
+    """El mayor |M| de las barras que se dibujan, con la carga a media viga;
+    la escala (m por kN m) lo lleva a LARGO_MOMENTO_M, con 2 cifras."""
+    peor, donde = 0.0, None
+    for r in recs:
+        alfa = 0.5
+        F = combinar_f(datos, r, alfa, P, f32=False)
+        for e, f in F.items():
+            if e not in dibujables:
+                continue
+            L = dibujables[e]
+            cargada = r['tipo'] == 'viga' and e == r['elemento']
+            for k in range(11):
+                x = L * k / 10.0
+                m = max(abs(my_en(f, x, alfa * L, P if cargada else 0.0)), abs(mz_en(f, x)))
+                if m > peor:
+                    peor, donde = m, e
+            if cargada:
+                m = abs(my_en(f, alfa * L, alfa * L, P))
+                if m > peor:
+                    peor, donde = m, e
+    bruta = LARGO_MOMENTO_M / peor
+    cifras = 10 ** (math.floor(math.log10(bruta)) - 1)
+    return round(bruta / cifras) * cifras, peor, donde
+
+
+def largos_dibujables(modelo):
+    """{barra: L} de las que llevan diagrama."""
+    nodos = {int(n['id']): carga_movil._xyz(n) for n in modelo['nodos']}
+    out = {}
+    for e in modelo['elementos']:
+        if e.get('tipo') in NO_DIBUJAR:
+            continue
+        a, b = nodos[int(e['n1'])], nodos[int(e['n2'])]
+        out[int(e['id'])] = math.sqrt(sum((a[i] - b[i]) ** 2 for i in range(3)))
+    return out
 
 
 # ============================================================
@@ -567,9 +755,47 @@ def verificar(js, modelo, sol, s4, fallas, n_pruebas, sin_cuantizar=None):
     detalle_b, detalle_f = '', ''
     nodos = {int(n['id']): n for n in modelo['nodos']}
     elems = {int(e['id']): e for e in modelo['elementos']}
+    peor_fa, peor_fb, peor_mc = 0.0, 0.0, 0.0
+    detalle_fb, detalle_mc = '', ''
     for rec, alfa in posiciones_al_azar(recs, n_pruebas):
         u_d = directo(sol, modelo, rec, alfa, P)
+        f_d = sol.fuerzas(rec['elementos_m'])
         mayor = max(float(np.abs(v[:3]).max()) for v in u_d.values())
+        # [8] los esfuerzos de extremo
+        if sin_cuantizar is not None:
+            suma = {e: np.zeros(12) for e in rec['elementos_m']}
+            for nodo, gdl, w in pesos(rec, alfa, P):
+                c = sin_cuantizar[(nodo, gdl)]
+                fila = {e: i for i, e in enumerate(c['elementos'])}
+                for e in rec['elementos_m']:
+                    suma[e] += w * c['_F'][fila[e]]
+            if rec['tipo'] == 'viga':
+                for i, v in empotramiento_local(rec, alfa, P).items():
+                    suma[rec['elemento']][i] += v
+            for e in rec['elementos_m']:
+                peor_fa = max(peor_fa, float(np.abs(suma[e] - f_d[e]).max()))
+        f_u = combinar_f(datos, rec, alfa, P, f32=True)
+        cf = cota_f(datos, rec, alfa, P)
+        for e in rec['elementos_m']:
+            err = np.abs(f_u[e].astype(float) - f_d[e])
+            c = cf[e] + 1e-12
+            j = int(np.argmax(err / c))
+            if err[j] / c[j] > peor_fb:
+                peor_fb = float(err[j] / c[j])
+                detalle_fb = ('peor: carga en %d alfa %.3f, barra %d, %s: error %.2e contra cota %.2e'
+                              % (rec['elemento'], alfa, e, ('N_i Vy_i Vz_i T_i My_i Mz_i N_j Vy_j Vz_j '
+                                                            'T_j My_j Mz_j').split()[j],
+                                 float(err[j]), float(c[j])))
+        if rec['tipo'] == 'viga':
+            a = alfa * rec['L']
+            ref = carga_movil.esfuerzos_con_puntual(f_d[rec['elemento']], 0.0, 0.0, -P, a, [a])['My'][0]
+            got = my_en(f_u[rec['elemento']].astype(float), a, a, P)
+            cc = cf[rec['elemento']]
+            c = cc[4] + a * cc[2] + K_F32 * EPS32 * abs(ref) + 1e-12
+            if abs(got - ref) / c > peor_mc:
+                peor_mc = abs(got - ref) / c
+                detalle_mc = ('peor: viga %d, alfa %.3f: M bajo la carga %.4f contra %.4f kN m'
+                              % (rec['elemento'], alfa, got, ref))
         # (a) sin cuantizar: la linealidad, al decimal del servidor
         if sin_cuantizar is not None:
             suma = {}
@@ -630,6 +856,18 @@ def verificar(js, modelo, sol, s4, fallas, n_pruebas, sin_cuantizar=None):
                  '[2] la elastica de la viga cargada (Hermite + phi; bajo la carga y en 1/4, 1/2, '
                  '3/4) = carga_movil.desplazamiento_en con la solucion directa',
                  '%s; cociente %.3f' % (detalle_f, peor_f))
+    if sin_cuantizar is not None:
+        fallas.check(peor_fa <= RESOLUCION_F,
+                     '[8a] los esfuerzos de extremo (casos + empotramiento) = localForce de OpenSees '
+                     'directo, sin cuantizar', 'peor diferencia %.2e (kN o kN m); el servidor escribe '
+                     '1e-4' % peor_fa)
+    fallas.check(peor_fb <= 1.0,
+                 '[8b] los esfuerzos de extremo como los suma Unity = localForce directo, dentro de su '
+                 'cota (la viga cargada y las barras de sus nodos)', '%s; cociente %.3f'
+                 % (detalle_fb, peor_fb))
+    fallas.check(peor_mc <= 1.0,
+                 '[8c] el momento bajo la carga = carga_movil.esfuerzos_con_puntual con localForce directo',
+                 '%s; cociente %.3f' % (detalle_mc, peor_mc))
 
 
 # ============================================================
@@ -702,6 +940,42 @@ def transcripcion(fallas):
         got = eval(_a_python(m_fl.group(1)), loc)
         want = uz_en(r, ui, uj, xi, a, P)
         peor_fl = max(peor_fl, abs(got - want) / max(1e-3, abs(want)))
+    # [9] el empotramiento y M(x)
+    emp = re.findall(r'f\[(2|4|8|10)\] \+= (.*?);', src)
+    m_my = re.search(r'static float MyEn\(float\[\] f, float x, float a, float P\)\s*\{\s*return (.*?);\s*\}',
+                     src, re.S)
+    m_mz = re.search(r'static float MzEn\(float\[\] f, float x\)\s*\{\s*return (.*?);\s*\}', src, re.S)
+    if fallas.check(len(emp) == 4 and m_my and m_mz,
+                    '[9] el C# tiene las cuatro lineas del empotramiento, MyEn y MzEn',
+                    'empotramiento %d lineas, MyEn %s, MzEn %s' % (len(emp), bool(m_my), bool(m_mz))):
+        peor_e, peor_m = 0.0, 0.0
+        for _ in range(300):
+            a, P = rnd.random(), 1 + 99 * rnd.random()
+            L = 2 + 8 * rnd.random()
+            r = {'tipo': 'viga', 'L': L}
+            loc = dict(entorno, a=a, P=P, r=type('R', (), {'L': L}))
+            ref = empotramiento_local(r, a, P)
+            cm = carga_movil.empotramiento(-P, a * L, L)
+            ref_cm = {2: cm['V_i'], 4: cm['My_i'], 8: cm['V_j'], 10: cm['My_j']}
+            for idx, expr in emp:
+                got = eval(_a_python(expr), loc)
+                peor_e = max(peor_e, abs(got - ref[int(idx)]) / max(1.0, abs(ref[int(idx)])),
+                             abs(ref[int(idx)] - ref_cm[int(idx)]) / max(1.0, abs(ref_cm[int(idx)])))
+            f = [rnd.uniform(-100, 100) for _ in range(12)]
+            x = L * rnd.random()
+            aa = L * a
+            loc.update(f=f, x=x, a=aa)
+            ex_my = _a_python(m_my.group(1)).replace('Mathf.Max', 'max')
+            ex_mz = _a_python(m_mz.group(1))
+            ref_s = carga_movil.esfuerzos_con_puntual(f, 0.0, 0.0, -P, aa, [x])
+            peor_m = max(peor_m,
+                         abs(eval(ex_my, loc) - ref_s['My'][0]) / max(1.0, abs(ref_s['My'][0])),
+                         abs(eval(ex_mz, loc) - ref_s['Mz'][0]) / max(1.0, abs(ref_s['Mz'][0])),
+                         abs(my_en(f, x, aa, P) - ref_s['My'][0]) / max(1.0, abs(ref_s['My'][0])))
+        fallas.check(peor_e < 1e-12 and peor_m < 1e-12,
+                     '[9] el empotramiento y M(x) del C# = carga_movil.empotramiento y '
+                     'esfuerzos_con_puntual, 300 tiros', 'peor: empotramiento %.1e, M(x) %.1e'
+                     % (peor_e, peor_m))
     fallas.check(peor_n < 1e-12 and peor_phi < 1e-12 and peor_w < 1e-12 and peor_fl < 1e-12,
                  '[3] la copia en C# (VisorPersona.Deformada.cs) = estas formulas, 300 tiros al azar',
                  'peor: N %.1e, phi %.1e (y phi = flecha_biempotrada / (P L^3/EI)), pesos %.1e, '
@@ -732,6 +1006,8 @@ def cruzar_registro(ruta, js, modelo, sol, fallas):
         esperados = 1 if rec['tipo'] == 'nodo' else 6
         fallas.check(int(kv['casos']) == esperados, '[7] la app sumo %d casos para %s %d (se esperan %d)'
                      % (int(kv['casos']), rec['tipo'], eid, esperados))
+        barras_txt = [t for t in nodos_txt if t.startswith('barra ')]
+        nodos_txt = [t for t in nodos_txt if t.startswith('nodo ')]
         for nt in nodos_txt:
             v = nt.split()
             nid, got = int(v[1]), np.array([float(c) for c in v[2:8]])
@@ -739,6 +1015,25 @@ def cruzar_registro(ruta, js, modelo, sol, fallas):
             r = float((np.abs(got - u_d[nid]) / c).max())
             if r > peor:
                 peor, detalle = r, 'elemento %d alfa %.4f nodo %d' % (eid, alfa, nid)
+        if barras_txt:
+            f_d = sol.fuerzas([int(t.split()[1]) for t in barras_txt])
+            cf = cota_f(datos, rec, alfa, P)
+            for t in barras_txt:
+                v = t.split()
+                eid_b, got = int(v[1]), np.array([float(c) for c in v[2:14]])
+                c = cf[eid_b] + 5e-9 * np.abs(got) + 1e-12
+                r = float((np.abs(got - f_d[eid_b]) / c).max())
+                if r > peor:
+                    peor, detalle = r, 'localForce de la barra %d (carga en %d)' % (eid_b, eid)
+            if 'M_carga' in kv and rec['tipo'] == 'viga':
+                a = alfa * rec['L']
+                ref = carga_movil.esfuerzos_con_puntual(f_d[eid], 0.0, 0.0, -P, a, [a])['My'][0]
+                cc = cf[eid]
+                c = cc[4] + a * cc[2] + (K_F32 * EPS32 + 5e-9) * abs(ref) + 1e-12
+                r = abs(float(kv['M_carga']) - ref) / c
+                if r > peor:
+                    peor, detalle = r, 'M bajo la carga en %d: app %s, OpenSees %.6g kN m' \
+                        % (eid, kv['M_carga'], ref)
         if rec['tipo'] == 'viga':
             ref = uz_en(rec, u_d[rec['n1']], u_d[rec['n2']], alfa, alfa, P)
             N1, N2, N3, N4 = hermite(alfa)
@@ -749,8 +1044,9 @@ def cruzar_registro(ruta, js, modelo, sol, fallas):
             if r > peor:
                 peor, detalle = r, 'flecha bajo la carga, elemento %d alfa %.4f: app %s m, OpenSees %.9g m'                     % (eid, alfa, kv['uz_carga'], ref)
         n_ok += 1
-    fallas.check(peor <= 1.0, '[7] lo que la app sumo (%d posiciones: nodos de la viga, el que mas se mueve '
-                 'y la flecha bajo la carga) = OpenSees directo, dentro de su cota' % n_ok,
+    fallas.check(peor <= 1.0, '[7] lo que la app sumo (%d posiciones: nodos de la viga, el que mas se mueve, '
+                 'la flecha bajo la carga y, si vienen, los esfuerzos de extremo y el momento bajo la '
+                 'carga) = OpenSees directo, dentro de su cota' % n_ok,
                  'peor cociente %.3f (%s)' % (peor, detalle))
 
 
@@ -761,7 +1057,7 @@ def contrato_cs(js, fallas):
     for clase, clave in CLASES_CS.items():
         muestra = js if clave is None else (js[clave][0] if isinstance(js[clave], list) else js[clave])
         en_cs = clases.get(clase, set())
-        sin_campo = sorted(k for k in set(muestra) - en_cs if not k.startswith('_U'))
+        sin_campo = sorted(k for k in set(muestra) - en_cs if k not in ('_U', '_F'))
         sin_clave = sorted(en_cs - set(muestra))
         fallas.check(clase in clases and not sin_campo and not sin_clave,
                      '[4] contrato JSON <-> C#: %s%s' % (clase, '' if not (sin_campo or sin_clave) else
@@ -804,7 +1100,7 @@ def main(argv=None):
                      'el JSON es de este modelo (%d nodos, %d elementos)'
                      % (js['info']['n_nodos'], js['info']['n_elementos']))
         ahora = receptores(vista, modelo, s4, fallas)
-        clave = lambda r: (r['elemento'], r['tipo'], r['nodo'], r['n1'], r['n2'])
+        clave = lambda r: (r['elemento'], r['tipo'], r['nodo'], r['n1'], r['n2'], tuple(r['elementos_m']))
         iguales = (sorted(map(clave, ahora)) == sorted(map(clave, js['receptores']))
                    and all(abs(a['flex'] - b['flex']) <= 1e-9 * max(a['flex'], 1e-30)
                            for a, b in zip(sorted(ahora, key=clave),
@@ -821,6 +1117,11 @@ def main(argv=None):
         fallas.check(abs(esc - js['info']['escala_deformada']) <= 1e-9 * esc,
                      '[6] la escala de dibujo es la que se calcula: x%g (%.3f mm con la carga a media '
                      'viga en el elemento %s -> %.2f m)' % (esc, peor * 1000, donde, peor * esc))
+        escm, peorm, dondem = escala_de_momentos(Datos(js), js['receptores'], P_POR_DEFECTO,
+                                                 largos_dibujables(modelo))
+        fallas.check(abs(escm - js['info']['escala_momento']) <= 1e-9 * escm,
+                     '[6] la escala de los momentos es la que se calcula: %g m por kN m (%.1f kN m en '
+                     'la barra %s -> %.2f m)' % (escm, peorm, dondem, peorm * escm))
     else:
         js, sol = armar(ed, modelo, vista, s4, fallas)
         sin_cuantizar = {(c['nodo'], c['gdl']): c for c in js['casos']}
@@ -829,10 +1130,16 @@ def main(argv=None):
         js['info']['escala_deformada'] = esc
         print('  escala de dibujo: x%g (el peor, %.3f mm con %g kN a media viga en el elemento %s, '
               'se dibuja %.2f m)' % (esc, peor * 1000, P_POR_DEFECTO, donde, peor * esc))
+        escm, peorm, dondem = escala_de_momentos(datos, js['receptores'], P_POR_DEFECTO,
+                                                 largos_dibujables(modelo))
+        js['info']['escala_momento'] = escm
+        print('  escala de momentos: %g m por kN m (el mayor, %.1f kN m en la barra %s, se dibuja '
+              '%.2f m)' % (escm, peorm, dondem, peorm * escm))
         verificar(js, modelo, sol, s4, fallas, args.pruebas, sin_cuantizar)
         transcripcion(fallas)
         for c in js['casos']:
             c.pop('_U', None)
+            c.pop('_F', None)
         contrato_cs(js, fallas)
         if not fallas.lista:
             ruta = rutas.asegurar(salida_unity(ed))

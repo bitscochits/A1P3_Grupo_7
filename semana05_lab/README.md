@@ -177,8 +177,8 @@ minutos, reexporta los anexos y deja el LT2.
   reparto no sea ambiguo: **ningún punto de losa cae en regiones de dos
   elementos distintos** (0 de 49 940), y 92 de las 883 regiones son de
   **muros**, que también se resaltan. Desde el 05-10 también muestra su
-  **efecto** (sección siguiente). Lo que sigue sin mostrar son los
-  esfuerzos que produce: ni momentos ni D/C.
+  **efecto**: la deformada y los momentos (sección siguiente). Lo que no
+  muestra es la D/C.
 - **La deformada de la persona (05-10), sin servidor.** Camina un AT-ST
   (2.8 m, de juguete; modelo de Tom Meyer, CC BY 3.0) y el edificio se
   deforma donde pisa, al instante. Python resuelve en OpenSees **una
@@ -203,7 +203,25 @@ minutos, reexporta los anexos y deja el LT2.
   (`capturas_persona/registro.txt`) = OpenSees directo. Con 100 kN la
   viga 200141 del conjunto baja 0.715 mm bajo la carga; a ×540 se ve.
 
+  **Los momentos.** Cada caso unitario trae también el `localForce` de
+  las barras que muestra su receptor (la viga y las que llegan a sus dos
+  nodos). Unity los suma con los **mismos** pesos y le agrega a la viga
+  cargada su empotramiento perfecto (P por las mismas N1..N4); entre
+  extremos M es lineal y en la cargada tiene el quiebre de P. Se dibujan
+  del lado traccionado, como la Semana 4. Comprobado igual que la
+  deformada: la suma = `localForce` de OpenSees resolviendo la carga
+  directo, el momento bajo la carga = `carga_movil.esfuerzos_con_puntual`,
+  y lo que la app sumó = OpenSees. Con 100 kN a media viga, la 200141
+  (8.90 m) da −123.5 kN·m bajo la carga, entre PL/8 = 111 (empotrada) y
+  PL/4 = 222 kN·m (simplemente apoyada), como debe.
+
+  **Otros pisos.** Q / E (o PgUp / PgDn, o los botones *Bajar piso* y
+  *Subir piso*) lo llevan al primer piso, en esa dirección, que tenga
+  losa bajo él; sube y baja como un ascensor (0.7 s). Si justo arriba no
+  hay losa, aparece en la región más cercana y el panel lo dice.
+
   ![El AT-ST en la viga 200141 del conjunto](capturas_persona/persona_2_cerca.jpg)
+  ![Un piso más arriba, con su momento](capturas_persona/persona_4_otro_piso.jpg)
 
   ```
   python semana05_lab/influencias_persona.py lt2          resuelve, verifica y escribe (15 s; conjunto 100 s)
