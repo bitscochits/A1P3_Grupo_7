@@ -235,8 +235,13 @@ minutos, reexporta los anexos y deja el LT2.
   todos CC0 (ambientCG y Poly Haven; `unity/Assets/Resources/Ambiente/LICENCIAS.md`):
   hormigón con mapa normal, pasto, tierra, acero galvanizado y un cielo
   HDRI girado para que su sol caiga donde está la luz (las sombras y el
-  cielo coinciden), con tonos ACES. Sin esos recursos vuelve a las
-  texturas procedurales. Los verifica `comun/recursos_realistas.py`.
+  cielo coinciden), con tonos ACES. Para que de lejos no se note la
+  grilla de la textura repetida, el mapa de detalle del URP/Lit le
+  multiplica un ruido de periodo largo (~300 m en el pasto, ~30 m en el
+  hormigon): no es "stochastic tiling" de verdad, que pediria un shader
+  propio, pero sin shader nuevo rompe la repeticion. Sin esos recursos
+  vuelve a las texturas procedurales. Los verifica
+  `comun/recursos_realistas.py`.
 
   ```
   python semana05_lab/influencias_persona.py lt2          resuelve, verifica y escribe (15 s; conjunto 100 s)

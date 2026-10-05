@@ -9,7 +9,7 @@ r"""
  AmbienteVisor.Recursos.cs). Este script hace lo que no se ve a simple
  vista y falla en silencio:
 
-   [1] EL SOL DEL CIELO. El HDRI trae su sol en algun lugar del
+   [1] EL SOL DEL CIELO (y su suelo). El HDRI trae su sol en algun lugar del
        panorama, y la luz direccional de la vista realista esta en otro
        (AmbienteVisor.SOL_REALISTA). Sin girar el cielo, las sombras van
        para un lado y el sol se ve en otro. Se lee el .hdr (Radiance
@@ -23,6 +23,17 @@ r"""
    [4] LOS MATERIALES apuntan a esas texturas (por GUID) y el del
        hormigon tiene el keyword _NORMALMAP; el cielo tiene el giro de
        sol.json.
+   [5] EL PATRON DE LEJOS. Una textura repetida cada 2-3 m se nota como
+       una grilla. Sin escribir un shader propio (el 'stochastic tiling'
+       de verdad lo pide, con sus sombras, SSAO y pases de profundidad),
+       el URP/Lit trae un MAPA DE DETALLE que multiplica el color (x2)
+       por otra textura con su propia escala. Se arma, por material,
+       Texturas/<item>/detalle.png: ruido periodico (manchas grandes y
+       variacion de ~1 m, ver DETALLES) en gris lineal de media 0.5 (=
+       no cambia nada en promedio), estirado a ~300 m: la base se sigue
+       repitiendo, pero cada repeticion queda distinta. Se verifica la
+       media, que empalme consigo mismo y que el material lo use con
+       _DETAIL_MULX2 y esa escala (Texturas/detalle.json).
 
  Correr:
    python comun/recursos_realistas.py              escribe sol.json y verifica
@@ -47,11 +58,45 @@ import rutas                                 # noqa: E402
 AMBIENTE = os.path.join(rutas.UNITY_PROYECTO, 'Assets', 'Resources', 'Ambiente')
 TEXTURAS = os.path.join(AMBIENTE, 'Texturas')
 CS_AMBIENTE = os.path.join(rutas.UNITY_PROYECTO, 'Assets', 'Scripts', 'AmbienteVisor.cs')
+# El HDRI tal como se bajo, FUERA de Assets (no entra a la build) y el que
+# usa Unity: el mismo con el hemisferio de abajo cambiado por suelo.
+HDR_ORIGINAL = os.path.join(rutas.UNITY_PROYECTO, 'FuentesAmbiente', 'cielo_2k.hdr')
+HDR_UNITY = os.path.join(TEXTURAS, 'cielo', 'cielo_2k_suelo.hdr')
+# Bajo el horizonte un HDRI 'puresky' trae mas cielo (borroso): visto desde
+# arriba, el relieve del sitio parecia una isla flotando en las nubes. El
+# cielo procedural de antes pintaba ahi un color de pasto (_GroundColor). Se
+# hace lo mismo: un pasto lejano, con el brillo del cielo junto al horizonte
+# por este factor, y una transicion de unos grados.
+SUELO_COLOR = (0.36, 0.40, 0.30)
+SUELO_BRILLO = 0.30
+SUELO_TRANSICION_GRADOS = 2.5
 ITEMS = ('hormigon_visto', 'hormigon_losa', 'pasto', 'tierra', 'acero')
 # Tolerancia del giro: el sol del HDRI es un disco de unos 0.5 grados y
 # se toma el pixel mas brillante de un panorama de 2048 px de ancho
 # (0.18 grados por pixel); el material guarda el giro como float.
 TOL_GIRO_GRADOS = 0.5
+
+# El mapa de detalle de cada material. NO es la propia textura a otra
+# escala: probado (simulacion de 16x16 tiles), eso arma una grilla NUEVA de
+# manchas cada 1/escala tiles, que se ve mas que la original. Es ruido
+# periodico solo cada 1/escala tiles (~300 m en el pasto: el suelo llega a
+# 1 km y con 86 m se veian filas de manchas hacia el horizonte): manchas
+# grandes (macro, 'ciclos_macro' por tile de detalle, ~100 m) y variacion de 1.5-5 m
+# (medio, banda 'medio_ciclos'), en gris lineal de media 0.5. De lejos el
+# mipmap promedia el medio y queda la mancha; de cerca el medio rompe la
+# repeticion de la base. macro y medio = desviacion de cada parte del
+# factor de brillo (x2). El acero no lleva: es poco y se ve de cerca.
+DETALLES = {
+    'pasto':          {'escala': 0.01, 'macro': 0.12, 'medio': 0.08, 'ciclos_macro': 3.0,
+                       'medio_ciclos': (60.0, 200.0), 'semilla': 11},
+    'tierra':         {'escala': 0.01, 'macro': 0.10, 'medio': 0.08, 'ciclos_macro': 3.0,
+                       'medio_ciclos': (60.0, 200.0), 'semilla': 13},
+    'hormigon_visto': {'escala': 0.05, 'macro': 0.07, 'medio': 0.04, 'ciclos_macro': 5.0,
+                       'medio_ciclos': (25.0, 60.0), 'semilla': 17},
+    'hormigon_losa':  {'escala': 0.05, 'macro': 0.07, 'medio': 0.04, 'ciclos_macro': 5.0,
+                       'medio_ciclos': (25.0, 60.0), 'semilla': 19},
+}
+LADO_DETALLE = 1024
 
 
 # ============================================================
@@ -100,6 +145,36 @@ def leer_hdr(ruta):
     return img[:, :, :3].astype(np.float32) * f[:, :, None]
 
 
+def escribir_hdr(ruta, img):
+    """Radiance .hdr plano (RGBE sin RLE), que Unity lee igual."""
+    v = img.max(axis=2)
+    m, e = np.frexp(v)
+    escala = np.where(v > 1e-32, m * 256.0 / np.maximum(v, 1e-32), 0.0)
+    rgbe = np.zeros(img.shape[:2] + (4,), dtype=np.uint8)
+    rgbe[:, :, :3] = np.clip(img * escala[:, :, None], 0, 255).astype(np.uint8)
+    rgbe[:, :, 3] = np.where(v > 1e-32, e + 128, 0).astype(np.uint8)
+    with io.open(ruta, 'wb') as f:
+        f.write(b'#?RADIANCE\nFORMAT=32-bit_rle_rgbe\n\n')
+        f.write(('-Y %d +X %d\n' % img.shape[:2]).encode('ascii'))
+        f.write(rgbe.tobytes())
+
+
+def con_suelo(img):
+    """El panorama con el hemisferio de abajo cambiado por un pasto lejano."""
+    alto = img.shape[0]
+    fila = np.arange(alto) + 0.5
+    depresion = np.degrees(np.pi * fila / alto) - 90.0       # > 0 bajo el horizonte
+    banda = img[int(alto * 0.47):alto // 2].reshape(-1, 3).mean(axis=0)  # cielo junto al horizonte
+    lum = 0.2126 * banda[0] + 0.7152 * banda[1] + 0.0722 * banda[2]
+    c = np.array(SUELO_COLOR)
+    suelo = c / (0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]) * lum * SUELO_BRILLO
+    t = np.clip(depresion / SUELO_TRANSICION_GRADOS, 0.0, 1.0)
+    t = t * t * (3 - 2 * t)
+    out = img.copy()
+    out[:] = img * (1 - t)[:, None, None] + suelo[None, None, :] * t[:, None, None]
+    return out
+
+
 def sol_del_hdri(img):
     """(fila, columna, phi' en grados, elevacion en grados) del pixel mas
     brillante. phi' es el angulo con que Skybox/Panoramic muestrea ese
@@ -136,6 +211,46 @@ def giro_para(phi_hdri_grados, pitch, yaw):
 # ============================================================
 # LO QUE VERIFICA
 # ============================================================
+def a_lineal(srgb):
+    s = srgb / 255.0
+    return np.where(s <= 0.04045, s / 12.92, ((s + 0.055) / 1.055) ** 2.4)
+
+
+def ruido_periodico(n, rng, filtro):
+    """Ruido blanco filtrado en Fourier: empalma consigo mismo por construccion."""
+    k = np.fft.fftfreq(n) * n
+    kk = np.sqrt(k[:, None] ** 2 + k[None, :] ** 2)
+    r = np.real(np.fft.ifft2(np.fft.fft2(rng.normal(size=(n, n))) * filtro(kk)))
+    return r / r.std()
+
+
+def detalle(item):
+    """La textura de detalle (gris lineal, media 0.5, periodica) de un item."""
+    cfg = DETALLES[item]
+    n = LADO_DETALLE
+    rng = np.random.default_rng(cfg['semilla'])
+    macro = ruido_periodico(n, rng, lambda kk: np.exp(-(kk / cfg['ciclos_macro']) ** 2))
+    lo, hi = cfg['medio_ciclos']
+    medio = ruido_periodico(n, rng, lambda kk: ((kk >= lo) & (kk <= hi)).astype(float))
+    d = 0.5 * (1.0 + cfg['macro'] * macro + cfg['medio'] * medio)
+    d = np.clip(d, 0.15, 0.85)
+    d += 0.5 - d.mean()
+    return np.clip(np.rint(d * 255.0), 0, 255).astype(np.uint8)
+
+
+def armar_detalles():
+    from PIL import Image
+    for item in DETALLES:
+        Image.fromarray(detalle(item), mode='L').save(os.path.join(TEXTURAS, item, 'detalle.png'))
+    lista = [{'item': i, 'escala': c['escala']} for i, c in DETALLES.items()]
+    with io.open(os.path.join(TEXTURAS, 'detalle.json'), 'w', encoding='utf-8') as fh:
+        json.dump({'items': lista, '_por_que': (
+            'Escala del mapa de detalle (URP/Lit _DetailAlbedoMap, x2) de cada material, respecto de '
+            'la base. La calcula comun/recursos_realistas.py (DETALLES) y la aplica '
+            'Editor/RecursosRealistas.cs.')}, fh, indent=1, ensure_ascii=False)
+    print('  escritos %d detalle.png y Texturas/detalle.json' % len(DETALLES))
+
+
 def guid_de(ruta):
     with io.open(ruta + '.meta', encoding='utf-8') as f:
         return re.search(r'guid: ([0-9a-f]{32})', f.read()).group(1)
@@ -155,8 +270,10 @@ def main(argv):
     print('=' * 72)
     print('  RECURSOS DE LA VISTA REALISTA   (%s)' % os.path.relpath(AMBIENTE, rutas.RAIZ))
     print('=' * 72)
-    hdr = os.path.join(TEXTURAS, 'cielo', 'cielo_2k.hdr')
+    hdr = HDR_ORIGINAL
     sol_json = os.path.join(TEXTURAS, 'cielo', 'sol.json')
+    if not verificar:
+        armar_detalles()
     if os.path.isfile(hdr):
         img = leer_hdr(hdr)
         fila, col, phi, elev, lum = sol_del_hdri(img)
@@ -189,7 +306,20 @@ def main(argv):
             r = float(m.group(1)) if m else float('nan')
             check(m is not None and abs(((r - giro + 180) % 360) - 180) <= TOL_GIRO_GRADOS,
                   '[4] Cielo.mat tiene ese giro (%s) y usa el HDR' % (m.group(1) if m else 'sin _Rotation'),
-                  '' if guid_de(hdr) in src else 'Cielo.mat no apunta al .hdr')
+                  '' if os.path.isfile(HDR_UNITY) and guid_de(HDR_UNITY) in src
+                  else 'Cielo.mat no apunta a cielo_2k_suelo.hdr')
+        if not verificar:
+            escribir_hdr(HDR_UNITY, con_suelo(img))
+            print('  escrito %s (bajo el horizonte, pasto lejano)' % os.path.relpath(HDR_UNITY, rutas.RAIZ))
+        if os.path.isfile(HDR_UNITY):
+            u = leer_hdr(HDR_UNITY)
+            arriba = slice(0, img.shape[0] // 2 - 5)
+            dif = float(np.abs(u[arriba] - img[arriba]).max() / max(img[arriba].max(), 1e-9))
+            abajo = u[int(img.shape[0] * 0.75):]
+            # max - min y no std: el std en float32 de un valor constante da ~1e-3
+            check(dif < 0.01 and float(np.ptp(abajo.reshape(-1, 3), axis=0).max()) == 0.0,
+                  '[1] cielo_2k_suelo.hdr = el original sobre el horizonte (dif. relativa %.1e, el RGBE) y '
+                  'pasto parejo bajo el' % dif)
         else:
             check(False, '[4] existe Cielo.mat (correr Editor/RecursosRealistas.cs)')
     else:
@@ -216,6 +346,33 @@ def main(argv):
         src = io.open(mat, encoding='utf-8').read()
         check(guid_de(color) in src and guid_de(normal) in src and '_NORMALMAP' in src,
               '[4] Mat_%s apunta a su color y su normal, con _NORMALMAP' % item)
+    # [5] el mapa de detalle
+    from PIL import Image
+    for item, cfg in DETALLES.items():
+        ruta = os.path.join(TEXTURAS, item, 'detalle.png')
+        if not os.path.isfile(ruta):
+            check(False, '[5] %s: existe detalle.png' % item)
+            continue
+        im = np.asarray(Image.open(ruta), dtype=float) / 255.0
+        media = float(im.mean())
+        # empalma: el salto entre el borde y el borde opuesto no es mayor
+        # que el salto tipico entre columnas vecinas
+        salto_borde = float(np.abs(im[:, 0] - im[:, -1]).mean() + np.abs(im[0, :] - im[-1, :]).mean()) / 2
+        salto_tipico = float(np.abs(np.diff(im, axis=1)).mean())
+        check(im.ndim == 2 and abs(media - 0.5) < 0.01 and salto_borde < 1.5 * salto_tipico,
+              '[5] %s: detalle.png gris, media %.3f (0.5 = neutro) y empalma (borde %.4f, tipico %.4f)'
+              % (item, media, salto_borde, salto_tipico))
+        mat = os.path.join(AMBIENTE, 'Mat_%s.mat' % item)
+        if os.path.isfile(mat) and os.path.isfile(ruta + '.meta'):
+            src = io.open(mat, encoding='utf-8').read()
+            meta = io.open(ruta + '.meta', encoding='utf-8').read()
+            m = re.search(r'_DetailAlbedoMap:\s*\n\s*m_Texture: \{fileID: \d+, guid: ([0-9a-f]+)[^\n]*\n'
+                          r'\s*m_Scale: \{x: ([-\d.e]+), y: ([-\d.e]+)\}', src)
+            check(m is not None and m.group(1) == guid_de(ruta) and '_DETAIL_MULX2' in src
+                  and abs(float(m.group(2)) - cfg['escala']) < 1e-6 and 'sRGBTexture: 0' in meta,
+                  '[5] Mat_%s usa su detalle.png (lineal) a escala %.3f, con _DETAIL_MULX2' % (item, cfg['escala']))
+        else:
+            check(False, '[5] Mat_%s y detalle.png.meta existen (correr Editor/RecursosRealistas.cs)' % item)
     perfil = os.path.join(AMBIENTE, 'PerfilRealista.asset')
     check(os.path.isfile(perfil) and all(k in io.open(perfil, encoding='utf-8').read()
                                          for k in ('Tonemapping', 'ColorAdjustments', 'Bloom')),

@@ -7,9 +7,12 @@
 
     Resources/Ambiente/Mat_<item>.mat   URP/Lit con color + mapa normal
                                          (Texturas/<item>/color.jpg y
-                                         normal_gl.jpg)
+                                         normal_gl.jpg) y el mapa de
+                                         detalle que rompe el patron
+                                         (detalle.png, detalle.json)
     Resources/Ambiente/Cielo.mat        Skybox/Panoramic con el HDRI
-                                         (Texturas/cielo/cielo_2k.hdr)
+                                         (Texturas/cielo/cielo_2k_suelo.hdr: el HDRI
+                                         con suelo bajo el horizonte)
     Resources/Ambiente/PerfilRealista.asset  post-proceso de la vista
                                          realista (ACES, color, bloom)
 
@@ -41,6 +44,10 @@ public static class RecursosRealistas
 {
     [System.Serializable]
     class SolDelCielo { public float giro_grados; }
+    [System.Serializable]
+    class Detalle { public string item; public float escala; }
+    [System.Serializable]
+    class Detalles { public Detalle[] items; }
 
     const string CARPETA = "Assets/Resources/Ambiente";
     const string TEXTURAS = CARPETA + "/Texturas";
@@ -68,11 +75,12 @@ public static class RecursosRealistas
             m.EnableKeyword("_NORMALMAP");
             m.SetColor("_BaseColor", Color.white);
             m.SetFloat("_Smoothness", 0.1f);
+            PonerDetalle(m, item);
             EditorUtility.SetDirty(m);
             hechos++;
         }
 
-        string hdr = TEXTURAS + "/cielo/cielo_2k.hdr";
+        string hdr = TEXTURAS + "/cielo/cielo_2k_suelo.hdr";
         if (File.Exists(hdr))
         {
             var ti = (TextureImporter)AssetImporter.GetAtPath(hdr);
@@ -102,6 +110,37 @@ public static class RecursosRealistas
         hechos++;
         AssetDatabase.SaveAssets();
         Debug.Log("RecursosRealistas: " + hechos + " recursos en " + CARPETA);
+    }
+
+    /// El mapa de detalle (URP/Lit, x2) que rompe el patron de lejos: lo
+    /// arma y lo escala comun/recursos_realistas.py (detalle.png y
+    /// detalle.json). Gris LINEAL: 0.5 deja el color igual.
+    static void PonerDetalle(Material m, string item)
+    {
+        string ruta = TEXTURAS + "/" + item + "/detalle.png";
+        string json = TEXTURAS + "/detalle.json";
+        Detalle d = null;
+        if (File.Exists(json))
+            foreach (Detalle x in JsonUtility.FromJson<Detalles>(File.ReadAllText(json)).items)
+                if (x.item == item) d = x;
+        if (d == null || !File.Exists(ruta))
+        {
+            m.SetTexture("_DetailAlbedoMap", null);
+            m.DisableKeyword("_DETAIL_MULX2");
+            return;
+        }
+        var ti = (TextureImporter)AssetImporter.GetAtPath(ruta);
+        ti.textureType = TextureImporterType.Default;
+        ti.sRGBTexture = false;
+        ti.wrapMode = TextureWrapMode.Repeat;
+        ti.anisoLevel = 8;
+        ti.filterMode = FilterMode.Trilinear;
+        ti.mipmapEnabled = true;
+        ti.SaveAndReimport();
+        m.SetTexture("_DetailAlbedoMap", AssetDatabase.LoadAssetAtPath<Texture2D>(ruta));
+        m.SetTextureScale("_DetailAlbedoMap", new Vector2(d.escala, d.escala));
+        m.SetFloat("_DetailAlbedoMapScale", 1f);
+        m.EnableKeyword("_DETAIL_MULX2");
     }
 
     static void Importar(string ruta, bool esNormal)
