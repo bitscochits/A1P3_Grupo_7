@@ -80,7 +80,7 @@ META
 | --- | --- | --- |
 | Build de Windows correcta | `build/unity_build.log:8` (`Date: 2026-09-16T00:00:38Z`, el 15-09 a las 21:00 hora local), `:8194` `Build Finished, Result: Success.`, `:8207` `BUILD OK ... (104 MB, 136 s)`, `:8241` `return code 0` | `build/` está ignorada por git (`.gitignore:50`): el log existe solo en este PC. En disco: `build/` ocupa 109 938 721 bytes, unos 110 MB (medido) |
 | Script de build | `unity/Assets/Editor/ConstruirApp.cs:41-42` (menú y `Construir()`), `:59` `BuildTarget.StandaloneWindows64`, `:30` una sola escena, `:78` `Exit(1)` si falla | Solo compila Windows |
-| Lanzador sin editor | `comun/lanzar_unity.py:332` `abrir_visor` (copia los JSON en `:347` y lanza el exe en `:362`), `:379` `abrir_servidor` (`Popen` del servidor en `:407`); `ver.ps1:45` exporta el LT2, `:55` levanta el servidor y `:69` abre la app | Necesita el `.venv` y una consola |
+| Lanzador sin editor | `comun/lanzar_unity.py:792` `abrir_visor` (copia los JSON en `:807` y lanza el exe en `:822`), `:839` `abrir_servidor` (`Popen` del servidor en `:875`); `ver.ps1:45` exporta el LT2, `:55` levanta el servidor y `:69` abre la app | Necesita el `.venv` y una consola |
 | Servidor de cálculo | `comun/servidor_opensees.py:42-48` (imports: flask, openseespy y la biblioteca estándar), `:612-615` `/ping`, `:618-632` `/analizar`, `:637-650` `--lan` (por defecto escucha en `127.0.0.1`) | `/ping` sirve para saber si el motor está vivo. En la rama semana05, `/analizar` además llama a `escribir_excel`, que importa `comun/excel.py` y openpyxl dentro de la función (§4) |
 | Unity ya sabe pedir un reanálisis | `unity/Assets/Scripts/AnalizadorEstructural.cs:43` `urlServidor = "http://localhost:5000/analizar"`, `:44` timeout de 30 s, `:132-160` POST con `UnityWebRequest`; la escena fija la URL en `SampleScene.unity:216` | En `f357eb6` la URL está fija; en la rama semana05 se puede escribir en el panel (§2.1). En el editor funcionó: `reports/semana02.md:720` "El reanálisis desde Unity **ya funciona**" |
 | Guardar el modelo editado | `EditorEstructura.cs:490` (`persistentDataPath`) | |
@@ -100,7 +100,7 @@ editar.
 | CORS en el servidor | `servidor_opensees.py:90` `PERMITIR_CORS` (activo salvo `OPENSEES_CORS=0`), `:688` `Access-Control-Allow-Origin` | Variante C con build Web |
 | Un solo servidor con `/combinar` y `/estados` | `semana05/servidor_s5.py:142` y `:173` (decisión 4) | Es el servidor que habría que empaquetar (componente 1) |
 | Excel del reanálisis | `servidor_opensees.py:731` `escribir_excel`, en `rutas.py:108` `EXCEL_REANALISIS` = `<raíz>/results/excel` | Componente 2; agrava F2 (escribe dentro de la raíz) |
-| Sincronizar los datos de un edificio | `lanzar_unity.py:357` `sincronizar(...)` (copia solo lo que cambió y no pisa con un archivo de otro edificio) y `:287` `carpetas_streaming()`, que incluye la StreamingAssets de la build | Componente 4, pero sigue siendo **fuera** de la app |
+| Sincronizar los datos de un edificio | `lanzar_unity.py:424` `sincronizar(...)` (copia solo lo que cambió y no pisa con un archivo de otro edificio) y `:354` `carpetas_streaming()`, que incluye la StreamingAssets de la build | Componente 4, pero sigue siendo **fuera** de la app |
 | Lectores que rechazan datos de otro edificio | `VisorSemana04.Superposicion.cs:355` (compara `sup.info.edificio`), `VisorSemana03.cs:403-404` (en `Comprobar()`, compara `Anexo.info.edificio` con `m.info.edificio`) | Componente 4 |
 | Métodos de build Web y Android | `ConstruirApp.cs:92-93` `ConstruirWeb()` con `:107` compresión `Disabled`; `:113-114` `ConstruirAndroid()`; `:163` `Soportado(...)` avisa si falta el módulo | Variantes B y C |
 
@@ -174,7 +174,7 @@ siendo un paso aparte, antes de abrir la app.
   `ModeloEditado`).
 
 **F4. El edificio se elige fuera de la app.**
-- `lanzar_unity.py:54` fija `EDIFICIO = 'lt2'`, `:106-111` `elegir_edificio`
+- `lanzar_unity.py:82` fija `EDIFICIO = 'lt2'`, `:133-140` `elegir_edificio`
   solo cambia qué archivo se copia encima, y `:216-225` explica que cada anexo
   es de un solo edificio.
 - Si no calzan, el visor apaga los diagramas (`VisorSemana04.cs:403`, "El
@@ -401,7 +401,7 @@ Suma de las etapas 1 a 4: 14-23 + 6-10 + 13-20 + 4-6 = **37-59 h**
 | HTTP bloqueado en el exe | La app no llega al motor; y en la Semana 5, la M1 desde el exe falla | Probarlo primero (etapa 1); `AlwaysAllowed` desde `ConstruirApp` ya está en la rama semana05 (sin probar en un exe) | `ProjectSettings.asset:945`; F7 |
 | Dependencias que se cuelan en el motor | openpyxl (el Excel de `/analizar` en la Semana 5) carga numpy y Pillow si están: el motor pasa de unos 24 MB a unos 94 MB de dependencias | `--exclude-module numpy --exclude-module PIL` en el build del motor, y comprobar que el Excel se sigue escribiendo | §4, filas de la Semana 5 |
 | Antivirus o SmartScreen | Marca `motor.exe` o la app sin firma | Carpeta de usuario, onedir (no onefile) y explicarlo en la guía; la firma de código cuesta dinero | No hay instalador ni firma (F6) |
-| Procesos huérfanos o puerto ocupado | Queda un motor vivo; el siguiente arranque falla | Puerto libre elegido por la app; el motor se apaga si muere su padre | `lanzar_unity.py:409-412` ya advierte "Puede que el puerto ... este ocupado" |
+| Procesos huérfanos o puerto ocupado | Queda un motor vivo; el siguiente arranque falla | Puerto libre elegido por la app; el motor se apaga si muere su padre | `lanzar_unity.py:877-880` ya advierte "Puede que el puerto ... este ocupado" |
 | Raíz y escritura | El motor no encuentra `data/` o no puede escribir | `LAB_RAIZ`/`sys.frozen`; salidas en `%LOCALAPPDATA%` | `rutas.py:66`, `:79` |
 | Datos de otro edificio | Diagramas apagados o números de otro modelo | Carpeta por edificio y cada lector comprueba `info.edificio` | Hoy pasó dos veces (§2.2) |
 | Recálculo lento en el conjunto | La app parece colgada unos segundos | Pedido asíncrono (`UnityWebRequest` ya lo es) y aviso "calculando..." | 4.1-4.3 s medidos (§4) |

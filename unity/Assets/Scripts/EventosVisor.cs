@@ -187,6 +187,15 @@ public static class AjustesVista
     /// Dibujar el suelo en la cota del terreno (info.cota_terreno).
     public static bool suelo = true;
 
+    /// Dibujar el relieve del sitio (StreamingAssets/topografia.json, de
+    /// edificios/conjunto/topografia.py). Con el a la vista se apaga el
+    /// plano del suelo, no sus terrazas.
+    public static bool relieve = true;
+
+    /// Lo que AmbienteVisor sabe del relieve, para el panel: de donde
+    /// salio, o por que no hay. Lo escribe AmbienteVisor; solo se lee.
+    public static string relieveEstado = "";
+
     /// Dibujar las losas por piso en la vista realista (AmbienteVisor). Es
     /// DIBUJO de los poligonos de areas_tributarias del JSON, no un dato
     /// nuevo: sin collider, y se esconden solas con la deformada, la carga

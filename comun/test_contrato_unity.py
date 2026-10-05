@@ -47,44 +47,9 @@ def check(cond, msg, detalle=""):
 # ============================================================
 # Parseo simple del C#: campos publicos de cada clase serializable
 # ============================================================
-def campos_de_clases(ruta):
-    with open(ruta, encoding='utf-8') as f:
-        src = f.read()
-
-    # Fuera comentarios, para no confundir ejemplos de las notas con
-    # codigo real.
-    src = re.sub(r'/\*.*?\*/', '', src, flags=re.S)
-    src = re.sub(r'//[^\n]*', '', src)
-
-    clases = {}
-    for m in re.finditer(r'class\s+(\w+)\s*\{', src):
-        nombre = m.group(1)
-        # Recorta hasta cerrar la llave de la clase.
-        i = m.end() - 1
-        prof, j = 0, i
-        while j < len(src):
-            if src[j] == '{':
-                prof += 1
-            elif src[j] == '}':
-                prof -= 1
-                if prof == 0:
-                    break
-            j += 1
-        cuerpo = src[i:j]
-
-        campos = set()
-        # public <tipo> a, b, c;   (ignora propiedades con { get; })
-        for d in re.finditer(
-                r'public\s+[\w<>\[\]\.]+\s+([\w\s,]+?)\s*(?:=[^;]*)?;', cuerpo):
-            grupo = d.group(1)
-            if '(' in grupo:
-                continue
-            for nom in grupo.split(','):
-                nom = nom.strip()
-                if nom and re.fullmatch(r'\w+', nom):
-                    campos.add(nom)
-        clases[nombre] = campos
-    return clases
+# La lectura de las clases C# vive en comun/campos_cs.py: la usa tambien
+# edificios/conjunto/topografia.py (una sola definicion).
+from campos_cs import campos_de_clases   # noqa: E402
 
 
 print("Leyendo contrato...")

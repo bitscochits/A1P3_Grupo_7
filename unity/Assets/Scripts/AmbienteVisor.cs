@@ -52,6 +52,10 @@
     la base; lo que baja bajo su cara se le recorta con la misma
     geometria del hueco (HuecoDelSuelo.CalcularTerraza). Hoy: la de
     Ingenieria, 3.96 local = -4.01 en el conjunto (segundo N.R.).
+  - RELIEVE DEL SITIO (AmbienteVisor.Topografia.cs): el terreno natural
+    alrededor del edificio, de StreamingAssets/topografia.json (lo arma
+    edificios/conjunto/topografia.py). Con el a la vista se apaga el
+    plano del suelo; las terrazas siguen.
 
   ----------------------------------------------------------------
   QUE NO HACE, A PROPOSITO
@@ -295,10 +299,13 @@ public partial class AmbienteVisor : MonoBehaviour
     void AplicarMaterialesSuelo()
     {
         aplicadoMapa = MapaDCActivo();
-        if (suelo == null) return;
-        // El suelo y sus hijos, las terrazas (AmbienteVisor.Terrazas.cs), con los mismos materiales.
-        foreach (MeshRenderer mr in suelo.GetComponentsInChildren<MeshRenderer>(true))
-            mr.sharedMaterials = AjustesVista.realista && !aplicadoMapa ? MaterialesSueloRealista() : MaterialesSueloTecnico();
+        Material[] mats = AjustesVista.realista && !aplicadoMapa ? MaterialesSueloRealista() : MaterialesSueloTecnico();
+        // El suelo y sus hijos, las terrazas (AmbienteVisor.Terrazas.cs), y el
+        // relieve del sitio (AmbienteVisor.Topografia.cs), con los mismos materiales.
+        if (suelo != null)
+            foreach (MeshRenderer mr in suelo.GetComponentsInChildren<MeshRenderer>(true)) mr.sharedMaterials = mats;
+        if (relieve != null)
+            foreach (MeshRenderer mr in relieve.GetComponentsInChildren<MeshRenderer>(true)) mr.sharedMaterials = mats;
     }
 
     void OnDestroy()
@@ -314,6 +321,7 @@ public partial class AmbienteVisor : MonoBehaviour
             if (mf != null && mf.sharedMesh != null) Destroy(mf.sharedMesh);
         }
         BorrarLosas(); BorrarTerrazas();     // y la malla de las terrazas (AmbienteVisor.Terrazas.cs)
+        BorrarRelieve();                     // y la del relieve (AmbienteVisor.Topografia.cs)
     }
 
     // ============================================================
@@ -330,6 +338,7 @@ public partial class AmbienteVisor : MonoBehaviour
         Registrar(false);
         ActualizarSueloSinCortar();
         ActualizarLosasSinCortar();
+        PedirRelieveDelModelo();             // AmbienteVisor.Topografia.cs
         Aplicar();
     }
 
@@ -352,7 +361,8 @@ public partial class AmbienteVisor : MonoBehaviour
     /// mapa D/C y la vista realista dependen de el).
     void ActualizarSueloSinCortar()
     {
-        try { ActualizarSuelo(); ActualizarTerrazas(); }     // las terrazas: AmbienteVisor.Terrazas.cs
+        // las terrazas: AmbienteVisor.Terrazas.cs; el relieve: AmbienteVisor.Topografia.cs
+        try { ActualizarSuelo(); ActualizarTerrazas(); ActualizarRelieve(); }
         catch (Exception ex) { Debug.LogException(ex); }
     }
 
@@ -477,6 +487,7 @@ public partial class AmbienteVisor : MonoBehaviour
         if (suelo != null) suelo.SetActive(AjustesVista.suelo);
         aplicadoRealista = realista;
         AplicarMaterialesSuelo();
+        AplicarVisibilidadRelieve();
         aplicadoSuelo = AjustesVista.suelo;
         hayAplicado = true;
         ActualizarVisibilidadLosas(true);

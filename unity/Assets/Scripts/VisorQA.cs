@@ -77,7 +77,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 [RequireComponent(typeof(VisorEstructura))]
-public class VisorQA : MonoBehaviour
+public partial class VisorQA : MonoBehaviour
 {
     [Header("Referencias")]
     public VisorEstructura visor;
@@ -2027,7 +2027,7 @@ public class VisorQA : MonoBehaviour
             GUILayout.Label(info != null && info.cota_terreno > -9000f
                 ? $"Terreno en la cota {Cota(info.cota_terreno)} m: donde arranca la estructura, declarado en el perfil del edificio.{TextoTerrazas(info)}"
                 : "Este JSON no trae cota de terreno: el suelo va en el apoyo mas bajo (respaldo de dibujo, ver consola).",
-                PanelUI.Tenue);
+                PanelUI.Tenue); CasillaRelieve();     // VisorQA.Relieve.cs
         }
 
         if (PanelUI.Plegable("qa.vista.camara", "Camara", true))

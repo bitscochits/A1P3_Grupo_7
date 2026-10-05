@@ -127,6 +127,10 @@ SUITE = [
     ('QA final S6 (tabla)',   ['semana06/verificar_semana06.py'], False),
     ('S6: 200037 lamina -> app', ['semana06/traza_200037.py'], False),
     ('S6: precision del registro', ['semana06/precision_ar.py'], False),
+    # El relieve del sitio que dibuja el visor (Google Earth + Copernicus
+    # GLO-30): calza con el techo y las terrazas del modelo, el JSON es el
+    # que se arma ahora y sus claves son las de AmbienteVisor.Topografia.cs.
+    ('relieve del sitio',     ['edificios/conjunto/topografia.py', '--verificar'], False),
 ]
 
 

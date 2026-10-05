@@ -1299,7 +1299,7 @@ pone −7.97 en el LT2 y nada en Ingeniería, el conjunto dibujará el suelo en
 **Efecto en el D/C: CERO, medido.** Ningún módulo de cálculo lee
 `cota_terreno`: solo la leen los exportadores de Unity (hoy tres: el del
 LT2, el del conjunto y `edificios/ingenieria/export_unity.py:52`),
-`comun/test_contrato_unity.py:214` y `semana05/comparar_unity.py:737`.
+`comun/test_contrato_unity.py:179` y `semana05/comparar_unity.py:737`.
 Cambiarla mueve el dibujo y no mueve un número.
 
 **Pero sí tiene una consecuencia para la defensa.** Si el piso −7.97/−4.01

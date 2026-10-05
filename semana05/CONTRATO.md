@@ -546,6 +546,7 @@ Nombres fijos en `unity/Assets/StreamingAssets/`:
 | `superposicion.json` | `VisorSemana04.Superposicion` (U3) | `data/unity/superposicion_<ed>.json` |
 | `carga_movil.json` | `VisorCargaMovil` (P4) | `data/unity/carga_movil_<ed>.json` |
 | `resultados.xlsx` | botón "Abrir Excel de resultados" (U2a) | `data/excel/<ed>_resultados.xlsx` |
+| `topografia.json` | `AmbienteVisor.Topografia` (relieve del sitio, 05-10) | `data/unity/topografia_<ed>.json` (`edificios/conjunto/topografia.py`) |
 
 (`modelo_unity.json` es el de antes; no se usa.)
 
@@ -561,6 +562,7 @@ de forma atómica:
 | `data/unity/superposicion_<ed>.json` | `superposicion.json` | aviso; no borra el que haya |
 | `data/unity/carga_movil_<ed>.json` | `carga_movil.json` | aviso; no borra |
 | `data/excel/<ed>_resultados.xlsx` | `resultados.xlsx` | aviso; no borra |
+| `data/unity/topografia_<ed>.json` | `topografia.json` | aviso; no borra |
 
 Y lo mismo a `build/LaboratorioEstructural_Data/StreamingAssets/` si la build
 existe. Cada lector comprueba el edificio del archivo, así que un archivo viejo

@@ -368,6 +368,7 @@ public class CapturaSemana05 : MonoBehaviour
         Seccion("A. VISTA GENERAL");
         AjustesVista.realista = true;
         AjustesVista.suelo = true;
+        AjustesVista.relieve = false;      // las fotos de la Semana 5 son sin el relieve del sitio
         EventosVisor.AvisarVistaCambio();
         EncuadreGeneral();
         Pestana(VisorQA.PESTANA_VISTA);

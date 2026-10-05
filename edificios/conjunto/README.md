@@ -58,3 +58,45 @@ hacer, y la que atrapó el error del módulo elástico.
 558 nodos, 937 elementos, 10 diafragmas, 47 secciones.
 G = 97 885.36 kN = 34 148.98 (LT2) + 63 736.38 (Ingeniería).
 Separación cara a cara 0.050 m. 705 polígonos tributarios.
+
+## El relieve del sitio (`sitio/`, `topografia.py`)
+
+El terreno natural alrededor del edificio, para el visor. **Solo dibujo**:
+ningún cálculo lo usa.
+
+```
+python edificios\conjunto\bajar_dem.py             una vez: baja la ventana del DEM al repo
+python edificios\conjunto\topografia.py            data/unity/topografia_<ed>.json + sitio/topografia_planta.png
+python edificios\conjunto\topografia.py --verificar
+python comun\lanzar_unity.py sincronizar conjunto   lo copia a StreamingAssets/topografia.json
+```
+
+| entrada | qué aporta |
+|---|---|
+| `sitio/topo_uandes.kmz` | la **zona**, trazada en Google Earth. Sin cotas: Google Earth guarda un trazo pegado al terreno con altura 0 |
+| `sitio/techo_edificio_antiguo.kmz` | el techo del cuerpo antiguo en la foto (el LT2 todavía no aparece): de él salen el **giro** y la **posición** |
+| `sitio/dem_copernicus_glo30.json` | las **cotas**: Copernicus DEM GLO-30 (celda de ~30 m, 2011-2015), solo la ventana del campus |
+| `sitio/sitio.json` | los supuestos, con su porqué |
+
+Cómo se ubica: el lado largo del techo de la foto da el rumbo de +x
+(71.9°, hacia el ENE); su centro cae en el centro del techo del modelo
+(entre ejes, x 8.02 a 58.02, y 47.70 a 64.10); y el DEM se corre en vertical
+por mínimos cuadrados sobre los 84 apoyos en terreno. Lo que comprueba
+`topografia.py`: el techo de la foto mide lo del modelo más el borde de la
+losa (+1.29 y +1.70 m), el terreno sube hacia +x a lo largo del edificio
+como sus terrazas (921.7 → 927.5 m), el calce vertical deja un residuo rms
+de 1.22 m, y las claves del JSON son los campos de
+`AmbienteVisor.Topografia.cs`.
+
+En Unity: Capas > Vista > "Relieve del sitio". Con el relieve a la vista se
+apaga el plano del suelo (no las terrazas), y el edificio queda en un hueco
+con taludes hasta la cota del terreno del modelo.
+
+![El relieve en la app, desde el suroeste](sitio/capturas/relieve_1_iso_suroeste.jpg)
+
+![De cerca: el edificio en la ladera](sitio/capturas/relieve_4_cerca.jpg)
+
+Las fotos las saca la app sola: `build\LaboratorioEstructural.exe -capturarRelieve <carpeta>`
+(`unity/Assets/Scripts/CapturaRelieve.cs`), con su `registro.txt`. La
+figura en planta, con curvas cada 1 m, el techo de la foto y los nodos de
+los dos cuerpos, es `sitio/topografia_planta.png`.
