@@ -271,6 +271,7 @@ def archivos_del_edificio(ed):
         (rutas.unity('superposicion_' + ed), 'superposicion.json', False, 'si_dice'),
         (rutas.unity('carga_movil_' + ed), 'carga_movil.json', False, 'si_dice'),
         (rutas.unity('topografia_' + ed), 'topografia.json', False, 'si_dice'),
+        (rutas.unity('influencias_' + ed), 'influencias.json', False, 'si_dice'),
         (rutas.excel_resultados(ed), 'resultados.xlsx', False, None),
     ]
 
@@ -282,6 +283,7 @@ _QUIEN_LO_GENERA = {
     'superposicion.json': 'python semana05/superposicion.py {ed} --exportar',
     'carga_movil.json': 'python semana05/carga_movil.py {ed}',
     'topografia.json': 'python edificios/conjunto/topografia.py',
+    'influencias.json': 'python semana05_lab/influencias_persona.py {ed}',
     'resultados.xlsx': 'python semana05/exportar_excel.py {ed}',
 }
 
@@ -299,6 +301,7 @@ PASOS_PREPARAR = (
     ('anexo de Semana 3', ('semana03/exportar_unity.py', '{ed}'), True, None),
     ('superposicion E1..E3', ('semana05/superposicion.py', '{ed}', '--exportar'), True, None),
     ('carga movil', ('semana05/carga_movil.py', '{ed}'), False, None),
+    ('deformada de la persona', ('semana05_lab/influencias_persona.py', '{ed}'), False, None),
     ('Excel de resultados', ('semana05/exportar_excel.py', '{ed}'), False, 'excel'),
 )
 

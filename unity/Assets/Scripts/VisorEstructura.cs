@@ -1020,7 +1020,7 @@ public class VisorEstructura : MonoBehaviour
                     + N3 * Vector3.Dot(ey, tj) + N4 * L * Vector3.Dot(ez, rj);
             float w = N1 * Vector3.Dot(ez, ti) - N2 * L * Vector3.Dot(ey, ri)
                     + N3 * Vector3.Dot(ez, tj) - N4 * L * Vector3.Dot(ey, rj);
-            Vector3 p = Vector3.Lerp(pa, pb, xi) + (u * ex + v * ey + w * ez) * factorEscala;
+            Vector3 p = Vector3.Lerp(pa, pb, xi) + (u * ex + v * ey + w * ez + EnVano(e, xi)) * factorEscala;
             curva[k] = Ejes.AUnity(p.x, p.y, p.z);
         }
 
@@ -1193,4 +1193,19 @@ public class VisorEstructura : MonoBehaviour
         }
     }
 
+    // ============================================================
+    // FLECHA DENTRO DEL VANO QUE MANDA OTRA FUENTE
+    // ============================================================
+    /// Lo que se suma, dentro del vano, a la curva de los nodos (m, ejes
+    /// OpenSees) de la barra 'id' en xi; null = nada. El visor no lo
+    /// calcula: lo pone quien SABE la carga dentro del vano (VisorPersona,
+    /// con la forma que exporta Python) y vale cero cuando la deformada
+    /// que se dibuja no es la suya. Va al final de la clase para no
+    /// correr las lineas que citan los informes.
+    public System.Func<int, float, Vector3> FlechaEnVano;
+
+    Vector3 EnVano(Elemento e, float xi)
+    {
+        return FlechaEnVano != null ? FlechaEnVano(e.id, xi) : Vector3.zero;
+    }
 }

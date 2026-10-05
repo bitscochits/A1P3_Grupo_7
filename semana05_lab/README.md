@@ -166,20 +166,51 @@ minutos, reexporta los anexos y deja el LT2.
 
 ## Lo que queda corto, dicho de frente
 
-- **SQ4: la persona muestra el reparto, no resuelve.** La carga móvil
-  recorre un **eje fijo de vigas** (30 posiciones resueltas en OpenSees).
-  La que sigue **al usuario** está en la pestaña **Persona**
-  (`VisorPersona.cs`, agregada después de la entrega). Su peso (0.80 kN
-  por defecto, ~80 kg) se asigna entero al elemento dueño de la región
+- **SQ4: la persona.** La carga móvil recorre un **eje fijo de vigas**
+  (30 posiciones resueltas en OpenSees). La que sigue **al usuario** está
+  en la pestaña **Persona** (`VisorPersona.cs`, agregada después de la
+  entrega). Su peso se asigna entero al elemento dueño de la región
   tributaria donde está parada: la misma regla con que el modelo carga
   la losa. Unity solo ubica un punto dentro de los polígonos que arma
-  Python (`areas_tributarias`), sin calcular nada. Dos propiedades de
-  esos polígonos, medidas sobre el conjunto con 56 758 puntos de muestra,
-  hacen que el reparto no sea ambiguo: **ningún punto de losa cae en
-  regiones de dos elementos distintos** (0 de 49 940), y 92 de las 883
-  regiones son de **muros**, que también se resaltan. Moverse no pide
-  reanálisis. Ver el *efecto* de la persona en la estructura sí lo
-  pediría (agregarla como carga y resolver), y eso no está hecho.
+  Python (`areas_tributarias`). Dos propiedades de esos polígonos,
+  medidas sobre el conjunto con 56 758 puntos de muestra, hacen que el
+  reparto no sea ambiguo: **ningún punto de losa cae en regiones de dos
+  elementos distintos** (0 de 49 940), y 92 de las 883 regiones son de
+  **muros**, que también se resaltan. Desde el 05-10 también muestra su
+  **efecto** (sección siguiente). Lo que sigue sin mostrar son los
+  esfuerzos que produce: ni momentos ni D/C.
+- **La deformada de la persona (05-10), sin servidor.** Camina un AT-ST
+  (2.8 m, de juguete; modelo de Tom Meyer, CC BY 3.0) y el edificio se
+  deforma donde pisa, al instante. Python resuelve en OpenSees **una
+  carga unitaria por cada nodo que puede recibirla** (Fz = 1 kN hacia
+  abajo, Mx y My = 1 kN·m): 474 casos en el LT2, 624 en Ingeniería,
+  1098 en el conjunto (`semana05_lab/influencias_persona.py`). El modelo
+  es lineal, así que la carga P en la abscisa α de una viga es la suma
+  de **seis** de esos casos con los pesos de Hermite (las fuerzas nodales
+  equivalentes que OpenSees ensambla para `-beamPoint`), y dentro de la
+  viga cargada se suma la flecha biempotrada con la forma adimensional
+  φ(ξ, α) por la flexibilidad L³/EI que exporta Python. Es la licencia
+  de los sliders: combinar casos ya resueltos. Supuestos, en el JSON:
+  la carga cae en la **proyección** de la persona sobre la viga (la
+  regla pareja de G, q·A/L, haría que caminar a lo largo de una viga no
+  cambie nada) y, si la región es de un muro, en su nodo de esa cota
+  (como la losa). Comprobado: la suma = OpenSees resolviendo la carga
+  directo, en todos los GDL (1.4e-15 sin cuantizar; lo que suma Unity,
+  en enteros de 16 bits y float32, dentro de su cota: a lo más el
+  0.003 % del mayor desplazamiento); la elástica de la viga cargada =
+  `carga_movil.desplazamiento_en`; las fórmulas del C# se leen y se
+  comparan con las de Python; y lo que **la app** sumó y dibujó
+  (`capturas_persona/registro.txt`) = OpenSees directo. Con 100 kN la
+  viga 200141 del conjunto baja 0.715 mm bajo la carga; a ×540 se ve.
+
+  ![El AT-ST en la viga 200141 del conjunto](capturas_persona/persona_2_cerca.jpg)
+
+  ```
+  python semana05_lab/influencias_persona.py lt2          resuelve, verifica y escribe (15 s; conjunto 100 s)
+  python semana05_lab/influencias_persona.py lt2 --verificar [--registro <registro.txt>]
+  python semana05_lab/personaje_atst.py                   el AT-ST a Resources/Personaje/atst.json
+  LaboratorioEstructural.exe -capturarPersona <carpeta>   fotos y registro
+  ```
 - **La modificación cubre cuatro de las seis** de la lista (el enunciado
   pide al menos dos): activar/desactivar elemento, intensidad de carga,
   sección y apoyo. Quedan fuera **propiedad material** y **área

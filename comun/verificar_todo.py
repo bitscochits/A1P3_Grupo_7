@@ -131,6 +131,15 @@ SUITE = [
     # GLO-30): calza con el techo y las terrazas del modelo, el JSON es el
     # que se arma ahora y sus claves son las de AmbienteVisor.Topografia.cs.
     ('relieve del sitio',     ['edificios/conjunto/topografia.py', '--verificar'], False),
+    # La deformada de la persona: la suma de casos unitarios que hace Unity
+    # = OpenSees resolviendo la carga directo, en posiciones al azar; las
+    # formulas del C# son las de Python. Y el AT-ST que la dibuja.
+    ('persona: deformada lt2',      ['semana05_lab/influencias_persona.py', 'lt2', '--verificar'], False),
+    ('persona: deformada ingenieria', ['semana05_lab/influencias_persona.py', 'ingenieria',
+                                       '--verificar'], False),
+    ('persona: deformada conjunto', ['semana05_lab/influencias_persona.py', 'conjunto', '--verificar',
+                                     '--registro', 'semana05_lab/capturas_persona/registro.txt'], False),
+    ('persona: el AT-ST',           ['semana05_lab/personaje_atst.py', '--verificar'], False),
 ]
 
 

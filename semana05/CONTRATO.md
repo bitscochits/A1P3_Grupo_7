@@ -298,7 +298,11 @@ visor.AplicarDeformada(desplazamientos); // ya llama a Redibujar()
   se aplica manda; nadie re-aplica la suya sin que el usuario la pida.
 - Fuentes de deformada: `VisorQA` (Sin / Cargas G / Sismo EX, EY / Caso activo),
   `VisorSemana04.AplicarDeformadaDelCaso`, `AnalizadorEstructural.MostrarCaso`,
-  `VisorCargaMovil`.
+  `VisorCargaMovil`, `VisorPersona` (05-10, al caminar).
+- **Flecha dentro del vano** (05-10): `visor.FlechaEnVano = (id, xi) => ...` suma
+  un desplazamiento (m, ejes OpenSees) a la curva de UNA barra. Lo pone quien sabe
+  la carga dentro del vano (`VisorPersona`, con la forma que exporta Python), vale
+  cero cuando la deformada dibujada ya no es la suya, y se suelta al quitarla.
 - Los **giros** (`rx, ry, rz`) no son decorativos: con ellos el visor CURVA cada
   barra (§12). Una fuente que los mande en cero dibuja palos rectos, sin avisar.
 
@@ -547,6 +551,7 @@ Nombres fijos en `unity/Assets/StreamingAssets/`:
 | `carga_movil.json` | `VisorCargaMovil` (P4) | `data/unity/carga_movil_<ed>.json` |
 | `resultados.xlsx` | botón "Abrir Excel de resultados" (U2a) | `data/excel/<ed>_resultados.xlsx` |
 | `topografia.json` | `AmbienteVisor.Topografia` (relieve del sitio, 05-10) | `data/unity/topografia_<ed>.json` (`edificios/conjunto/topografia.py`) |
+| `influencias.json` | `VisorPersona.Deformada` (deformada de la persona, 05-10) | `data/unity/influencias_<ed>.json` (`semana05_lab/influencias_persona.py`) |
 
 (`modelo_unity.json` es el de antes; no se usa.)
 
@@ -563,6 +568,7 @@ de forma atómica:
 | `data/unity/carga_movil_<ed>.json` | `carga_movil.json` | aviso; no borra |
 | `data/excel/<ed>_resultados.xlsx` | `resultados.xlsx` | aviso; no borra |
 | `data/unity/topografia_<ed>.json` | `topografia.json` | aviso; no borra |
+| `data/unity/influencias_<ed>.json` | `influencias.json` | aviso; no borra |
 
 Y lo mismo a `build/LaboratorioEstructural_Data/StreamingAssets/` si la build
 existe. Cada lector comprueba el edificio del archivo, así que un archivo viejo

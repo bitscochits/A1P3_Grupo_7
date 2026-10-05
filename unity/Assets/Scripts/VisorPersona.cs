@@ -32,9 +32,11 @@
   REANALISIS
   ----------------------------------------------------------------
   Moverse NO requiere reanalisis: es la regla de reparto aplicada a un
-  punto, y el panel lo dice. Ver el EFECTO de la persona sobre la
-  estructura (flecha, momentos) si lo requeriria: habria que agregarla
-  como carga y resolver en el servidor. Tampoco se hace aqui.
+  punto, y el panel lo dice. El EFECTO de la persona sobre la
+  estructura (la deformada y la flecha de la viga cargada) tampoco: lo
+  muestra VisorPersona.Deformada.cs sumando casos unitarios que
+  OpenSees resolvio en Python (semana05_lab/influencias_persona.py).
+  Los momentos no se muestran.
 
   ----------------------------------------------------------------
   CONTRATO
@@ -54,7 +56,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
 
-public class VisorPersona : MonoBehaviour, IPanelIncrustable
+public partial class VisorPersona : MonoBehaviour, IPanelIncrustable
 {
     // ============================================================
     // IPanelIncrustable
@@ -62,8 +64,9 @@ public class VisorPersona : MonoBehaviour, IPanelIncrustable
     public string TituloPestana { get { return "Persona"; } }
     public bool PanelPropio { get; set; } = true;
 
-    [Tooltip("Peso de la persona, kN (80 kg = 0.78 kN).")]
-    public float pesoKN = 0.80f;
+    [Tooltip("Peso del caminante, kN. Arranca en la P de la pestana Carga movil (100 kN) para que su "
+             + "deformada se vea; una persona son 0.80 kN (boton Persona del panel).")]
+    public float pesoKN = 100f;
     [Tooltip("Velocidad al caminar con las flechas, m/s.")]
     public float velocidad = 2.5f;
 
@@ -139,7 +142,7 @@ public class VisorPersona : MonoBehaviour, IPanelIncrustable
 
     // Con el modelo editado las areas tributarias siguen siendo las del
     // modelo original: se sigue mostrando, pero se avisa.
-    void AlEditarModelo(string que) { modeloEditado = true; }
+    void AlEditarModelo(string que) { modeloEditado = true; SoltarDeformadaPersona(); }
 
     bool Listo()
     {
@@ -168,7 +171,7 @@ public class VisorPersona : MonoBehaviour, IPanelIncrustable
     {
         if (!puesta || !Listo()) return;
         // Con el foco en un campo de texto las flechas son del campo.
-        if (GUIUtility.keyboardControl != 0) { if (redibujar) Calcular(); return; }
+        if (GUIUtility.keyboardControl != 0) { if (redibujar) Calcular(); AplicarDeformadaSiToca(); return; }
 
         Vector2 mov = Vector2.zero;
         if (Input.GetKey(KeyCode.UpArrow)) mov.y += 1f;
@@ -188,11 +191,16 @@ public class VisorPersona : MonoBehaviour, IPanelIncrustable
             fwd.Normalize(); der.Normalize();
             Vector2 d = (fwd * mov.y + der * mov.x).normalized * velocidad * Time.unscaledDeltaTime;
             x += d.x; y += d.y;
+            AlCaminar(d);                       // VisorPersona.Personaje.cs: el paso y el rumbo
             cambio = true;
         }
         if (Input.GetKeyDown(KeyCode.PageUp) && piso < pisos.Count - 1) { piso++; cambio = true; }
         if (Input.GetKeyDown(KeyCode.PageDown) && piso > 0) { piso--; cambio = true; }
         if (cambio || redibujar) Calcular();
+        // La deformada se pide al MOVERSE, no al redibujar: aplicarla
+        // redibuja, y pedirla en cada redibujo no pararia nunca.
+        if (cambio) PedirDeformadaPersona();
+        AplicarDeformadaSiToca();               // VisorPersona.Deformada.cs
     }
 
     /// Pone a la persona en el centro del piso elegido.
@@ -211,13 +219,16 @@ public class VisorPersona : MonoBehaviour, IPanelIncrustable
         if (n == 0) return;
         x = sx / n; y = sy / n;
         puesta = true;
+        PrepararInfluencias();
         Calcular();
+        PedirDeformadaPersona();
     }
 
     void Quitar()
     {
         puesta = false;
         ultimo = null;
+        QuitarDeformadaPersona();
         Limpiar();
     }
 
@@ -362,18 +373,28 @@ public class VisorPersona : MonoBehaviour, IPanelIncrustable
     {
         Limpiar();
         float z = r.z;
+        // Con la deformada puesta, la persona baja con el punto que carga
+        // (dibujado, con la misma escala que el edificio).
+        float dz = DescensoDibujado();
 
-        // la persona: una capsula de 1.70 m
-        GameObject p = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-        Destroy(p.GetComponent<Collider>());
-        p.name = "SQ4_Persona";
-        p.transform.position = Ejes.AUnity(x, y, z + 0.85f);
-        p.transform.localScale = new Vector3(0.45f, 0.85f, 0.45f);
-        p.GetComponent<Renderer>().sharedMaterial = MaterialDe(COLOR_PERSONA);
-        creados.Add(p);
+        // el AT-ST (VisorPersona.Personaje.cs) o, sin el, una capsula de 1.70 m
+        if (!DibujarPersonaje(z + dz))
+        {
+            GameObject p = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+            Destroy(p.GetComponent<Collider>());
+            p.name = "SQ4_Persona";
+            p.transform.position = Ejes.AUnity(x, y, z + dz + 0.85f);
+            p.transform.localScale = new Vector3(0.45f, 0.85f, 0.45f);
+            p.GetComponent<Renderer>().sharedMaterial = MaterialDe(COLOR_PERSONA);
+            creados.Add(p);
+        }
 
         // la flecha de su peso, hasta la losa
-        Linea(Ejes.AUnity(x, y, z + 2.6f), Ejes.AUnity(x, y, z + 0.02f), COLOR_PERSONA, 0.06f);
+        Linea(Ejes.AUnity(x, y, z + dz + 2.6f), Ejes.AUnity(x, y, z + dz + 0.02f), COLOR_PERSONA, 0.06f);
+        // y por donde llega a la viga: hasta el punto cargado (o el nodo del muro)
+        Vector3 cargado;
+        if (PuntoDeCarga(out cargado))
+            Linea(Ejes.AUnity(x, y, z + dz + 0.02f), cargado, COLOR_LLEVA, 0.05f);
 
         // la region tributaria donde esta parada
         if (r.region != null) Contorno(r.region, z + 0.03f, COLOR_REGION, 0.07f);
@@ -412,6 +433,8 @@ public class VisorPersona : MonoBehaviour, IPanelIncrustable
         Nodo a = visor.Modelo.NodoPorId(e.n1), b = visor.Modelo.NodoPorId(e.n2);
         if (a == null || b == null) return;
         Vector3 alto = Vector3.up * (lleva ? 0.55f : 0.45f);
+        // La que lleva el peso, con su elastica si la deformada esta puesta.
+        if (lleva && DibujarElastica(id, alto, 0.22f)) return;
         Linea(visor.PosicionActual(a) + alto, visor.PosicionActual(b) + alto,
               lleva ? COLOR_LLEVA : COLOR_RECEPTORA, lleva ? 0.22f : 0.12f);
     }
@@ -508,8 +531,8 @@ public class VisorPersona : MonoBehaviour, IPanelIncrustable
         GUI.enabled = true;
 
         GUILayout.Label($"Peso: {F(pesoKN, "0.00")} kN  ({F(pesoKN / 9.80665f * 1000f, "0")} kg)", texto);
-        float nuevo = GUILayout.HorizontalSlider(pesoKN, 0.3f, 2.0f);
-        if (Mathf.Abs(nuevo - pesoKN) > 1e-4f) pesoKN = Mathf.Round(nuevo * 20f) / 20f;
+        PanelPeso(boton);                                   // VisorPersona.Deformada.cs
+        PanelDeformada(texto, tenue, aviso, boton);
 
         if (modeloEditado)
             GUILayout.Label("El modelo se edito: las areas tributarias son las del modelo "
@@ -558,9 +581,9 @@ public class VisorPersona : MonoBehaviour, IPanelIncrustable
         }
 
         GUILayout.Space(PanelUI.Px(6f));
-        GUILayout.Label("REANALISIS: moverse NO lo requiere (es la regla de reparto aplicada a un "
-                        + "punto). Ver el EFECTO de la persona en la estructura si: habria que "
-                        + "agregarla como carga y resolver en el servidor (Modificar).", tenue);
+        GUILayout.Label("REANALISIS: no hace falta. El reparto es la regla tributaria aplicada a un "
+                        + "punto, y la deformada (arriba) suma casos unitarios que OpenSees ya "
+                        + "resolvio en Python: el modelo es lineal.", tenue);
     }
 
     // Las acciones de los botones corren en LateUpdate, fuera de OnGUI.
