@@ -1,5 +1,5 @@
 AmbienteVisor: suelo en z = -7.97 m (info.cota_terreno); hueco del subterraneo 0 m2 sobre 0 estampas bajo la cota (fondo z = -7.97); 0 apoyos en terreno fuera del hueco, 0 sobre muros del subterraneo.
-AmbienteVisor: texturas procedurales de 512 px en 730 ms.
+AmbienteVisor: texturas procedurales de 512 px en 749 ms.
 AmbienteVisor: 1 nivel(es) de terreno sobre la base (z = -7.97 m, info.terrenos), celda 0.25 m, 15039 vertices. Terraza 'ingenieria: terraza oriente (N.R. -4.01)' en z = -4.01 m (1 poligono(s)): 777 m2 de tierra, 124 m2 recortados alrededor de 90 estampas que bajan a la base; 33 apoyos sobre tierra, 6 sobre la estructura que baja.
 AmbienteVisor: losas de dibujo desde areas_tributarias (705 entradas): z -4.01: 186 poligonos, 1664.2 m2 dibujados, cara superior -3.60; z -0.05: 166 poligonos, 1274.9 m2 dibujados, cara superior 0.36; z 3.91: 166 poligonos, 1274.9 m2 dibujados, cara superior 4.32; z 7.87: 189 poligonos, 1397.4 m2 dibujados, cara superior 8.28; z 11.83: 176 poligonos, 1352.4 m2 dibujados, cara superior 12.24
 AmbienteVisor: relieve del sitio de 50 x 63 nodos cada 4.0 m, 2 huecos, fondo en z = -7.97.
@@ -14,4 +14,7 @@ foto entorno_2_fachada_sur: distancia 48.0 m, pitch 9, yaw 10
 foto entorno_3_estacionamiento: distancia 62.0 m, pitch 32, yaw 25
 foto entorno_4_ventanas_cerca: distancia 15.0 m, pitch 4, yaw 20
 foto entorno_5_fachada_oeste: distancia 42.0 m, pitch 10, yaw 100
+anexo de Semana 4 calza con el modelo: True
+deformada del caso S3: dibujada True; ventanas a la vista 0 (se esconden con ella)
+foto entorno_6_deformada_S3: distancia 124.1 m, pitch 18, yaw 40
 errores del log: 0

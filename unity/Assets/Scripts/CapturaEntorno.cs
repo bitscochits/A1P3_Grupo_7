@@ -124,6 +124,24 @@ public class CapturaEntorno : MonoBehaviour
         // Fachada oeste del LT2 (x = -24).
         yield return Foto(cam, "entorno_5_fachada_oeste", Ejes.AUnity(-24f, 56f, 0f), 42f, 10f, 100f);
 
+        // La deformada del caso activo sigue andando con el entorno a la vista,
+        // y las ventanas se esconden con ella (como las losas: no la siguen).
+        // Necesita el anexo de Semana 4 del MISMO modelo (preparar <ed>).
+        VisorSemana04 s4 = FindAnyObjectByType<VisorSemana04>();
+        VisorQA qa = FindAnyObjectByType<VisorQA>();
+        registro.Add("anexo de Semana 4 calza con el modelo: " + (s4 != null && s4.AnexoCalzaConElModelo));
+        MethodInfo aplicar = typeof(VisorQA).GetMethod("AplicarModo", BindingFlags.NonPublic | BindingFlags.Instance);
+        if (s4 != null && qa != null && aplicar != null && s4.AnexoCalzaConElModelo)
+        {
+            aplicar.Invoke(qa, new object[] { ModoDeformada.CasoActivo });
+            yield return new WaitForSecondsRealtime(1.5f);
+            registro.Add(string.Format("deformada del caso {0}: dibujada {1}; ventanas a la vista {2} (se esconden con ella)",
+                                       s4.casoActivo, visor.mostrarDeformada && visor.HayDeformada, Contar("Ventanas")));
+            yield return Foto(cam, "entorno_6_deformada_" + s4.casoActivo, c, d * 1.1f, 18f, 40f);
+            aplicar.Invoke(qa, new object[] { ModoDeformada.Sin });
+        }
+        else registro.Add("sin foto de la deformada: el anexo de Semana 4 no es de este modelo");
+
         Escribir();
         bool ok = nErrores == 0 && AjustesVista.entornoEstado.Contains("vanos con ventana");
         Application.Quit(ok ? 0 : 2);

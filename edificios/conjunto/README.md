@@ -163,7 +163,11 @@ relieve y se ven con él. El vidrio es `Resources/Ambiente/Mat_vidrio.mat`
 Las fotos las saca la app sola, con el conjunto sincronizado:
 `build\LaboratorioEstructural.exe -capturarEntorno <carpeta>`
 (`unity/Assets/Scripts/CapturaEntorno.cs`), con su `registro.txt` (0 errores
-del log; 173 ventanas y 25 mallas de autos, árboles y piso).
+del log; 173 ventanas y 25 mallas de autos, árboles y piso). La última foto
+pone la deformada del caso activo y registra que se dibuja y que las ventanas
+se esconden con ella; para eso los anexos tienen que ser del mismo modelo:
+`python comun\lanzar_unity.py preparar conjunto` (sin eso el visor apaga la
+deformada de los casos, y la captura lo dice en vez de sacar la foto).
 
 ![Antes: la vista realista sin entorno](sitio/capturas/entorno/entorno_0_sin_entorno.jpg)
 
@@ -174,3 +178,5 @@ del log; 173 ventanas y 25 mallas de autos, árboles y piso).
 ![El estacionamiento](sitio/capturas/entorno/entorno_3_estacionamiento.jpg)
 
 ![Las ventanas de cerca: antepecho, marco y montantes, la estructura adelante](sitio/capturas/entorno/entorno_4_ventanas_cerca.jpg)
+
+![La deformada del caso S3: las ventanas y las losas se esconden, como siempre que se dibuja una deformada](sitio/capturas/entorno/entorno_6_deformada_S3.jpg)
