@@ -15,6 +15,9 @@
                                          con suelo bajo el horizonte)
     Resources/Ambiente/PerfilRealista.asset  post-proceso de la vista
                                          realista (ACES, color, bloom)
+    Resources/Ambiente/Mat_vidrio.mat   URP/Lit TRANSPARENTE: el vidrio de
+                                         las ventanas (AmbienteVisor.Entorno.cs;
+                                         solo: RecursosRealistas.CrearVidrio)
 
   POR QUE ASSETS Y NO CODIGO: la build borra las variantes de shader que
   ningun material usa. Un material creado con 'new Material' y el
@@ -107,6 +110,8 @@ public static class RecursosRealistas
         else Debug.LogWarning("RecursosRealistas: falta " + hdr);
 
         CrearPerfil(CARPETA + "/PerfilRealista.asset");
+        hechos++;
+        CrearVidrio();
         hechos++;
         AssetDatabase.SaveAssets();
         Debug.Log("RecursosRealistas: " + hechos + " recursos en " + CARPETA);
@@ -201,5 +206,36 @@ public static class RecursosRealistas
         foreach (VolumeComponent comp in p.components)
             if (!AssetDatabase.IsSubAsset(comp)) AssetDatabase.AddObjectToAsset(comp, p);
         EditorUtility.SetDirty(p);
+    }
+
+    /// El vidrio de las ventanas (AmbienteVisor.Entorno.cs): URP/Lit
+    /// TRANSPARENTE (alfa), liso y brillante, sin sombra propia. Como asset:
+    /// un 'new Material' transparente sale opaco en el exe (la build borra
+    /// la variante _SURFACE_TYPE_TRANSPARENT). El color y el alfa los pone
+    /// el visor desde la paleta de Resources/Entorno/modelos.json; los de
+    /// aca son el respaldo. Se puede correr solo, sin rehacer lo demas:
+    ///   Unity.exe -batchmode -quit -projectPath unity
+    ///             -executeMethod RecursosRealistas.CrearVidrio -logFile <log>
+    [MenuItem("Laboratorio/Vidrio de las ventanas")]
+    public static void CrearVidrio()
+    {
+        Material m = MaterialDe(CARPETA + "/Mat_vidrio.mat", Shader.Find("Universal Render Pipeline/Lit"));
+        m.SetFloat("_Surface", 1f);             // transparente
+        m.SetFloat("_Blend", 0f);               // alfa
+        m.SetFloat("_Cull", 2f);                // una cara: el visor dibuja las dos con su normal
+        m.SetFloat("_AlphaClip", 0f);
+        m.SetFloat("_ReceiveShadows", 1f);
+        m.SetColor("_BaseColor", new Color(0.30f, 0.40f, 0.45f, 0.38f));
+        m.SetFloat("_Smoothness", 0.93f);
+        m.SetFloat("_Metallic", 0f);
+        m.SetFloat("_SpecularHighlights", 1f);
+        m.SetFloat("_EnvironmentReflections", 1f);
+        // Lo mismo que hace el inspector al elegir "Transparent": keywords,
+        // mezcla, ZWrite y cola de render.
+        BaseShaderGUI.SetMaterialKeywords(m);
+        EditorUtility.SetDirty(m);
+        AssetDatabase.SaveAssets();
+        Debug.Log("RecursosRealistas: vidrio en " + CARPETA + "/Mat_vidrio.mat (cola " + m.renderQueue
+                  + ", transparente: " + m.IsKeywordEnabled("_SURFACE_TYPE_TRANSPARENT") + ")");
     }
 }

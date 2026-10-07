@@ -270,7 +270,7 @@ def archivos_del_edificio(ed):
         (rutas.unity('semana04'), 'semana04.json', False, 'debe_decir'),
         (rutas.unity('superposicion_' + ed), 'superposicion.json', False, 'si_dice'),
         (rutas.unity('carga_movil_' + ed), 'carga_movil.json', False, 'si_dice'),
-        (rutas.unity('topografia_' + ed), 'topografia.json', False, 'si_dice'),
+        *[(rutas.unity(n + '_' + ed), n + '.json', False, 'si_dice') for n in ('topografia', 'entorno')],
         (rutas.unity('influencias_' + ed), 'influencias.json', False, 'si_dice'),
         (rutas.excel_resultados(ed), 'resultados.xlsx', False, None),
     ]
@@ -282,7 +282,7 @@ _QUIEN_LO_GENERA = {
     'semana04.json': 'python semana04/exportar_unity.py {ed}',
     'superposicion.json': 'python semana05/superposicion.py {ed} --exportar',
     'carga_movil.json': 'python semana05/carga_movil.py {ed}',
-    'topografia.json': 'python edificios/conjunto/topografia.py',
+    'topografia.json': 'python edificios/conjunto/topografia.py', 'entorno.json': 'python edificios/conjunto/entorno.py',
     'influencias.json': 'python semana05_lab/influencias_persona.py {ed}',
     'resultados.xlsx': 'python semana05/exportar_excel.py {ed}',
 }

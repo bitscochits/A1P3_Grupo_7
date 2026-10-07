@@ -281,6 +281,7 @@ public partial class AmbienteVisor : MonoBehaviour
         // El mapa D/C y las capas que esconden las losas no avisan por
         // EventosVisor: se miran aca (barato, y solo toca algo si cambio).
         ActualizarVisibilidadLosas(false);
+        ActualizarVisibilidadEntorno();      // AmbienteVisor.Entorno.cs
         bool mapa = MapaDCActivo();
         if (mapa != aplicadoMapa) AplicarMaterialesSuelo();
     }
@@ -327,6 +328,7 @@ public partial class AmbienteVisor : MonoBehaviour
         }
         BorrarLosas(); BorrarTerrazas();     // y la malla de las terrazas (AmbienteVisor.Terrazas.cs)
         BorrarRelieve();                     // y la del relieve (AmbienteVisor.Topografia.cs)
+        BorrarEntorno();                     // ventanas, autos y arboles (AmbienteVisor.Entorno.cs)
     }
 
     // ============================================================
@@ -344,6 +346,7 @@ public partial class AmbienteVisor : MonoBehaviour
         ActualizarSueloSinCortar();
         ActualizarLosasSinCortar();
         PedirRelieveDelModelo();             // AmbienteVisor.Topografia.cs
+        PedirEntornoDelModelo();             // AmbienteVisor.Entorno.cs
         Aplicar();
     }
 
@@ -368,6 +371,9 @@ public partial class AmbienteVisor : MonoBehaviour
     {
         // las terrazas: AmbienteVisor.Terrazas.cs; el relieve: AmbienteVisor.Topografia.cs
         try { ActualizarSuelo(); ActualizarTerrazas(); ActualizarRelieve(); }
+        catch (Exception ex) { Debug.LogException(ex); }
+        // Ventanas, autos y arboles: AmbienteVisor.Entorno.cs
+        try { ActualizarEntorno(); }
         catch (Exception ex) { Debug.LogException(ex); }
     }
 

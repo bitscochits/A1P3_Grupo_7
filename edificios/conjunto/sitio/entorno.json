@@ -1,0 +1,94 @@
+{
+  "_que_es": "Supuestos de DIBUJO de lo que rodea a la estructura en la vista realista: ventanas entre pisos, autos estacionados y arboles. Lo lee edificios/conjunto/entorno.py. Nada de esto entra al calculo: el modelo no tiene fachada, ni autos, ni arboles.",
+
+  "ventanas": {
+    "antepecho_m": 0.90,
+    "_antepecho_por_que": "Parte ciega bajo la ventana, desde la cara de la losa. 0.90 m es el antepecho habitual de una sala (OGUC 4.2.7 pide 0.95 m a una baranda; en una ventana se usa 0.85 a 1.00). Los planos que tenemos son de estructura: no dicen como es la fachada.",
+    "pano_max_m": 1.60,
+    "_pano_max_por_que": "Cada vano entre pilares se divide en panos iguales de a lo mas este ancho, con un montante entre ellos: el ancho de una hoja de vidrio comun.",
+    "plano_afuera_del_eje_m": 0.10,
+    "_plano_por_que": "El vidrio va 0.10 m hacia afuera del eje de la viga de borde: dentro del ancho de la viga (0.60 m) y del pilar (0.70 m), asi el marco de hormigon queda adelante, como una fachada con la estructura a la vista.",
+    "marco_m": 0.06,
+    "profundidad_marco_m": 0.10,
+    "espesor_antepecho_m": 0.12,
+    "_marco_por_que": "Perfil de aluminio de ventana (5 a 7 cm de cara vista) y un antepecho de 12 cm.",
+    "ancho_minimo_m": 0.80,
+    "_ancho_minimo_por_que": "Un trozo de vano mas angosto que esto (entre un muro y un pilar) no lleva ventana.",
+    "muestras_con_losa_m": [0.6, 1.5, 3.0],
+    "muestras_sin_losa_m": [0.6, 1.5, 3.0, 6.0, 10.0],
+    "_borde_por_que": "Una viga es de FACHADA si a un lado hay losa (algun punto a 0.6, 1.5 o 3 m cae en un poligono de area tributaria) y al otro no hay nada hasta 10 m. Asi la junta entre los dos cuerpos (5 cm) y los shafts y escaleras no llevan ventana. Se mira en 3 puntos a lo largo de la viga (20, 50 y 80 %).",
+    "afuera_para_el_suelo_m": [2.5, 4.0],
+    "_enterrada_por_que": "Una ventana va solo si el suelo afuera (el relieve, la terraza o el fondo de la excavacion, a 2.5 y 4 m de la fachada) queda bajo el alfeizar. Si no, estaria enterrada."
+  },
+
+  "autos": {
+    "ancho_estacionamiento_m": 2.5,
+    "largo_estacionamiento_m": 5.0,
+    "medio_pasillo_m": 3.0,
+    "_medidas_por_que": "Estacionamiento de 2.5 x 5.0 m y pasillo de 6 m (OGUC 2.4.2 y la practica en Chile), a los dos lados de cada pasillo (highway=service, service=parking_aisle de OpenStreetMap) que cae dentro de un estacionamiento (amenity=parking).",
+    "ocupacion": 0.6,
+    "_ocupacion_por_que": "Un dia de clases a media manana: mas de la mitad ocupado. Cada estacionamiento se llena o no con un sorteo con semilla fija, para que el dibujo sea siempre el mismo.",
+    "arbol_cada": 6,
+    "_arbol_cada_por_que": "Uno de cada 6 estacionamientos de una fila es una isla con un arbol en la cabecera, como en los estacionamientos del campus.",
+    "pendiente_max": 0.18,
+    "_pendiente_por_que": "No se estaciona donde el relieve (DEM de 30 m) pasa de 18 %: ahi el estacionamiento real esta en terrazas que el DEM no ve.",
+    "semilla": 2026,
+    "modelos": [
+      {"nombre": "sedan", "peso": 0.26, "largo_m": 4.60, "ancho_m": 1.80, "alto_m": 1.45},
+      {"nombre": "sedan-sports", "peso": 0.10, "largo_m": 4.50, "ancho_m": 1.80, "alto_m": 1.35},
+      {"nombre": "hatchback-sports", "peso": 0.18, "largo_m": 4.10, "ancho_m": 1.75, "alto_m": 1.45},
+      {"nombre": "suv", "peso": 0.22, "largo_m": 4.60, "ancho_m": 1.85, "alto_m": 1.70},
+      {"nombre": "suv-luxury", "peso": 0.12, "largo_m": 4.90, "ancho_m": 1.95, "alto_m": 1.75},
+      {"nombre": "truck", "peso": 0.08, "largo_m": 5.30, "ancho_m": 1.90, "alto_m": 1.80},
+      {"nombre": "van", "peso": 0.04, "largo_m": 5.00, "ancho_m": 1.95, "alto_m": 1.95}
+    ],
+    "_modelos_por_que": "Kenney Car Kit (CC0). Son de juguete (cortos y anchos): se estiran a las medidas de un auto real de cada tipo; las ruedas se escalan parejo en su centro para que sigan redondas. 'truck' es una camioneta (pickup).",
+    "colores": [
+      {"nombre": "blanco", "peso": 0.24, "rgb": [0.86, 0.87, 0.87]},
+      {"nombre": "plata", "peso": 0.20, "rgb": [0.62, 0.64, 0.66]},
+      {"nombre": "gris", "peso": 0.18, "rgb": [0.33, 0.34, 0.36]},
+      {"nombre": "negro", "peso": 0.15, "rgb": [0.07, 0.07, 0.08]},
+      {"nombre": "azul", "peso": 0.08, "rgb": [0.10, 0.17, 0.33]},
+      {"nombre": "rojo", "peso": 0.07, "rgb": [0.52, 0.06, 0.06]},
+      {"nombre": "beige", "peso": 0.05, "rgb": [0.66, 0.60, 0.50]},
+      {"nombre": "verde", "peso": 0.03, "rgb": [0.13, 0.25, 0.18]}
+    ],
+    "_colores_por_que": "Los colores de auto mas comunes en Chile (blanco, plata, gris y negro son casi 8 de cada 10), en sRGB."
+  },
+
+  "arboles": {
+    "modelos": [
+      {"nombre": "tree_default", "peso": 0.22, "alto_m": [7.0, 10.0]},
+      {"nombre": "tree_oak", "peso": 0.16, "alto_m": [6.0, 9.0]},
+      {"nombre": "tree_detailed", "peso": 0.16, "alto_m": [7.0, 10.0]},
+      {"nombre": "tree_fat", "peso": 0.12, "alto_m": [5.0, 7.0]},
+      {"nombre": "tree_plateau", "peso": 0.08, "alto_m": [6.0, 8.0]},
+      {"nombre": "tree_tall", "peso": 0.12, "alto_m": [11.0, 15.0]},
+      {"nombre": "tree_pineRoundC", "peso": 0.08, "alto_m": [8.0, 12.0]},
+      {"nombre": "tree_pineTallA_detailed", "peso": 0.06, "alto_m": [10.0, 14.0]}
+    ],
+    "_modelos_por_que": "Kenney Nature Kit (CC0), escalados parejo a la altura de un arbol de campus: copa redonda (acacia, liquidambar), alamo ('tree_tall') y pinos. El color de la hoja cambia de arbol a arbol.",
+    "colores_hoja": [
+      {"nombre": "verde oscuro", "peso": 0.35, "rgb": [0.20, 0.30, 0.13]},
+      {"nombre": "verde", "peso": 0.35, "rgb": [0.27, 0.38, 0.16]},
+      {"nombre": "oliva", "peso": 0.20, "rgb": [0.36, 0.40, 0.20]},
+      {"nombre": "amarillento", "peso": 0.10, "rgb": [0.44, 0.45, 0.20]}
+    ],
+    "color_pino": [0.13, 0.24, 0.15],
+    "por_calles_cada_m": 13.0,
+    "afuera_de_la_calle_m": 2.5,
+    "_calles_por_que": "En fila a los dos lados de calles y pasillos de afuera de los estacionamientos (highway residential, tertiary, service, living_street), cada 13 m y a 2.5 m del borde de la calzada.",
+    "borde_estacionamiento_cada_m": 11.0,
+    "borde_estacionamiento_afuera_m": 2.0,
+    "en_areas_verdes_cada_m": 16.0,
+    "_areas_verdes_por_que": "En las areas verdes (landuse=grass, leisure=park, natural=heath) una grilla de 16 m con un corrimiento al azar de hasta 5 m; las canchas (leisure=pitch) no llevan.",
+    "lejos_del_edificio_m": 7.0,
+    "_lejos_por_que": "Ningun arbol a menos de 7 m de la huella de un cuerpo del modelo (la del relieve): taparia la estructura, que es lo que el visor muestra.",
+    "libre_cada_m": 13.0,
+    "libre_umbral": 0.15,
+    "libre_lejos_del_edificio_m": 12.0,
+    "_libre_por_que": "Dentro de la zona del relieve casi no hay areas verdes marcadas en OpenStreetMap (lo verde grande son canchas). En el terreno que no es cancha, calle, estacionamiento ni edificio van grupos de arboles: una grilla de 13 m con corrimiento al azar, solo donde un ruido suave de ~60 m pasa el umbral (bosquetes y claros). A 12 m o mas del edificio, para no tapar la estructura.",
+    "separacion_min_m": 6.0,
+    "maximo": 180
+  }
+}

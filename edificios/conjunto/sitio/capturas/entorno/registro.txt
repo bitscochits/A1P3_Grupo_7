@@ -1,0 +1,17 @@
+AmbienteVisor: suelo en z = -7.97 m (info.cota_terreno); hueco del subterraneo 0 m2 sobre 0 estampas bajo la cota (fondo z = -7.97); 0 apoyos en terreno fuera del hueco, 0 sobre muros del subterraneo.
+AmbienteVisor: texturas procedurales de 512 px en 730 ms.
+AmbienteVisor: 1 nivel(es) de terreno sobre la base (z = -7.97 m, info.terrenos), celda 0.25 m, 15039 vertices. Terraza 'ingenieria: terraza oriente (N.R. -4.01)' en z = -4.01 m (1 poligono(s)): 777 m2 de tierra, 124 m2 recortados alrededor de 90 estampas que bajan a la base; 33 apoyos sobre tierra, 6 sobre la estructura que baja.
+AmbienteVisor: losas de dibujo desde areas_tributarias (705 entradas): z -4.01: 186 poligonos, 1664.2 m2 dibujados, cara superior -3.60; z -0.05: 166 poligonos, 1274.9 m2 dibujados, cara superior 0.36; z 3.91: 166 poligonos, 1274.9 m2 dibujados, cara superior 4.32; z 7.87: 189 poligonos, 1397.4 m2 dibujados, cara superior 8.28; z 11.83: 176 poligonos, 1352.4 m2 dibujados, cara superior 12.24
+AmbienteVisor: relieve del sitio de 50 x 63 nodos cada 4.0 m, 2 huecos, fondo en z = -7.97.
+AmbienteVisor: entorno de 'conjunto': 173 ventanas, 143 autos y arboles en 371 mallas, en 39 ms.
+relieveEstado: Relieve del sitio (conjunto): Copernicus DEM GLO-30 (ESA/Airbus, TanDEM-X 2011-2015), modelo de superficie, interpolado en una malla cada 4 m; ubicado con el techo del cuerpo antiguo en Google Earth (+x del modelo a 71.9 grados del norte) y calzado con los apoyos en terreno (desfase 929.08 m, residuo rms 1.22 m). Solo dibujo.
+entornoEstado: 173 vanos con ventana (1666 m2 de vidrio) en las fachadas del modelo (conjunto); 79 autos y 64 arboles donde OpenStreetMap pone estacionamientos, calles y areas verdes. Modelos de Kenney (CC0); Estacionamientos, pasillos, calles y areas verdes: (c) OpenStreetMap contributors, ODbL 1.0. Solo dibujo.
+modelo: 558 nodos, 937 elementos
+foto entorno_0_sin_entorno: distancia 191.8 m, pitch 24, yaw 40
+ventanas a la vista: 173; mallas de autos y arboles: 25
+foto entorno_1_con_entorno: distancia 191.8 m, pitch 24, yaw 40
+foto entorno_2_fachada_sur: distancia 48.0 m, pitch 9, yaw 10
+foto entorno_3_estacionamiento: distancia 62.0 m, pitch 32, yaw 25
+foto entorno_4_ventanas_cerca: distancia 15.0 m, pitch 4, yaw 20
+foto entorno_5_fachada_oeste: distancia 42.0 m, pitch 10, yaw 100
+errores del log: 0

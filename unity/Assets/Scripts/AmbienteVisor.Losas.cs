@@ -301,17 +301,7 @@ public partial class AmbienteVisor
     void ActualizarVisibilidadLosas(bool forzar)
     {
         if (losas.Count == 0) return;
-        if (Time.unscaledTime >= proximaBusquedaLosas && (s4Losas == null || movilLosas == null))
-        {
-            proximaBusquedaLosas = Time.unscaledTime + 1f;
-            if (s4Losas == null) s4Losas = FindAnyObjectByType<VisorSemana04>();
-            if (movilLosas == null) movilLosas = FindAnyObjectByType<VisorCargaMovil>();
-        }
-
-        bool alguna = AjustesVista.losas && AjustesVista.realista && visor != null && visor.Modelo != null
-                      && !(visor.mostrarDeformada && visor.HayDeformada)
-                      && !(movilLosas != null && movilLosas.Activo)
-                      && !(s4Losas != null && (s4Losas.MapaDCActivo || s4Losas.HayDiagramaDibujado));
+        bool alguna = AjustesVista.losas && PiezasDeDibujoALaVista();
         float zSel = float.PositiveInfinity;
         Vector2 selA = Vector2.zero, selB = Vector2.zero;
         bool haySel = alguna && Seleccion(visor.Modelo, out zSel, out selA, out selB);
@@ -379,6 +369,24 @@ public partial class AmbienteVisor
             return true;
         }
         return false;
+    }
+
+    /// La regla de cuando se ven las piezas de DIBUJO que no siguen a la
+    /// estructura (las losas y las ventanas de AmbienteVisor.Entorno.cs):
+    /// solo en la vista realista, y no con la deformada, la carga movil, los
+    /// diagramas ni el mapa D/C. Una sola definicion para las dos.
+    bool PiezasDeDibujoALaVista()
+    {
+        if (Time.unscaledTime >= proximaBusquedaLosas && (s4Losas == null || movilLosas == null))
+        {
+            proximaBusquedaLosas = Time.unscaledTime + 1f;
+            if (s4Losas == null) s4Losas = FindAnyObjectByType<VisorSemana04>();
+            if (movilLosas == null) movilLosas = FindAnyObjectByType<VisorCargaMovil>();
+        }
+        return AjustesVista.realista && visor != null && visor.Modelo != null
+               && !(visor.mostrarDeformada && visor.HayDeformada)
+               && !(movilLosas != null && movilLosas.Activo)
+               && !(s4Losas != null && (s4Losas.MapaDCActivo || s4Losas.HayDiagramaDibujado));
     }
 
     /// Distancia en planta de un segmento a un rectangulo (0 si se tocan).

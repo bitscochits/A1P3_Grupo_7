@@ -31,3 +31,7 @@ arma `comun/recursos_realistas.py`:
 y el post-proceso (`PerfilRealista.asset`) los arma
 `unity/Assets/Editor/RecursosRealistas.cs`; los verifica
 `python comun/recursos_realistas.py --verificar`.
+
+`Mat_vidrio.mat` (el vidrio de las ventanas, URP/Lit transparente) no usa
+textura ni recurso descargado: lo arma `RecursosRealistas.CrearVidrio` y el
+visor le pone el color de la paleta de `Resources/Entorno/modelos.json`.

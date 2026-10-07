@@ -131,6 +131,12 @@ SUITE = [
     # GLO-30): calza con el techo y las terrazas del modelo, el JSON es el
     # que se arma ahora y sus claves son las de AmbienteVisor.Topografia.cs.
     ('relieve del sitio',     ['edificios/conjunto/topografia.py', '--verificar'], False),
+    # Ventanas, autos y arboles de la vista realista: cada vano sobre una
+    # viga de fachada, sin cruzar muros ni pilares; cada auto dentro de su
+    # estacionamiento de OpenStreetMap y con las ruedas en la malla del
+    # relieve; los JSON los que se arman ahora y sus claves las de
+    # AmbienteVisor.Entorno.cs.
+    ('entorno: ventanas, autos y arboles', ['edificios/conjunto/entorno.py', '--verificar'], False),
     # La deformada de la persona: la suma de casos unitarios que hace Unity
     # = OpenSees resolviendo la carga directo, en posiciones al azar; las
     # formulas del C# son las de Python. Y el AT-ST que la dibuja.

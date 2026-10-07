@@ -27,5 +27,6 @@ public partial class VisorQA
         GUILayout.Label(string.IsNullOrEmpty(AjustesVista.relieveEstado)
             ? "Relieve del sitio: todavia no se carga el modelo."
             : AjustesVista.relieveEstado, PanelUI.Tenue);
+        CasillasEntorno();                   // VisorQA.Entorno.cs: ventanas, autos y arboles
     }
 }

@@ -196,6 +196,20 @@ public static class AjustesVista
     /// salio, o por que no hay. Lo escribe AmbienteVisor; solo se lee.
     public static string relieveEstado = "";
 
+    /// Dibujar las VENTANAS entre pisos en la vista realista
+    /// (StreamingAssets/entorno.json, de edificios/conjunto/entorno.py).
+    /// Son dibujo, sin collider, y se esconden con las losas: con la
+    /// deformada, la carga movil, los diagramas o el mapa D/C, que no siguen.
+    public static bool ventanas = true;
+
+    /// Dibujar los AUTOS estacionados y los ARBOLES del sitio (el mismo
+    /// archivo). Van sobre el relieve: sin el relieve a la vista no se ven.
+    public static bool entorno = true;
+
+    /// Lo que AmbienteVisor sabe del entorno, para el panel: cuantas
+    /// ventanas, autos y arboles, y de donde salen. Solo se lee.
+    public static string entornoEstado = "";
+
     /// Dibujar las losas por piso en la vista realista (AmbienteVisor). Es
     /// DIBUJO de los poligonos de areas_tributarias del JSON, no un dato
     /// nuevo: sin collider, y se esconden solas con la deformada, la carga
